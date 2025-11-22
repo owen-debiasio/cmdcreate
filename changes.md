@@ -79,7 +79,7 @@
   - Now shows the number of commands that contain your input
   - Cleaned up code
 - Misc enhancements:
-  - When you don't enter enough arguments for a command, it will now display the usage.
+  - When you don't enter enough arguments for a command, it will display its usage.
 
 ## v0.5.1
 
@@ -98,7 +98,7 @@
 
 ## v0.5.3
 
-- Fixed bug where cmdcreate would allow you to delete a command that doesn't exist (For real this time)
+- Fixed bug where cmdcreate would allow you to delete a command that didn't exist
 - Fixed bug where you would have insufficient write access to commands.
 
 ## v0.5.4
@@ -143,7 +143,7 @@
 - Heavy code optimizations
 - Fixed bug in command `display`
   - Fixed the output of `%` at the end of the output
-- Debugging flag: `--offline`: Allows you to run certain commands without an internet connection
+- Debugging flag: `--offline`: Allows you to run commands without an internet connection
 
 ## v0.6.1
 
@@ -244,3 +244,13 @@
 ## v0.7.4-2
 
 - AUR users: compile error
+
+## v0.7.5
+
+- Code optimizations
+- Attempt to fix the compile error for AUR users again
+
+## v0.7.6
+
+- Fixed odd listing when updating with a `.rpm` or `.deb` file
+- Misc tweaks
