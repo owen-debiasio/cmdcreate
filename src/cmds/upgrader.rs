@@ -61,7 +61,7 @@ pub fn upgrade() {
     ask_for_confirmation("Do you want to upgrade cmdcreate?");
 
     println!(
-        "\nSelect an upgrade method:\n\n{blue}1]{reset} Upgrade through AUR\n{blue}2]{reset} Install via .deb file\n{blue}4]{reset} Manually install binary"
+        "\nSelect an upgrade method:\n\n{blue}1]{reset} Upgrade through AUR\n{blue}2]{reset} Install via .deb file\n{blue}3]{reset} Install via .rpm file\n{blue}4]{reset} Manually install binary"
     );
 
     let mut method = String::new();
@@ -109,7 +109,7 @@ pub fn upgrade() {
             run_shell_command(
                 &format!(
                     "
-                    curl -L -o /tmp/cmdcreate-{latest_release}-linux-x86_64.deb https://github.com/Meme-Supplier/cmdcreate/releases/latest/download/cmdcreate-{latest_release}-linux-x86_64.deb; \
+                    curl -L -o /tmp/cmdcreate-{latest_release}-linux-x86_64.deb https://github.com/owen-debiasio/cmdcreate/releases/latest/download/cmdcreate-{latest_release}-linux-x86_64.deb; \
                     sudo dpkg -i /tmp/cmdcreate-{latest_release}-linux-x86_64.deb;
                     "
                 ));
@@ -120,7 +120,7 @@ pub fn upgrade() {
             run_shell_command(
                 &format!(
                     "
-                    curl -L -o /tmp/cmdcreate-{latest_release}-linux-x86_64.rpm https://github.com/Meme-Supplier/cmdcreate/releases/latest/download/cmdcreate-{latest_release}-linux-x86_64.rpm; \
+                    curl -L -o /tmp/cmdcreate-{latest_release}-linux-x86_64.rpm https://github.com/owen-debiasio/cmdcreate/releases/latest/download/cmdcreate-{latest_release}-linux-x86_64.rpm; \
                     sudo dpkg -i /tmp/cmdcreate-{latest_release}-linux-x86_64.rpm;
                     "
                 ));
@@ -128,7 +128,7 @@ pub fn upgrade() {
         "4" => {
             println!("Downloading latest binary...");
 
-            let (owner, repo) = ("Meme-Supplier", "cmdcreate");
+            let (owner, repo) = ("owen-debiasio", "cmdcreate");
             let file_to_download = format!("cmdcreate-{latest_release}-linux-bin");
             let client = Client::new();
 
@@ -214,7 +214,7 @@ pub fn get_latest_tag(owner: &str, repo: &str) -> Result<String, Box<dyn Error>>
 /// # Returns
 /// * `Option<String>` - The latest release version or None if fetch fails
 pub fn get_latest_release() -> Option<String> {
-    get_latest_tag("Meme-Supplier", "cmdcreate").ok()
+    get_latest_tag("owen-debiasio", "cmdcreate").ok()
 }
 
 /// Checks for available updates and initiates upgrade if needed
