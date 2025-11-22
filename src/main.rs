@@ -24,7 +24,7 @@ use crate::{
 };
 
 /// Current version of the project
-pub static PROJ_VER: &str = "v0.7.5";
+pub static PROJ_VER: &str = "v0.7.6";
 
 /// Main entry point for the cmdcreate application
 ///
@@ -53,8 +53,8 @@ fn main() {
     {
         run_shell_command(
             "
-            curl -sSo ~/.local/share/cmdcreate/LICENSE https://raw.githubusercontent.com/Meme-Supplier/cmdcreate/master/LICENSE; \
-            curl -sSo ~/.local/share/cmdcreate/changes.md https://raw.githubusercontent.com/Meme-Supplier/cmdcreate/master/changes.md
+            curl -sSo ~/.local/share/cmdcreate/LICENSE https://raw.githubusercontent.com/owen-debiasio/cmdcreate/master/LICENSE; \
+            curl -sSo ~/.local/share/cmdcreate/changes.md https://raw.githubusercontent.com/owen-debiasio/cmdcreate/master/changes.md
             "
         );
     }
