@@ -34,7 +34,7 @@ Flags:
 
   Offline:
     -g, --get_offline_files         Downloads files for offline use
-    -r, --remove_offline_fil        Removes files for offline use
+    -r, --remove_offline_files      Removes files for offline use
 ```
 
 # Installation
