@@ -4,9 +4,9 @@
 /// them system-wide. It handles the creation of command files, setting proper
 /// permissions, and creating system symlinks.
 use crate::utils::{
-    colors::COLORS,                              // Terminal color formatting
-    fs::write_to_file,                           // File system operations
-    sys::{return_args, run_shell_command, VARS}, // System operations and variables
+    colors::COLORS,                 // Terminal color formatting
+    fs::write_to_file,              // File system operations
+    sys::{run_shell_command, VARS}, // System operations and variables
 };
 
 /// Creates a new command in the system
@@ -20,22 +20,12 @@ use crate::utils::{
 /// ```bash
 /// cmdcreate create <command_name> <command_contents>
 /// ```
-pub fn create() {
+pub fn create(command: &str, contents: &str, verbose: bool) {
     // Initialize color codes for terminal output formatting
-    let (blue, yellow, green, reset) = (COLORS.blue, COLORS.yellow, COLORS.green, COLORS.reset);
-
-    // Get command line arguments and validate argument count
-    let args = return_args();
-    if args.len() < 3 {
-        println!("Usage:\ncmdcreate {blue}create {yellow}<command> <contents>{reset}");
-        return;
-    }
-
-    // Extract command name and contents from arguments
-    let (name, contents) = (args.get(1).unwrap(), args.get(2).unwrap());
+    let (blue, _yellow, green, reset) = (COLORS.blue, COLORS.yellow, COLORS.green, COLORS.reset);
 
     // Construct the path for the new command file
-    let script = &format!("{}/.local/share/cmdcreate/files/{name}", VARS.home);
+    let script = &format!("{}/.local/share/cmdcreate/files/{command}", VARS.home);
 
     // Write the command contents to the file
     write_to_file(script, contents);
@@ -44,10 +34,12 @@ pub fn create() {
     run_shell_command(&format!(
         "
             chmod +x {script}; \
-            sudo ln -sf {script} /usr/bin/{name}
+            sudo ln -sf {script} /usr/bin/{command}
             ",
     ));
 
     // Confirm successful creation to user
-    println!("\n{green}Success! Created command: {blue}\"{name}\"{reset}",);
+    if verbose {
+        println!("\n{green}Success! Created command: {blue}\"{command}\"{reset}",);
+    }
 }
