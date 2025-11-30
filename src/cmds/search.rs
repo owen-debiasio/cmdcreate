@@ -6,9 +6,8 @@
 use crate::{
     cmds::tools::retrieve_commands, // Command retrieval utility
     utils::{
-        colors::COLORS,   // Terminal color formatting
-        msgs::error,      // Error message handling
-        sys::return_args, // Command line argument handling
+        colors::COLORS, // Terminal color formatting
+        msgs::error,    // Error message handling
     },
 };
 
@@ -24,40 +23,31 @@ use crate::{
 /// ```bash
 /// cmdcreate search <search_term>
 /// ```
-pub fn search() {
+pub fn search(cmd: &str) {
     // Initialize color codes for terminal output formatting
-    let (blue, yellow, reset) = (COLORS.blue, COLORS.yellow, COLORS.reset);
-
-    // Get command line arguments and validate argument count
-    let args = return_args();
-    if args.len() < 2 {
-        println!("Usage:\ncmdcreate {blue}search {yellow}<command>{reset}");
-        return;
-    }
+    let (yellow, reset) = (COLORS.yellow, COLORS.reset);
 
     // Extract search term and get list of installed commands
-    if let Some(name) = args.get(1) {
-        let installed_scripts = retrieve_commands("installed");
+    let installed_scripts = retrieve_commands("installed");
 
-        // Search through installed commands and count matches
-        let mut count: i32 = 0;
-        for script in installed_scripts {
-            // Extract command name from file path
-            let file_stem = script.file_stem().unwrap_or_default().to_string_lossy();
+    // Search through installed commands and count matches
+    let mut count = 0;
+    for script in installed_scripts {
+        // Extract command name from file path
+        let file_stem = script.file_stem().unwrap_or_default().to_string_lossy();
 
-            // Print matching command names
-            if file_stem.contains(name) {
-                println!("{file_stem}");
-                count += 1
-            }
+        // Print matching command names
+        if file_stem.contains(cmd) {
+            println!("{file_stem}");
+            count += 1
         }
+    }
 
-        // Display error if no matches found
-        if count == 0 {
-            error(
-                "No installed commands contain:",
-                &format!("{yellow}\"{name}\"{reset}"),
-            )
-        }
+    // Display error if no matches found
+    if count == 0 {
+        error(
+            "No installed commands contain:",
+            &format!("{yellow}\"{cmd}\"{reset}"),
+        )
     }
 }
