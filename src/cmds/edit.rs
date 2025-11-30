@@ -6,9 +6,9 @@
 use crate::{
     cmds::tools::retrieve_commands, // Command management utilities
     utils::{
-        colors::COLORS,                        // Terminal color formatting
-        msgs::error,                           // Error message handling
-        sys::{return_args, run_shell_command}, // System operations
+        colors::COLORS,         // Terminal color formatting
+        msgs::error,            // Error message handling
+        sys::run_shell_command, // System operations
     },
 };
 use std::process::Command;
@@ -59,16 +59,9 @@ pub fn is_editor_installed(editor: &str) -> bool {
 /// ```bash
 /// cmdcreate edit <command_name>
 /// ```
-pub fn edit() {
+pub fn edit(cmd: &str) {
     // Initialize color codes for terminal output formatting
-    let (blue, yellow, reset) = (COLORS.blue, COLORS.yellow, COLORS.reset);
-
-    // Get command line arguments and validate argument count
-    let args = return_args();
-    if args.len() < 2 {
-        println!("Usage:\ncmdcreate {blue}remove{yellow} <command>{reset}");
-        return;
-    }
+    let (yellow, reset) = (COLORS.yellow, COLORS.reset);
 
     // Get the installation directory for commands
     let binding = retrieve_commands("dir");
@@ -90,13 +83,13 @@ pub fn edit() {
     };
 
     // Construct the full path to the command file
-    let file_path = install_dir.join(args.get(1).unwrap());
+    let file_path = install_dir.join(cmd);
 
     // Validate the command exists
     if !file_path.exists() {
         error(
             "Command not installed:",
-            &format!("{yellow}\"{}\"{reset}", &args.get(1).unwrap()),
+            &format!("{yellow}\"{cmd}\"{reset}"),
         )
     }
 
