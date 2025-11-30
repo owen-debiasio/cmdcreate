@@ -24,7 +24,7 @@ use crate::{
 };
 
 /// Current version of the project
-pub static PROJ_VER: &str = "v0.7.6";
+pub static PROJ_VER: &str = "v0.7.7";
 
 /// Main entry point for the cmdcreate application
 ///
@@ -36,7 +36,13 @@ pub static PROJ_VER: &str = "v0.7.6";
 /// - Information display (version, supported editors, license, changelog)
 fn main() {
     // Initialize color codes for terminal output
-    let (magenta, green, reset) = (COLORS.magenta, COLORS.green, COLORS.reset);
+    let (magenta, green, blue, yellow, reset) = (
+        COLORS.magenta,
+        COLORS.green,
+        COLORS.blue,
+        COLORS.yellow,
+        COLORS.reset,
+    );
 
     // Get command line arguments
     let args = return_args();
@@ -62,14 +68,78 @@ fn main() {
     // Match the first argument to determine which operation to perform
     match args[0].as_str() {
         // Command Management Operations
-        "create" => create::create(),       // Create a new command
-        "remove" => remove::remove(),       // Remove an existing command
-        "edit" => edit::edit(),             // Edit an existing command
-        "list" => list::list(),             // List all available commands
-        "search" => search::search(),       // Search for specific commands
-        "display" => display::display(),    // Display details of a command
-        "rename" => rename::rename(),       // Rename an existing command
-        "favorite" => favorite::favorite(), // Add command to favorites
+
+        // Create a new command
+        "create" => {
+            if args.len() < 3 {
+                println!("Usage:\ncmdcreate {blue}create {yellow}<command> <contents>{reset}");
+                return;
+            }
+            create::create(&args[1], &args[2], true)
+        }
+
+        // Remove an existing command
+        "remove" => {
+            if args.len() < 2 {
+                println!("Usage:\ncmdcreate {blue}remove {yellow}<command>{reset}");
+                return;
+            }
+
+            remove::remove(&args[1])
+        }
+
+        // Edit an existing command
+        "edit" => {
+            if args.len() < 2 {
+                println!("Usage:\ncmdcreate {blue}edit {yellow}<command>{reset}");
+                return;
+            }
+
+            edit::edit(&args[1])
+        }
+
+        // Search for specific commands
+        "search" => {
+            if args.len() < 2 {
+                println!("Usage:\ncmdcreate {blue}search {yellow}<command>{reset}");
+                return;
+            }
+
+            search::search(&args[1])
+        }
+
+        // Display details of a command
+        "display" => {
+            if args.len() < 2 {
+                println!("Usage:\ncmdcreate {blue}display {yellow}<command>{reset}");
+                return;
+            }
+
+            display::display(&args[1])
+        }
+
+        // Rename an existing command
+        "rename" => {
+            if args.len() < 3 {
+                println!("Usage:\ncmdcreate {blue}rename {yellow}<command> <new name>{reset}");
+                return;
+            }
+
+            rename::rename(&args[1], &args[2])
+        }
+
+        // Add command to favorites
+        "favorite" => {
+            if args.len() < 3 || !["add", "remove"].contains(&args[1].as_str()) {
+                println!("Usage:\ncmdcreate {blue}favorite {yellow}<add/remove> <command>{reset}");
+                return;
+            }
+
+            favorite::favorite(&args[1], &args[2])
+        }
+
+        "repair" => repair::repair(), // Repair a command
+        "list" => list::list(),       // List all available commands
 
         // System Operations
         "check" => check_for_updates(), // Check for available updates
