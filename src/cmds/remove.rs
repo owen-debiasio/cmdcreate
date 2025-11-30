@@ -9,7 +9,7 @@ use crate::{
         colors::COLORS,                                           // Terminal color formatting
         fs::{delete_file, read_file_to_string, remove_from_file}, // File system operations
         msgs::ask_for_confirmation,                               // User interaction
-        sys::{return_args, run_shell_command, VARS},              // System operations and variables
+        sys::{run_shell_command, VARS},                           // System operations and variables
     },
 };
 
@@ -24,7 +24,7 @@ use crate::{
 /// ```bash
 /// cmdcreate remove <command_name>
 /// ```
-pub fn remove() {
+pub fn remove(command: &str) {
     // Initialize color codes for terminal output formatting
     let (blue, yellow, red, green, reset) = (
         COLORS.blue,
@@ -34,44 +34,34 @@ pub fn remove() {
         COLORS.reset,
     );
 
-    // Get command line arguments and validate argument count
-    let args = return_args();
-    if args.len() < 2 {
-        println!("Usage:\ncmdcreate {blue}remove {yellow}<command>{reset}");
-        return;
-    }
-
-    // Extract the command name to be removed
-    let name = args.get(1).unwrap();
-
     // Check if there are any installed commands
     if retrieve_commands("installed").is_empty() {
         return; // Exit if no commands are installed
     }
 
     // Verify that the specified command exists
-    is_command_installed(name);
+    is_command_installed(command);
 
     // Request user confirmation before deletion
     ask_for_confirmation(&format!(
-        "{red}Are you sure you want to delete command{yellow} \"{name}\"{red}?{reset}"
+        "{red}Are you sure you want to delete command{yellow} \"{command}\"{red}?{reset}"
     ));
 
     // Remove the command file from cmdcreate's storage
     delete_file(&format!(
-        "{}/.local/share/cmdcreate/files/{name}",
+        "{}/.local/share/cmdcreate/files/{command}",
         VARS.home
     ));
 
     // Remove the command from the list of favorites
     let path = format!("{}/.local/share/cmdcreate/favorites", VARS.home);
-    if read_file_to_string(&path).contains(name) {
-        remove_from_file(&path, name);
+    if read_file_to_string(&path).contains(command) {
+        remove_from_file(&path, command);
     }
 
     // Remove the system-wide command symlink
-    run_shell_command(&format!("sudo rm -f /usr/bin/{name}"));
+    run_shell_command(&format!("sudo rm -f /usr/bin/{command}"));
 
     // Confirm successful removal to user
-    println!("\n{green}Removed command \"{name}\"");
+    println!("\n{green}Removed command {blue}\"{command}\"{reset}");
 }
