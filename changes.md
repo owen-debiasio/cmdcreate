@@ -262,3 +262,7 @@
 - Added command: `repair`
   - Fixes commands by recreating missing binaries in `/usr/bin`
   - Usage: `cmdcreate repair`
+ 
+## v0.7.8
+
+- Quick fix
