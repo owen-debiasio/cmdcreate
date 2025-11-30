@@ -1,40 +1,39 @@
-# cmdcreate v0.7.6
+# cmdcreate v0.7.7
 Cmdcreate allows you to create custom commands for your Linux terminal without needing to enter the same "complex" commands over and over (unless if your are lazy like me).
-
-Cmdcreate will no longer get feature updates, and will instead get bug fixes, only if necessary.
   
 ## Usage:
 
 ```
 Commands:
-  create   <command>     <contents> Create a custom command
-  remove   <command>                Remove a custom command
-  edit     <command>                Modify a custom command
-  list                              Display custom commands
-  search   <command>                Searches for matched command
-  reset                             Removes all installed commands
-  display  <command>                Display contents of a command
-  rename   <command>    <new name>  Renames a command
-  favorite <add/remove> <command>   Renames a command
+  create   <command>     <contents>  Create a custom command
+  remove   <command>                 Remove a custom command
+  edit     <command>                 Modify contents of a command
+  list                               Display custom commands
+  search   <command>                 Searches for matched command
+  reset                              Removes all installed commands
+  display  <command>                 Display contents of a command
+  rename   <command>    <new name>   Renames a command
+  favorite <add/remove> <command>    Renames a command
+  repair                             Repairs installed commands if needed
 
  Update:
-    check                           Checks for updates
-    update                          Updates your system
+    check                            Checks for updates
+    update                           Updates your system
 
- Update:
-    export <output directory>       Checks for updates
-    import <file input>             Updates your system
+ Backup:
+    export <output directory>        Checks for updates
+    import <file input>              Updates your system
 
 Flags:
-  -v, --version                     Displays version
-  -s, --supported_editors           Displays supported text editors
-  -c, --changelog                   Displays changelog
-  -l, --license                     Displays license
-  -d, --debugging                   Displays flags used for debugging
+  -v, --version                      Displays version
+  -s, --supported_editors            Displays supported text editors
+  -c, --changelog                    Displays changelog
+  -l, --license                      Displays license
+  -d, --debugging                    Displays flags used for debugging
 
   Offline:
-    -g, --get_offline_files         Downloads files for offline use
-    -r, --remove_offline_files      Removes files for offline use
+    -g, --get_offline_files          Downloads files for offline use
+    -r, --remove_offline_files       Removes files for offline use
 ```
 
 # Installation
