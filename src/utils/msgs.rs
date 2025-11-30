@@ -30,14 +30,15 @@ pub fn display_usage() {
         format!("cmdcreate {PROJ_VER}"),
         format!("Usage: cmdcreate {magenta}(flags){reset} [{blue}command{reset}, {cyan}argument{reset}] {yellow}<args> {magenta}(flags){reset}"),
         "\nCommands:".into(),
-        format!("  {blue}create{yellow}   <command> <contents>{reset}     Create a command"),
+        format!("  {blue}create{yellow}   <command>    <contents>{reset}  Create a command"),
         format!("  {blue}remove {yellow}  <command>{reset}                Remove a command"),
-        format!("  {blue}edit   {yellow}  <command>{reset}                Modify a command"),
+        format!("  {blue}edit   {yellow}  <command>{reset}                Modify contents of a command"),
         format!("  {blue}list{reset}                              Display installed commands"),
         format!("  {blue}search {yellow}  <command>{reset}                Searches for matched command"),
         format!("  {blue}display {yellow} <command>{reset}                Display contents of a command"),
         format!("  {blue}rename {yellow}  <command>    <new name>{reset}  Renames a command"),
         format!("  {blue}favorite {yellow}<add/remove> <command>{reset}   Adds or removes a command from favorites"),
+        format!("  {blue}repair{reset}                            Repairs installed commands if needed"),
         "\n  Update:".into(),
         format!("    {blue}check{reset}                           Checks for updates"),
         format!("    {blue}update{reset}                          Updates your system"),
@@ -57,8 +58,6 @@ pub fn display_usage() {
         "   Cmdcreate allows you to create custom commands for your Linux Terminal".into(),
         "   without needing to enter the same \"complex\" commands over and over".into(),
         "   (unless if your are lazy like me).".into(),
-        "\n   Cmdcreate will no longer get feature updates, and will instead get".into(),
-        "   bug fixes only if necessary.".into(),
     ];
 
     // Print all lines to terminal
