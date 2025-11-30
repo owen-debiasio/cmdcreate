@@ -31,8 +31,9 @@ pub mod favorite; // Favorite command management
 pub mod list; // Command listing utility
 pub mod remove; // Command removal functionality
 pub mod rename; // Command renaming operations
+pub mod repair; // Command repairing functionality
 pub mod search; // Command search functionality
-pub mod upgrader; // Update management
+pub mod upgrader; // Update management // Repair broken commands
 
 // Internal utilities
 mod tools; // Shared command operation utilities
