@@ -22,7 +22,7 @@ use crate::utils::{
 /// ```
 pub fn create(command: &str, contents: &str, verbose: bool) {
     // Initialize color codes for terminal output formatting
-    let (blue, _yellow, green, reset) = (COLORS.blue, COLORS.yellow, COLORS.green, COLORS.reset);
+    let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
     // Construct the path for the new command file
     let script = &format!("{}/.local/share/cmdcreate/files/{command}", VARS.home);
