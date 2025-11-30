@@ -254,3 +254,11 @@
 
 - Fixed odd listing when updating with a `.rpm` or `.deb` file
 - Misc tweaks
+
+## v0.7.7
+
+- Tons of code optimizations
+- Tons of bug fixes
+- Added command: `repair`
+  - Fixes commands by recreating missing binaries in `/usr/bin`
+  - Usage: `cmdcreate repair`
