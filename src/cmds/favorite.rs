@@ -15,25 +15,21 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{create_file, remove_from_file, write_to_file},
-        sys::{return_args, VARS},
+        sys::VARS,
     },
 };
 
 /// Entry point for the `favorite` command.
 ///
 /// Parses arguments and routes to either [`add()`] or [`remove()`].
-pub fn favorite() {
+pub fn favorite(mode: &str, command: &str) {
     let (blue, yellow, reset) = (COLORS.blue, COLORS.yellow, COLORS.reset);
-    let args = return_args();
 
-    if args.len() < 2 || !["add", "remove"].contains(&args[1].as_str()) {
-        println!("Usage:\ncmdcreate {blue}favorite {yellow}<add/remove> <command>{reset}");
-        return;
-    }
+    println!("{mode}, {command}");
 
-    match args[1].as_str() {
-        "add" => add(),
-        "remove" => remove(),
+    match mode {
+        "add" => add(command),
+        "remove" => remove(command),
         _ => println!("Usage:\ncmdcreate {blue}favorite {yellow}<add/remove> <command>{reset}"),
     }
 }
@@ -44,34 +40,34 @@ pub fn favorite() {
 /// - Validates command exists
 /// - Ensures favorites file exists
 /// - Appends command to favorites file
-fn add() {
-    let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
-    let args = return_args();
-
-    let command = &args[2];
+fn add(cmd: &str) {
+    let (blue, green, yellow, reset) = (COLORS.blue, COLORS.green, COLORS.yellow, COLORS.reset);
     let path = format!("{}/.local/share/cmdcreate/favorites", VARS.home);
 
-    is_command_installed(command);
-    create_file(&path);
-    write_to_file(&path, command);
+    // Validate command
+    is_command_installed(cmd);
 
-    println!("{green}Command {blue}\"{command}\"{green} added to favorites.{reset}");
+    // Ensure file exists
+    create_file(&path);
+
+    // Check for duplicates
+    let existing = std::fs::read_to_string(&path).unwrap_or_default();
+    if existing.lines().any(|c| c == cmd) {
+        println!("{yellow}Command {blue}\"{cmd}\"{yellow} is already in favorites.{reset}");
+        return;
+    }
+
+    write_to_file(&path, &format!("{cmd}\n"));
+
+    println!("{green}Command {blue}\"{cmd}\"{green} added to favorites.{reset}");
 }
 
-/// Removes a command from the favorites list.
-///
-/// # Behavior
-/// - Validates command exists
-/// - Removes command from favorites file if present
-fn remove() {
+fn remove(cmd: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
-    let args = return_args();
-
-    let command = &args[2];
     let path = format!("{}/.local/share/cmdcreate/favorites", VARS.home);
 
-    is_command_installed(command);
-    remove_from_file(&path, command);
+    // Don’t validate install — unnecessary
+    remove_from_file(&path, cmd);
 
-    println!("{green}Command {blue}\"{command}\"{green} removed from favorites.{reset}");
+    println!("{green}Command {blue}\"{cmd}\"{green} removed from favorites.{reset}");
 }
