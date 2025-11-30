@@ -63,9 +63,15 @@ pub fn overwrite_file(path: &str, contents: &str) {
 /// # Arguments
 /// * `path` - Path to the file
 /// * `contents` - String data to remove
-pub fn remove_from_file(path: &str, contents: &str) {
-    let current_contents = read_file_to_string(path);
-    let new_contents = current_contents.replace(contents, "");
+pub fn remove_from_file(path: &str, target: &str) {
+    let contents = read_file_to_string(path);
+
+    let new_contents = contents
+        .lines()
+        .filter(|line| line.trim() != target)
+        .map(|line| format!("{line}\n"))
+        .collect::<String>();
+
     overwrite_file(path, &new_contents);
 }
 
@@ -75,12 +81,11 @@ pub fn remove_from_file(path: &str, contents: &str) {
 /// * `path` - File/folder path
 ///
 /// # Returns
-/// * `bool` - true if folder exists, false otherwise
+/// * `bool` - true if path exists, false otherwise
 ///
 /// # Note
-/// Currently not used in cmdcreate
-pub fn _path_exists(path: &str) -> bool {
-    Path::new(path).is_dir()
+pub fn path_exists(path: &str) -> bool {
+    Path::new(path).exists()
 }
 
 /// Creates a folder and all parent directories if they don't exist
@@ -104,13 +109,13 @@ pub fn _create_folder(path: &str) {
 /// # Arguments
 /// * `path` - File path to create
 pub fn create_file(path: &str) {
-    // Ensure parent directories exist
     if let Some(parent) = Path::new(path).parent() {
         let _ = fs::create_dir_all(parent);
     }
 
-    // Create the file itself
-    let _ = fs::File::create(path);
+    if !Path::new(path).exists() {
+        let _ = fs::File::create(path);
+    }
 }
 
 /// Deletes a file safely
