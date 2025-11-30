@@ -4,11 +4,10 @@
 /// their functionality and system integration. It handles both the command file
 /// renaming and updating system symlinks.
 use crate::{
-    cmds::tools::retrieve_commands, // Command management utilities
+    cmds::tools::{is_command_installed, retrieve_commands}, // Command management utilities
     utils::{
-        colors::COLORS,                        // Terminal color formatting
-        msgs::error,                           // Error message handling
-        sys::{return_args, run_shell_command}, // System operations
+        colors::COLORS,         // Terminal color formatting
+        sys::run_shell_command, // System operations
     },
 };
 
@@ -24,19 +23,9 @@ use crate::{
 /// ```bash
 /// cmdcreate rename <old_name> <new_name>
 /// ```
-pub fn rename() {
+pub fn rename(old: &str, new: &str) {
     // Initialize color codes for terminal output formatting
-    let (blue, yellow, green, reset) = (COLORS.blue, COLORS.yellow, COLORS.green, COLORS.reset);
-
-    // Get command line arguments and validate argument count
-    let args = return_args();
-    if args.len() < 3 {
-        println!("Usage:\ncmdcreate {blue}rename {yellow}<command> <new name>{reset}");
-        return;
-    }
-
-    // Extract old and new command names
-    let (name, new) = (args.get(1).unwrap(), args.get(2).unwrap());
+    let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
     // Get list of installed commands and validate there are commands to rename
     let installed_scripts = retrieve_commands("installed");
@@ -44,23 +33,8 @@ pub fn rename() {
         return;
     }
 
-    // Check if the command exists by counting matching scripts
-    let mut count: i32 = 0;
-    for script in installed_scripts {
-        if script
-            .file_stem()
-            .unwrap_or_default()
-            .to_string_lossy()
-            .contains(name)
-        {
-            count += 1
-        }
-    }
-
-    // Error if command doesn't exist
-    if count == 0 {
-        error("Command doesn't exist:", name);
-    }
+    // Validate base command exists
+    is_command_installed(old);
 
     // Perform the rename operation:
     // 1. Rename the command file in cmdcreate's directory
@@ -68,12 +42,12 @@ pub fn rename() {
     // 3. Update the symlink to point to the new file
     run_shell_command(&format!(
         "
-            mv ~/.local/share/cmdcreate/files/{name} ~/.local/share/cmdcreate/files/{new}; \
-            sudo mv /usr/bin/{name} /usr/bin/{new}; \
-            sudo ln -sf ~/.local/share/cmdcreate/files/{new} /usr/bin/{new}; \
-            "
+        mv ~/.local/share/cmdcreate/files/{old} ~/.local/share/cmdcreate/files/{new}; \
+        sudo mv /usr/bin/{old} /usr/bin/{new}; \
+        sudo ln -sf ~/.local/share/cmdcreate/files/{new} /usr/bin/{new}; \
+        "
     ));
 
     // Confirm successful rename to user
-    println!("{green}Created command {blue}\"{new}\"{reset}")
+    println!("{green}Successfully renamed command {blue}\"{old}\" to {blue}\"{new}\"{reset}")
 }
