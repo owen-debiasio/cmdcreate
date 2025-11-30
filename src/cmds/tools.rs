@@ -22,7 +22,7 @@ use crate::utils::{
 ///
 /// # Exit
 /// Exits with status 0 if command is not found and force flag is not set
-pub fn is_command_installed(cmd: &str) {
+pub fn is_command_installed(cmd: &str) -> bool {
     // Count occurrences of the command in installed commands
     let mut count: i32 = 0;
     for script in retrieve_commands("installed") {
@@ -32,9 +32,7 @@ pub fn is_command_installed(cmd: &str) {
     }
 
     // Exit if command not found and not in force mode
-    if count == 0 && !(args_contains("-f") || args_contains("--force")) {
-        error("Command not installed:", cmd);
-    }
+    !(count == 0 && !(args_contains("-f") || args_contains("--force")))
 }
 
 /// Retrieves installed commands or the installation directory
