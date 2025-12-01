@@ -262,7 +262,26 @@
 - Added command: `repair`
   - Fixes commands by recreating missing binaries in `/usr/bin`
   - Usage: `cmdcreate repair`
- 
+
 ## v0.7.8
 
 - Quick fix
+
+## v0.8.0
+
+### Skipped v0.7.9 because of major changes
+
+- Typo fix
+- Code optimizations
+- Added testing library
+  - Run tests:
+    - Backup (importing/exporting)
+    - Command creation
+    - Displaying of command contents
+    - Editing of command contents
+    - Listing commands
+    - Favoriting commands
+    - Removing commands
+    - Renaming commands
+    - repairing commands
+    - Searching for commands
