@@ -10,7 +10,7 @@ set -e  # Exit immediately on any error
 # Enter the source directory
 cd ./src || { echo "Failed to enter ./src directory"; exit 1; }
 
-# Format main
+# Format the main file
 echo "Formatting main..."
 rustfmt main.rs
 
@@ -24,5 +24,9 @@ rustfmt ./cmds/backup/*.rs
 # Format utility modules
 echo "Formatting utils..."
 rustfmt ./utils/*.rs
+
+# Format testing scripts
+echo "Formatting tests..."
+black ../testing/*
 
 echo "Done formatting all source files."
