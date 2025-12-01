@@ -1,5 +1,0 @@
-Cargo.lock
-.gitignore
-.git/
-target/
-aur-update.sh
