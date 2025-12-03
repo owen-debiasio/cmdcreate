@@ -37,6 +37,7 @@ Flags:
 ```
 
 # Installation
+**NOTE: Only supported on x86_64 architectures.**
 
 ## Arch Linux
 Install through the AUR
