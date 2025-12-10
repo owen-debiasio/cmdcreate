@@ -285,3 +285,9 @@
     - Renaming commands
     - repairing commands
     - Searching for commands
+
+## v0.8.1
+
+- Code optimizations
+- File restructure
+- Added better comments/documentation to feature testing scripts
