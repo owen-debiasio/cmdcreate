@@ -1,4 +1,4 @@
-# cmdcreate v0.8.1
+# cmdcreate v0.8.2
 Cmdcreate allows you to create custom commands for your Linux terminal without needing to enter the same "complex" commands over and over (unless if your are lazy like me).
   
 ## Usage:
