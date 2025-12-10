@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# format_src.sh - Format all Rust source files in cmdcreate
+# format.sh - Format all Rust source files in cmdcreate
 #
 # This script uses `rustfmt` to format all Rust files in the `src` directory,
 # including main.rs, command modules, backup modules, and utility modules.
@@ -27,6 +27,6 @@ rustfmt ./utils/*.rs
 
 # Format testing scripts
 echo "Formatting tests..."
-black ../testing/*
+black ../testing/features/*
 
 echo "Done formatting all source files."
