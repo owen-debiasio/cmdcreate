@@ -14,16 +14,30 @@ mod utils;
 
 use crate::{
     cmds::{
-        backup::{export, import}, // Handles command backup and restore functionality
-        edit::*,                  // Command editing operations
-        upgrader::*,              // Update checking and installation
-        *,                        // All other command operations
+        backup::*,   // Handles command backup and restore functionality
+        edit::*,     // Command editing operations
+        upgrader::*, // Update checking and installation
+        *,           // All other command operations
     },
     utils::{colors::*, fs::*, msgs::*, sys::*}, // Utility modules for colors, filesystem ops, and messages
 };
 
 /// Current version of the project
-pub static PROJ_VER: &str = "v0.8.0";
+pub static PROJ_VER: &str = "v0.8.1";
+
+/// Retrieve main offline from the Git repository
+///
+/// Downloads License and changelog
+fn get_files() {
+    retrieve_git_file(
+        &format!("{}/.local/share/cmdcreate/LICENSE", VARS.home),
+        "LICENSE",
+    );
+    retrieve_git_file(
+        &format!("{}/.local/share/cmdcreate/changes.md", VARS.home),
+        "changes.md",
+    );
+}
 
 /// Main entry point for the cmdcreate application
 ///
@@ -56,12 +70,7 @@ fn main() {
         || args[0].starts_with("-c")
         || args[0].starts_with("--c")
     {
-        run_shell_command(
-            "
-            curl -sSo ~/.local/share/cmdcreate/LICENSE https://raw.githubusercontent.com/owen-debiasio/cmdcreate/master/LICENSE; \
-            curl -sSo ~/.local/share/cmdcreate/changes.md https://raw.githubusercontent.com/owen-debiasio/cmdcreate/master/changes.md
-            "
-        );
+        get_files();
     }
 
     // Match the first argument to determine which operation to perform
@@ -74,6 +83,7 @@ fn main() {
                 println!("Usage:\ncmdcreate {blue}create {yellow}<command> <contents>{reset}");
                 return;
             }
+
             create::create(&args[1], &args[2], true)
         }
 
@@ -94,7 +104,7 @@ fn main() {
                 return;
             }
 
-            edit::edit(&args[1])
+            edit(&args[1])
         }
 
         // Search for specific commands
@@ -145,35 +155,52 @@ fn main() {
         "update" => upgrade(),          // Perform system upgrade
 
         // Backup Operations
-        "import" => import::import(), // Import commands from backup
-        "export" => export::export(), // Export commands to backup
+        //
+        // Import commands from backup
+        "import" => {
+            if args.len() < 2 {
+                println!("Usage:\ncmdcreate {blue}import {yellow}<input file>{reset}");
+                return;
+            }
+            import::import(&args[1])
+        }
+
+        // Export commands to backup
+        "export" => {
+            if args.len() < 2 {
+                println!("Usage:\ncmdcreate {blue}export {yellow}<output directory>{reset}");
+                return;
+            }
+            export::export(&args[1])
+        }
 
         // Information Display Arguments
         "--version" | "-v" => println!("cmdcreate {PROJ_VER}"), // Display version information
 
+        // Display list of supported text editors
         "--supported_editors" | "-s" => {
-            // Display list of supported text editors
             println!("Current supported editors:\n");
             for option in SUPPORTED_EDITORS {
                 println!("{option}")
             }
         }
 
+        // Download offline documentation files
         "--get_offline_files" | "-g" => {
-            // Download offline documentation files
             println!("Downloading offline files...");
+            get_files();
             println!("{green}Files downloaded successfully.{reset}");
         }
 
+        // Remove installed offline documentation
         "--remove_offline_files" | "-r" => {
-            // Remove installed offline documentation
             delete_file(&format!("{}/.local/share/cmdcreate/changes.md", VARS.home));
             delete_file(&format!("{}/.local/share/cmdcreate/LICENSE", VARS.home));
             println!("Files removed successfully.");
         }
 
+        // Display license information
         "--license" | "-l" => {
-            // Display license information
             println!(
                 "{}",
                 read_file_to_string(&format!("{}/.local/share/cmdcreate/LICENSE", VARS.home))
