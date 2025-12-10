@@ -14,7 +14,18 @@ use std::{
     path::Path,
 };
 
-use crate::utils::msgs::error;
+use crate::utils::{msgs::error, sys::run_shell_command};
+
+/// Reads the contents of a file into a `String`
+///
+/// # Arguments
+/// * `dest` - Destination path for the downloaded file
+/// * `file_path` - Path of the file to download
+pub fn retrieve_git_file(dest: &str, file_path: &str) {
+    run_shell_command(&format!(
+        "curl -sSo {dest} https://raw.githubusercontent.com/owen-debiasio/cmdcreate/master/{file_path}"
+    ))
+}
 
 /// Reads the contents of a file into a `String`
 ///
