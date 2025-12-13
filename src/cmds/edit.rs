@@ -3,11 +3,13 @@
 /// This module provides functionality to edit existing commands using various
 /// text editors. It supports multiple popular editors and handles editor
 /// detection, command validation, and secure editing of system commands.
-use crate::utils::{
-    colors::COLORS,
-    fs::*,
-    msgs::error,
-    sys::run_shell_command, // System operations
+use crate::{
+    cmds::tools::is_command_installed,
+    utils::{
+        fs::*,
+        msgs::error,
+        sys::run_shell_command, // System operations
+    },
 };
 use std::process::Command;
 
@@ -15,7 +17,7 @@ use std::process::Command;
 ///
 /// These editors are checked in order until a installed editor is found.
 /// The list includes both terminal-based and GUI editors.
-pub const SUPPORTED_EDITORS: [&str; 13] = [
+pub const SUPPORTED_EDITORS: [&str; 16] = [
     "nvim",
     "vi",
     "vim",
@@ -29,6 +31,9 @@ pub const SUPPORTED_EDITORS: [&str; 13] = [
     "emacs",
     "vscodium",
     "vscodium-insiders",
+    "zed",
+    "zed-beta",
+    "mousepad",
 ];
 
 /// Checks if a specific text editor is installed on the system
@@ -58,8 +63,8 @@ pub fn is_editor_installed(editor: &str) -> bool {
 /// cmdcreate edit <command_name>
 /// ```
 pub fn edit(cmd: &str) {
-    // Initialize color codes for terminal output formatting
-    let (yellow, reset) = (COLORS.yellow, COLORS.reset);
+    // Validate the command exists
+    is_command_installed(cmd);
 
     // Find the first installed editor from the supported list
     let Some(editor) = SUPPORTED_EDITORS
@@ -70,17 +75,6 @@ pub fn edit(cmd: &str) {
         return;
     };
 
-    // Get the command script path
-    let path = format!("{}{cmd}", PATHS.install_dir);
-
-    // Validate the command exists
-    if path_exists(&path) {
-        error(
-            "Command not installed:",
-            &format!("{yellow}\"{cmd}\"{reset}"),
-        )
-    }
-
     // Open the command file in the selected editor with sudo permissions
-    run_shell_command(&format!("sudo {editor} {path}"))
+    run_shell_command(&format!("sudo {editor} {}{cmd}", PATHS.install_dir))
 }
