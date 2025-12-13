@@ -5,7 +5,7 @@
 /// and system integration.
 ///
 /// # Features
-/// - Command Management: Create, edit, remove, list, search commands
+/// - Command Management: Create, edit, remove, list, search, etc
 /// - Backup & Restore: Import/export command configurations
 /// - System Integration: Supports multiple editors and shell environments
 /// - Update Management: Built-in version checking and updating
@@ -17,13 +17,13 @@ use crate::{
         backup::*,   // Handles command backup and restore functionality
         edit::*,     // Command editing operations
         upgrader::*, // Update checking and installation
-        *,
+        *,           // Everything else
     },
     utils::{colors::*, fs::*, msgs::*, sys::*}, // Utility modules for colors, filesystem ops, and messages
 };
 
 /// Current version of the project
-pub static PROJ_VER: &str = "v0.8.3";
+pub const PROJ_VER: &str = "v0.8.4";
 
 /// Retrieve main offline from the Git repository
 ///
@@ -169,7 +169,11 @@ fn main() {
         }
 
         // Information Display Arguments
-        "--version" | "-v" => println!("cmdcreate {PROJ_VER}"), // Display version information
+
+        // Display version information
+        "--version" | "-v" => println!(
+            "cmdcreate {PROJ_VER}\n(C) 2025 Owen Debiasio; distributed under the MIT License"
+        ),
 
         // Display list of supported text editors
         "--supported_editors" | "-s" => {
