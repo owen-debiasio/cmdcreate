@@ -19,6 +19,7 @@ Features supported:
 8. Renaming commands
 9. Repairing missing installations
 10. Importing/exporting command bundles
+11. Run every test
 """
 
 from scripts import (
@@ -58,7 +59,8 @@ def main():
         "7] Displaying command contents",
         "8] Rename command",
         "9] Repair command(s)",
-        "10] Importing/exporting command(s)",
+        "10] Importing/exporting command(s)\n",
+        "11] All tests",
     ]
 
     for line in options:
@@ -95,6 +97,9 @@ def run_test(test):
             repair.test()
         case "10":
             backup.test()
+        case "11":
+            for i in range(1, 10):
+                run_test(str(i))
         case _:
             # If invalid input, restart the menu
             main()
