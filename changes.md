@@ -291,3 +291,13 @@
 - Code optimizations
 - File restructure
 - Added better comments/documentation to feature testing scripts
+
+## v0.8.2
+
+- Fix
+
+## v0.8.3
+
+- Major code optimizations and fixes
+- Updated/fixed Python testing scripts for version 3.13.11
+- Other random fixes
