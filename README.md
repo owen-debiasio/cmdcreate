@@ -5,7 +5,7 @@ Cmdcreate allows you to create custom commands for your Linux terminal without n
 
 ```
 Commands:
-  create   <command>     <contents>  Create a custom command
+  create   <command>    <contents>  Create a custom command
   remove   <command>                 Remove a custom command
   edit     <command>                 Modify contents of a command
   list                               Display custom commands
