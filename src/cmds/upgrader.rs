@@ -147,13 +147,14 @@ pub fn upgrade() {
                 .into_iter()
                 .find(|a| a.name == file_to_download)
             {
-                let tmp_path = &format!("/tmp/{}", asset.name);
-                let mut tmp_file = File::create(tmp_path).unwrap();
-                let out_path = &format!("/usr/bin/{}", asset.name);
+                let (tmp_path, out_path) = (
+                    &format!("/tmp/{}", asset.name),
+                    &format!("/usr/bin/{}", asset.name),
+                );
 
                 std::io::copy(
                     &mut client.get(&asset.browser_download_url).send().unwrap(),
-                    &mut tmp_file,
+                    &mut File::create(tmp_path).unwrap(),
                 )
                 .unwrap();
 
