@@ -294,10 +294,21 @@
 
 ## v0.8.2
 
-- Fix
+- Fix (Update: Did not work, was fixed in v0.8.3)
 
 ## v0.8.3
 
 - Major code optimizations and fixes
 - Updated/fixed Python testing scripts for version 3.13.11
+- Other random fixes
+
+## v0.8.4
+
+- Fixed command not installed error when running `cmdcreate edit`
+- Reorganized the file structure a bit
+- Added `mousepad`, `zed`, and `zed-beta` as supported editors
+- Changed some statics to consts for consistency
+- Added copyright and license information to version display
+- Code optimizations
+- You can now run all tests by picking option 11 in the Python script
 - Other random fixes
