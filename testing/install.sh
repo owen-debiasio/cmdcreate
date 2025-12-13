@@ -10,7 +10,7 @@
 # Remove any previously installed cmdcreate package via pacman
 # -Rns removes the package and dependencies that are not required by other packages
 # --noconfirm skips confirmation prompts
-sudo pacman -Rns cmdcreate --noconfirm || clear
+sudo pacman -Rns cmdcreate cmdcreate-debug --noconfirm || clear
 
 # Notify user if release version was not installed
 echo -e "\nRelease ver not installed, skipping\n"
