@@ -14,9 +14,8 @@ use std::{
     process::{Command, Stdio},
 };
 
-use once_cell::sync::Lazy;
-
 use crate::utils::msgs::error;
+use once_cell::sync::Lazy;
 
 /// Holds key environment variables for cmdcreate
 pub struct Vars {
@@ -92,4 +91,24 @@ pub fn run_shell_command(cmd: &str) {
             error("Failed to run shell command:", &e.to_string());
         }
     }
+}
+
+/// Enables or disables handling of Ctrl-C (SIGINT) for the program
+///
+/// # Arguments
+/// * `enabled` - If `true`, Ctrl-C will terminate the program (default behavior).
+///               If `false`, Ctrl-C will be ignored.
+///
+/// This function is useful for controlling whether the user can interrupt
+/// certain critical sections of the program
+#[allow(clippy::doc_overindented_list_items)]
+pub fn ctrlc_enabled(enabled: bool) {
+    if enabled {
+        // Re-enable default Ctrl-C behavior: exit program on Ctrl-C
+        ctrlc::set_handler(|| std::process::exit(1)).expect("Failed to set Ctrl-C handler");
+        return;
+    }
+
+    // Disable Ctrl-C: set a no-op handler so the program ignores it
+    ctrlc::set_handler(|| {}).expect("Failed to set Ctrl-C handler");
 }
