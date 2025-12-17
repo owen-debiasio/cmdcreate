@@ -23,15 +23,7 @@ use crate::{
 };
 
 /// Current version of the project
-pub const PROJ_VER: &str = "v0.8.4";
-
-/// Retrieve main offline from the Git repository
-///
-/// Downloads License and changelog
-fn get_files() {
-    retrieve_git_file(&PATHS.license, "LICENSE");
-    retrieve_git_file(&PATHS.changelog, "changes.md");
-}
+pub const VERSION: &str = "v0.8.5";
 
 /// Main entry point for the cmdcreate application
 ///
@@ -57,6 +49,9 @@ fn main() {
         utils::msgs::display_usage();
         return;
     }
+
+    // Disables Ctrl-C behavior
+    ctrlc_enabled(false);
 
     // Pre-download license or changelog files if requested
     if args[0].starts_with("-l")
@@ -172,7 +167,7 @@ fn main() {
 
         // Display version information
         "--version" | "-v" => println!(
-            "cmdcreate {PROJ_VER}\n(C) 2025 Owen Debiasio; distributed under the MIT License"
+            "cmdcreate {VERSION}\n(C) 2025 Owen Debiasio; distributed under the MIT License"
         ),
 
         // Display list of supported text editors
@@ -235,4 +230,7 @@ fn main() {
             error("Invalid command:", &args[0])
         }
     }
+
+    // Re-enable Ctrl-C behavior
+    ctrlc_enabled(true);
 }
