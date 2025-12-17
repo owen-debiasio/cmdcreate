@@ -1,3 +1,4 @@
+use std::io::stdin;
 /// Messaging Utilities for cmdcreate
 ///
 /// This module provides functions to display usage instructions,
@@ -10,8 +11,8 @@
 /// - Print errors and terminate the program
 use std::process::exit;
 
+use crate::VERSION;
 use crate::utils::{colors::COLORS, sys::args_contains};
-use crate::PROJ_VER;
 
 /// Displays the full usage instructions for cmdcreate
 ///
@@ -27,7 +28,7 @@ pub fn display_usage() {
     );
 
     let lines: Vec<String> = vec![
-        format!("cmdcreate {PROJ_VER}"),
+        format!("cmdcreate {VERSION}"),
         format!(
             "Usage: cmdcreate {magenta}(flags){reset} [{blue}command{reset}, {cyan}argument{reset}] {yellow}<args> {magenta}(flags){reset}"
         ),
@@ -63,9 +64,6 @@ pub fn display_usage() {
         ),
         "\nArguments:".into(),
         format!("  {cyan}-v{reset},{cyan} --version {reset}                    Displays version"),
-        format!(
-            "  {cyan}-s{reset},{cyan} --supported_editors {reset}          Displays supported text editors"
-        ),
         format!("  {cyan}-c{reset},{cyan} --changelog {reset}                  Displays changelog"),
         format!("  {cyan}-l{reset},{cyan} --license {reset}                    Displays license"),
         format!(
@@ -100,7 +98,7 @@ pub fn ask_for_confirmation(q: &str) {
     if !args_contains("--force") && !args_contains("-f") {
         println!("{q}\n(Y or N)");
         let mut confirm = String::new();
-        std::io::stdin().read_line(&mut confirm).unwrap();
+        stdin().read_line(&mut confirm).unwrap();
         if confirm.trim().to_lowercase() != "y" {
             println!("{}\nAborted.{}", COLORS.red, COLORS.reset);
             exit(0)
@@ -116,6 +114,11 @@ pub fn ask_for_confirmation(q: &str) {
 ///
 /// Uses terminal red color for visibility
 pub fn error(msg: &str, err: &str) {
-    eprintln!("{}Error: {} {err}{}", COLORS.red, msg.trim(), COLORS.reset);
+    eprintln!(
+        "\n{}Error: {} {err}{}",
+        COLORS.red,
+        msg.trim(),
+        COLORS.reset
+    );
     exit(1)
 }
