@@ -14,7 +14,7 @@
 #   - The version argument MUST NOT start with 'v'.
 #   - Ensure the binary exists in ~/Downloads before running.
 
-set -e  # Exit immediately if any command fails
+set -e # Exit immediately if any command fails
 
 # Check for version argument
 if [[ -z "$1" ]]; then
@@ -39,7 +39,7 @@ mkdir -p "$RPMBUILD_DIR"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 SPEC_FILE="$RPMBUILD_DIR/SPECS/cmdcreate.spec"
 
 # Generate the spec file with metadata, dependencies, and installation steps
-cat > "$SPEC_FILE" <<EOF
+cat >"$SPEC_FILE" <<EOF
 Name:           cmdcreate
 Version:        $VERSION
 Release:        1%{?dist}
