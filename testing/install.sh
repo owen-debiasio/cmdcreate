@@ -21,8 +21,8 @@ rustup update
 # Update Rust crate dependencies
 cargo update
 
-# Run formatting script (assumes you have ./format.sh)
-./format.sh
+# Run formatting script
+./package/format.sh
 
 # Build cmdcreate in release mode
 cargo build --release
