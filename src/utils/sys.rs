@@ -11,10 +11,11 @@
 /// - Run shell commands safely with optional system shell override
 use std::{
     env,
-    process::{Command, Stdio},
+    process::{Command, Stdio, exit},
 };
 
 use crate::utils::msgs::error;
+use ctrlc::set_handler;
 use once_cell::sync::Lazy;
 
 /// Holds key environment variables for cmdcreate
@@ -105,10 +106,10 @@ pub fn run_shell_command(cmd: &str) {
 pub fn ctrlc_enabled(enabled: bool) {
     if enabled {
         // Re-enable default Ctrl-C behavior: exit program on Ctrl-C
-        ctrlc::set_handler(|| std::process::exit(1)).expect("Failed to set Ctrl-C handler");
+        set_handler(|| exit(1)).expect("Failed to set Ctrl-C handler");
         return;
     }
 
     // Disable Ctrl-C: set a no-op handler so the program ignores it
-    ctrlc::set_handler(|| {}).expect("Failed to set Ctrl-C handler");
+    set_handler(|| {}).expect("Failed to set Ctrl-C handler");
 }
