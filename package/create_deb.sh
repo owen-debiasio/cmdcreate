@@ -14,7 +14,7 @@
 #   - The version argument MUST NOT start with 'v'.
 #   - Make sure the binary exists in ~/Downloads before running.
 
-set -e  # Exit immediately on any error
+set -e # Exit immediately on any error
 
 # Check for version argument
 if [[ -z "$1" ]]; then
