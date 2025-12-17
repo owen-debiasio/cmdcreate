@@ -71,7 +71,6 @@ rm -r "$PKGDIR"
 mv "$BINARY_SRC" "$HOME/Downloads/cmdcreate-v${VERSION}-linux-x86_64-bin"
 
 # Clean old package files in local package folder
-cd /home/owen/Documents/Code/Projects/cmdcreate/package
 rm -r cmdcreate*
 
 # Final notification
