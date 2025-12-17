@@ -312,3 +312,13 @@
 - Code optimizations
 - You can now run all tests by picking option 11 in the Python script
 - Other random fixes
+
+## v0.8.5
+
+- Code optimizations
+- Formatted shell files to make them look better
+- Overhauled upgrading command
+  - It can now detect your distro (hopefully)
+    - PLEASE and I mean **PLEASE** report issues
+- You can no longer use the CTRL-C shortcut to exit
+  - Meant to prevent accidental exits and break things
