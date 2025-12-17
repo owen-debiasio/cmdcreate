@@ -3,7 +3,8 @@ use serde::Deserialize;
 use serde_json::Value;
 use std::{
     error::Error,
-    fs::{self, File},
+    fs::{File, read_to_string},
+    io::{copy, stdin},
     path::Path,
     process::Command,
 };
@@ -31,7 +32,7 @@ pub fn installation_method(path: &Path) -> InstallMethod {
     let path_str = path.to_str().unwrap_or_default();
 
     // Determine base distro
-    let distro_base = fs::read_to_string("/etc/os-release")
+    let distro_base = read_to_string("/etc/os-release")
         .ok()
         .map(|s| {
             let s = s.to_lowercase();
@@ -101,13 +102,12 @@ struct Asset {
 /// Performs the upgrade of cmdcreate
 pub fn upgrade() {
     let latest_release = get_latest_release().unwrap_or_else(|| VERSION.to_string());
-    let method = installation_method(Path::new("/usr/bin/cmdcreate"));
 
-    match method {
+    match installation_method(Path::new("/usr/bin/cmdcreate")) {
         InstallMethod::Aur => upgrade_aur(),
         InstallMethod::Dpkg => upgrade_deb(&latest_release),
         InstallMethod::Rpm => upgrade_rpm(&latest_release),
-        InstallMethod::StandaloneBinary => println!("Manual binary installation will be used."),
+        InstallMethod::StandaloneBinary => (),
     }
 
     interactive_upgrade(latest_release);
@@ -149,17 +149,18 @@ fn interactive_upgrade(latest_release: String) {
 
     ask_for_confirmation("Do you want to upgrade cmdcreate?");
     println!(
-        "\nSelect an upgrade method:\n\n{blue}1]{reset} Upgrade through AUR\n{blue}2]{reset} Install via .deb file\n{blue}3]{reset} Install via .rpm file\n{blue}4]{reset} Manually install binary"
+        "\nSelect an upgrade method:\n\n{blue}1]{reset} Upgrade through AUR\n{blue}2]{reset} Install via .deb file\n{blue}3]{reset} Install via .rpm file\n{blue}4]{reset} Manually install binary\n{blue}5]{reset} Exit"
     );
 
     let mut method_input = String::new();
-    std::io::stdin().read_line(&mut method_input).unwrap();
+    stdin().read_line(&mut method_input).unwrap();
 
     match method_input.trim() {
         "1" => upgrade_aur(),
         "2" => upgrade_deb(&latest_release),
         "3" => upgrade_rpm(&latest_release),
         "4" => upgrade_binary(&latest_release),
+        "5" => error("Aborted.", ""),
         _ => error("Invalid selection.", ""),
     }
 }
@@ -185,10 +186,12 @@ fn upgrade_binary(latest_release: &str) {
         .into_iter()
         .find(|a| a.name == file_to_download)
     {
-        let tmp_path = format!("/tmp/{}", asset.name);
-        let out_path = format!("/usr/bin/{}", asset.name);
+        let (tmp_path, out_path) = (
+            format!("/tmp/{}", asset.name),
+            format!("/usr/bin/{}", asset.name),
+        );
 
-        std::io::copy(
+        copy(
             &mut client.get(&asset.browser_download_url).send().unwrap(),
             &mut File::create(&tmp_path).unwrap(),
         )
