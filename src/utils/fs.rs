@@ -19,8 +19,16 @@ use once_cell::sync::Lazy;
 
 use crate::utils::{
     msgs::error,
-    sys::{run_shell_command, VARS},
+    sys::{VARS, run_shell_command},
 };
+
+/// Retrieve main offline from the Git repository
+///
+/// Downloads License and changelog
+pub fn get_files() {
+    retrieve_git_file(&PATHS.license, "LICENSE");
+    retrieve_git_file(&PATHS.changelog, "changes.md");
+}
 
 /// Reads the contents of a file into a `String`
 ///
@@ -157,6 +165,15 @@ pub fn delete_folder(path: &str) {
     }
 }
 
+/// Base directory for all cmdcreate data
+///
+/// Resolves to:
+/// `$HOME/.local/share/cmdcreate`
+///
+/// NOTE: DOES NOT END WITH A SLASH ("/")
+pub static MAIN_PATH: LazyLock<String> =
+    LazyLock::new(|| format!("{}/.local/share/cmdcreate", VARS.home));
+
 /// Holds commonly used paths
 ///
 /// This struct groups together frequently accessed filesystem paths
@@ -173,16 +190,7 @@ pub struct Paths {
     pub changelog: String, // Changelog
 }
 
-/// Base directory for all cmdcreate data
-///
-/// Resolves to:
-/// `$HOME/.local/share/cmdcreate`
-///
-/// NOTE: DOES NOT END WITH A SLASH ("/")
-pub static MAIN_PATH: LazyLock<String> =
-    LazyLock::new(|| format!("{}/.local/share/cmdcreate", VARS.home));
-
-/// Global static variable storing commonly used paths
+/// Global const variable storing commonly used paths
 ///
 /// This lazily initializes all derived paths from `MAIN_PATH`
 /// and provides a single source of truth for filesystem locations.
