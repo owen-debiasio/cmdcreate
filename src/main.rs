@@ -23,7 +23,7 @@ use crate::{
 };
 
 /// Current version of the project
-pub const VERSION: &str = "v0.8.5";
+pub const VERSION: &str = "v0.8.6";
 
 /// Main entry point for the cmdcreate application
 ///
@@ -170,14 +170,6 @@ fn main() {
             "cmdcreate {VERSION}\n(C) 2025 Owen Debiasio; distributed under the MIT License"
         ),
 
-        // Display list of supported text editors
-        "--supported_editors" | "-s" => {
-            println!("Current supported editors:\n");
-            for option in SUPPORTED_EDITORS {
-                println!("{option}")
-            }
-        }
-
         // Download offline documentation files
         "--get_offline_files" | "-g" => {
             println!("Downloading offline files...");
@@ -230,7 +222,4 @@ fn main() {
             error("Invalid command:", &args[0])
         }
     }
-
-    // Re-enable Ctrl-C behavior
-    ctrlc_enabled(true);
 }
