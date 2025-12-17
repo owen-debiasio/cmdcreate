@@ -322,3 +322,10 @@
     - PLEASE and I mean **PLEASE** report issues
 - You can no longer use the CTRL-C shortcut to exit
   - Meant to prevent accidental exits and break things
+
+## v0.8.6
+
+- Fixed AUR packages not installing (my mistake)
+- Removed `--supported_editors`/`-s` flag: Why would you need this?
+- Code optimizations
+- Fixed bug where the CTRL-C disabled caused crashes
