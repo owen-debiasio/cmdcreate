@@ -1,4 +1,4 @@
-# cmdcreate v0.8.5
+# cmdcreate v0.8.6
 Cmdcreate allows you to create custom commands for your Linux terminal without needing to enter the same "complex" commands over and over (unless if your are lazy like me).
   
 ## Usage:
@@ -26,7 +26,6 @@ Commands:
 
 Flags:
   -v, --version                      Displays version
-  -s, --supported_editors            Displays supported text editors
   -c, --changelog                    Displays changelog
   -l, --license                      Displays license
   -d, --debugging                    Displays flags used for debugging
