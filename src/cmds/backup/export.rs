@@ -1,0 +1,41 @@
+use std::path::Path;
+
+use crate::cmds::tools::get_installed_commands;
+use crate::utils::{
+    colors::COLORS,
+    fs::{read_file_to_string, write_to_file},
+    sys::VARS,
+};
+
+pub fn export(path: &str) {
+    let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
+
+    let export_file = Path::new(path).join("export.cmdcreate");
+
+    for script in get_installed_commands() {
+        if let Some(stem) = script.file_stem() {
+            let cmd = stem.to_string_lossy();
+
+            let mut cmd_contents =
+                read_file_to_string(&format!("{}/.local/share/cmdcreate/files/{cmd}", VARS.home));
+
+            cmd_contents = cmd_contents.replace('|', "[|");
+
+            let line =
+                if read_file_to_string(&format!("{}/.local/share/cmdcreate/favorites", VARS.home))
+                    .contains(cmd.as_ref())
+                {
+                    format!("{cmd} | {cmd_contents} | favorite\n")
+                } else {
+                    format!("{cmd} | {cmd_contents}\n")
+                };
+
+            write_to_file(export_file.to_str().unwrap(), &line);
+        }
+    }
+
+    println!(
+        "{green}Successfully exported commands to:{blue} \"{}\"{green}.{reset}",
+        export_file.display()
+    );
+}
