@@ -329,3 +329,10 @@
 - Removed `--supported_editors`/`-s` flag: Why would you need this?
 - Code optimizations
 - Fixed bug where the CTRL-C disabled caused crashes
+
+## v0.8.7
+
+- Added more information in `Cargo.toml`
+- Code optimizations
+- The upgrading process should work a bit better now
+- Optimized the sh!t out of the code, reorganized tons of stuff
