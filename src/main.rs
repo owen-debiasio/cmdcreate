@@ -11,13 +11,13 @@ use crate::{
     },
     utils::{
         colors::COLORS,
-        fs::{PATHS, create_folder, delete_file, get_files, read_file_to_string},
+        fs::{PATHS, delete_file, init_fs, init_git_fs, read_file_to_string},
         msgs::{display_usage, error},
-        sys::{VARS, return_args},
+        sys::return_args,
     },
 };
 
-pub const VERSION: &str = "v0.8.8";
+pub const VERSION: &str = "v0.8.9";
 
 fn main() {
     let args = return_args();
@@ -26,8 +26,8 @@ fn main() {
         return;
     }
 
+    init_fs();
     cmdcreate(&args);
-    create_folder(&format!("{}/.local/share/cmdcreate/", VARS.home));
 }
 
 fn cmdcreate(args: &[String]) {
@@ -45,7 +45,7 @@ fn cmdcreate(args: &[String]) {
     );
 
     if matches!(cmd.as_str(), "-l" | "--l" | "-c" | "--c") {
-        get_files();
+        init_git_fs();
     }
 
     let arg = |i| args.get(i).map(String::as_str);
@@ -111,7 +111,7 @@ fn cmdcreate(args: &[String]) {
 
         "--get_offline_files" | "-g" => {
             println!("Downloading offline files...");
-            get_files();
+            init_git_fs();
             println!("{green}Files downloaded successfully.{reset}");
         }
 
