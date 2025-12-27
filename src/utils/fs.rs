@@ -1,5 +1,5 @@
 use std::{
-    fs::{self, File, OpenOptions},
+    fs::{self, File, OpenOptions, create_dir_all, read_to_string, remove_file},
     io::Write,
     path::Path,
     sync::LazyLock,
@@ -22,26 +22,26 @@ pub fn retrieve_git_file(dest: &str, file_path: &str) {
 }
 
 pub fn read_file_to_string(file_path: &str) -> String {
-    fs::read_to_string(file_path).unwrap_or_else(|e| {
+    read_to_string(file_path).unwrap_or_else(|e| {
         error("Error reading file:", &format!("\"{file_path}\": {e}"));
         String::new()
     })
 }
 
 pub fn write_to_file(path: &str, contents: &str) {
-    let mut file = OpenOptions::new()
+    OpenOptions::new()
         .create(true)
         .append(true)
         .open(path)
-        .expect("Failed to open or create file");
-
-    file.write_all(contents.as_bytes())
+        .expect("Failed to open or create file")
+        .write_all(contents.as_bytes())
         .expect("Failed to write to file");
 }
 
 pub fn overwrite_file(path: &str, contents: &str) {
-    let mut file = File::create(path).expect("Failed to overwrite file");
-    file.write_all(contents.as_bytes())
+    File::create(path)
+        .expect("Failed to overwrite file")
+        .write_all(contents.as_bytes())
         .expect("Failed to write to file");
 }
 
@@ -64,8 +64,8 @@ pub fn path_exists(path: &str) -> bool {
     Path::new(path).exists()
 }
 
-pub fn _create_folder(path: &str) {
-    match fs::create_dir_all(path) {
+pub fn create_folder(path: &str) {
+    match create_dir_all(path) {
         Ok(()) => {}
         Err(e) => error(
             &format!("Failed to create folder: \"{path}\":"),
@@ -76,16 +76,16 @@ pub fn _create_folder(path: &str) {
 
 pub fn create_file(path: &str) {
     if let Some(parent) = Path::new(path).parent() {
-        let _ = fs::create_dir_all(parent);
+        let _ = create_dir_all(parent);
     }
 
     if !Path::new(path).exists() {
-        let _ = fs::File::create(path);
+        let _ = File::create(path);
     }
 }
 
 pub fn delete_file(path: &str) {
-    if let Err(e) = fs::remove_file(path) {
+    if let Err(e) = remove_file(path) {
         error(&format!("Failed to delete file {path}:"), &e.to_string());
     }
 }
@@ -108,7 +108,7 @@ pub struct Paths {
     pub changelog: String,
 }
 
-pub static PATHS: std::sync::LazyLock<Paths> = LazyLock::new(|| Paths {
+pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     favorites: format!("{}/favorites", *MAIN_PATH),
 
     install_dir: format!("{}/files/", *MAIN_PATH),
