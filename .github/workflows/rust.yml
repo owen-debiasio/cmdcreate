@@ -1,4 +1,4 @@
-name: Rust (Linux)
+name: Rust
 
 on:
   push:
@@ -10,13 +10,13 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  linux-ci:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Rust
+      - name: Install Rust (with clippy + fmt)
         uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
@@ -27,11 +27,11 @@ jobs:
       - name: Format check
         run: cargo fmt -- --check
 
-      - name: Clippy (strict, matches Cargo.toml)
+      - name: Clippy (matches Cargo.toml lints)
         run: cargo clippy --all-targets --all-features -- -D warnings
 
-      - name: Build (release, Linux)
+      - name: Build (release profile)
         run: cargo build --release --verbose
 
-      - name: Tests
+      - name: Run tests
         run: cargo test --release --verbose
