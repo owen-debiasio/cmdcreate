@@ -2,15 +2,14 @@ use std::{fs::read_dir, path::PathBuf};
 
 use crate::utils::{colors::COLORS, fs::PATHS, msgs::error, sys::args_contains};
 
-pub fn is_command_installed(cmd: &str) -> bool {
-    let mut count: i32 = 0;
-    for script in get_installed_commands() {
-        if script.file_stem().unwrap_or_default().to_string_lossy() == *cmd {
-            count += 1;
-        }
-    }
+pub fn is_command_installed(cmd: &str) {
+    let installed = get_installed_commands()
+        .iter()
+        .any(|script| script.file_stem().and_then(|s| s.to_str()) == Some(cmd));
 
-    !(count == 0 && !(args_contains("-f") || args_contains("--force")))
+    if !(installed || args_contains("-f") || args_contains("--force")) {
+        error(&format!("Command \"{cmd}\" is not installed"), "");
+    }
 }
 
 pub fn get_installed_commands() -> Vec<PathBuf> {
