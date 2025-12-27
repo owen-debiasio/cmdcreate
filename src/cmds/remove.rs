@@ -2,7 +2,7 @@ use crate::{
     cmds::tools::{get_installed_commands, is_command_installed},
     utils::{
         colors::COLORS,
-        fs::{delete_file, read_file_to_string, remove_from_file},
+        fs::{delete_file, path_exists, read_file_to_string, remove_from_file},
         msgs::ask_for_confirmation,
         sys::{VARS, run_shell_command},
     },
@@ -33,7 +33,7 @@ pub fn remove(command: &str) {
     ));
 
     let path = format!("{}/.local/share/cmdcreate/favorites", VARS.home);
-    if read_file_to_string(&path).contains(command) {
+    if read_file_to_string(&path).contains(command) && path_exists(&path) {
         remove_from_file(&path, command);
     }
     run_shell_command(&format!("sudo rm -f /usr/bin/{command}"));
