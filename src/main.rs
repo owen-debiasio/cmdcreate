@@ -11,13 +11,13 @@ use crate::{
     },
     utils::{
         colors::COLORS,
-        fs::{PATHS, delete_file, get_files, read_file_to_string},
+        fs::{PATHS, create_folder, delete_file, get_files, read_file_to_string},
         msgs::{display_usage, error},
-        sys::{ctrlc_enabled, return_args},
+        sys::{VARS, return_args},
     },
 };
 
-pub const VERSION: &str = "v0.8.7";
+pub const VERSION: &str = "v0.8.8";
 
 fn main() {
     let args = return_args();
@@ -26,8 +26,8 @@ fn main() {
         return;
     }
 
-    ctrlc_enabled(false);
     cmdcreate(&args);
+    create_folder(&format!("{}/.local/share/cmdcreate/", VARS.home));
 }
 
 fn cmdcreate(args: &[String]) {
@@ -116,6 +116,7 @@ fn cmdcreate(args: &[String]) {
         }
 
         "--remove_offline_files" | "-r" => {
+            println!("Removing files...");
             delete_file(&PATHS.changelog);
             delete_file(&PATHS.license);
             println!("Files removed successfully.");
