@@ -336,3 +336,9 @@
 - Code optimizations
 - The upgrading process should work a bit better now
 - Optimized the sh!t out of the code, reorganized tons of stuff
+
+## v0.8.8
+
+- Ctrl-C is no longer disabled
+- `bash` is no longer a dependency
+- Code optimizations
