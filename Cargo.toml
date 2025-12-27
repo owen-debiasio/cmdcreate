@@ -2,7 +2,7 @@
 name = "cmdcreate"
 authors = ["Owen Debiasio <owen.debiasio@gmail.com>"]
 license = "MIT"
-version = "0.8.9"
+version = "0.9.0"
 edition = "2024"
 
 [dependencies]

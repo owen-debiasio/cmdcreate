@@ -17,7 +17,7 @@ use crate::{
     },
 };
 
-pub const VERSION: &str = "v0.8.9";
+pub const VERSION: &str = "v0.9.0";
 
 fn main() {
     let args = return_args();
