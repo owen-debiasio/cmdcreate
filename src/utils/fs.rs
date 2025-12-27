@@ -1,5 +1,5 @@
 use std::{
-    fs::{self, File, OpenOptions, create_dir_all, read_to_string, remove_file},
+    fs::{File, OpenOptions, create_dir_all, read_to_string, remove_dir_all, remove_file},
     io::Write,
     path::Path,
     sync::LazyLock,
@@ -10,7 +10,14 @@ use crate::utils::{
     sys::{VARS, run_shell_command},
 };
 
-pub fn get_files() {
+pub fn init_fs() {
+    create_folder(&format!("{}/.local/share/cmdcreate/", VARS.home));
+    create_folder(&format!("{}/.local/share/cmdcreate/files", VARS.home));
+
+    create_file(&format!("{}/.local/share/cmdcreate/favorites", VARS.home));
+}
+
+pub fn init_git_fs() {
     retrieve_git_file(&PATHS.license, "LICENSE");
     retrieve_git_file(&PATHS.changelog, "changes.md");
 }
@@ -91,7 +98,7 @@ pub fn delete_file(path: &str) {
 }
 
 pub fn delete_folder(path: &str) {
-    if let Err(e) = fs::remove_dir_all(path) {
+    if let Err(e) = remove_dir_all(path) {
         error(&format!("Failed to delete folder {path}:"), &e.to_string());
     }
 }
