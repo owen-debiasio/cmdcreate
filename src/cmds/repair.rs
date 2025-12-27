@@ -26,7 +26,7 @@ pub fn repair() {
 
     if count > 0 {
         println!("{green}Broken commands have been repaired.{reset}");
-        return
+        return;
     }
     
     println!("{yellow}No commands needed repairs.{reset}");
