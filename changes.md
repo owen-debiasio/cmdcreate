@@ -342,3 +342,10 @@
 - Ctrl-C is no longer disabled
 - `bash` is no longer a dependency
 - Code optimizations
+
+## 0.8.9
+
+- Fixed bug: (Thank you `Dominiquini` for bringing this to my attention!)
+  - File not found error for creating, removing, listing commands
+- Code optimizations
+- Other small tweaks
