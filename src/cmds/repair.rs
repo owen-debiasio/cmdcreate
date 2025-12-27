@@ -28,6 +28,6 @@ pub fn repair() {
         println!("{green}Broken commands have been repaired.{reset}");
         return;
     }
-    
+
     println!("{yellow}No commands needed repairs.{reset}");
 }
