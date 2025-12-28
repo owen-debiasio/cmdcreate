@@ -349,3 +349,7 @@
   - File not found error for creating, removing, listing commands
 - Code optimizations
 - Other small tweaks
+
+## v0.9.0
+
+- Code optimizations
