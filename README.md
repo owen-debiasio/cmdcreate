@@ -79,19 +79,11 @@ You can the get the `x86_64` binary from the latest [release](https://github.com
 
 ```
 $ git clone https://github.com/Meme-Supplier/cmdcreate.git
-```
-
-## Clone repository
-
-```
 $ cd cmdcreate
+$ cargo build --release
 ```
 
-## Then you can build from there
-
-```
-$ cargo build
-```
+The binary should be located at `target/release/cmdcreate`
 
 ---
 
