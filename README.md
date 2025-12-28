@@ -129,4 +129,4 @@ say-hi
 
 (C) 2025 Owen Debiasio
 
-Licensed under MIT
+Licensed under GPL-2.0-only
