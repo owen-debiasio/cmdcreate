@@ -356,3 +356,4 @@
 - Added support for configurations
   - For all avaliable configurations, visit:
     - <https://github.com/owen-debiasio/cmdcreate/blob/main/config_example.toml>
+- Changed license to `GPL-2.0-only`

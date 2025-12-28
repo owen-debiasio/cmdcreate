@@ -63,9 +63,8 @@ pub fn display_usage() {
             "    {cyan}-r{reset},{cyan} --remove_offline_files{reset}      Removes files for offline use"
         ),
         "\nAbout:".into(),
-        "   Cmdcreate allows you to create custom commands for your Linux Terminal".into(),
-        "   without needing to enter the same \"complex\" commands over and over".into(),
-        "   (unless if your are lazy like me).".into(),
+        "   Cmdcreate allows you to create custom commands for your Linux terminal".into(),
+        "   without needing to enter the same \"complex\" commands over and over.".into(),
     ];
 
     for line in lines {
