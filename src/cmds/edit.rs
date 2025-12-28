@@ -19,7 +19,7 @@ pub const SUPPORTED_EDITORS: [&str; 16] = [
     "vscodium",
     "vscodium-insiders",
     "zed",
-    "zed-beta",
+    "zed-preview",
     "mousepad",
 ];
 
