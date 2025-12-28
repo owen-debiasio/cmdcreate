@@ -353,3 +353,6 @@
 ## v0.9.0
 
 - Code optimizations
+- Added support for configurations
+  - For all avaliable configurations, visit:
+    - <https://github.com/owen-debiasio/cmdcreate/blob/main/config_example.toml>

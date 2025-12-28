@@ -5,6 +5,7 @@ sudo pacman -Rns cmdcreate cmdcreate-debug --noconfirm || clear
 echo -e "\nRelease ver not installed, skipping\n"
 
 rustup update
+rustup default stable
 
 cargo update
 

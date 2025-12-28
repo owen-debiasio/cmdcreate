@@ -4,7 +4,7 @@ use std::{
     sync::LazyLock,
 };
 
-use crate::utils::msgs::error;
+use crate::{configs::load, utils::msgs::error};
 pub struct Vars {
     pub shell: String,
     pub home: String,
@@ -24,10 +24,10 @@ pub fn args_contains(arg: &str) -> bool {
 }
 
 pub fn run_shell_command(cmd: &str) {
-    let shell: String = if args_contains("--force_system_shell") | args_contains("-F") {
-        VARS.shell.clone()
+    let shell: &str = if args_contains("--force_system_shell") | args_contains("-F") {
+        &VARS.shell
     } else {
-        "sh".to_string()
+        &load("sys", "shell", "sh")
     };
 
     if cmd.trim().is_empty() {

@@ -1,0 +1,4 @@
+# This file is located in ~/.config/cmdcreate/config.toml
+
+[sys]
+shell = "bash"
