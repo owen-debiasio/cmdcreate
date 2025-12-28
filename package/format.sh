@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
-# format.sh - Format all Rust source files in cmdcreate
-#
-# This script uses `cargo fmt` to format all Rust files.
-# Run this before building or committing to ensure consistent code style.
 
-set -e # Exit immediately on any error
+set -e
 
 cd ./
 
