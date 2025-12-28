@@ -116,7 +116,7 @@ fn cmdcreate(args: &[String]) {
         ),
 
         "--version" | "-v" => {
-            println!("cmdcreate {VERSION}\n(C) 2025 Owen Debiasio; Licensed under GPL-2.0-only")
+            println!("cmdcreate {VERSION}\n(C) 2025 Owen Debiasio; Licensed under GPL-2.0-only");
         }
 
         "--get_offline_files" | "-g" => {
