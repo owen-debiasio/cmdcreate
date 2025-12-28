@@ -7,7 +7,6 @@ cd ./
 echo "Formatting source code..."
 cargo fmt
 
-# Format testing scripts
 echo "Formatting testing scripts..."
 black testing/features/*
 
