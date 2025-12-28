@@ -12,6 +12,6 @@ cargo update
 
 cargo build --release
 
-cargo clippy --fix --allow-no-vcs
+cargo clippy --fix --allow-no-vcs --release
 
 sudo cp ./target/release/cmdcreate /usr/bin
