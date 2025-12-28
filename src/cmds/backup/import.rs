@@ -27,7 +27,7 @@ pub fn import(file: &str) {
 
         for part in parts.iter().skip(1) {
             if *part == "favorite" {
-                favorite = true
+                favorite = true;
             } else if !part.is_empty() {
                 if data.is_empty() {
                     data.push('\n');

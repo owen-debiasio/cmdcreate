@@ -159,9 +159,7 @@ fn upgrade_binary(latest_release: &str) {
     let client = Client::new();
 
     let release: Release = client
-        .get(format!(
-            "https://api.github.com/repos/owen-debiasio/cmdcreate/releases/latest"
-        ))
+        .get("https://api.github.com/repos/owen-debiasio/cmdcreate/releases/latest")
         .header("User-Agent", "reqwest")
         .send()
         .unwrap()
