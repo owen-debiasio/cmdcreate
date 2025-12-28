@@ -21,16 +21,14 @@ pub fn import(file: &str) {
             continue;
         }
 
-        let name = parts[0]; // Command name
-        let mut data = String::new(); // Command content
-        let mut favorite = false; // Favorite flag
+        let name = parts[0];
+        let mut data = String::new();
+        let mut favorite = false;
 
-        // Parse additional parts (script content or "favorite" tag)
         for part in parts.iter().skip(1) {
             if *part == "favorite" {
-                favorite = true; // Mark as favorite
+                favorite = true
             } else if !part.is_empty() {
-                // Append line to the command data
                 if data.is_empty() {
                     data.push('\n');
                 }
@@ -56,6 +54,5 @@ pub fn import(file: &str) {
         }
     }
 
-    // Final success message
     println!("\n{green}Successfully imported commands.{reset}");
 }

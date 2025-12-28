@@ -32,7 +32,6 @@ pub fn installation_method(path: &Path) -> InstallMethod {
     };
     let path_str = path.to_str().unwrap_or_default();
 
-    // Determine base distro
     let distro_base = read_to_string("/etc/os-release")
         .ok()
         .map_or("unknown", |s| {
@@ -156,13 +155,12 @@ fn interactive_upgrade(latest_release: &str) {
 }
 
 fn upgrade_binary(latest_release: &str) {
-    let (owner, repo) = ("owen-debiasio", "cmdcreate");
     let file_to_download = format!("cmdcreate-{latest_release}-linux-bin");
     let client = Client::new();
 
     let release: Release = client
         .get(format!(
-            "https://api.github.com/repos/{owner}/{repo}/releases/latest"
+            "https://api.github.com/repos/owen-debiasio/cmdcreate/releases/latest"
         ))
         .header("User-Agent", "reqwest")
         .send()
