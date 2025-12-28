@@ -23,12 +23,12 @@ pub fn list() {
             println!("★ {name}");
             continue;
         }
-        
+
         if favorites.is_empty() {
             println!("{name}");
             continue;
         }
-        
+
         println!("  {name}");
     }
 }
