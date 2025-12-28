@@ -20,14 +20,15 @@ use crate::{
 pub const VERSION: &str = "v0.9.0";
 
 fn main() {
-    let args = return_args();
+    let args = &return_args();
     if args.is_empty() {
         display_usage();
         return;
     }
 
     init_fs();
-    cmdcreate(&args);
+
+    cmdcreate(args);
 }
 
 fn cmdcreate(args: &[String]) {
