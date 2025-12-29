@@ -21,13 +21,9 @@ use crate::{
 
 pub const VERSION: &str = "v0.9.1";
 
-fn init() {
+fn main() {
     init_configs();
     init_fs();
-}
-
-fn main() {
-    init();
 
     let args = return_args();
     if args.is_empty() {
@@ -40,6 +36,8 @@ fn main() {
 
 fn cmdcreate(args: &[String]) {
     let cmd = args[0].as_str();
+    let arg = |i| args.get(i).map(String::as_str);
+
     let (magenta, green, blue, yellow, reset) = (
         COLORS.magenta,
         COLORS.green,
@@ -51,8 +49,6 @@ fn cmdcreate(args: &[String]) {
     if matches!(cmd, "-l" | "--l" | "-c" | "--c") {
         init_git_fs();
     }
-
-    let arg = |i| args.get(i).map(String::as_str);
 
     match cmd {
         "create" => match (arg(1), arg(2)) {
@@ -132,12 +128,11 @@ fn cmdcreate(args: &[String]) {
         "--changelog" | "-c" => println!("{}", read_file_to_string(&PATHS.changelog).trim()),
 
         "--debugging" | "-d" => {
-            let lines = [
+            for line in [
                 format!("Usage: cmdcreate {magenta}(flags){reset} [run]"),
                 format!("  {magenta}-F{reset}, --force_system_shell"),
                 format!("  {magenta}-f{reset}, --force"),
-            ];
-            for line in lines {
+            ] {
                 println!("{line}");
             }
         }
