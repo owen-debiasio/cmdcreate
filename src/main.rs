@@ -73,10 +73,11 @@ fn cmdcreate(args: &[String]) {
 
         "display" => {
             if let Some(c) = arg(1) {
-                let content = read_file_to_string(&format!("{}{c}", PATHS.install_dir))
-                    .trim()
-                    .to_string();
-                println!("Contents of command: {blue}\"{c}\"{reset}\n--------\n{content}");
+                println!(
+                    "Contents of command: {blue}\"{c}\"{reset}\n--------\n{}",
+                    read_file_to_string(&format!("{}{c}", PATHS.install_dir))
+                        .trim()
+                );
             } else {
                 println!("Usage:\ncmdcreate {blue}display {yellow}<command>{reset}");
             }
