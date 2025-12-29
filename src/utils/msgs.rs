@@ -75,7 +75,7 @@ pub fn display_usage() {
 pub fn ask_for_confirmation(q: &str) {
     let (blue, red, green, reset) = (COLORS.blue, COLORS.red, COLORS.green, COLORS.reset);
 
-    if !(args_contains("--force") && args_contains("-f")) {
+    if !(args_contains("--force") || args_contains("-f")) {
         println!("{blue}{q}{reset}\n({green}Y{reset} or {red}N{reset})");
 
         let mut confirm = String::new();
