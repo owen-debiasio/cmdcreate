@@ -1,9 +1,10 @@
 # cmdcreate
+
 Cmdcreate allows you to create custom commands for your Linux terminal without needing to enter the same "complex" commands over and over.
 
 ---
   
-## Usage:
+## Usage
 
 ```
 Commands:
@@ -39,10 +40,12 @@ Flags:
 
 ---
 
-# Installation (Latest release)
+## Installation (Latest release)
+
 **NOTE: Only supported on x86_64 architectures (*unless built from source*).**
 
 ## Arch Linux
+
 ### Install through an AUR manager
 
 ```
@@ -50,6 +53,7 @@ $ yay -S cmdcreate
 ```
 
 ### Or clone AUR repo
+
 ```
 $ git clone --branch cmdcreate --single-branch https://github.com/archlinux/aur.git ~/cmdcreate
 $ cd ~/cmdcreate
@@ -65,13 +69,15 @@ You can get the `.deb` package file from the latest [release](https://github.com
 You can get the `.rpm` package file from the latest [release](https://github.com/Meme-Supplier/cmdcreate/releases)
 
 ## Other
+
 You can the get the `x86_64` binary from the latest [release](https://github.com/Meme-Supplier/cmdcreate/releases)
 
 ---
 
-# Building from source (Latest git)
+## Building from source (Latest git)
 
 ### Dependencies
+
 - Cargo
 - Rustup
 
@@ -87,7 +93,7 @@ The binary should be located at `target/release/cmdcreate`
 
 ---
 
-# Example command usage
+## Example command usage
 
 ### Creation
 
@@ -121,7 +127,13 @@ say-hi
 
 ---
 
-# Configuring cmdcreate
+## Configuring cmdcreate
+
+Create the config file
+
+```
+$ touch ~/.config/cmdcreate/config.toml
+```
 
 **You can find the avaliable configurations [here](https://github.com/Meme-Supplier/cmdcreate/blob/main/config_example.toml)**
 
