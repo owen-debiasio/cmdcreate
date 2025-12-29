@@ -39,12 +39,9 @@ fn main() {
 }
 
 fn cmdcreate(args: &[String]) {
-    let cmd = match args.first() {
-        Some(c) => c.as_str(),
-        None => {
-            display_usage();
-            return;
-        }
+    let cmd = if let Some(c) = args.first() { c.as_str() } else {
+        display_usage();
+        return;
     };
 
     let (magenta, green, blue, yellow, reset) = (
@@ -84,7 +81,9 @@ fn cmdcreate(args: &[String]) {
 
         "display" => {
             if let Some(c) = arg(1) {
-                let content = read_file_to_string(&format!("{}{c}", PATHS.install_dir)).trim().to_string();
+                let content = read_file_to_string(&format!("{}{c}", PATHS.install_dir))
+                    .trim()
+                    .to_string();
                 println!("Contents of command: {blue}\"{c}\"{reset}\n--------\n{content}");
             } else {
                 println!("Usage:\ncmdcreate {blue}display {yellow}<command>{reset}");
@@ -116,7 +115,9 @@ fn cmdcreate(args: &[String]) {
             export::export,
         ),
 
-        "--version" | "-v" => println!("cmdcreate {VERSION}\n(C) 2025 Owen Debiasio; Licensed under GPL-2.0-only"),
+        "--version" | "-v" => {
+            println!("cmdcreate {VERSION}\n(C) 2025 Owen Debiasio; Licensed under GPL-2.0-only");
+        }
 
         "--get_offline_files" | "-g" => {
             println!("Downloading offline files...");
@@ -140,7 +141,9 @@ fn cmdcreate(args: &[String]) {
                 format!("  {magenta}-F{reset}, --force_system_shell"),
                 format!("  {magenta}-f{reset}, --force"),
             ];
-            for line in lines { println!("{line}"); }
+            for line in lines {
+                println!("{line}");
+            }
         }
 
         _ if cmd.starts_with('-') => error("Invalid argument:", cmd),
