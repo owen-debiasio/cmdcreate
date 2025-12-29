@@ -19,7 +19,7 @@ use crate::{
     },
 };
 
-pub const VERSION: &str = "v0.9.0";
+pub const VERSION: &str = "v0.9.1";
 
 fn init() {
     init_configs();
