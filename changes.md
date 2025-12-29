@@ -357,3 +357,9 @@
   - For all avaliable configurations, visit:
     - <https://github.com/owen-debiasio/cmdcreate/blob/main/config_example.toml>
 - Changed license to `GPL-2.0-only`
+
+## v0.9.1
+
+- Code optimizations
+- Fixed `-f` and `--force` flags not working
+- Made `search` command output look nicer
