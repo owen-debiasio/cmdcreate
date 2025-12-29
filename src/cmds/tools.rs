@@ -1,13 +1,13 @@
 use std::{fs::read_dir, path::PathBuf};
 
-use crate::utils::{colors::COLORS, fs::PATHS, msgs::error, sys::args_contains};
+use crate::utils::{
+    colors::COLORS,
+    fs::{PATHS, path_exists},
+    msgs::error,
+};
 
 pub fn is_command_installed(cmd: &str) {
-    let installed = get_installed_commands()
-        .iter()
-        .any(|script| script.file_stem().and_then(|s| s.to_str()) == Some(cmd));
-
-    if !(installed || args_contains("-f") || args_contains("--force")) {
+    if !path_exists(&format!("{}/{cmd}", PATHS.install_dir)) {
         error(&format!("Command \"{cmd}\" is not installed"), "");
     }
 }

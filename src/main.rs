@@ -5,7 +5,7 @@ mod utils;
 use crate::{
     cmds::{
         backup::{export, import},
-        create,
+        create, display,
         edit::edit,
         favorite, list, remove, rename, repair, search,
         upgrader::{check_for_updates, upgrade},
@@ -71,16 +71,10 @@ fn cmdcreate(args: &[String]) {
             search::search,
         ),
 
-        "display" => {
-            if let Some(c) = arg(1) {
-                println!(
-                    "Contents of command: {blue}\"{c}\"{reset}\n--------\n{}",
-                    read_file_to_string(&format!("{}{c}", PATHS.install_dir)).trim()
-                );
-            } else {
-                println!("Usage:\ncmdcreate {blue}display {yellow}<command>{reset}");
-            }
-        }
+        "display" => arg(1).map_or_else(
+            || println!("Usage:\ncmdcreate {blue}display {yellow}<command>{reset}"),
+            display::display,
+        ),
 
         "rename" => match (arg(1), arg(2)) {
             (Some(a), Some(b)) => rename::rename(a, b),

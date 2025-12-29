@@ -1,5 +1,6 @@
 pub mod backup;
 pub mod create;
+pub mod display;
 pub mod edit;
 pub mod favorite;
 pub mod list;
