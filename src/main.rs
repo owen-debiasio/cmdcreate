@@ -39,11 +39,7 @@ fn main() {
 }
 
 fn cmdcreate(args: &[String]) {
-    let cmd = if let Some(c) = args.first() { c.as_str() } else {
-        display_usage();
-        return;
-    };
-
+    let cmd = args[0].as_str();
     let (magenta, green, blue, yellow, reset) = (
         COLORS.magenta,
         COLORS.green,
