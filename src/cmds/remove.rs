@@ -2,9 +2,9 @@ use crate::{
     cmds::tools::{get_installed_commands, is_command_installed},
     utils::{
         colors::COLORS,
-        fs::{delete_file, path_exists, read_file_to_string, remove_from_file},
+        fs::{PATHS, delete_file, path_exists, read_file_to_string, remove_from_file},
         msgs::ask_for_confirmation,
-        sys::{VARS, run_shell_command},
+        sys::run_shell_command,
     },
 };
 
@@ -27,14 +27,10 @@ pub fn remove(command: &str) {
         "{red}Are you sure you want to delete command{yellow} \"{command}\"{red}?{reset}"
     ));
 
-    delete_file(&format!(
-        "{}/.local/share/cmdcreate/files/{command}",
-        VARS.home
-    ));
+    delete_file(&format!("{}{command}", PATHS.install_dir));
 
-    let path = format!("{}/.local/share/cmdcreate/favorites", VARS.home);
-    if read_file_to_string(&path).contains(command) && path_exists(&path) {
-        remove_from_file(&path, command);
+    if read_file_to_string(&PATHS.favorites).contains(command) && path_exists(&PATHS.favorites) {
+        remove_from_file(&PATHS.favorites, command);
     }
     run_shell_command(&format!("sudo rm -f /usr/bin/{command}"));
 
