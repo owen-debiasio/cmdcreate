@@ -363,3 +363,7 @@
 - Code optimizations
 - Fixed `-f` and `--force` flags not working
 - Made `search` command output look nicer
+
+## v0.9.2
+
+- Updated dependency `reqwest` to version `0.13`
