@@ -5,6 +5,7 @@ use std::{
 };
 
 use crate::{configs::load, utils::msgs::error};
+
 pub struct Vars {
     pub shell: String,
     pub home: String,

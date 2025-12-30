@@ -109,6 +109,8 @@ pub static MAIN_PATH: LazyLock<String> =
 pub struct Paths {
     pub favorites: String,
 
+    pub configs: String,
+
     pub install_dir: String,
 
     pub license: String,
@@ -117,6 +119,8 @@ pub struct Paths {
 
 pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     favorites: format!("{}/favorites", *MAIN_PATH),
+
+    configs: format!("{}/.config/cmdcreate/config.toml", VARS.home),
 
     install_dir: format!("{}/files/", *MAIN_PATH),
 

@@ -1,10 +1,11 @@
 use std::path::Path;
 
-use crate::cmds::tools::get_installed_commands;
-use crate::utils::{
-    colors::COLORS,
-    fs::{read_file_to_string, write_to_file},
-    sys::VARS,
+use crate::{
+    cmds::tools::get_installed_commands,
+    utils::{
+        colors::COLORS,
+        fs::{PATHS, read_file_to_string, write_to_file},
+    },
 };
 
 pub fn export(path: &str) {
@@ -16,19 +17,15 @@ pub fn export(path: &str) {
         if let Some(stem) = script.file_stem() {
             let cmd = stem.to_string_lossy();
 
-            let mut cmd_contents =
-                read_file_to_string(&format!("{}/.local/share/cmdcreate/files/{cmd}", VARS.home));
+            let mut cmd_contents = read_file_to_string(&format!("{}{cmd}", PATHS.install_dir));
 
             cmd_contents = cmd_contents.replace('|', "[|");
 
-            let line =
-                if read_file_to_string(&format!("{}/.local/share/cmdcreate/favorites", VARS.home))
-                    .contains(cmd.as_ref())
-                {
-                    format!("{cmd} | {cmd_contents} | favorite\n")
-                } else {
-                    format!("{cmd} | {cmd_contents}\n")
-                };
+            let line = if read_file_to_string(&PATHS.favorites).contains(cmd.as_ref()) {
+                format!("{cmd} | {cmd_contents} | favorite\n")
+            } else {
+                format!("{cmd} | {cmd_contents}\n")
+            };
 
             write_to_file(export_file.to_str().unwrap(), &line);
         }

@@ -1,10 +1,8 @@
-use std::fs::read_to_string;
-
 use crate::{
     cmds::tools::is_command_installed,
     utils::{
         colors::COLORS,
-        fs::{PATHS, create_file, remove_from_file, write_to_file},
+        fs::{PATHS, create_file, read_file_to_string, remove_from_file, write_to_file},
     },
 };
 
@@ -25,8 +23,7 @@ fn add(cmd: &str) {
     is_command_installed(cmd);
     create_file(favorites_path);
 
-    if read_to_string(favorites_path)
-        .unwrap_or_default()
+    if read_file_to_string(favorites_path)
         .lines()
         .any(|c| c == cmd)
     {

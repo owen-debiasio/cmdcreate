@@ -1,8 +1,9 @@
-use std::io::stdin;
-use std::process::exit;
+use std::{io::stdin, process::exit};
 
-use crate::VERSION;
-use crate::utils::{colors::COLORS, sys::args_contains};
+use crate::{
+    VERSION,
+    utils::{colors::COLORS, sys::args_contains},
+};
 
 pub fn display_usage() {
     let (blue, cyan, yellow, magenta, reset) = (

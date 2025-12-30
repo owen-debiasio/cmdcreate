@@ -1,7 +1,9 @@
-use crate::utils::fs::{PATHS, path_exists, read_file_to_string};
 use crate::{
     cmds::{create::create, tools::get_installed_commands},
-    utils::colors::COLORS,
+    utils::{
+        colors::COLORS,
+        fs::{PATHS, path_exists, read_file_to_string},
+    },
 };
 
 pub fn repair() {

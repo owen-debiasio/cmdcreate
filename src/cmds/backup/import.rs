@@ -1,7 +1,7 @@
 use crate::utils::{
     colors::COLORS,
-    fs::{read_file_to_string, write_to_file},
-    sys::{VARS, run_shell_command},
+    fs::{PATHS, read_file_to_string, write_to_file},
+    sys::run_shell_command,
 };
 
 pub fn import(file: &str) {
@@ -38,7 +38,7 @@ pub fn import(file: &str) {
 
         println!("{blue}Installing command: \"{green}{name}{reset}\"");
 
-        let script_path = format!("{}/.local/share/cmdcreate/files/{name}", VARS.home);
+        let script_path = format!("{}{name}", PATHS.install_dir);
 
         write_to_file(&script_path, &data);
 
@@ -47,10 +47,7 @@ pub fn import(file: &str) {
         ));
 
         if favorite {
-            write_to_file(
-                &format!("{}/.local/share/cmdcreate/favorites", VARS.home),
-                &format!("{name}\n"),
-            );
+            write_to_file(&PATHS.favorites, &format!("{name}\n"));
         }
     }
 
