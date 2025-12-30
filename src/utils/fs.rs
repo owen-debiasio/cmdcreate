@@ -11,10 +11,10 @@ use crate::utils::{
 };
 
 pub fn init_fs() {
-    create_folder(&format!("{}/.local/share/cmdcreate/", VARS.home));
-    create_folder(&format!("{}/.local/share/cmdcreate/files", VARS.home));
+    create_folder(&MAIN_PATH);
+    create_folder(&PATHS.install_dir);
 
-    create_file(&format!("{}/.local/share/cmdcreate/favorites", VARS.home));
+    create_file(&PATHS.favorites);
 }
 
 pub fn init_git_fs() {

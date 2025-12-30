@@ -368,3 +368,4 @@
 
 - Updated dependency `reqwest` to version `0.13`
 - Overhauled a couple of the shell scripts
+- Code optimizations
