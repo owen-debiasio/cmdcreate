@@ -3,7 +3,7 @@ use serde::Deserialize;
 use serde_json::Value;
 use std::{
     error::Error,
-    fs::{File, read_to_string},
+    fs::File,
     io::{copy, stdin},
     path::Path,
     process::Command,
@@ -13,7 +13,7 @@ use crate::{
     VERSION,
     utils::{
         colors::COLORS,
-        fs::delete_folder,
+        fs::{delete_folder, read_file_to_string},
         msgs::{ask_for_confirmation, error},
         sys::{VARS, run_shell_command},
     },
@@ -26,26 +26,33 @@ pub enum InstallMethod {
     Rpm,
     Other,
 }
+
 pub fn installation_method(path: &Path) -> InstallMethod {
     let Ok(path) = path.canonicalize() else {
         return InstallMethod::Other;
     };
-    let path_str = path.to_str().unwrap_or_default();
 
-    let distro_base = read_to_string("/etc/os-release")
-        .ok()
-        .map_or("unknown", |s| {
-            let s = s.to_lowercase();
-            if s.contains("arch") || s.contains("manjaro") {
-                "arch"
-            } else if s.contains("fedora") || s.contains("rhel") || s.contains("centos") {
-                "fedora"
-            } else if s.contains("debian") || s.contains("ubuntu") || s.contains("linuxmint") {
-                "debian"
-            } else {
-                "unknown"
-            }
-        });
+    let Some(path_str) = path.to_str() else {
+        return InstallMethod::Other;
+    };
+
+    let distro_base = read_file_to_string("/etc/os-release").to_lowercase();
+
+    let distro_base = if distro_base.contains("arch") || distro_base.contains("manjaro") {
+        "arch"
+    } else if distro_base.contains("fedora")
+        || distro_base.contains("rhel")
+        || distro_base.contains("centos")
+    {
+        "fedora"
+    } else if distro_base.contains("debian")
+        || distro_base.contains("ubuntu")
+        || distro_base.contains("linuxmint")
+    {
+        "debian"
+    } else {
+        "unknown"
+    };
 
     match distro_base {
         "arch" => {
@@ -109,11 +116,10 @@ pub fn upgrade() {
 
 fn upgrade_aur() {
     run_shell_command(
-        "
-        sudo rm /usr/bin/cmdcreate; \
-        git clone --branch cmdcreate --single-branch https://github.com/archlinux/aur.git ~/cmdcreate; \
-        cd ~/cmdcreate; \
-        makepkg -si",
+        "rm -rf ~/cmdcreate; \
+         git clone --branch cmdcreate --single-branch https://github.com/archlinux/aur.git ~/cmdcreate; \
+         cd ~/cmdcreate; \
+         makepkg -si",
     );
     delete_folder(&format!("{}/cmdcreate", VARS.home));
 }
@@ -133,6 +139,7 @@ fn upgrade_rpm(latest_release: &str) {
          sudo rpm -Uvh /tmp/cmdcreate-{latest_release}-linux-x86_64.rpm"
     ));
 }
+
 fn interactive_upgrade(latest_release: &str) {
     let (blue, reset) = (COLORS.blue, COLORS.reset);
 
@@ -162,32 +169,32 @@ fn upgrade_binary(latest_release: &str) {
         .get("https://api.github.com/repos/owen-debiasio/cmdcreate/releases/latest")
         .header("User-Agent", "reqwest")
         .send()
-        .unwrap()
+        .expect("Failed to fetch release info")
         .json()
-        .unwrap();
+        .expect("Failed to parse release info");
 
     if let Some(asset) = release
         .assets
         .into_iter()
         .find(|a| a.name == file_to_download)
     {
-        let (tmp_path, out_path) = (
-            format!("/tmp/{}", asset.name),
-            format!("/usr/bin/{}", asset.name),
-        );
+        let tmp_path = format!("/tmp/{}", asset.name);
+        let out_path = "/usr/bin/cmdcreate";
+
+        let mut resp = client
+            .get(&asset.browser_download_url)
+            .send()
+            .expect("Failed to download binary");
 
         copy(
-            &mut client.get(&asset.browser_download_url).send().unwrap(),
-            &mut File::create(&tmp_path).unwrap(),
+            &mut resp,
+            &mut File::create(&tmp_path).expect("Failed to create temp file"),
         )
-        .unwrap();
+        .expect("Failed to copy binary");
 
         run_shell_command(&format!(
-            "
-            sudo mv +x {tmp_path} {out_path}; \
-            sudo chmod +x {out_path}; \
-            sudo rm /usr/bin/cmdcreate; \
-            sudo mv /usr/bin/{file_to_download} /usr/bin/cmdcreate"
+            "sudo chmod +x {tmp_path}; \
+             sudo mv {tmp_path} {out_path}"
         ));
 
         println!(
