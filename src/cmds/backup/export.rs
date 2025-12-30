@@ -16,9 +16,8 @@ pub fn export(path: &str) {
         if let Some(stem) = script.file_stem() {
             let cmd = stem.to_string_lossy();
 
-            let mut cmd_contents = read_file_to_string(&format!("{}{cmd}", PATHS.install_dir));
-
-            cmd_contents = cmd_contents.replace('|', "[|");
+            let cmd_contents =
+                read_file_to_string(&format!("{}{cmd}", PATHS.install_dir)).replace('|', "[|");
 
             let line = if read_file_to_string(&PATHS.favorites).contains(cmd.as_ref()) {
                 format!("{cmd} | {cmd_contents} | favorite\n")
