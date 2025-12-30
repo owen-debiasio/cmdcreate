@@ -27,6 +27,7 @@
 
 - `black`
 - `shfmt`
+- `cargo`
 
 ---
 

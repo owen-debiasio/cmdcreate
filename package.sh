@@ -1,19 +1,24 @@
 #!/usr/bin/env bash
 
-set -e
+set -Eeuo pipefail
 
-if [[ -z "$1" ]]; then
-    echo "Provide cmdcreate's version (MUST NOT START WITH v)"
+die() {
+    echo "error: $*" >&2
     exit 1
-fi
+}
+
+[[ $# -eq 1 ]] || die "Provide cmdcreate's version (MUST NOT START WITH v)"
+[[ "$1" != v* ]] || die "Version must NOT start with 'v'"
 
 VERSION="$1"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 
-./package/format.sh
+cd "$SCRIPT_DIR/package"
 
-cd package
+echo "Formatting code..."
+./format.sh
 
-echo "Creating binary..."
+echo "Creating binary ($VERSION)..."
 ./create_bin.sh "$VERSION"
 
 echo "Creating Debian package..."
@@ -22,4 +27,5 @@ echo "Creating Debian package..."
 echo "Creating RPM package..."
 ./create_rpm.sh "$VERSION"
 
-echo -e "\nAll release artifacts created successfully."
+echo
+echo "All release artifacts created successfully"

@@ -1,15 +1,37 @@
 #!/usr/bin/env bash
 
-set -e
+set -Eeuo pipefail
 
-cd ./
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+ROOT_DIR="$(realpath "$SCRIPT_DIR/..")"
 
-echo "Formatting source code..."
+echo "Formatting cmdcreate..."
+
+command -v cargo >/dev/null || {
+    echo "cargo not found"
+    exit 1
+}
+command -v black >/dev/null || {
+    echo "black not found"
+    exit 1
+}
+command -v shfmt >/dev/null || {
+    echo "shfmt not found"
+    exit 1
+}
+
+echo "Formatting Rust source..."
+cd "$ROOT_DIR"
 cargo fmt
 
-echo "Formatting testing scripts..."
-black testing/features/*
+if [[ -d "$ROOT_DIR/testing/features" ]]; then
+    echo "Formatting Python testing scripts..."
+    black "$ROOT_DIR/testing/features"
+else
+    echo "Skipping Python formatting (testing/features not found)"
+fi
 
 echo "Formatting shell scripts..."
-shfmt -w -i 4 ./
-echo "Done formatting all source files."
+shfmt -w -i 4 "$SCRIPT_DIR"
+
+echo "Formatting complete."

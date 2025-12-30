@@ -367,3 +367,4 @@
 ## v0.9.2
 
 - Updated dependency `reqwest` to version `0.13`
+- Overhauled a couple of the shell scripts
