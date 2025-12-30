@@ -19,7 +19,7 @@ use crate::{
     },
 };
 
-pub const VERSION: &str = "v0.9.1";
+pub const VERSION: &str = "v0.9.2";
 
 fn main() {
     init_configs();
@@ -46,7 +46,7 @@ fn cmdcreate(args: &[String]) {
         COLORS.reset,
     );
 
-    if matches!(cmd, "-l" | "--l" | "-c" | "--c") {
+    if matches!(cmd, "-l" | "--license" | "-c" | "--changelog") {
         init_git_fs();
     }
 
