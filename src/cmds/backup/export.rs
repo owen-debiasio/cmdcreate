@@ -1,17 +1,16 @@
-use std::path::Path;
-
 use crate::{
     cmds::tools::get_installed_commands,
     utils::{
         colors::COLORS,
-        fs::{PATHS, read_file_to_string, write_to_file},
+        fs::{PATHS, create_file, read_file_to_string, write_to_file},
     },
 };
 
 pub fn export(path: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
-    let export_file = Path::new(path).join("export.cmdcreate");
+    let export_file = &format!("{path}/export.cmdcreate");
+    create_file(export_file);
 
     for script in get_installed_commands() {
         if let Some(stem) = script.file_stem() {
@@ -27,12 +26,9 @@ pub fn export(path: &str) {
                 format!("{cmd} | {cmd_contents}\n")
             };
 
-            write_to_file(export_file.to_str().unwrap(), &line);
+            write_to_file(export_file, &line);
         }
     }
 
-    println!(
-        "{green}Successfully exported commands to:{blue} \"{}\"{green}.{reset}",
-        export_file.display()
-    );
+    println!("{green}Successfully exported commands to:{blue} \"{export_file}\"{green}.{reset}",);
 }
