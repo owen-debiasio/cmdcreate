@@ -1,4 +1,5 @@
 # This file is located in ~/.config/cmdcreate/config.toml
 
 [sys]
-shell = "bash"
+shell = "bash" # Your preferred shell
+fake_arch = "true" # If "true", the architecture will be spoofed to x86_64
