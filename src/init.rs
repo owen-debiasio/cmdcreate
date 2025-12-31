@@ -22,7 +22,6 @@ pub fn init_() {
             eprintln!("{line}");
         }
 
-        let mut read = String::new();
-        stdin().read_line(&mut read).unwrap();
+        stdin().read_line(&mut String::new()).unwrap();
     }
 }
