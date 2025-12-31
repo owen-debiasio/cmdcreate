@@ -1,5 +1,5 @@
 use std::{
-    env::{args, var},
+    env::{args, consts, var},
     process::{Command, Stdio},
     sync::LazyLock,
 };
@@ -15,6 +15,8 @@ pub static VARS: LazyLock<Vars> = LazyLock::new(|| Vars {
     shell: var("SHELL").unwrap_or_else(|_| "unknown".to_string()),
     home: var("HOME").unwrap_or_else(|_| "unknown".to_string()),
 });
+
+pub static ARCH: &str = consts::ARCH;
 
 pub fn return_args() -> Vec<String> {
     args().skip(1).collect()

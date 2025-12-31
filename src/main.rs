@@ -1,5 +1,6 @@
 mod cmds;
 mod configs;
+mod init;
 mod utils;
 
 use crate::{
@@ -10,20 +11,18 @@ use crate::{
         favorite, list, remove, rename, repair, search,
         upgrader::{check_for_updates, upgrade},
     },
-    configs::init_configs,
     utils::{
         colors::COLORS,
-        fs::{PATHS, delete_file, init_fs, init_git_fs, read_file_to_string},
+        fs::{PATHS, delete_file, init_git_fs, read_file_to_string},
         msgs::{display_usage, error},
         sys::return_args,
     },
 };
 
-pub const VERSION: &str = "v0.9.2";
+pub const VERSION: &str = "v0.9.3";
 
 fn main() {
-    init_configs();
-    init_fs();
+    init::init_();
 
     let args = return_args();
     if args.is_empty() {
