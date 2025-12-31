@@ -11,6 +11,7 @@ use crate::{
         favorite, list, remove, rename, repair, search,
         upgrader::{check_for_updates, upgrade},
     },
+    init::init_,
     utils::{
         colors::COLORS,
         fs::{PATHS, delete_file, init_git_fs, read_file_to_string},
@@ -22,7 +23,7 @@ use crate::{
 pub const VERSION: &str = "v0.9.3";
 
 fn main() {
-    init::init_();
+    init_();
 
     let args = return_args();
     if args.is_empty() {
