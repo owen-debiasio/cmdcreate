@@ -129,12 +129,6 @@ say-hi
 
 ## Configuring cmdcreate
 
-Create the config file
-
-```
-$ touch ~/.config/cmdcreate/config.toml
-```
-
 **You can find the avaliable configurations [here](https://github.com/Meme-Supplier/cmdcreate/blob/main/config_example.toml)**
 
 ---
