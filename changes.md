@@ -369,3 +369,12 @@
 - Updated dependency `reqwest` to version `0.13`
 - Overhauled a couple of the shell scripts
 - Code optimizations
+
+## v0.9.3
+
+- Code optimizations
+- cmdcreate will now detect your CPU and will let you know if it is supported
+- New configuration: `fake_arch`
+  - Spoofs your architecture to make cmdcreate think it is supported
+  - boolean
+    - `false` by default
