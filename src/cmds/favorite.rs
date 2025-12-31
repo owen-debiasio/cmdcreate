@@ -2,7 +2,7 @@ use crate::{
     cmds::tools::is_command_installed,
     utils::{
         colors::COLORS,
-        fs::{PATHS, create_file, read_file_to_string, remove_from_file, write_to_file},
+        fs::{PATHS, read_file_to_string, remove_from_file, write_to_file},
     },
 };
 
@@ -21,7 +21,6 @@ fn add(cmd: &str) {
     let favorites_path = &PATHS.favorites;
 
     is_command_installed(cmd);
-    create_file(favorites_path);
 
     if read_file_to_string(favorites_path)
         .lines()

@@ -13,13 +13,10 @@ pub fn is_command_installed(cmd: &str) {
 }
 
 pub fn get_installed_commands() -> Vec<PathBuf> {
+    let (red, reset) = (COLORS.red, COLORS.reset);
+
     let commands: Vec<PathBuf> = read_dir(&PATHS.install_dir)
-        .unwrap_or_else(|_| {
-            panic!(
-                "{}Error: Failed to read install directory{}",
-                COLORS.red, COLORS.reset
-            )
-        })
+        .unwrap_or_else(|_| panic!("{red}Error: Failed to read install directory{reset}",))
         .flatten()
         .map(|entry| entry.path())
         .filter(|path| path.is_file())
