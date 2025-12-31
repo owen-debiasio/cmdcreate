@@ -14,7 +14,7 @@ pub fn display_usage() {
         COLORS.reset,
     );
 
-    let lines: Vec<String> = vec![
+    for line in vec![
         format!("cmdcreate {VERSION}"),
         format!(
             "Usage: cmdcreate {magenta}(flags){reset} [{blue}command{reset}, {cyan}argument{reset}] {yellow}<args> {magenta}(flags){reset}"
@@ -66,9 +66,7 @@ pub fn display_usage() {
         "\nAbout:".into(),
         "   Cmdcreate allows you to create custom commands for your Linux terminal".into(),
         "   without needing to enter the same \"complex\" commands over and over.".into(),
-    ];
-
-    for line in lines {
+    ] {
         println!("{line}");
     }
 }
