@@ -15,6 +15,9 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 
 cd "$SCRIPT_DIR/package"
 
+echo "Cleaning up before packaging..."
+cargo clean
+
 echo "Formatting code..."
 ./format.sh
 
@@ -26,6 +29,9 @@ echo "Creating Debian package..."
 
 echo "Creating RPM package..."
 ./create_rpm.sh "$VERSION"
+
+echo "Cleaning up..."
+cargo clean
 
 echo
 echo "All release artifacts created successfully"
