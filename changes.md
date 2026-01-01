@@ -384,3 +384,7 @@
 - Updated copyright information
 - Code optimizations
 - cmdcreate will now exit if you create a command with no contents
+- New configuration: `fake_arch`
+  - A symbol or string of text to indicate a favorite command
+  - String
+    - `"★"` by default
