@@ -42,22 +42,23 @@ Flags:
 
 ## Installation (Latest release)
 
-**NOTE: Only supported on x86_64 architectures (*unless built from source*).**
+> [!NOTE]
+> Only supported on x86_64 architectures (unless built from source).
 
 ## Arch Linux
 
 ### Install through an AUR manager
 
 ```
-$ yay -S cmdcreate
+yay -S cmdcreate
 ```
 
 ### Or clone AUR repo
 
 ```
-$ git clone --branch cmdcreate --single-branch https://github.com/archlinux/aur.git ~/cmdcreate
-$ cd ~/cmdcreate
-$ makepkg -si
+git clone --branch cmdcreate --single-branch https://github.com/archlinux/aur.git ~/cmdcreate \
+cd ~/cmdcreate \
+makepkg -si \
 ```
 
 ## Debian/Ubuntu
@@ -84,12 +85,13 @@ You can the get the `x86_64` binary from the latest [release](https://github.com
 ## Clone repo
 
 ```
-$ git clone https://github.com/Meme-Supplier/cmdcreate.git
-$ cd cmdcreate
-$ cargo build --release
+git clone https://github.com/Meme-Supplier/cmdcreate.git \
+cd cmdcreate \
+cargo build --release \
 ```
 
-The binary should be located at `target/release/cmdcreate`
+> [!NOTE]
+> The binary should be located at `target/release/cmdcreate`
 
 ---
 
@@ -129,7 +131,8 @@ say-hi
 
 ## Configuring cmdcreate
 
-**You can find the avaliable configurations [here](https://github.com/Meme-Supplier/cmdcreate/blob/main/config_example.toml)**
+> [!NOTE]
+> You can find the avaliable configurations [here](https://github.com/Meme-Supplier/cmdcreate/blob/main/config_example.toml)
 
 ---
 
