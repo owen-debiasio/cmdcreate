@@ -1,5 +1,6 @@
 use crate::{
     cmds::tools::get_installed_commands,
+    configs::load,
     utils::{
         colors::COLORS,
         fs::{PATHS, read_file_to_string},
@@ -20,7 +21,7 @@ pub fn list() {
         let favorites = read_file_to_string(&PATHS.favorites);
 
         if favorites.contains(name.to_string().as_str()) {
-            println!("★ {name}");
+            println!("{} {name}", load("appearence", "favorite_indicator", "★"));
             continue;
         }
 

@@ -3,3 +3,6 @@
 [sys]
 shell = "bash" # Your preferred shell
 fake_arch = "true" # If "true", the architecture will be spoofed to x86_64
+
+[appearence]
+favorite_indicator = "★" # A symbol or string of text to indicate a favorite command
