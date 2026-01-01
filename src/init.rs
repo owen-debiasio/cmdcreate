@@ -5,7 +5,7 @@ use crate::{
     utils::{colors::COLORS, fs::init_fs, sys::ARCH},
 };
 
-pub fn init_() {
+pub fn init() {
     let (yellow, red, reset) = (COLORS.yellow, COLORS.red, COLORS.reset);
 
     init_configs();
