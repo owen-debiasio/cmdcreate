@@ -378,3 +378,7 @@
   - Spoofs your architecture to make cmdcreate think it is supported
   - boolean
     - `false` by default
+
+## v0.9.4
+
+- Updated copyright information
