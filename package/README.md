@@ -33,5 +33,6 @@
 
 ## Additional notes
 
-- `create_bin.sh`, `create_deb.sh`, and `create_rpm.sh` are all ran in `package.sh`
-- Built packages and binaries are built to `~/Downloads`
+> [!NOTE]
+> `create_bin.sh`, `create_deb.sh`, and `create_rpm.sh` are all ran in `package.sh`
+> Built packages and binaries are built to `~/Downloads`

@@ -25,4 +25,5 @@
 - Repairing commands
 - Importing/Exporting commands
 
-### Running all tests is also an option
+> [!NOTE]
+> Running all tests is also an option
