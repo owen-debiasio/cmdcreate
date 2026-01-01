@@ -115,7 +115,7 @@ fn cmdcreate(args: &[String]) {
             println!("Removing files...");
             delete_file(&PATHS.changelog);
             delete_file(&PATHS.license);
-            println!("Files removed successfully.");
+            println!("{green}Files removed successfully.{reset}");
         }
 
         "--license" | "-l" => println!("{}", read_file_to_string(&PATHS.license)),
