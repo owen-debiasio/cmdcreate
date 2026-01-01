@@ -383,3 +383,4 @@
 
 - Updated copyright information
 - Code optimizations
+- cmdcreate will now exit if you create a command with no contents
