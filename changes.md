@@ -382,3 +382,4 @@
 ## v0.9.4
 
 - Updated copyright information
+- Code optimizations
