@@ -133,6 +133,6 @@ say-hi
 
 ---
 
-(C) 2025 Owen Debiasio
+(C) 2026 Owen Debiasio
 
 Licensed under GPL-2.0-only
