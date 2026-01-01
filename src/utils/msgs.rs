@@ -88,12 +88,9 @@ pub fn ask_for_confirmation(q: &str) {
 }
 
 pub fn error(msg: &str, err: &str) {
-    eprintln!(
-        "\n{}Error: {} {err}{}",
-        COLORS.red,
-        msg.trim(),
-        COLORS.reset
-    );
+    let (red, reset) = (COLORS.red, COLORS.reset);
+
+    eprintln!("{red}Error: {} {err}{reset}", msg.trim(),);
 
     exit(1)
 }
