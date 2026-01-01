@@ -23,7 +23,7 @@ pub const SUPPORTED_EDITORS: [&str; 16] = [
     "mousepad",
 ];
 
-pub fn is_editor_installed(editor: &str) -> bool {
+fn is_editor_installed(editor: &str) -> bool {
     Command::new("which")
         .arg(editor)
         .output()
