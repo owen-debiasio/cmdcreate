@@ -388,3 +388,7 @@
   - A symbol or string of text to indicate a favorite command
   - String
     - `"★"` by default
+
+## v0.9.5
+
+- Attempt to fix AUR install errors
