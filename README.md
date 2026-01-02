@@ -53,7 +53,7 @@ Flags:
 yay -S cmdcreate
 ```
 
-### Latest git
+**Latest git**
 
 ```
 yay -S cmdcreate-git
@@ -67,7 +67,7 @@ cd ~/cmdcreate
 makepkg -si
 ```
 
-### Latest git
+**Latest git**
 
 ```
 git clone --branch cmdcreate-git --single-branch https://github.com/archlinux/aur.git ~/cmdcreate-git
