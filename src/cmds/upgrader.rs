@@ -6,7 +6,7 @@ use std::{
     fs::File,
     io::{copy, stdin},
     path::Path,
-    process::Command,
+    process::{Command, exit},
 };
 
 use crate::{
@@ -36,25 +36,7 @@ pub fn installation_method(path: &Path) -> InstallMethod {
         return InstallMethod::Other;
     };
 
-    let distro_base = read_file_to_string("/etc/os-release").to_lowercase();
-
-    let distro_base = if distro_base.contains("arch") || distro_base.contains("manjaro") {
-        "arch"
-    } else if distro_base.contains("fedora")
-        || distro_base.contains("rhel")
-        || distro_base.contains("centos")
-    {
-        "fedora"
-    } else if distro_base.contains("debian")
-        || distro_base.contains("ubuntu")
-        || distro_base.contains("linuxmint")
-    {
-        "debian"
-    } else {
-        "unknown"
-    };
-
-    match distro_base {
+    match get_distro_base() {
         "arch" => {
             if Command::new("pacman")
                 .args(["-Qo", path_str])
@@ -89,6 +71,33 @@ pub fn installation_method(path: &Path) -> InstallMethod {
     }
 
     InstallMethod::Other
+}
+
+fn get_distro_base() -> &'static str {
+    let content = read_file_to_string("/etc/os-release").to_lowercase();
+
+    let mut id: &str = "";
+    let mut id_like: &str = "";
+
+    for line in content.lines() {
+        if let Some(v) = line.strip_prefix("id=") {
+            id = v.trim_matches('"');
+        } else if let Some(v) = line.strip_prefix("id_like=") {
+            id_like = v.trim_matches('"');
+        }
+    }
+
+    let base = format!("{id} {id_like}");
+
+    if base.contains("arch") || base.contains("manjaro") {
+        "arch"
+    } else if base.contains("fedora") || base.contains("rhel") || base.contains("centos") {
+        "fedora"
+    } else if base.contains("debian") || base.contains("ubuntu") || base.contains("linuxmint") {
+        "debian"
+    } else {
+        "unknown"
+    }
 }
 
 #[derive(Deserialize)]
@@ -140,27 +149,6 @@ fn upgrade_rpm(latest_release: &str) {
     ));
 }
 
-fn interactive_upgrade(latest_release: &str) {
-    let (blue, reset) = (COLORS.blue, COLORS.reset);
-
-    ask_for_confirmation("Do you want to upgrade cmdcreate?");
-    println!(
-        "\nSelect an upgrade method:\n\n{blue}1]{reset} Upgrade through AUR\n{blue}2]{reset} Install via .deb file\n{blue}3]{reset} Install via .rpm file\n{blue}4]{reset} Manually install binary\n{blue}5]{reset} Exit"
-    );
-
-    let mut method_input = String::new();
-    stdin().read_line(&mut method_input).unwrap();
-
-    match method_input.trim() {
-        "1" => upgrade_aur(),
-        "2" => upgrade_deb(latest_release),
-        "3" => upgrade_rpm(latest_release),
-        "4" => upgrade_binary(latest_release),
-        "5" => error("Aborted.", ""),
-        _ => error("Invalid selection.", ""),
-    }
-}
-
 fn upgrade_binary(latest_release: &str) {
     let file_to_download = format!("cmdcreate-{latest_release}-linux-bin");
     let client = Client::new();
@@ -203,6 +191,74 @@ fn upgrade_binary(latest_release: &str) {
         );
     } else {
         error("Binary not found in latest release.", "");
+    }
+}
+
+fn build_from_source() {
+    let (green, reset) = (COLORS.green, COLORS.reset);
+
+    run_shell_command(
+        "rm -rf ~/.cache/cmdcreate && \
+         git clone https://github.com/owen-debiasio/cmdcreate ~/.cache/cmdcreate",
+    );
+
+    let pm: &str = match get_distro_base() {
+        "arch" => "sudo pacman -S --noconfirm",
+        "debian" => "sudo apt install -y",
+        "fedora" => "sudo dnf install -y",
+        _ => {
+            error(
+                "Your system currently isn't supported for building from source.",
+                "",
+            );
+            exit(1);
+        }
+    };
+
+    run_shell_command(&format!(
+        "{pm} cargo && \
+         cd ~/.cache/cmdcreate && \
+         cargo build --release && \
+         sudo cp target/release/cmdcreate /usr/bin/cmdcreate.new && \
+         sudo chmod +x /usr/bin/cmdcreate.new && \
+         sudo mv /usr/bin/cmdcreate.new /usr/bin/cmdcreate",
+    ));
+
+    println!("{green}Successfully built from source!{reset}");
+}
+
+fn interactive_upgrade(latest_release: &str) {
+    let (blue, reset) = (COLORS.blue, COLORS.reset);
+
+    ask_for_confirmation("Do you want to upgrade cmdcreate?");
+
+    println!("\nSelect an upgrade method:\n");
+
+    for (i, option) in [
+        &format!("Upgrade through AUR {blue}(universal device compatibility){reset}"),
+        "Install via .deb file",
+        "Install via .rpm file",
+        "Manually install binary",
+        &format!("Build from source {blue}(latest git, universal device compatibility){reset}"),
+        "Exit",
+    ]
+    .iter()
+    .enumerate()
+    {
+        println!("{blue}{}]{reset} {option}", i + 1);
+    }
+
+    let mut method_input = String::new();
+    stdin().read_line(&mut method_input).unwrap();
+
+    match method_input.trim() {
+        "1" => upgrade_aur(),
+        "2" => upgrade_deb(latest_release),
+        "3" => upgrade_rpm(latest_release),
+        "4" => upgrade_binary(latest_release),
+        "5" => build_from_source(),
+        "6" => error("Aborted.", ""),
+        _ => error("Invalid selection.", ""),
     }
 }
 
