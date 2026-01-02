@@ -154,7 +154,6 @@ fn upgrade_rpm(latest_release: &str) {
 }
 
 fn upgrade_binary(latest_release: &str) {
-    let file_to_download = format!("cmdcreate-{latest_release}-linux-bin");
     let client = Client::new();
 
     let release: Release = client
@@ -168,25 +167,22 @@ fn upgrade_binary(latest_release: &str) {
     if let Some(asset) = release
         .assets
         .into_iter()
-        .find(|a| a.name == file_to_download)
+        .find(|a| a.name == format!("cmdcreate-{latest_release}-linux-bin"))
     {
         let tmp_path = format!("/tmp/{}", asset.name);
-        let out_path = "/usr/bin/cmdcreate";
-
-        let mut resp = client
-            .get(&asset.browser_download_url)
-            .send()
-            .expect("Failed to download binary");
 
         copy(
-            &mut resp,
+            &mut client
+                .get(&asset.browser_download_url)
+                .send()
+                .expect("Failed to download binary"),
             &mut File::create(&tmp_path).expect("Failed to create temp file"),
         )
         .expect("Failed to copy binary");
 
         run_shell_command(&format!(
             "sudo chmod +x {tmp_path}; \
-             sudo mv {tmp_path} {out_path}"
+             sudo mv {tmp_path} /usr/bin/cmdcreate"
         ));
 
         println!(
@@ -201,10 +197,9 @@ fn upgrade_binary(latest_release: &str) {
 fn build_from_source() {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    run_shell_command(
-        "rm -rf ~/.cache/cmdcreate && \
-         git clone https://github.com/owen-debiasio/cmdcreate ~/.cache/cmdcreate",
-    );
+    delete_folder(&format!("{}/.cache/cmdcreate", VARS.home));
+
+    run_shell_command("git clone https://github.com/owen-debiasio/cmdcreate ~/.cache/cmdcreate");
 
     let pm: &str = match get_distro_base() {
         "arch" => "sudo pacman -S --noconfirm",
@@ -269,14 +264,14 @@ fn interactive_upgrade(latest_release: &str) {
 }
 
 pub fn get_latest_tag(owner: &str, repo: &str) -> Result<String, Box<dyn Error>> {
-    let res = Client::new()
+    let json: Value = Client::new()
         .get(format!(
             "https://api.github.com/repos/{owner}/{repo}/releases/latest"
         ))
         .header("User-Agent", "rust-client")
-        .send()?;
+        .send()?
+        .json()?;
 
-    let json: Value = res.json()?;
     Ok(json["tag_name"]
         .as_str()
         .ok_or("Missing tag_name in response")?
@@ -288,14 +283,14 @@ pub fn get_latest_release() -> Option<String> {
 }
 
 pub fn check_for_updates() {
+    let (green, reset) = (COLORS.green, COLORS.reset);
+
     println!("\nChecking for updates...");
+
     match get_latest_release() {
         Some(latest) if latest != VERSION => {
-            println!(
-                "{}Update available: {VERSION} -> {latest}{}",
-                COLORS.green, COLORS.reset
-            );
-            ask_for_confirmation("Do you want to upgrade cmdcreate?");
+            println!("{green}\nUpdate available: {VERSION} -> {latest}{reset}",);
+            ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
             upgrade();
         }
         Some(_) => println!("Already up to date."),
