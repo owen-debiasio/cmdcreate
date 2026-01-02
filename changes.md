@@ -392,3 +392,10 @@
 ## v0.9.5
 
 - Attempt to fix AUR install errors
+
+## v0.9.6
+
+- Code optimizations
+- Fixed multiple issues with the upgrade process
+- You now have the option to build from source from the latest git in the upgrading process.
+- Installing via `AUR` should now works on any cpu architecture
