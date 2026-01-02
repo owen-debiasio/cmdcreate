@@ -116,21 +116,25 @@ pub fn upgrade() {
     let latest_release = get_latest_release().unwrap_or_else(|| VERSION.to_string());
 
     match installation_method(Path::new("/usr/bin/cmdcreate")) {
-        InstallMethod::Aur => upgrade_aur(),
+        InstallMethod::Aur => upgrade_aur(false),
         InstallMethod::Dpkg => upgrade_deb(&latest_release),
         InstallMethod::Rpm => upgrade_rpm(&latest_release),
         InstallMethod::Other => interactive_upgrade(&latest_release),
     }
 }
 
-fn upgrade_aur() {
-    run_shell_command(
-        "rm -rf ~/cmdcreate; \
-         git clone --branch cmdcreate --single-branch https://github.com/archlinux/aur.git ~/cmdcreate; \
-         cd ~/cmdcreate; \
+fn upgrade_aur(git: bool) {
+    let pkg = if git { "cmdcreate-git" } else { "cmdcreate" };
+    
+    delete_folder(&format!("{}/{pkg}", VARS.home));
+    
+    run_shell_command(&format!(
+        "git clone --branch {pkg} --single-branch https://github.com/archlinux/aur.git ~/{pkg}; \
+         cd ~/{pkg}; \
          makepkg -si",
-    );
-    delete_folder(&format!("{}/cmdcreate", VARS.home));
+    ));
+    
+    delete_folder(&format!("{}/{pkg}", VARS.home));
 }
 
 fn upgrade_deb(latest_release: &str) {
@@ -236,6 +240,7 @@ fn interactive_upgrade(latest_release: &str) {
 
     for (i, option) in [
         &format!("Upgrade through AUR {blue}(universal device compatibility){reset}"),
+        &format!("Upgrade through AUR {blue}(latest git, universal device compatibility){reset}"),
         "Install via .deb file",
         "Install via .rpm file",
         "Manually install binary",
@@ -252,12 +257,13 @@ fn interactive_upgrade(latest_release: &str) {
     stdin().read_line(&mut method_input).unwrap();
 
     match method_input.trim() {
-        "1" => upgrade_aur(),
-        "2" => upgrade_deb(latest_release),
-        "3" => upgrade_rpm(latest_release),
-        "4" => upgrade_binary(latest_release),
-        "5" => build_from_source(),
-        "6" => error("Aborted.", ""),
+        "1" => upgrade_aur(false),
+        "2" => upgrade_aur(true),
+        "3" => upgrade_deb(latest_release),
+        "4" => upgrade_rpm(latest_release),
+        "5" => upgrade_binary(latest_release),
+        "6" => build_from_source(),
+        "7" => error("Aborted.", ""),
         _ => error("Invalid selection.", ""),
     }
 }
