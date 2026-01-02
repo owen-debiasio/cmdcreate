@@ -56,9 +56,9 @@ yay -S cmdcreate
 ### Or clone AUR repo
 
 ```
-git clone --branch cmdcreate --single-branch https://github.com/archlinux/aur.git ~/cmdcreate \
-cd ~/cmdcreate \
-makepkg -si \
+git clone --branch cmdcreate --single-branch https://github.com/archlinux/aur.git ~/cmdcreate
+cd ~/cmdcreate
+makepkg -si
 ```
 
 ## Debian/Ubuntu
@@ -85,9 +85,9 @@ You can the get the `x86_64` binary from the latest [release](https://github.com
 ## Clone repo
 
 ```
-git clone https://github.com/Meme-Supplier/cmdcreate.git \
-cd cmdcreate \
-cargo build --release \
+git clone https://github.com/Meme-Supplier/cmdcreate.git
+cd cmdcreate
+cargo build --release
 ```
 
 > [!NOTE]
