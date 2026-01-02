@@ -125,15 +125,15 @@ pub fn upgrade() {
 
 fn upgrade_aur(git: bool) {
     let pkg = if git { "cmdcreate-git" } else { "cmdcreate" };
-    
+
     delete_folder(&format!("{}/{pkg}", VARS.home));
-    
+
     run_shell_command(&format!(
         "git clone --branch {pkg} --single-branch https://github.com/archlinux/aur.git ~/{pkg}; \
          cd ~/{pkg}; \
          makepkg -si",
     ));
-    
+
     delete_folder(&format!("{}/{pkg}", VARS.home));
 }
 
