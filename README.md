@@ -77,15 +77,15 @@ makepkg -si
 
 ## Debian/Ubuntu
 
-You can get the `.deb` package file from the latest [release](https://github.com/Meme-Supplier/cmdcreate/releases)
+You can get the `.deb` package file from the latest [release](https://github.com/owen-debiasio/cmdcreate/releases)
 
 ## Fedora
 
-You can get the `.rpm` package file from the latest [release](https://github.com/Meme-Supplier/cmdcreate/releases)
+You can get the `.rpm` package file from the latest [release](https://github.com/owen-debiasio/cmdcreate/releases)
 
 ## Other
 
-You can the get the `x86_64` binary from the latest [release](https://github.com/Meme-Supplier/cmdcreate/releases)
+You can the get the `x86_64` binary from the latest [release](https://github.com/owen-debiasio/cmdcreate/releases)
 
 ---
 
@@ -99,7 +99,7 @@ You can the get the `x86_64` binary from the latest [release](https://github.com
 ## Clone repo
 
 ```
-git clone https://github.com/Meme-Supplier/cmdcreate.git
+git clone https://github.com/owen-debiasio/cmdcreate.git
 cd cmdcreate
 cargo build --release
 ```
@@ -146,7 +146,7 @@ say-hi
 ## Configuring cmdcreate
 
 > [!NOTE]
-> You can find the avaliable configurations [here](https://github.com/Meme-Supplier/cmdcreate/blob/main/config_example.toml)
+> You can find the avaliable configurations [here](https://github.com/owen-debiasio/cmdcreate/blob/main/config_example.toml)
 
 ---
 
