@@ -4,14 +4,6 @@ use crate::{
 };
 use std::process::Command;
 
-fn is_editor_installed(editor: &str) -> bool {
-    Command::new("which")
-        .arg(editor)
-        .output()
-        .map(|output| output.status.success())
-        .unwrap_or(false)
-}
-
 pub fn edit(cmd: &str) {
     is_command_installed(cmd);
 
@@ -34,7 +26,13 @@ pub fn edit(cmd: &str) {
         "mousepad",
     ]
     .iter()
-    .find(|&&ed| is_editor_installed(ed)) else {
+    .find(|&&ed| {
+        Command::new("which")
+            .arg(ed)
+            .output()
+            .map(|output| output.status.success())
+            .unwrap_or(false)
+    }) else {
         error("No known editor is installed on your device.", "");
         return;
     };
