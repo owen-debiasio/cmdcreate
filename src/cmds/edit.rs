@@ -4,25 +4,6 @@ use crate::{
 };
 use std::process::Command;
 
-pub const SUPPORTED_EDITORS: [&str; 16] = [
-    "nvim",
-    "vi",
-    "vim",
-    "nano",
-    "micro",
-    "code",
-    "code-insiders",
-    "gedit",
-    "kate",
-    "kwrite",
-    "emacs",
-    "vscodium",
-    "vscodium-insiders",
-    "zed",
-    "zed-preview",
-    "mousepad",
-];
-
 fn is_editor_installed(editor: &str) -> bool {
     Command::new("which")
         .arg(editor)
@@ -34,10 +15,26 @@ fn is_editor_installed(editor: &str) -> bool {
 pub fn edit(cmd: &str) {
     is_command_installed(cmd);
 
-    let Some(editor) = SUPPORTED_EDITORS
-        .iter()
-        .find(|&&ed| is_editor_installed(ed))
-    else {
+    let Some(editor) = [
+        "nvim",
+        "vi",
+        "vim",
+        "nano",
+        "micro",
+        "code",
+        "code-insiders",
+        "gedit",
+        "kate",
+        "kwrite",
+        "emacs",
+        "vscodium",
+        "vscodium-insiders",
+        "zed",
+        "zed-preview",
+        "mousepad",
+    ]
+    .iter()
+    .find(|&&ed| is_editor_installed(ed)) else {
         error("No known editor is installed on your device.", "");
         return;
     };
