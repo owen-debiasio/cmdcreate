@@ -20,7 +20,7 @@ use crate::{
     },
 };
 
-pub const VERSION: &str = "v0.9.7";
+pub const VERSION: &str = "v0.9.8";
 
 fn main() {
     init();
