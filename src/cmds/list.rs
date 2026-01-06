@@ -11,7 +11,7 @@ pub fn list() {
     let (blue, reset) = (COLORS.blue, COLORS.reset);
 
     let installed_scripts = get_installed_commands();
-    
+
     println!(
         "Installed commands: ({blue}{}{reset})\n--------",
         installed_scripts.len()
