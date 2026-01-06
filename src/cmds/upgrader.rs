@@ -6,99 +6,18 @@ use std::{
     fs::File,
     io::{copy, stdin},
     path::Path,
-    process::{Command, exit},
+    process::exit,
 };
 
 use crate::{
     VERSION,
     utils::{
         colors::COLORS,
-        fs::{delete_folder, read_file_to_string},
+        fs::delete_folder,
         msgs::{ask_for_confirmation, error},
-        sys::{VARS, run_shell_command},
+        sys::{InstallMethod, VARS, get_distro_base, installation_method, run_shell_command},
     },
 };
-
-#[derive(Debug)]
-pub enum InstallMethod {
-    Aur,
-    Dpkg,
-    Rpm,
-    Other,
-}
-
-pub fn installation_method(path: &Path) -> InstallMethod {
-    let Ok(path) = path.canonicalize() else {
-        return InstallMethod::Other;
-    };
-
-    let Some(path_str) = path.to_str() else {
-        return InstallMethod::Other;
-    };
-
-    match get_distro_base() {
-        "arch" => {
-            if Command::new("pacman")
-                .args(["-Qo", path_str])
-                .output()
-                .map(|o| o.status.success())
-                .unwrap_or(false)
-            {
-                return InstallMethod::Aur;
-            }
-        }
-        "fedora" => {
-            if Command::new("rpm")
-                .args(["-qf", path_str])
-                .output()
-                .map(|o| o.status.success())
-                .unwrap_or(false)
-            {
-                return InstallMethod::Rpm;
-            }
-        }
-        "debian" => {
-            if Command::new("dpkg-query")
-                .args(["-S", path_str])
-                .output()
-                .map(|o| o.status.success())
-                .unwrap_or(false)
-            {
-                return InstallMethod::Dpkg;
-            }
-        }
-        _ => {}
-    }
-
-    InstallMethod::Other
-}
-
-fn get_distro_base() -> &'static str {
-    let content = read_file_to_string("/etc/os-release").to_lowercase();
-
-    let mut id: &str = "";
-    let mut id_like: &str = "";
-
-    for line in content.lines() {
-        if let Some(v) = line.strip_prefix("id=") {
-            id = v.trim_matches('"');
-        } else if let Some(v) = line.strip_prefix("id_like=") {
-            id_like = v.trim_matches('"');
-        }
-    }
-
-    let base = format!("{id} {id_like}");
-
-    if base.contains("arch") || base.contains("manjaro") {
-        "arch"
-    } else if base.contains("fedora") || base.contains("rhel") || base.contains("centos") {
-        "fedora"
-    } else if base.contains("debian") || base.contains("ubuntu") || base.contains("linuxmint") {
-        "debian"
-    } else {
-        "unknown"
-    }
-}
 
 #[derive(Deserialize)]
 struct Release {
@@ -299,4 +218,18 @@ pub fn check_for_updates() {
             "",
         ),
     }
+}
+
+pub fn get_latest_commit(owner: &str, repo: &str, branch: &str) -> String {
+    let res: Value = Client::new()
+        .get(format!(
+            "https://api.github.com/repos/{owner}/{repo}/commits/{branch}"
+        ))
+        .header("User-Agent", "rust-app")
+        .send()
+        .expect("request failed")
+        .json()
+        .expect("invalid json");
+
+    res["sha"].as_str().expect("missing sha")[..7].to_string()
 }

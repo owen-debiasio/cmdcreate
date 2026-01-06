@@ -1,10 +1,14 @@
 use std::{
     env::{args, consts, var},
+    path::Path,
     process::{Command, Stdio},
     sync::LazyLock,
 };
 
-use crate::{configs::load, utils::msgs::error};
+use crate::{
+    configs::load,
+    utils::{fs::read_file_to_string, msgs::error},
+};
 
 pub struct Vars {
     pub shell: String,
@@ -49,5 +53,86 @@ pub fn run_shell_command(cmd: &str) {
         Err(e) => {
             error("Failed to run shell command:", &e.to_string());
         }
+    }
+}
+
+#[derive(Debug)]
+pub enum InstallMethod {
+    Aur,
+    Dpkg,
+    Rpm,
+    Other,
+}
+
+pub fn installation_method(path: &Path) -> InstallMethod {
+    let Ok(path) = path.canonicalize() else {
+        return InstallMethod::Other;
+    };
+
+    let Some(path_str) = path.to_str() else {
+        return InstallMethod::Other;
+    };
+
+    match get_distro_base() {
+        "arch" => {
+            if Command::new("pacman")
+                .args(["-Qo", path_str])
+                .output()
+                .map(|o| o.status.success())
+                .unwrap_or(false)
+            {
+                return InstallMethod::Aur;
+            }
+        }
+        "fedora" => {
+            if Command::new("rpm")
+                .args(["-qf", path_str])
+                .output()
+                .map(|o| o.status.success())
+                .unwrap_or(false)
+            {
+                return InstallMethod::Rpm;
+            }
+        }
+        "debian" => {
+            if Command::new("dpkg-query")
+                .args(["-S", path_str])
+                .output()
+                .map(|o| o.status.success())
+                .unwrap_or(false)
+            {
+                return InstallMethod::Dpkg;
+            }
+        }
+        _ => {}
+    }
+
+    InstallMethod::Other
+}
+
+pub fn get_distro_base() -> &'static str {
+    let content = read_file_to_string("/etc/os-release").to_lowercase();
+
+    let mut id: &str = "";
+    let mut id_like: &str = "";
+
+    for line in content.lines() {
+        if let Some(v) = line.strip_prefix("id=") {
+            id = v.trim_matches('"');
+        } else if let Some(v) = line.strip_prefix("id_like=") {
+            id_like = v.trim_matches('"');
+        }
+    }
+
+    let base = format!("{id} {id_like}");
+
+    if base.contains("arch") || base.contains("manjaro") {
+        "arch"
+    } else if base.contains("fedora") || base.contains("rhel") || base.contains("centos") {
+        "fedora"
+    } else if base.contains("debian") || base.contains("ubuntu") || base.contains("linuxmint") {
+        "debian"
+    } else {
+        "unknown"
     }
 }

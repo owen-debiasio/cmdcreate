@@ -107,23 +107,17 @@ pub static MAIN_PATH: LazyLock<String> =
     LazyLock::new(|| format!("{}/.local/share/cmdcreate", VARS.home));
 
 pub struct Paths {
-    pub favorites: String,
-
-    pub configs: String,
-
-    pub install_dir: String,
-
-    pub license: String,
     pub changelog: String,
+    pub configs: String,
+    pub favorites: String,
+    pub install_dir: String,
+    pub license: String,
 }
 
 pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
-    favorites: format!("{}/favorites", *MAIN_PATH),
-
-    configs: format!("{}/.config/cmdcreate/config.toml", VARS.home),
-
-    install_dir: format!("{}/files/", *MAIN_PATH),
-
-    license: format!("{}/LICENSE", *MAIN_PATH),
     changelog: format!("{}/changes.md", *MAIN_PATH),
+    configs: format!("{}/.config/cmdcreate/config.toml", VARS.home),
+    favorites: format!("{}/favorites", *MAIN_PATH),
+    install_dir: format!("{}/files/", *MAIN_PATH),
+    license: format!("{}/LICENSE", *MAIN_PATH),
 });
