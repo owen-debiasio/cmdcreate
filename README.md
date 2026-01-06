@@ -67,7 +67,7 @@ cd ~/cmdcreate
 makepkg -si
 ```
 
-**Latest git**
+**Latest git (may be unstable)**
 
 ```
 git clone --branch cmdcreate-git --single-branch https://github.com/archlinux/aur.git ~/cmdcreate-git
@@ -102,6 +102,7 @@ You can the get the `x86_64` binary from the latest [release](https://github.com
 git clone https://github.com/owen-debiasio/cmdcreate.git
 cd cmdcreate
 cargo build --release
+sudo cp target/release/cmdcreate /usr/bin/cmdcreate
 ```
 
 > [!NOTE]
