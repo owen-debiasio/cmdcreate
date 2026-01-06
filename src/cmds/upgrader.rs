@@ -220,7 +220,7 @@ pub fn check_for_updates() {
     }
 }
 
-pub fn get_latest_commit(owner: &str, repo: &str, branch: &str) -> String {
+pub fn _get_latest_commit(owner: &str, repo: &str, branch: &str) -> String {
     let res: Value = Client::new()
         .get(format!(
             "https://api.github.com/repos/{owner}/{repo}/commits/{branch}"
