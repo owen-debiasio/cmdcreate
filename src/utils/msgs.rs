@@ -90,7 +90,7 @@ pub fn ask_for_confirmation(q: &str) {
 pub fn error(msg: &str, err: &str) {
     let (red, reset) = (COLORS.red, COLORS.reset);
 
-    eprintln!("{red}Error: {} {err}{reset}", msg.trim(),);
+    eprintln!("{red}Error: {} {err}{reset}", msg.trim());
 
     exit(1)
 }
