@@ -405,3 +405,8 @@
 - Code optimizations
 - You now have the option to build from source from the latest git from the AUR in the upgrading process
 - Downgraded dependency `reqwest` to version `0.12` due to build issues AUR installation
+
+## v0.9.8
+
+- Code optimizations
+- Random tweaks
