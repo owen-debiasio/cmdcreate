@@ -11,7 +11,7 @@ pub fn init() {
     init_configs();
     init_fs();
 
-    if ARCH != "x86_64" && !load("sys", "fake_arch", "").parse().unwrap_or(false) {
+    if ARCH != "x86_64" && !load("sys", "spoof_arch", "").parse().unwrap_or(false) {
         for line in [
             format!(
                 "{yellow}Your current CPU architecture {red}({ARCH}){yellow} is not currently supported."
