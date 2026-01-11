@@ -58,25 +58,25 @@ fn upgrade_aur(git: bool) {
 
 fn upgrade_deb(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
-    
+
     run_shell_command(&format!(
         "curl -L -o /tmp/cmdcreate-{latest_release}-linux-x86_64.deb \
          https://github.com/owen-debiasio/cmdcreate/releases/latest/download/cmdcreate-{latest_release}-linux-x86_64.deb; \
          sudo dpkg -i /tmp/cmdcreate-{latest_release}-linux-x86_64.deb"
     ));
-    
+
     println!("\n{green}Update complete!{reset}");
 }
 
 fn upgrade_rpm(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
-    
+
     run_shell_command(&format!(
         "curl -L -o /tmp/cmdcreate-{latest_release}-linux-x86_64.rpm \
          https://github.com/owen-debiasio/cmdcreate/releases/latest/download/cmdcreate-{latest_release}-linux-x86_64.rpm; \
          sudo rpm -Uvh /tmp/cmdcreate-{latest_release}-linux-x86_64.rpm"
     ));
-    
+
     println!("\n{green}Update complete!{reset}");
 }
 
