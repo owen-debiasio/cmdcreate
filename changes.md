@@ -410,3 +410,4 @@
 
 - Code optimizations
 - Random tweaks
+- Config `fake_arch` has been renamed to `spoof_arch`
