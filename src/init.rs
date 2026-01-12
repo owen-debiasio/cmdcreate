@@ -17,7 +17,7 @@ pub fn init() {
                 "{yellow}Your current CPU architecture {red}({ARCH}){yellow} is not currently supported."
             ),
             format!("Use {red}x86_64{yellow} as for it is supported.\n"),
-            format!("Press {red}Enter{yellow} to continue...{reset}"),
+            format!("(You can disable this message in the configuration file){reset}\n"),
         ] {
             eprintln!("{line}");
         }
