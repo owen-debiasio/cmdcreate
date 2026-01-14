@@ -1,10 +1,9 @@
-import os
 from lib.sys import command
 from shared import create_single_command
 
 
 def test():
-    os.system("clear")
+    command("clear")
 
     print("\nRunning tests: Rename command\n")
     desc = [
@@ -16,12 +15,12 @@ def test():
         print(line)
 
     input("\nPress enter to continue...")
-    os.system("clear")
+    command("clear")
 
     print("Creating command...")
     create_single_command()
     input("\nPress enter to continue...")
-    os.system("clear")
+    command("clear")
 
     print("\nRenaming created command...\n\n")
     command("cargo run rename test_command renamed_test_command")
@@ -30,12 +29,12 @@ def test():
     print("\nRunning renamed command...\n\n")
     command("renamed_test_command")
     input("\n\nPress enter to continue...")
-    os.system("clear")
+    command("clear")
 
     print("Cleaning up...\n")
     command("cargo run remove renamed_test_command -f")
     input("\nPress enter to continue...")
-    os.system("clear")
+    command("clear")
 
     print("\nCommand test completed.\n")
     input("Press enter to continue...")

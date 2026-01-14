@@ -1,10 +1,9 @@
-import os
 from lib.sys import command
 from shared import create_single_command, delete_single_command
 
 
 def test():
-    os.system("clear")
+    command("clear")
 
     print("\nRunning tests: Command editing\n")
     desc = ['Command name: "test_command"', 'Command contents: "echo Test succeeded"']
@@ -13,25 +12,25 @@ def test():
 
     input("\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("\nCreating command...\n")
     create_single_command()
     input("\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("\nEditing created command...\n")
     command("cargo run edit test_command")
     input("\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("Cleaning up...\n")
     delete_single_command()
     input("\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("\nCommand test completed.\n")
     input("Press enter to continue...")

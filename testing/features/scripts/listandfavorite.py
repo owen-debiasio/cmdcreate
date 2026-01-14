@@ -1,4 +1,3 @@
-import os
 from lib.sys import command
 from shared import (
     create_multiple_commands,
@@ -8,7 +7,7 @@ from shared import (
 
 
 def test():
-    os.system("clear")
+    command("clear")
 
     print("\nRunning tests: Command listing\n")
     desc = [
@@ -26,12 +25,12 @@ def test():
         print(line)
 
     input("\nPress enter to continue...")
-    os.system("clear")
+    command("clear")
 
     print("Creating commands...")
     create_multiple_commands()
     input("\nPress enter to continue...")
-    os.system("clear")
+    command("clear")
 
     print("Listing commands...")
     list_commands()
@@ -39,14 +38,14 @@ def test():
     print("Adding command as favorite...")
     command("cargo run favorite add test_command")
     input("\nPress enter to continue...")
-    os.system("clear")
+    command("clear")
 
     print("\nListing commands again...\n")
     list_commands()
 
     command("cargo run favorite remove test_command")
     input("\nPress enter to continue...")
-    os.system("clear")
+    command("clear")
 
     print("\nListing commands again...\n")
     list_commands()
@@ -54,12 +53,12 @@ def test():
     print("Removing/cleaning up...\n")
     delete_multiple_commands()
     input("\nPress enter to continue...")
-    os.system("clear")
+    command("clear")
 
     print("\nListing commands again...\n")
     list_commands()
 
-    os.system("clear")
+    command("clear")
     print("\nCommand test completed.\n")
     input("Press enter to continue...")
 

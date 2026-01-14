@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import os
-
 from scripts import (
     backup,
     create,
@@ -14,11 +12,13 @@ from scripts import (
     search,
 )
 
+from testing.features.lib.sys import command
+
 VERSION = "v0.1.2"
 
 
 def main():
-    os.system("clear")
+    command("clear")
     print(f"cmdcreate feature testing {VERSION}\n\nPick a feature to test:\n")
 
     options = [

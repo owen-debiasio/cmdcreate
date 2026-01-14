@@ -5,7 +5,7 @@ from shared import create_multiple_commands, delete_multiple_commands
 
 
 def test():
-    os.system("clear")
+    command("clear")
 
     print("\nRunning tests: Command importing/exporting\n")
     desc = [

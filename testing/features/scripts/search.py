@@ -1,10 +1,9 @@
-import os
 from lib.sys import command
 from shared import create_multiple_commands, delete_multiple_commands
 
 
 def test():
-    os.system("clear")
+    command("clear")
 
     print("\nRunning tests: Searching for command\n")
     desc = [
@@ -22,27 +21,27 @@ def test():
         print(line)
 
     input("\nPress enter to continue...")
-    os.system("clear")
+    command("clear")
 
     print("Creating commands...\n")
     create_multiple_commands()
     input("\nPress enter to continue...")
-    os.system("clear")
+    command("clear")
 
     print('Searching for command that contains "2"...\n')
     command("cargo run search 2")
     input("\nPress enter to continue...")
-    os.system("clear")
+    command("clear")
 
     print('Searching for no matches using "none"...\n')
     command("cargo run search none")
     input("\nPress enter to continue...")
-    os.system("clear")
+    command("clear")
 
     print("Removing/cleaning up...\n")
     delete_multiple_commands()
     input("\nPress enter to continue...")
-    os.system("clear")
+    command("clear")
 
     print("\nCommand test completed.\n")
     input("Press enter to continue...")
