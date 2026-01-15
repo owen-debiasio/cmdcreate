@@ -6,4 +6,4 @@
 
 - **package/create_deb.sh**
   - Fix error by adding dependency:
-     - `cmdcreate: error while loading shared libraries: libssl.so.3: cannot open shared object file: No such file or directory`
+    - `cmdcreate: error while loading shared libraries: libssl.so.3: cannot open shared object file: No such file or directory`
