@@ -5,10 +5,16 @@ mod utils;
 
 use crate::{
     cmds::{
-        backup::{export, import},
-        create, display,
+        backup::{export::export, import::import},
+        create::create,
+        display::display,
         edit::edit,
-        favorite, list, remove, rename, repair, search,
+        favorite::favorite,
+        list::list,
+        remove::remove,
+        rename::rename,
+        repair::repair,
+        search::search,
         upgrader::{check_for_updates, upgrade},
     },
     init::init,
@@ -52,13 +58,13 @@ fn cmdcreate(args: &[String]) {
 
     match cmd {
         "create" => match (arg(1), arg(2)) {
-            (Some(c), Some(v)) => create::create(c, v, true),
+            (Some(c), Some(v)) => create(c, v, true),
             _ => println!("Usage:\ncmdcreate {blue}create {yellow}<command> <contents>{reset}"),
         },
 
         "remove" => arg(1).map_or_else(
             || println!("Usage:\ncmdcreate {blue}remove {yellow}<command>{reset}"),
-            remove::remove,
+            remove,
         ),
 
         "edit" => arg(1).map_or_else(
@@ -68,37 +74,37 @@ fn cmdcreate(args: &[String]) {
 
         "search" => arg(1).map_or_else(
             || println!("Usage:\ncmdcreate {blue}search {yellow}<command>{reset}"),
-            search::search,
+            search,
         ),
 
         "display" => arg(1).map_or_else(
             || println!("Usage:\ncmdcreate {blue}display {yellow}<command>{reset}"),
-            display::display,
+            display,
         ),
 
         "rename" => match (arg(1), arg(2)) {
-            (Some(a), Some(b)) => rename::rename(a, b),
+            (Some(a), Some(b)) => rename(a, b),
             _ => println!("Usage:\ncmdcreate {blue}rename {yellow}<command> <new name>{reset}"),
         },
 
         "favorite" => match (arg(1), arg(2)) {
-            (Some(op @ ("add" | "remove")), Some(c)) => favorite::favorite(op, c),
+            (Some(op @ ("add" | "remove")), Some(c)) => favorite(op, c),
             _ => println!("Usage:\ncmdcreate {blue}favorite {yellow}<add/remove> <command>{reset}"),
         },
 
-        "repair" => repair::repair(),
-        "list" => list::list(),
+        "repair" => repair(),
+        "list" => list(),
         "check" => check_for_updates(),
         "update" => upgrade(),
 
         "import" => arg(1).map_or_else(
             || println!("Usage:\ncmdcreate {blue}import {yellow}<input file>{reset}"),
-            import::import,
+            import,
         ),
 
         "export" => arg(1).map_or_else(
             || println!("Usage:\ncmdcreate {blue}export {yellow}<output dir>{reset}"),
-            export::export,
+            export,
         ),
 
         "--version" | "-v" => {
