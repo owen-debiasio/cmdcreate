@@ -25,7 +25,7 @@ Section: utils
 Priority: optional
 Architecture: amd64
 Maintainer: Owen Debiasio <owen.debiasio@gmail.com>
-Depends: curl, nano, libssl-dev
+Depends: curl, nano, libssl3
 Description: Allows you to create custom commands for your custom scripts
 EOF
 
