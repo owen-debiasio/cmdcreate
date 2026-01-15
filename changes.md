@@ -412,3 +412,7 @@
 - Random tweaks
 - Config `fake_arch` has been renamed to `spoof_arch`
 - Added additional message about disabling unsupported architectures in the configuration file
+
+## v0.9.9
+
+- Fixed dependency issues when installing on `Debian`/`Ubuntu` systems
