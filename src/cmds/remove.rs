@@ -32,6 +32,7 @@ pub fn remove(command: &str) {
     if read_file_to_string(&PATHS.favorites).contains(command) && path_exists(&PATHS.favorites) {
         remove_from_file(&PATHS.favorites, command);
     }
+
     run_shell_command(&format!("sudo rm -f /usr/bin/{command}"));
 
     println!("\n{green}Removed command {blue}\"{command}\"{reset}");

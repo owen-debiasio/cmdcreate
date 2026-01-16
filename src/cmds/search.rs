@@ -16,6 +16,7 @@ pub fn search(cmd: &str) {
             }
 
             println!("{file_stem}");
+
             count += 1;
         }
     }

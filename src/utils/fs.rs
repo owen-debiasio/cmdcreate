@@ -74,6 +74,7 @@ pub fn path_exists(path: &str) -> bool {
 pub fn create_folder(path: &str) {
     match create_dir_all(path) {
         Ok(()) => {}
+
         Err(e) => error(
             &format!("Failed to create folder: \"{path}\":"),
             &e.to_string(),

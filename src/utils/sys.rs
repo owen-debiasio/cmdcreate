@@ -50,6 +50,7 @@ pub fn run_shell_command(cmd: &str) {
         .status()
     {
         Ok(_) => {}
+
         Err(e) => {
             error("Failed to run shell command:", &e.to_string());
         }
@@ -84,6 +85,7 @@ pub fn installation_method(path: &Path) -> InstallMethod {
                 return InstallMethod::Aur;
             }
         }
+
         "fedora" => {
             if Command::new("rpm")
                 .args(["-qf", path_str])
@@ -94,6 +96,7 @@ pub fn installation_method(path: &Path) -> InstallMethod {
                 return InstallMethod::Rpm;
             }
         }
+
         "debian" => {
             if Command::new("dpkg-query")
                 .args(["-S", path_str])
@@ -104,6 +107,7 @@ pub fn installation_method(path: &Path) -> InstallMethod {
                 return InstallMethod::Dpkg;
             }
         }
+
         _ => {}
     }
 

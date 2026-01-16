@@ -32,6 +32,7 @@ pub fn import(file: &str) {
                 if data.is_empty() {
                     data.push('\n');
                 }
+
                 data.push_str(part);
             }
         }

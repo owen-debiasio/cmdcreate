@@ -34,6 +34,7 @@ pub fn edit(cmd: &str) {
             .unwrap_or(false)
     }) else {
         error("No known editor is installed on your device.", "");
+
         return;
     };
 

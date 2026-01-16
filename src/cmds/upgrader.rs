@@ -132,11 +132,13 @@ fn build_from_source() {
         "arch" => "sudo pacman -S --noconfirm",
         "debian" => "sudo apt install -y",
         "fedora" => "sudo dnf install -y",
+
         _ => {
             error(
                 "Your system currently isn't supported for building from source.",
                 "",
             );
+
             exit(1);
         }
     };
@@ -186,6 +188,7 @@ fn interactive_upgrade(latest_release: &str) {
         "5" => upgrade_binary(latest_release),
         "6" => build_from_source(),
         "7" => error("Aborted.", ""),
+
         _ => error("Invalid selection.", ""),
     }
 }
@@ -220,7 +223,9 @@ pub fn check_for_updates() {
             ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
             upgrade();
         }
+
         Some(_) => println!("Already up to date."),
+
         None => error(
             "Failed to check for updates. Ensure you are connected to the internet.",
             "",

@@ -12,6 +12,7 @@ pub fn favorite(mode: &str, command: &str) {
     match mode {
         "add" => add(command),
         "remove" => remove(command),
+
         _ => println!("Usage:\ncmdcreate {blue}favorite {yellow}<add/remove> <command>{reset}"),
     }
 }
@@ -29,7 +30,9 @@ fn add(cmd: &str) {
         println!("{yellow}Command {blue}\"{cmd}\"{yellow} is already in favorites.{reset}");
         return;
     }
+
     write_to_file(favorites_path, &format!("{cmd}\n"));
+
     println!("{green}Command {blue}\"{cmd}\"{green} added to favorites.{reset}");
 }
 
@@ -37,5 +40,6 @@ fn remove(cmd: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
     remove_from_file(&PATHS.favorites, cmd);
+
     println!("{green}Command {blue}\"{cmd}\"{green} removed from favorites.{reset}");
 }

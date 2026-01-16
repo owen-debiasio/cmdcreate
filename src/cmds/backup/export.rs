@@ -10,6 +10,7 @@ pub fn export(path: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
     let export_file = &format!("{path}/export.cmdcreate");
+
     create_file(export_file);
 
     for script in get_installed_commands() {
