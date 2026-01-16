@@ -45,9 +45,9 @@ pub fn create(command: &str, contents: &str, verbose: bool) {
 
     run_shell_command(&format!(
         "
-            chmod +x {script}; \
-            sudo ln -sf {script} /usr/bin/{command}
-            ",
+        chmod +x {script}; \
+        sudo ln -sf {script} /usr/bin/{command}
+        ",
     ));
 
     if verbose {
