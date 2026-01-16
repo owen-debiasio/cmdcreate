@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
-sudo rm -f /usr/bin/cmdcreate || echo "Failed to uninstall cmdcreate"
+BIN="cmdcreate"
+INSTALL_DIR="/usr/local/bin"
 
-exit 1
+if [ -f "$INSTALL_DIR/$BIN" ]; then
+    sudo rm "$INSTALL_DIR/$BIN"
+    echo "cmdcreate uninstalled"
+else
+    echo "cmdcreate not installed, nothing to do"
+fi
