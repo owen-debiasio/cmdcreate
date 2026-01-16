@@ -1,21 +1,18 @@
 use reqwest::blocking::Client;
 use serde::Deserialize;
 use serde_json::Value;
-use std::{
-    error::Error,
-    fs::File,
-    io::{copy, stdin},
-    path::Path,
-    process::exit,
-};
+use std::{error::Error, fs::File, io::copy, path::Path, process::exit};
 
 use crate::{
     VERSION,
     utils::{
         colors::COLORS,
         fs::delete_folder,
-        msgs::{ask_for_confirmation, error},
-        sys::{InstallMethod, VARS, get_distro_base, installation_method, run_shell_command},
+        io::{ask_for_confirmation, error, input},
+        sys::{
+            InstallMethod, VARS, args_forced, get_distro_base, installation_method,
+            run_shell_command,
+        },
     },
 };
 
@@ -32,13 +29,74 @@ struct Asset {
 }
 
 pub fn upgrade() {
-    let latest_release = get_latest_release().unwrap_or_else(|| VERSION.to_string());
+    let latest_release = &get_latest_release().unwrap_or_else(|| VERSION.to_string());
+    let (green, blue, red, reset) = (COLORS.green, COLORS.blue, COLORS.red, COLORS.reset);
 
     match installation_method(Path::new("/usr/bin/cmdcreate")) {
-        InstallMethod::Aur => upgrade_aur(false),
-        InstallMethod::Dpkg => upgrade_deb(&latest_release),
-        InstallMethod::Rpm => upgrade_rpm(&latest_release),
-        InstallMethod::Other => interactive_upgrade(&latest_release),
+        InstallMethod::Aur => {
+            if input(&format!(
+                "{blue}Arch Linux{reset}-based system detected. Would you like to install through the {blue}AUR{blue}?\n({green}Y{reset} or {red}N{reset})"
+            ))
+            .trim()
+            .to_lowercase()
+                != "y" && !args_forced()
+            {
+                println!();
+
+                interactive_upgrade(latest_release);
+
+                return;
+            }
+
+            if input(&format!(
+                "\nWould you like to install the latest git?\n({green}Y{reset} or {red}N{reset})"
+            ))
+            .trim()
+            .to_lowercase()
+                == "y"
+                && !args_forced()
+            {
+                upgrade_aur(true);
+
+                return;
+            }
+
+            upgrade_aur(false);
+        }
+
+        InstallMethod::Dpkg => {
+            if input(&format!(
+                "{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
+            ))
+            .trim()
+            .to_lowercase()
+                != "y" && !args_forced()
+            {
+                interactive_upgrade(latest_release);
+
+                return;
+            }
+
+            upgrade_deb(latest_release);
+        }
+
+        InstallMethod::Rpm => {
+            if input(&format!(
+                "{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
+            ))
+            .trim()
+            .to_lowercase()
+                != "y" && !args_forced()
+            {
+                interactive_upgrade(latest_release);
+
+                return;
+            }
+
+            upgrade_rpm(latest_release);
+        }
+
+        InstallMethod::Other => interactive_upgrade(latest_release),
     }
 }
 
@@ -177,10 +235,7 @@ fn interactive_upgrade(latest_release: &str) {
         println!("{blue}{}]{reset} {option}", i + 1);
     }
 
-    let mut method_input = String::new();
-    stdin().read_line(&mut method_input).unwrap();
-
-    match method_input.trim() {
+    match input("").trim() {
         "1" => upgrade_aur(false),
         "2" => upgrade_aur(true),
         "3" => upgrade_deb(latest_release),
@@ -191,6 +246,8 @@ fn interactive_upgrade(latest_release: &str) {
 
         _ => error("Invalid selection.", ""),
     }
+
+    exit(0)
 }
 
 pub fn get_latest_tag(owner: &str, repo: &str) -> Result<String, Box<dyn Error>> {
