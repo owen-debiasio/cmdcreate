@@ -17,15 +17,17 @@ pub fn log(text: &str, lvl: u8) {
         _ => COLORS.reset,
     };
 
+    let log_text = format!("{}[LOG] {color}{text}{}", COLORS.blue, COLORS.reset);
+
     if load("logs", "verbose", "").parse::<bool>().unwrap_or(false)
         || args_contains("-V")
         || args_contains("--verbose")
     {
-        println!("{color}{text}{}", COLORS.reset);
+        println!("{color}{log_text}{}", COLORS.reset);
     }
 
     write_to_file(
         &format!("{}/{time}.log", PATHS.log_dir),
-        &format!("{time} {text}\n"),
+        &format!("{time} {log_text}\n"),
     );
 }
