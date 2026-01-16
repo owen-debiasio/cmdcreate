@@ -52,6 +52,7 @@ pub fn error(msg: &str, err: &str) {
         &format!("utils/io::error(): Error encountered: Message: \"{msg}\", Error: \"{err}\""),
         0,
     );
+
     eprintln!("{red}Error: {} {err}{reset}", msg.trim());
 
     exit(1)
