@@ -20,6 +20,13 @@ pub fn is_command_installed(cmd: &str) {
     if !path_exists(&format!("{}/{cmd}", PATHS.install_dir)) {
         error(&format!("Command \"{cmd}\" is not installed"), "");
     }
+
+    log(
+        &format!(
+            "cmds/tools::is_command_installed(): Command \"{cmd}\" is installed, continuing..."
+        ),
+        0,
+    );
 }
 
 pub fn get_installed_commands() -> Vec<PathBuf> {
