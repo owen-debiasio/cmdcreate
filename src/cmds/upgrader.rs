@@ -5,6 +5,7 @@ use std::{error::Error, fs::File, io::copy, path::Path, process::exit};
 
 use crate::{
     VERSION,
+    logger::log,
     utils::{
         colors::COLORS,
         fs::delete_folder,
@@ -29,11 +30,24 @@ struct Asset {
 }
 
 pub fn upgrade() {
-    let latest_release = &get_latest_release().unwrap_or_else(|| VERSION.to_string());
     let (green, blue, red, reset) = (COLORS.green, COLORS.blue, COLORS.red, COLORS.reset);
+
+    log(
+        "cmds/upgrader::upgrade(): Initializing upgrade process...",
+        0,
+    );
+
+    let latest_release = &get_latest_release().unwrap_or_else(|| VERSION.to_string());
+
+    log(
+        "cmds/upgrader::upgrade(): Determining installation method...",
+        0,
+    );
 
     match installation_method(Path::new("/usr/bin/cmdcreate")) {
         InstallMethod::Aur => {
+            log("cmds/upgrader::upgrade(): Arch Linux detected...", 0);
+
             if input(&format!(
                 "{blue}Arch Linux{reset}-based system detected. Would you like to install through the {blue}AUR{blue}?\n({green}Y{reset} or {red}N{reset})"
             ))
@@ -65,6 +79,8 @@ pub fn upgrade() {
         }
 
         InstallMethod::Dpkg => {
+            log("cmds/upgrader::upgrade(): Debian/Ubuntu detected...", 0);
+
             if input(&format!(
                 "{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
             ))
@@ -81,6 +97,8 @@ pub fn upgrade() {
         }
 
         InstallMethod::Rpm => {
+            log("cmds/upgrader::upgrade(): Fedora detected...", 0);
+
             if input(&format!(
                 "{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
             ))
@@ -96,14 +114,43 @@ pub fn upgrade() {
             upgrade_rpm(latest_release);
         }
 
-        InstallMethod::Other => interactive_upgrade(latest_release),
+        InstallMethod::Other => {
+            log(
+                "cmds/upgrader::upgrade(): No distro detected... Moving on to interactive upgrade...",
+                1,
+            );
+
+            interactive_upgrade(latest_release);
+        }
     }
 }
 
 fn upgrade_aur(git: bool) {
+    let (green, reset) = (COLORS.green, COLORS.reset);
+
+    log(
+        "cmds/upgrader::upgrade_aur(): Determining whether to install the git or stable version...",
+        0,
+    );
+
     let pkg = if git { "cmdcreate-git" } else { "cmdcreate" };
 
+    log(
+        &format!("cmds/upgrader::upgrade_aur(): Installing package \"{pkg}\"..."),
+        0,
+    );
+
+    log(
+        "cmds/upgrader::upgrade_aur(): Deleting temp folder (if exists)...",
+        0,
+    );
+
     delete_folder(&format!("{}/{pkg}", VARS.home));
+
+    log(
+        &format!("cmds/upgrader::upgrade_aur(): Downloading and installing package \"{pkg}\"..."),
+        0,
+    );
 
     run_shell_command(&format!(
         "git clone --branch {pkg} --single-branch https://github.com/archlinux/aur.git ~/{pkg}; \
@@ -111,11 +158,25 @@ fn upgrade_aur(git: bool) {
          makepkg -si",
     ));
 
+    log("cmds/upgrader::upgrade_aur(): Removing temp folder...", 0);
+
     delete_folder(&format!("{}/{pkg}", VARS.home));
+
+    log(
+        "cmds/upgrader::upgrade_aur(): Upgrading process completed...",
+        0,
+    );
+
+    println!("{green}Update complete!{reset}");
 }
 
 fn upgrade_deb(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
+
+    log(
+        "cmds/upgrader::upgrade_deb(): Downloading and installing \".deb\" package...",
+        0,
+    );
 
     run_shell_command(&format!(
         "curl -L -o /tmp/cmdcreate-{latest_release}-linux-x86_64.deb \
@@ -123,11 +184,18 @@ fn upgrade_deb(latest_release: &str) {
          sudo dpkg -i /tmp/cmdcreate-{latest_release}-linux-x86_64.deb"
     ));
 
+    log("cmds/upgrader::upgrade_deb(): Update completed...", 0);
+
     println!("\n{green}Update complete!{reset}");
 }
 
 fn upgrade_rpm(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
+
+    log(
+        "cmds/upgrader::upgrade_rpm(): Downloading and installing \".rpm\" package...",
+        0,
+    );
 
     run_shell_command(&format!(
         "curl -L -o /tmp/cmdcreate-{latest_release}-linux-x86_64.rpm \
@@ -135,11 +203,22 @@ fn upgrade_rpm(latest_release: &str) {
          sudo rpm -Uvh /tmp/cmdcreate-{latest_release}-linux-x86_64.rpm"
     ));
 
+    log("cmds/upgrader::upgrade_rpm(): Update completed...", 0);
+
     println!("\n{green}Update complete!{reset}");
 }
 
 fn upgrade_binary(latest_release: &str) {
+    let (green, reset) = (COLORS.green, COLORS.reset);
+
+    log("cmds/upgrader::upgrade_binary(): Initializing client...", 0);
+
     let client = Client::new();
+
+    log(
+        "cmds/upgrader::upgrade_binary(): Getting release info...",
+        0,
+    );
 
     let release: Release = client
         .get("https://api.github.com/repos/owen-debiasio/cmdcreate/releases/latest")
@@ -148,6 +227,11 @@ fn upgrade_binary(latest_release: &str) {
         .expect("Failed to fetch release info")
         .json()
         .expect("Failed to parse release info");
+
+    log(
+        "cmds/upgrader::upgrade_binary(): Downloading latest release...",
+        0,
+    );
 
     if let Some(asset) = release
         .assets
@@ -165,6 +249,8 @@ fn upgrade_binary(latest_release: &str) {
         )
         .expect("Failed to copy binary");
 
+        log("cmds/upgrader::upgrade_binary(): Installing binary...", 0);
+
         run_shell_command(&format!(
             "sudo chmod +x {tmp_path}; \
              sudo mv {tmp_path} /usr/bin/cmdcreate"
@@ -174,6 +260,10 @@ fn upgrade_binary(latest_release: &str) {
             "Downloaded {} from release {}",
             asset.name, release.tag_name
         );
+
+        log("cmds/upgrader::upgrade_binary(): Update completed...", 0);
+
+        println!("\n{green}Update complete!{reset}");
     } else {
         error("Binary not found in latest release.", "");
     }
@@ -182,9 +272,24 @@ fn upgrade_binary(latest_release: &str) {
 fn build_from_source() {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
+    log(
+        "cmds/upgrader::build_from_source(): Deleting temp folder (if exists)...",
+        0,
+    );
+
     delete_folder(&format!("{}/.cache/cmdcreate", VARS.home));
 
+    log(
+        "cmds/upgrader::build_from_source(): Cloning repository...",
+        0,
+    );
+
     run_shell_command("git clone https://github.com/owen-debiasio/cmdcreate ~/.cache/cmdcreate");
+
+    log(
+        "cmds/upgrader::build_from_source(): Retrieving distro base...",
+        0,
+    );
 
     let pm: &str = match get_distro_base() {
         "arch" => "sudo pacman -S --noconfirm",
@@ -201,6 +306,16 @@ fn build_from_source() {
         }
     };
 
+    log(
+        &format!("cmds/upgrader::build_from_source(): Detected package manager as \"{pm}\"..."),
+        0,
+    );
+
+    log(
+        "cmds/upgrader::build_from_source(): Building and installing package...",
+        0,
+    );
+
     run_shell_command(&format!(
         "{pm} cargo && \
          cd ~/.cache/cmdcreate && \
@@ -210,13 +325,35 @@ fn build_from_source() {
          sudo mv /usr/bin/cmdcreate.new /usr/bin/cmdcreate",
     ));
 
+    log("cmds/upgrader::build_from_source(): Update complete...", 0);
+
     println!("\n{green}Update complete!{reset}");
 }
 
 fn interactive_upgrade(latest_release: &str) {
     let (blue, reset) = (COLORS.blue, COLORS.reset);
 
+    log(
+        "cmds/upgrader::interactive_upgrade(): Initializing interactive upgrade...",
+        0,
+    );
+
+    log(
+        "cmds/upgrader::interactive_upgrade(): Requesting permission to upgrade...",
+        0,
+    );
+
     ask_for_confirmation("Do you want to upgrade cmdcreate?");
+
+    log(
+        "cmds/upgrader::interactive_upgrade(): Continuing with upgrade...",
+        0,
+    );
+
+    log(
+        "cmds/upgrader::interactive_upgrade(): Providing upgrade options...",
+        0,
+    );
 
     println!("\nSelect an upgrade method:\n");
 
@@ -235,6 +372,11 @@ fn interactive_upgrade(latest_release: &str) {
         println!("{blue}{}]{reset} {option}", i + 1);
     }
 
+    log(
+        "cmds/upgrader::interactive_upgrade(): Allowing user to select upgrade method...",
+        0,
+    );
+
     match input("").trim() {
         "1" => upgrade_aur(false),
         "2" => upgrade_aur(true),
@@ -247,10 +389,20 @@ fn interactive_upgrade(latest_release: &str) {
         _ => error("Invalid selection.", ""),
     }
 
+    log(
+        "cmds/upgrader::interactive_upgrade(): Interactive update completed...",
+        0,
+    );
+
     exit(0)
 }
 
 pub fn get_latest_tag(owner: &str, repo: &str) -> Result<String, Box<dyn Error>> {
+    log(
+        "cmds/upgrader::get_latest_tag(): Retrieving latest tag...",
+        0,
+    );
+
     let json: Value = Client::new()
         .get(format!(
             "https://api.github.com/repos/{owner}/{repo}/releases/latest"
@@ -259,31 +411,81 @@ pub fn get_latest_tag(owner: &str, repo: &str) -> Result<String, Box<dyn Error>>
         .send()?
         .json()?;
 
-    Ok(json["tag_name"]
+    let tag = json["tag_name"]
         .as_str()
         .ok_or("Missing tag_name in response")?
-        .to_string())
+        .to_string();
+
+    log(
+        &format!("cmds/upgrader::get_latest_tag(): Latest tag: {tag}..."),
+        0,
+    );
+
+    Ok(tag)
 }
 
 pub fn get_latest_release() -> Option<String> {
+    log(
+        "cmds/upgrader::get_latest_release(): Retrieving latest release...",
+        0,
+    );
+
     get_latest_tag("owen-debiasio", "cmdcreate").ok()
 }
 
 pub fn check_for_updates() {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
+    log(
+        "cmds/upgrader::check_for_updates(): Beginning update check...",
+        0,
+    );
+
     println!("\nChecking for updates...");
+
+    let (current, latest) = (VERSION, get_latest_release().unwrap_or_default());
+
+    log(
+        &format!(
+            "cmds/upgrader::check_for_updates(): Comparing versions \"{current} (Current)\" to \"{latest}\" (Latest)..."
+        ),
+        0,
+    );
 
     match get_latest_release() {
         Some(latest) if latest != VERSION => {
+            log(
+                &format!(
+                    "cmds/upgrader::check_for_updates(): Found available update from \"{current}\" to \"{latest}\"..."
+                ),
+                0,
+            );
+
             println!("{green}\nUpdate available: {VERSION} -> {latest}{reset}");
 
+            log(
+                "cmds/upgrader::check_for_updates(): Asking user for confirmation...",
+                0,
+            );
+
             ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
+
+            log(
+                "cmds/upgrader::check_for_updates(): Launching upgrade process...",
+                0,
+            );
 
             upgrade();
         }
 
-        Some(_) => println!("Already up to date."),
+        Some(_) => {
+            log(
+                "cmds/upgrader::check_for_updates(): No updates available.",
+                1,
+            );
+
+            println!("Already up to date.");
+        }
 
         None => error(
             "Failed to check for updates. Ensure you are connected to the internet.",
