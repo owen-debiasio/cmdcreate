@@ -6,7 +6,7 @@ use std::{
 };
 
 use crate::utils::{
-    msgs::error,
+    io::error,
     sys::{VARS, run_shell_command},
 };
 

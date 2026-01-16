@@ -1,8 +1,6 @@
-use std::io::{self, Read};
-
 use crate::{
     configs::{init_configs, load},
-    utils::{colors::COLORS, fs::init_fs, sys::ARCH},
+    utils::{colors::COLORS, fs::init_fs, io::input, sys::ARCH},
 };
 
 pub fn init() {
@@ -26,5 +24,5 @@ pub fn init() {
         (You can disable this message in the configuration file){reset}"
     );
 
-    let _ = io::stdin().read(&mut [0u8]).ok();
+    let _ = input("");
 }

@@ -1,5 +1,5 @@
 use std::{
-    env::{args, consts, var},
+    env::{args, consts::ARCH as ARCHITECTURE, var},
     path::Path,
     process::{Command, Stdio},
     sync::LazyLock,
@@ -7,7 +7,7 @@ use std::{
 
 use crate::{
     configs::load,
-    utils::{fs::read_file_to_string, msgs::error},
+    utils::{fs::read_file_to_string, io::error},
 };
 
 pub struct Vars {
@@ -20,10 +20,14 @@ pub static VARS: LazyLock<Vars> = LazyLock::new(|| Vars {
     home: var("HOME").unwrap_or_else(|_| "unknown".to_string()),
 });
 
-pub static ARCH: &str = consts::ARCH;
+pub static ARCH: &str = ARCHITECTURE;
 
 pub fn return_args() -> Vec<String> {
     args().skip(1).collect()
+}
+
+pub fn args_forced() -> bool {
+    args_contains("--force") || args_contains("-f")
 }
 
 pub fn args_contains(arg: &str) -> bool {

@@ -3,7 +3,7 @@ use std::{fs::read_dir, path::PathBuf};
 use crate::utils::{
     colors::COLORS,
     fs::{PATHS, path_exists},
-    msgs::error,
+    io::error,
 };
 
 pub fn is_command_installed(cmd: &str) {

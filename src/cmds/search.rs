@@ -1,6 +1,6 @@
 use crate::{
     cmds::tools::get_installed_commands,
-    utils::{colors::COLORS, msgs::error},
+    utils::{colors::COLORS, io::error},
 };
 
 pub fn search(cmd: &str) {
