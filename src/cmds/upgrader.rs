@@ -276,8 +276,10 @@ pub fn check_for_updates() {
 
     match get_latest_release() {
         Some(latest) if latest != VERSION => {
-            println!("{green}\nUpdate available: {VERSION} -> {latest}{reset}",);
+            println!("{green}\nUpdate available: {VERSION} -> {latest}{reset}");
+
             ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
+
             upgrade();
         }
 
