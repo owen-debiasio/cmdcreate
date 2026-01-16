@@ -1,6 +1,6 @@
 use crate::{
     cmds::tools::is_command_installed,
-    utils::{fs::PATHS, msgs::error, sys::run_shell_command},
+    utils::{fs::PATHS, io::error, sys::run_shell_command},
 };
 use std::process::Command;
 

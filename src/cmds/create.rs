@@ -1,7 +1,7 @@
 use crate::utils::{
     colors::COLORS,
     fs::{PATHS, overwrite_file},
-    msgs::error,
+    io::error,
     sys::run_shell_command,
 };
 

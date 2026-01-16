@@ -3,7 +3,7 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{PATHS, delete_file, path_exists, read_file_to_string, remove_from_file},
-        msgs::ask_for_confirmation,
+        io::ask_for_confirmation,
         sys::run_shell_command,
     },
 };
