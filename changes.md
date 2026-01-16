@@ -416,3 +416,4 @@
 ## v0.9.9
 
 - Fixed dependency issues when installing on `Debian`/`Ubuntu` systems
+- Code optimizations
