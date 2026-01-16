@@ -65,7 +65,7 @@ fn add(cmd: &str) {
 
 fn remove(cmd: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
-    
+
     log(
         &format!("cmds/favorite::favorite(): Removing command \"{cmd}\" from favorites..."),
         0,
