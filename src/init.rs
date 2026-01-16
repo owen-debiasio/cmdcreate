@@ -1,4 +1,4 @@
-use std::io::stdin;
+use std::io::{self, Read};
 
 use crate::{
     configs::{init_configs, load},
@@ -6,22 +6,25 @@ use crate::{
 };
 
 pub fn init() {
-    let (yellow, red, reset) = (COLORS.yellow, COLORS.red, COLORS.reset);
-
     init_configs();
     init_fs();
 
-    if !(ARCH == "x86_64" && load("sys", "spoof_arch", "").parse().unwrap_or(false)) {
-        for line in [
-            format!(
-                "{yellow}Your current CPU architecture {red}({ARCH}){yellow} is not currently supported."
-            ),
-            format!("Use {red}x86_64{yellow} as for it is supported.\n"),
-            format!("(You can disable this message in the configuration file){reset}\n"),
-        ] {
-            eprintln!("{line}");
-        }
-
-        stdin().read_line(&mut String::new()).unwrap();
+    if ARCH == "x86_64"
+        || load("sys", "spoof_arch", "")
+            .parse::<bool>()
+            .unwrap_or(false)
+    {
+        return;
     }
+
+    let (yellow, red, reset) = (COLORS.yellow, COLORS.red, COLORS.reset);
+
+    eprintln!(
+        "{yellow}Your current CPU architecture {red}({ARCH}){yellow} is not currently supported.
+        Use {red}x86_64{yellow} as it is supported.
+
+        (You can disable this message in the configuration file){reset}"
+    );
+
+    let _ = io::stdin().read(&mut [0u8]).ok();
 }
