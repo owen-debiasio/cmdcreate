@@ -420,3 +420,22 @@
 - Fixed bug where that cmdcreate would crash if it tried to delete a folder that didn't exist
 - Fixed misdetection of architecture
 - Overhauled the upgrade process to be more reliable
+
+---
+
+# v1.0.0 🎉
+
+- Added logging
+- Added verbose output
+- New debug flag: `-v`, `--verbose`
+  - Used for verbose output of logs
+- Added configurations:
+  - `time_format`
+    - Time format used for logs
+    - String
+    - Default: `%Y-%m-%d %H:%M:%S`
+  - `verbose`
+    - Enabled verbose logging by default
+    - Boolean
+    - Default: `false`
+- Code optimizations
