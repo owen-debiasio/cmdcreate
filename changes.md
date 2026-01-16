@@ -418,3 +418,5 @@
 - Fixed dependency issues when installing on `Debian`/`Ubuntu` systems
 - Code optimizations
 - Fixed bug where that cmdcreate would crash if it tried to delete a folder that didn't exist
+- Fixed misdetection of architecture
+- Overhauled the upgrade process to be more reliable
