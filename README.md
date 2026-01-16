@@ -102,7 +102,7 @@ You can the get the `x86_64` binary from the latest [release](https://github.com
 git clone https://github.com/owen-debiasio/cmdcreate.git
 cd cmdcreate
 cargo build --release
-sudo cp target/release/cmdcreate /usr/bin/cmdcreate
+sudo cp target/release/cmdcreate /usr/local/bin/cmdcreate
 ```
 
 > [!NOTE]
