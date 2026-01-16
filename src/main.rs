@@ -1,6 +1,7 @@
 mod cmds;
 mod configs;
 mod init;
+mod logger;
 mod utils;
 
 use crate::{
@@ -97,7 +98,19 @@ pub fn display_usage() {
 fn main() {
     init();
 
-    let args = return_args();
+    let mut args = return_args();
+    if args.is_empty() {
+        display_usage();
+        return;
+    }
+
+    if args
+        .iter()
+        .any(|a| matches!(a.as_str(), "-V" | "--verbose"))
+    {
+        args.retain(|a| !matches!(a.as_str(), "-V" | "--verbose"));
+    }
+
     if args.is_empty() {
         display_usage();
         return;
@@ -106,6 +119,7 @@ fn main() {
     cmdcreate(&args);
 }
 
+#[allow(clippy::too_many_lines)]
 fn cmdcreate(args: &[String]) {
     let cmd = args[0].as_str();
     let arg = |i| args.get(i).map(String::as_str);
@@ -118,7 +132,14 @@ fn cmdcreate(args: &[String]) {
         COLORS.reset,
     );
 
-    if matches!(cmd, "-l" | "--license" | "-c" | "--changelog") {
+    if matches!(cmd, "-V" | "--verbose") {
+        return;
+    }
+
+    if matches!(
+        cmd,
+        "-l" | "--license" | "-c" | "--changelog" | "-g" | "--get_offline_files"
+    ) {
         init_git_fs();
     }
 
@@ -179,31 +200,52 @@ fn cmdcreate(args: &[String]) {
 
         "--get_offline_files" | "-g" => {
             println!("Downloading offline files...");
+
             init_git_fs();
+
             println!("{green}Files downloaded successfully.{reset}");
         }
 
         "--remove_offline_files" | "-r" => {
             println!("Removing files...");
+
             delete_file(&PATHS.changelog);
             delete_file(&PATHS.license);
+
             println!("{green}Files removed successfully.{reset}");
         }
 
-        "--license" | "-l" => println!("{}", read_file_to_string(&PATHS.license)),
-        "--changelog" | "-c" => println!("{}", read_file_to_string(&PATHS.changelog).trim()),
+        "--license" | "-l" => {
+            println!("{}", read_file_to_string(&PATHS.license));
+        }
+
+        "--changelog" | "-c" => {
+            println!("{}", read_file_to_string(&PATHS.changelog).trim());
+        }
 
         "--debugging" | "-d" => {
             for line in [
                 format!("Usage: cmdcreate {magenta}(flags){reset} [run]"),
-                format!("  {magenta}-F{reset}, --force_system_shell"),
-                format!("  {magenta}-f{reset}, --force"),
+                format!(
+                    "  {magenta}-F{reset}, {magenta}--force_system_shell{reset}          Force system shell"
+                ),
+                format!(
+                    "  {magenta}-f{reset}, {magenta}--force{reset}                       Force commands"
+                ),
+                format!(
+                    "  {magenta}-V{reset}, {magenta}--verbose{reset}                     Print logs"
+                ),
             ] {
                 println!("{line}");
             }
         }
 
-        _ if cmd.starts_with('-') => error("Invalid argument:", cmd),
-        _ => error("Invalid command:", cmd),
+        _ if cmd.starts_with('-') => {
+            error("Invalid argument:", cmd);
+        }
+
+        _ => {
+            error("Invalid command:", cmd);
+        }
     }
 }
