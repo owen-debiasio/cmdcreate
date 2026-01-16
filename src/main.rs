@@ -19,6 +19,7 @@ use crate::{
         upgrader::{check_for_updates, upgrade},
     },
     init::init,
+    logger::log,
     utils::{
         colors::COLORS,
         fs::{PATHS, delete_file, init_git_fs, read_file_to_string},
@@ -37,6 +38,8 @@ pub fn display_usage() {
         COLORS.magenta,
         COLORS.reset,
     );
+
+    log("main::display_usage(): Displaying usage information...", 0);
 
     for line in vec![
         format!("cmdcreate {VERSION}"),
@@ -98,6 +101,8 @@ pub fn display_usage() {
 fn main() {
     init();
 
+    log("main::main(): Retrieving args...", 0);
+
     let mut args = return_args();
     if args.is_empty() {
         display_usage();
@@ -112,6 +117,7 @@ fn main() {
     }
 
     if args.is_empty() {
+        log("main::main(): Args are empty, displaying usage...", 1);
         display_usage();
         return;
     }
@@ -140,8 +146,11 @@ fn cmdcreate(args: &[String]) {
         cmd,
         "-l" | "--license" | "-c" | "--changelog" | "-g" | "--get_offline_files"
     ) {
+        log("main::main(): Offline files have been requested...", 0);
         init_git_fs();
     }
+
+    log(&format!("main::main(): Processing command \"{cmd}\"..."), 0);
 
     match cmd {
         "create" => match (arg(1), arg(2)) {
@@ -201,29 +210,41 @@ fn cmdcreate(args: &[String]) {
         "--get_offline_files" | "-g" => {
             println!("Downloading offline files...");
 
+            log("main::main(): Retrieval of offline files requested...", 0);
+
             init_git_fs();
+
+            log("main::main(): Retrieved offline files...", 0);
 
             println!("{green}Files downloaded successfully.{reset}");
         }
 
         "--remove_offline_files" | "-r" => {
+            log("main::main(): Removing offline files...", 0);
+
             println!("Removing files...");
 
             delete_file(&PATHS.changelog);
             delete_file(&PATHS.license);
 
+            log("main::main(): Removed offline files", 0);
+
             println!("{green}Files removed successfully.{reset}");
         }
 
         "--license" | "-l" => {
+            log("main::main(): Displaying license...", 0);
             println!("{}", read_file_to_string(&PATHS.license));
         }
 
         "--changelog" | "-c" => {
+            log("main::main(): Displaying changelog...", 0);
             println!("{}", read_file_to_string(&PATHS.changelog).trim());
         }
 
         "--debugging" | "-d" => {
+            log("main::main(): Displaying debug info...", 0);
+
             for line in [
                 format!("Usage: cmdcreate {magenta}(flags){reset} [run]"),
                 format!(

@@ -52,6 +52,8 @@ pub fn init_git_fs() {
 
     retrieve_git_file(&PATHS.license, "LICENSE");
     retrieve_git_file(&PATHS.changelog, "changes.md");
+
+    log("utils/fs::init_git_fs(): Initialized offline files", 0);
 }
 
 pub fn retrieve_git_file(dest: &str, file_path: &str) {
