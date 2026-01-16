@@ -12,7 +12,7 @@ from scripts import (
     search,
 )
 
-from testing.features.lib.sys import command
+from lib.sys import command
 
 VERSION = "v0.1.2"
 
