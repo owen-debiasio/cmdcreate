@@ -1,11 +1,19 @@
 use crate::{
     cmds::tools::is_command_installed,
+    logger::log,
     utils::{fs::PATHS, io::error, sys::run_shell_command},
 };
 use std::process::Command;
 
 pub fn edit(cmd: &str) {
+    log(
+        &format!("cmds/edit::edit(): Checking if command \"{cmd}\" is installed..."),
+        0,
+    );
+
     is_command_installed(cmd);
+
+    log("cmds/edit::edit(): Checking editors...", 0);
 
     let Some(editor) = [
         "nvim",
@@ -37,6 +45,11 @@ pub fn edit(cmd: &str) {
 
         return;
     };
+
+    log(
+        &format!("cmds/edit::edit(): Launching editor \"{editor}\"..."),
+        0,
+    );
 
     run_shell_command(&format!("sudo {editor} {}{cmd}", PATHS.install_dir));
 }
