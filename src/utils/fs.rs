@@ -93,15 +93,18 @@ pub fn create_file(path: &str) {
 }
 
 pub fn delete_file(path: &str) {
-    if let Err(e) = remove_file(path) {
+    if let Err(e) = remove_file(path)
+        && path_exists(path)
+    {
         error(&format!("Failed to delete file {path}:"), &e.to_string());
     }
 }
 
 pub fn delete_folder(path: &str) {
-    if let Err(e) = remove_dir_all(path) {
-        error(&format!("Failed to delete folder {path}:"), &e.to_string());
-    }
+    if let Err(e) = remove_dir_all(path)
+        && path_exists(path) {
+            error(&format!("Failed to delete folder {path}:"), &e.to_string());
+        }
 }
 
 pub static MAIN_PATH: LazyLock<String> =
