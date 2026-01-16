@@ -77,7 +77,7 @@ pub fn run_shell_command(cmd: &str) {
         .status()
     {
         Ok(_) => log(
-            &format!("utils/sys::run_shell_command(): Ran command {cmd} using shell {shell}"),
+            &format!("utils/sys::run_shell_command(): Ran command \"{cmd}\" using shell \"{shell}\""),
             0,
         ),
 
