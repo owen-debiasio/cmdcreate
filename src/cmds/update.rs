@@ -286,8 +286,7 @@ fn build_from_source() {
 
     run_shell_command(
         "cd ~/.cache/cmdcreate && \
-         cargo update \
-         cargo update icu_properties_data icu_local_core zerofrom --precise ver \
+         cargo update --precise ver \
          cargo build --release && \
          sudo cp target/release/cmdcreate /usr/bin/cmdcreate.new && \
          sudo chmod +x /usr/bin/cmdcreate.new && \
