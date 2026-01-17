@@ -35,8 +35,8 @@ pub fn rename(old: &str, new: &str) {
     run_shell_command(&format!(
         "
         mv {install_dir}{old} {install_dir}{new}; \
-        sudo mv /usr/bin/{old} /usr/bin/{new}; \
-        sudo ln -sf {install_dir}{new} /usr/bin/{new}; \
+        sudo mv /usr/local/bin/{old} /usr/local/bin/{new}; \
+        sudo ln -sf {install_dir}{new} /usr/local/bin/{new}; \
         "
     ));
 

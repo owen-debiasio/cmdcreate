@@ -72,7 +72,7 @@ pub fn remove(command: &str) {
         0,
     );
 
-    run_shell_command(&format!("sudo rm -f /usr/bin/{command}"));
+    run_shell_command(&format!("sudo rm -f /usr/local/bin/{command}"));
 
     println!("\n{green}Removed command {blue}\"{command}\"{reset}");
 }

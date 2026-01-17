@@ -44,52 +44,59 @@ pub fn upgrade() {
         0,
     );
 
-    match installation_method(Path::new("/usr/bin/cmdcreate")) {
+    log("cmds/upgrader::upgrade(): Getting installation paths...", 0);
+
+    let install_path = ["/usr/bin/cmdcreate", "/usr/local/bin/cmdcreate"]
+        .iter()
+        .map(Path::new)
+        .find(|p| p.exists());
+
+    let Some(install_path) = install_path else {
+        log(
+            "cmds/upgrader::upgrade(): cmdcreate not found, falling back to interactive upgrade",
+            1,
+        );
+        interactive_upgrade(latest_release);
+        return;
+    };
+
+    match installation_method(install_path) {
         InstallMethod::Aur => {
             log("cmds/upgrader::upgrade(): Arch Linux detected...", 0);
 
-            if input(&format!(
-                "{blue}Arch Linux{reset}-based system detected. Would you like to install through the {blue}AUR{blue}?\n({green}Y{reset} or {red}N{reset})"
-            ))
-            .trim()
-            .to_lowercase()
-                != "y" && !args_forced()
+            if !args_forced()
+                && input(&format!(
+                    "{blue}Arch Linux{reset}-based system detected. Would you like to install through the {blue}AUR{reset}?\n({green}Y{reset} or {red}N{reset})"
+                ))
+                .trim()
+                .eq_ignore_ascii_case("n")
             {
                 println!();
-
                 interactive_upgrade(latest_release);
-
                 return;
             }
 
-            if input(&format!(
-                "\nWould you like to install the latest git?\n({green}Y{reset} or {red}N{reset})"
-            ))
-            .trim()
-            .to_lowercase()
-                == "y"
-                && !args_forced()
-            {
-                upgrade_aur(true);
+            let use_git = !args_forced()
+                && input(&format!(
+                    "\nWould you like to install the latest git?\n({green}Y{reset} or {red}N{reset})"
+                ))
+                .trim()
+                .eq_ignore_ascii_case("y");
 
-                return;
-            }
-
-            upgrade_aur(false);
+            upgrade_aur(use_git);
         }
 
         InstallMethod::Dpkg => {
             log("cmds/upgrader::upgrade(): Debian/Ubuntu detected...", 0);
 
-            if input(&format!(
-                "{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
-            ))
-            .trim()
-            .to_lowercase()
-                != "y" && !args_forced()
+            if !args_forced()
+                && input(&format!(
+                    "{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
+                ))
+                .trim()
+                .eq_ignore_ascii_case("n")
             {
                 interactive_upgrade(latest_release);
-
                 return;
             }
 
@@ -99,15 +106,14 @@ pub fn upgrade() {
         InstallMethod::Rpm => {
             log("cmds/upgrader::upgrade(): Fedora detected...", 0);
 
-            if input(&format!(
-                "{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
-            ))
-            .trim()
-            .to_lowercase()
-                != "y" && !args_forced()
+            if !args_forced()
+                && input(&format!(
+                    "{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
+                ))
+                .trim()
+                .eq_ignore_ascii_case("n")
             {
                 interactive_upgrade(latest_release);
-
                 return;
             }
 
@@ -119,7 +125,6 @@ pub fn upgrade() {
                 "cmds/upgrader::upgrade(): No distro detected... Moving on to interactive upgrade...",
                 1,
             );
-
             interactive_upgrade(latest_release);
         }
     }

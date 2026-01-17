@@ -1,11 +1,7 @@
 use crate::{
     cmds::{create::create, favorite::favorite as add_favorite},
     logger::log,
-    utils::{
-        colors::COLORS,
-        fs::read_file_to_string,
-        io::error,
-    },
+    utils::{colors::COLORS, fs::read_file_to_string, io::error},
 };
 
 pub fn import(file: &str) {
