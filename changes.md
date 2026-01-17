@@ -439,3 +439,4 @@
     - Boolean
     - Default: `false`
 - Code optimizations
+- Installation of commands have now moved to `/usr/local/bin/<command name>`
