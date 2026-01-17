@@ -8,6 +8,6 @@ pub mod remove;
 pub mod rename;
 pub mod repair;
 pub mod search;
-pub mod upgrader;
+pub mod update;
 
 mod tools;

@@ -16,7 +16,7 @@ use crate::{
         rename::rename,
         repair::repair,
         search::search,
-        upgrader::{check_for_updates, upgrade},
+        update::{check, update},
     },
     init::init,
     logger::log,
@@ -190,8 +190,8 @@ fn cmdcreate(args: &[String]) {
 
         "repair" => repair(),
         "list" => list(),
-        "check" => check_for_updates(),
-        "update" => upgrade(),
+        "check" => check(),
+        "update" => update(),
 
         "import" => arg(1).map_or_else(
             || println!("Usage:\ncmdcreate {blue}import {yellow}<input file>{reset}"),
