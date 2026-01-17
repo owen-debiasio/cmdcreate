@@ -42,7 +42,12 @@ pub fn init() {
     if input("").to_lowercase() == "y" {
         write_to_file(
             &format!("{}/.config/cmdcreate/config.toml", VARS.home),
-            "[sys]\nspoof_arch = \"true\"",
+            "[sys]",
+        );
+
+        write_to_file(
+            &format!("{}/.config/cmdcreate/config.toml", VARS.home),
+            "spoof_arch = \"true\"",
         );
     }
 }

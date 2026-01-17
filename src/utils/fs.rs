@@ -82,20 +82,18 @@ pub fn read_file_to_string(file_path: &str) -> String {
 }
 
 pub fn write_to_file(path: &str, contents: &str) {
-    // Also causes a memory leak/stack overflow
+    if let Some(parent) = Path::new(path).parent() {
+        let _ = create_dir_all(parent);
+    }
 
-    //log(
-    //    &format!("utils/fs::write_to_file(): Writing file contents \"{contents}\" to {path}"),
-    //    0,
-    //);
-
-    OpenOptions::new()
+    if let Err(e) = OpenOptions::new()
         .create(true)
         .append(true)
         .open(path)
-        .unwrap_or_else(|e| panic!("Failed to open {path}: {e}"))
-        .write_all(contents.as_bytes())
-        .unwrap_or_else(|e| panic!("Failed to write to {path}: {e}"));
+        .and_then(|mut f| f.write_all(contents.as_bytes()))
+    {
+        panic!("Failed to write to {path}: {e}");
+    }
 }
 
 pub fn overwrite_file(path: &str, contents: &str) {
@@ -104,10 +102,13 @@ pub fn overwrite_file(path: &str, contents: &str) {
         0,
     );
 
-    File::create(path)
-        .unwrap_or_else(|e| panic!("Failed to overwrite {path}: {e}"))
-        .write_all(contents.as_bytes())
-        .unwrap_or_else(|e| panic!("Failed to write to {path}: {e}"));
+    if let Some(parent) = Path::new(path).parent() {
+        let _ = create_dir_all(parent);
+    }
+
+    if let Err(e) = File::create(path).and_then(|mut f| f.write_all(contents.as_bytes())) {
+        panic!("Failed to overwrite {path}: {e}");
+    }
 }
 
 pub fn remove_from_file(path: &str, contents: &str) {
@@ -154,14 +155,21 @@ pub fn create_file(path: &str) {
         0,
     );
 
-    if let Some(parent) = Path::new(path).parent() {
-        let _ = create_dir_all(parent);
+    if let Some(parent) = Path::new(path).parent()
+        && let Err(e) = create_dir_all(parent)
+    {
+        error(
+            &format!("Failed to create parent folder: \"{path}\":"),
+            &e.to_string(),
+        );
+        return;
     }
+
     if !Path::new(path).exists()
         && let Err(e) = File::create(path)
     {
         error(
-            &format!("Failed to create file: \"{path}\":"),
+            &format!("Failed to create file: \"{path}\""),
             &e.to_string(),
         );
     }
