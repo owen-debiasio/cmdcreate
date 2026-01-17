@@ -440,6 +440,7 @@
     - Boolean
     - Default: `false`
 - Code optimizations
+- File structure changes and organizations
 - Installation of commands have now moved to `/usr/local/bin/<command name>`
 - Fixed (yet again) issues with the distro detection and upgrade process
 - The unsupported architecture message now gives you an option to disable it in the configuration file
