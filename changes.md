@@ -427,7 +427,7 @@
 
 - Added logging
 - Added verbose output
-  - Example: `[LOG] <file of origin> <details>`
+  - Example: `[LOG] <file::function() of origin>: <details>`
 - New debug flag: `-v`, `--verbose`
   - Used for verbose output of logs
 - Added configurations:
