@@ -46,10 +46,7 @@ pub fn init_fs() {
     create_folder(&PATHS.install_dir);
     create_file(&PATHS.favorites);
 
-    log(
-        "utils/fs::init_fs(): Initialized cmdcreate's filesystem",
-        0,
-    );
+    log("utils/fs::init_fs(): Initialized cmdcreate's filesystem", 0);
 }
 
 pub fn init_git_fs() {
