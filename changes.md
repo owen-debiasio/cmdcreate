@@ -449,3 +449,4 @@
 
 - Fixed crash when first installed
 - Fixed issues regarding building from source
+- Code optimizations
