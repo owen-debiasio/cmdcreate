@@ -1,7 +1,12 @@
 use crate::{
     configs::{init_configs, load},
     logger::log,
-    utils::{colors::COLORS, fs::{init_fs, write_to_file}, io::input, sys::{ARCH, VARS}},
+    utils::{
+        colors::COLORS,
+        fs::{init_fs, write_to_file},
+        io::input,
+        sys::{ARCH, VARS},
+    },
 };
 
 pub fn init() {
@@ -35,6 +40,9 @@ pub fn init() {
     );
 
     if input("").to_lowercase() == "y" {
-        write_to_file(&format!("{}/.config/cmdcreate/config.toml", VARS.home), "[sys]\nspoof_arch = \"true\"");
+        write_to_file(
+            &format!("{}/.config/cmdcreate/config.toml", VARS.home),
+            "[sys]\nspoof_arch = \"true\"",
+        );
     }
 }
