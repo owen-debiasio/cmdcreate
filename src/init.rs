@@ -1,7 +1,7 @@
 use crate::{
     configs::{init_configs, load},
     logger::log,
-    utils::{colors::COLORS, fs::init_fs, io::input, sys::ARCH},
+    utils::{colors::COLORS, fs::{init_fs, write_to_file}, io::input, sys::{ARCH, VARS}},
 };
 
 pub fn init() {
@@ -29,8 +29,12 @@ pub fn init() {
         "{yellow}Your current CPU architecture {red}({ARCH}){yellow} is not currently supported.
         Use {red}x86_64{yellow} as it is supported.
 
-        (You can disable this message in the configuration file){reset}"
+        (You can disable this message in the configuration file){reset}
+        
+        Do you want to disable this message?\n{red}(Y/N){reset}"
     );
 
-    let _ = input("");
+    if input("").to_lowercase() == "y" {
+        write_to_file(&format!("{}/.config/cmdcreate/config.toml", VARS.home), "[sys]\nspoof_arch = \"true\"");
+    }
 }
