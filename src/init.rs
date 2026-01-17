@@ -47,7 +47,7 @@ pub fn init() {
 
         write_to_file(
             &format!("{}/.config/cmdcreate/config.toml", VARS.home),
-            "spoof_arch = \"true\"",
+            "\nspoof_arch = \"true\"",
         );
     }
 }
