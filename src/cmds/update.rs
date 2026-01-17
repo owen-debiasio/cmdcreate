@@ -285,12 +285,11 @@ fn build_from_source() {
     );
 
     run_shell_command(
-        "cd ~/.cache/cmdcreate && \
-         cargo update --precise ver \
+        "set -e && \
+         cd \"$HOME/.cache/cmdcreate\" && \
+         cargo update -p cmdcreate --precise \"$VERSION\" && \
          cargo build --release && \
-         sudo cp target/release/cmdcreate /usr/bin/cmdcreate.new && \
-         sudo chmod +x /usr/bin/cmdcreate.new && \
-         sudo mv /usr/bin/cmdcreate.new /usr/bin/cmdcreate",
+         sudo install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate",
     );
 
     log("cmds/update::build_from_source(): Update complete...", 0);
