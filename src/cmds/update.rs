@@ -243,17 +243,23 @@ fn build_from_source() {
         0,
     );
 
-    delete_folder(&format!("{}/.cache/cmdcreate", VARS.home));
+    let cache_dir = format!("{}/.cache/cmdcreate", VARS.home);
+    delete_folder(&cache_dir);
 
     log(
         "cmds/update::build_from_source(): Retrieving distro base...",
         0,
     );
 
-    let pm: &str = match get_distro_base() {
-        DistroBase::Arch => "sudo pacman -S --noconfirm",
-        DistroBase::Debian => "sudo apt install -y",
-        DistroBase::Fedora => "sudo dnf install -y",
+    log(
+        "cmds/update::build_from_source(): Installing build dependencies...",
+        0,
+    );
+
+    run_shell_command(match get_distro_base() {
+        DistroBase::Arch => "sudo pacman -S --needed --noconfirm cargo git",
+        DistroBase::Debian => "sudo apt install -y cargo git",
+        DistroBase::Fedora => "sudo dnf install -y cargo git-core",
         DistroBase::Unknown => {
             error(
                 "Your system currently isn't supported for building from source.",
@@ -261,36 +267,25 @@ fn build_from_source() {
             );
             exit(1);
         }
-    };
-
-    log(
-        &format!("cmds/update::build_from_source(): Detected package manager as \"{pm}\"..."),
-        0,
-    );
-
-    log(
-        "cmds/update::build_from_source(): Installing dependencies...",
-        0,
-    );
-
-    run_shell_command(&format!("{pm} cargo git"));
+    });
 
     log("cmds/update::build_from_source(): Cloning repository...", 0);
 
-    run_shell_command("git clone https://github.com/owen-debiasio/cmdcreate ~/.cache/cmdcreate");
+    run_shell_command(&format!(
+        "git clone --depth=1 https://github.com/owen-debiasio/cmdcreate {cache_dir}",
+    ));
 
     log(
         "cmds/update::build_from_source(): Building and installing package...",
         0,
     );
 
-    run_shell_command(
+    run_shell_command(&format!(
         "set -e && \
-         cd \"$HOME/.cache/cmdcreate\" && \
-         cargo update -p cmdcreate --precise \"$VERSION\" && \
+         cd \"{cache_dir}\" && \
          cargo build --release && \
          sudo install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate",
-    );
+    ));
 
     log("cmds/update::build_from_source(): Update complete...", 0);
 
