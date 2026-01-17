@@ -278,7 +278,7 @@ fn build_from_source() {
     );
 
     run_shell_command(&format!(
-        "{pm} cargo && \
+        "{pm} cargo git && \
          cd ~/.cache/cmdcreate && \
          cargo build --release && \
          sudo cp target/release/cmdcreate /usr/bin/cmdcreate.new && \

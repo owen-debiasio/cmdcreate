@@ -36,7 +36,7 @@ URL:            https://github.com/owen-debiasio/cmdcreate
 Source0:        $SOURCE_FILE
 
 BuildArch:      x86_64
-Requires:       curl, nano, openssl-libs
+Requires:       curl, nano, git, openssl-libs
 
 %description
 Allows you to create custom commands for your custom scripts.
