@@ -6,9 +6,7 @@ use chrono::Local;
 use crate::{
     configs::load,
     utils::{
-        colors::COLORS,
-        fs::{PATHS, write_to_file},
-        sys::args_contains,
+        colors::COLORS, fs::{PATHS, write_to_file}, io::error, sys::args_contains
     },
 };
 
@@ -36,7 +34,8 @@ pub fn log(text: &str, lvl: u8) {
     if !Path::new(&PATHS.log_dir).exists()
         && let Err(e) = create_dir_all(&PATHS.log_dir)
     {
-        eprintln!("Failed to create log directory: {e}");
+        error("Failed to create log directory", &e.to_string());
+
         return;
     }
 
