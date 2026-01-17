@@ -39,10 +39,7 @@ fn http_client() -> Client {
 pub fn update() {
     let (green, blue, red, reset) = (COLORS.green, COLORS.blue, COLORS.red, COLORS.reset);
 
-    log(
-        "cmds/update::upgrade(): Initializing upgrade process...",
-        0,
-    );
+    log("cmds/update::upgrade(): Initializing upgrade process...", 0);
 
     let latest_release = &get_latest_release().unwrap_or_else(|| VERSION.to_string());
 
@@ -198,10 +195,7 @@ fn upgrade_rpm(latest_release: &str) {
 fn upgrade_binary(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    log(
-        "cmds/update::upgrade_binary(): Fetching release info...",
-        0,
-    );
+    log("cmds/update::upgrade_binary(): Fetching release info...", 0);
 
     let release: Release = http_client()
         .get("https://api.github.com/repos/owen-debiasio/cmdcreate/releases/latest")
@@ -251,10 +245,7 @@ fn build_from_source() {
 
     delete_folder(&format!("{}/.cache/cmdcreate", VARS.home));
 
-    log(
-        "cmds/update::build_from_source(): Cloning repository...",
-        0,
-    );
+    log("cmds/update::build_from_source(): Cloning repository...", 0);
 
     run_shell_command("git clone https://github.com/owen-debiasio/cmdcreate ~/.cache/cmdcreate");
 
@@ -368,10 +359,7 @@ fn interactive_upgrade(latest_release: &str) {
 }
 
 pub fn get_latest_tag(owner: &str, repo: &str) -> Result<String, Box<dyn Error>> {
-    log(
-        "cmds/update::get_latest_tag(): Retrieving latest tag...",
-        0,
-    );
+    log("cmds/update::get_latest_tag(): Retrieving latest tag...", 0);
 
     let json: Value = http_client()
         .get(format!(
@@ -448,10 +436,7 @@ pub fn check() {
         }
 
         Some(_) => {
-            log(
-                "cmds/update::check_for_updates(): No updates available.",
-                1,
-            );
+            log("cmds/update::check_for_updates(): No updates available.", 1);
 
             println!("Already up to date.");
         }
