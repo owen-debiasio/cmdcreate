@@ -11,15 +11,14 @@ use crate::{
         fs::delete_folder,
         io::{ask_for_confirmation, error, input},
         sys::{
-            InstallMethod, VARS, args_forced, get_distro_base, installation_method,
-            run_shell_command,
+            ARCH, DistroBase, InstallMethod, VARS, args_forced, get_distro_base,
+            installation_method, run_shell_command,
         },
     },
 };
 
 #[derive(Deserialize)]
 struct Release {
-    tag_name: String,
     assets: Vec<Asset>,
 }
 
@@ -27,6 +26,14 @@ struct Release {
 struct Asset {
     name: String,
     browser_download_url: String,
+}
+
+fn http_client() -> Client {
+    Client::builder()
+        .timeout(std::time::Duration::from_secs(15))
+        .user_agent("cmdcreate-upgrader")
+        .build()
+        .expect("Failed to build HTTP client")
 }
 
 pub fn upgrade() {
@@ -133,44 +140,21 @@ pub fn upgrade() {
 fn upgrade_aur(git: bool) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    log(
-        "cmds/upgrader::upgrade_aur(): Determining whether to install the git or stable version...",
-        0,
-    );
-
     let pkg = if git { "cmdcreate-git" } else { "cmdcreate" };
 
-    log(
-        &format!("cmds/upgrader::upgrade_aur(): Installing package \"{pkg}\"..."),
-        0,
-    );
-
-    log(
-        "cmds/upgrader::upgrade_aur(): Deleting temp folder (if exists)...",
-        0,
-    );
+    log("cmds/upgrader::upgrade_aur(): Installing from AUR...", 0);
 
     delete_folder(&format!("{}/{pkg}", VARS.home));
-
-    log(
-        &format!("cmds/upgrader::upgrade_aur(): Downloading and installing package \"{pkg}\"..."),
-        0,
-    );
 
     run_shell_command(&format!(
-        "git clone --branch {pkg} --single-branch https://github.com/archlinux/aur.git ~/{pkg}; \
-         cd ~/{pkg}; \
-         makepkg -si",
+        "git clone https://aur.archlinux.org/{pkg}.git ~/{pkg} && \
+         cd ~/{pkg} && \
+         makepkg -si --noconfirm"
     ));
-
-    log("cmds/upgrader::upgrade_aur(): Removing temp folder...", 0);
 
     delete_folder(&format!("{}/{pkg}", VARS.home));
 
-    log(
-        "cmds/upgrader::upgrade_aur(): Upgrading process completed...",
-        0,
-    );
+    log("cmds/upgrader::upgrade_aur(): Update completed.", 0);
 
     println!("{green}Update complete!{reset}");
 }
@@ -178,18 +162,17 @@ fn upgrade_aur(git: bool) {
 fn upgrade_deb(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    log(
-        "cmds/upgrader::upgrade_deb(): Downloading and installing \".deb\" package...",
-        0,
-    );
+    log("cmds/upgrader::upgrade_deb(): Installing .deb...", 0);
+
+    let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}.deb");
 
     run_shell_command(&format!(
-        "curl -L -o /tmp/cmdcreate-{latest_release}-linux-x86_64.deb \
-         https://github.com/owen-debiasio/cmdcreate/releases/latest/download/cmdcreate-{latest_release}-linux-x86_64.deb; \
-         sudo dpkg -i /tmp/cmdcreate-{latest_release}-linux-x86_64.deb"
+        "curl -Lf -o /tmp/{pkg} \
+         https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
+         sudo dpkg -i /tmp/{pkg}"
     ));
 
-    log("cmds/upgrader::upgrade_deb(): Update completed...", 0);
+    log("cmds/upgrader::upgrade_deb(): Update completed.", 0);
 
     println!("\n{green}Update complete!{reset}");
 }
@@ -197,18 +180,17 @@ fn upgrade_deb(latest_release: &str) {
 fn upgrade_rpm(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    log(
-        "cmds/upgrader::upgrade_rpm(): Downloading and installing \".rpm\" package...",
-        0,
-    );
+    log("cmds/upgrader::upgrade_rpm(): Installing .rpm...", 0);
+
+    let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}.rpm");
 
     run_shell_command(&format!(
-        "curl -L -o /tmp/cmdcreate-{latest_release}-linux-x86_64.rpm \
-         https://github.com/owen-debiasio/cmdcreate/releases/latest/download/cmdcreate-{latest_release}-linux-x86_64.rpm; \
-         sudo rpm -Uvh /tmp/cmdcreate-{latest_release}-linux-x86_64.rpm"
+        "curl -Lf -o /tmp/{pkg} \
+         https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
+         sudo rpm -Uvh /tmp/{pkg}"
     ));
 
-    log("cmds/upgrader::upgrade_rpm(): Update completed...", 0);
+    log("cmds/upgrader::upgrade_rpm(): Update completed.", 0);
 
     println!("\n{green}Update complete!{reset}");
 }
@@ -216,62 +198,47 @@ fn upgrade_rpm(latest_release: &str) {
 fn upgrade_binary(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    log("cmds/upgrader::upgrade_binary(): Initializing client...", 0);
-
-    let client = Client::new();
-
     log(
-        "cmds/upgrader::upgrade_binary(): Getting release info...",
+        "cmds/upgrader::upgrade_binary(): Fetching release info...",
         0,
     );
 
-    let release: Release = client
+    let release: Release = http_client()
         .get("https://api.github.com/repos/owen-debiasio/cmdcreate/releases/latest")
-        .header("User-Agent", "reqwest")
         .send()
         .expect("Failed to fetch release info")
         .json()
-        .expect("Failed to parse release info");
+        .expect("Invalid release JSON");
 
-    log(
-        "cmds/upgrader::upgrade_binary(): Downloading latest release...",
-        0,
-    );
-
-    if let Some(asset) = release
+    let asset = release
         .assets
         .into_iter()
-        .find(|a| a.name == format!("cmdcreate-{latest_release}-linux-bin"))
-    {
-        let tmp_path = format!("/tmp/{}", asset.name);
+        .find(|a| a.name == format!("cmdcreate-{latest_release}-linux-{ARCH}-bin"))
+        .unwrap_or_else(|| {
+            error("Binary not found in latest release.", "");
+            exit(1);
+        });
 
-        copy(
-            &mut client
-                .get(&asset.browser_download_url)
-                .send()
-                .expect("Failed to download binary"),
-            &mut File::create(&tmp_path).expect("Failed to create temp file"),
-        )
-        .expect("Failed to copy binary");
+    let tmp = format!("/tmp/{}", asset.name);
 
-        log("cmds/upgrader::upgrade_binary(): Installing binary...", 0);
+    log("cmds/upgrader::upgrade_binary(): Downloading binary...", 0);
 
-        run_shell_command(&format!(
-            "sudo chmod +x {tmp_path}; \
-             sudo mv {tmp_path} /usr/bin/cmdcreate"
-        ));
+    copy(
+        &mut http_client()
+            .get(&asset.browser_download_url)
+            .send()
+            .expect("Download failed"),
+        &mut File::create(&tmp).expect("Temp file failed"),
+    )
+    .expect("Write failed");
 
-        println!(
-            "Downloaded {} from release {}",
-            asset.name, release.tag_name
-        );
+    log("cmds/upgrader::upgrade_binary(): Installing binary...", 0);
 
-        log("cmds/upgrader::upgrade_binary(): Update completed...", 0);
+    run_shell_command(&format!("sudo install -Dm755 {tmp} /usr/bin/cmdcreate"));
 
-        println!("\n{green}Update complete!{reset}");
-    } else {
-        error("Binary not found in latest release.", "");
-    }
+    log("cmds/upgrader::upgrade_binary(): Update completed.", 0);
+
+    println!("\n{green}Update complete!{reset}");
 }
 
 fn build_from_source() {
@@ -297,16 +264,14 @@ fn build_from_source() {
     );
 
     let pm: &str = match get_distro_base() {
-        "arch" => "sudo pacman -S --noconfirm",
-        "debian" => "sudo apt install -y",
-        "fedora" => "sudo dnf install -y",
-
-        _ => {
+        DistroBase::Arch => "sudo pacman -S --noconfirm",
+        DistroBase::Debian => "sudo apt install -y",
+        DistroBase::Fedora => "sudo dnf install -y",
+        DistroBase::Unknown => {
             error(
                 "Your system currently isn't supported for building from source.",
                 "",
             );
-
             exit(1);
         }
     };
@@ -408,11 +373,10 @@ pub fn get_latest_tag(owner: &str, repo: &str) -> Result<String, Box<dyn Error>>
         0,
     );
 
-    let json: Value = Client::new()
+    let json: Value = http_client()
         .get(format!(
             "https://api.github.com/repos/{owner}/{repo}/releases/latest"
         ))
-        .header("User-Agent", "rust-client")
         .send()?
         .json()?;
 
@@ -500,11 +464,10 @@ pub fn check_for_updates() {
 }
 
 pub fn _get_latest_commit(owner: &str, repo: &str, branch: &str) -> String {
-    let res: Value = Client::new()
+    let res: Value = http_client()
         .get(format!(
             "https://api.github.com/repos/{owner}/{repo}/commits/{branch}"
         ))
-        .header("User-Agent", "rust-app")
         .send()
         .expect("request failed")
         .json()
