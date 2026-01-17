@@ -45,6 +45,11 @@ pub fn init_fs() {
     create_folder(&MAIN_PATH);
     create_folder(&PATHS.install_dir);
     create_file(&PATHS.favorites);
+
+    log(
+        "utils/fs::init_fs(): Initialized cmdcreate's filesystem",
+        0,
+    );
 }
 
 pub fn init_git_fs() {
@@ -68,13 +73,6 @@ pub fn retrieve_git_file(dest: &str, file_path: &str) {
 }
 
 pub fn read_file_to_string(file_path: &str) -> String {
-    // Leaving this commented rn cause it causes a memory leak/stack overflow
-
-    //log(
-    //  &format!("utils/fs::read_file_to_string(): Reading file: {file_path}"),
-    //      0,
-    //);
-
     read_to_string(file_path).unwrap_or_else(|e| {
         error("Error reading file:", &format!("\"{file_path}\": {e}"));
         String::new()
