@@ -444,3 +444,8 @@
 - Installation of commands have now moved to `/usr/local/bin/<command name>`
 - Fixed (yet again) issues with the distro detection and upgrade process
 - The unsupported architecture message now gives you an option to disable it in the configuration file
+
+## 1.0.1
+
+- Fixed crash when first installed
+- Fixed issues regarding building from source
