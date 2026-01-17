@@ -39,6 +39,11 @@ pub fn init() {
         Do you want to disable this message?\n{red}(Y/N){reset}"
     );
 
+    log(
+        "init::init(): Asking for confirmation to disable the warning...",
+        0,
+    );
+
     if input("").to_lowercase() == "y" {
         write_to_file(
             &format!("{}/.config/cmdcreate/config.toml", VARS.home),
