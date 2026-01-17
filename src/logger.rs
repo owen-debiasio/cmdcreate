@@ -3,9 +3,13 @@ use std::path::Path;
 
 use chrono::Local;
 
-use crate::configs::load;
-use crate::utils::colors::COLORS;
-use crate::utils::fs::{PATHS, write_to_file};
+use crate::{
+    configs::load,
+    utils::{
+        colors::COLORS,
+        fs::{PATHS, write_to_file},
+    },
+};
 
 pub fn log(text: &str, lvl: u8) {
     let time = Local::now()
