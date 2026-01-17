@@ -305,7 +305,7 @@ fn interactive_upgrade(latest_release: &str) {
         0,
     );
 
-    ask_for_confirmation("Do you want to upgrade cmdcreate?");
+    ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
 
     log(
         "cmds/update::interactive_upgrade(): Continuing with upgrade...",
