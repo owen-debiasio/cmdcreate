@@ -39,16 +39,16 @@ fn http_client() -> Client {
 pub fn update() {
     let (green, blue, red, reset) = (COLORS.green, COLORS.blue, COLORS.red, COLORS.reset);
 
-    log("cmds/update::upgrade(): Initializing upgrade process...", 0);
+    log("cmds/update::update(): Initializing upgrade process...", 0);
 
     let latest_release = &get_latest_release().unwrap_or_else(|| VERSION.to_string());
 
     log(
-        "cmds/update::upgrade(): Determining installation method...",
+        "cmds/update::update(): Determining installation method...",
         0,
     );
 
-    log("cmds/update::upgrade(): Getting installation paths...", 0);
+    log("cmds/update::update(): Getting installation paths...", 0);
 
     let install_path = ["/usr/bin/cmdcreate", "/usr/local/bin/cmdcreate"]
         .iter()
@@ -57,7 +57,7 @@ pub fn update() {
 
     let Some(install_path) = install_path else {
         log(
-            "cmds/update::upgrade(): cmdcreate not found, falling back to interactive upgrade",
+            "cmds/update::update(): cmdcreate not found, falling back to interactive upgrade",
             1,
         );
         interactive_upgrade(latest_release);
@@ -66,7 +66,7 @@ pub fn update() {
 
     match installation_method(install_path) {
         InstallMethod::Aur => {
-            log("cmds/update::upgrade(): Arch Linux detected...", 0);
+            log("cmds/update::update(): Arch Linux detected...", 0);
 
             if !args_forced()
                 && input(&format!(
@@ -91,7 +91,7 @@ pub fn update() {
         }
 
         InstallMethod::Dpkg => {
-            log("cmds/update::upgrade(): Debian/Ubuntu detected...", 0);
+            log("cmds/update::update(): Debian/Ubuntu detected...", 0);
 
             if !args_forced()
                 && input(&format!(
@@ -108,7 +108,7 @@ pub fn update() {
         }
 
         InstallMethod::Rpm => {
-            log("cmds/update::upgrade(): Fedora detected...", 0);
+            log("cmds/update::update(): Fedora detected...", 0);
 
             if !args_forced()
                 && input(&format!(
@@ -126,7 +126,7 @@ pub fn update() {
 
         InstallMethod::Other => {
             log(
-                "cmds/update::upgrade(): No distro detected... Moving on to interactive upgrade...",
+                "cmds/update::update(): No distro detected... Moving on to interactive upgrade...",
                 1,
             );
             interactive_upgrade(latest_release);
@@ -139,7 +139,7 @@ fn upgrade_aur(git: bool) {
 
     let pkg = if git { "cmdcreate-git" } else { "cmdcreate" };
 
-    log("cmds/update::upgrade_aur(): Installing from AUR...", 0);
+    log("cmds/update::update_aur(): Installing from AUR...", 0);
 
     delete_folder(&format!("{}/{pkg}", VARS.home));
 
@@ -151,7 +151,7 @@ fn upgrade_aur(git: bool) {
 
     delete_folder(&format!("{}/{pkg}", VARS.home));
 
-    log("cmds/update::upgrade_aur(): Update completed.", 0);
+    log("cmds/update::update_aur(): Update completed.", 0);
 
     println!("{green}Update complete!{reset}");
 }
@@ -159,7 +159,7 @@ fn upgrade_aur(git: bool) {
 fn upgrade_deb(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    log("cmds/update::upgrade_deb(): Installing .deb...", 0);
+    log("cmds/update::update_deb(): Installing .deb...", 0);
 
     let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}.deb");
 
@@ -169,7 +169,7 @@ fn upgrade_deb(latest_release: &str) {
          sudo dpkg -i /tmp/{pkg}"
     ));
 
-    log("cmds/update::upgrade_deb(): Update completed.", 0);
+    log("cmds/update::update_deb(): Update completed.", 0);
 
     println!("\n{green}Update complete!{reset}");
 }
@@ -177,7 +177,7 @@ fn upgrade_deb(latest_release: &str) {
 fn upgrade_rpm(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    log("cmds/update::upgrade_rpm(): Installing .rpm...", 0);
+    log("cmds/update::update_rpm(): Installing .rpm...", 0);
 
     let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}.rpm");
 
@@ -187,7 +187,7 @@ fn upgrade_rpm(latest_release: &str) {
          sudo rpm -Uvh /tmp/{pkg}"
     ));
 
-    log("cmds/update::upgrade_rpm(): Update completed.", 0);
+    log("cmds/update::update_rpm(): Update completed.", 0);
 
     println!("\n{green}Update complete!{reset}");
 }
@@ -195,7 +195,7 @@ fn upgrade_rpm(latest_release: &str) {
 fn upgrade_binary(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    log("cmds/update::upgrade_binary(): Fetching release info...", 0);
+    log("cmds/update::update_binary(): Fetching release info...", 0);
 
     let release: Release = http_client()
         .get("https://api.github.com/repos/owen-debiasio/cmdcreate/releases/latest")
@@ -215,7 +215,7 @@ fn upgrade_binary(latest_release: &str) {
 
     let tmp = format!("/tmp/{}", asset.name);
 
-    log("cmds/update::upgrade_binary(): Downloading binary...", 0);
+    log("cmds/update::update_binary(): Downloading binary...", 0);
 
     copy(
         &mut http_client()
@@ -226,11 +226,11 @@ fn upgrade_binary(latest_release: &str) {
     )
     .expect("Write failed");
 
-    log("cmds/update::upgrade_binary(): Installing binary...", 0);
+    log("cmds/update::update_binary(): Installing binary...", 0);
 
     run_shell_command(&format!("sudo install -Dm755 {tmp} /usr/bin/cmdcreate"));
 
-    log("cmds/update::upgrade_binary(): Update completed.", 0);
+    log("cmds/update::update_binary(): Update completed.", 0);
 
     println!("\n{green}Update complete!{reset}");
 }
