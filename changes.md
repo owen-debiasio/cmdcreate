@@ -441,3 +441,4 @@
     - Default: `false`
 - Code optimizations
 - Installation of commands have now moved to `/usr/local/bin/<command name>`
+- Fixed (yet again) issues with the distro detection and upgrade process
