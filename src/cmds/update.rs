@@ -293,7 +293,7 @@ fn build_from_source() {
 }
 
 fn interactive_upgrade(latest_release: &str) {
-    let (blue, reset) = (COLORS.blue, COLORS.reset);
+    let (blue, red, reset) = (COLORS.blue, COLORS.red, COLORS.reset);
 
     log(
         "cmds/update::interactive_upgrade(): Initializing interactive upgrade...",
@@ -325,7 +325,7 @@ fn interactive_upgrade(latest_release: &str) {
         "Install via .deb file",
         "Install via .rpm file",
         "Manually install binary",
-        &format!("Build from source {blue}(latest git, universal device compatibility){reset}"),
+        &format!("Build from source {blue}(latest git, universal device compatibility, {red}DEBIAN/UBUNTU MAY INVOLVE MANUAL INTERVENTION{blue}){reset}"),
         "Exit",
     ]
     .iter()
