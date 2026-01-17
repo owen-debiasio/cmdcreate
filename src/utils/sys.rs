@@ -24,9 +24,6 @@ pub static VARS: LazyLock<Vars> = LazyLock::new(|| Vars {
 pub static ARCH: &str = ARCHITECTURE;
 
 pub fn return_args() -> Vec<String> {
-    // This piece of shit causes a stack overflow
-    //log("utils/sys::return_args(): Retrieving args...", 0);
-
     args().skip(1).collect()
 }
 
@@ -39,20 +36,17 @@ pub fn args_forced() -> bool {
 }
 
 pub fn args_contains(arg: &str) -> bool {
-    // Also a stack overlow causing piece of shit
-    //log(
-    //"utils/sys::args_contains(): Checking if args contain \"{arg}\"...",
-    //0,
-    //);
-
-    return_args().contains(&arg.to_string())
+    args().skip(1).any(|a| a == arg)
 }
 
 pub fn run_shell_command(cmd: &str) {
-    let shell: &str = if args_contains("--force_system_shell") | args_contains("-F") {
+    let shell_owned;
+
+    let shell: &str = if args_contains("--force_system_shell") || args_contains("-F") {
         &VARS.shell
     } else {
-        &load("sys", "shell", "sh")
+        shell_owned = load("sys", "shell", "sh");
+        &shell_owned
     };
 
     log(
@@ -82,10 +76,7 @@ pub fn run_shell_command(cmd: &str) {
             ),
             0,
         ),
-
-        Err(e) => {
-            error("Failed to run shell command:", &e.to_string());
-        }
+        Err(e) => error("Failed to run shell command:", &e.to_string()),
     }
 }
 
@@ -98,6 +89,11 @@ pub enum InstallMethod {
 }
 
 pub fn installation_method(path: &Path) -> InstallMethod {
+    log(
+        "utils/sys::installation_method(): Detecting installation method...",
+        0,
+    );
+
     let Ok(path) = path.canonicalize() else {
         return InstallMethod::Other;
     };
@@ -106,65 +102,55 @@ pub fn installation_method(path: &Path) -> InstallMethod {
         return InstallMethod::Other;
     };
 
-    log(
-        "utils/sys::installation_method(): Detecting installation method...",
-        0,
-    );
-
     match get_distro_base() {
-        "arch" => {
-            log(
-                "utils/sys::installation_method(): Checking if installation method is Pacman...",
-                0,
-            );
-
+        DistroBase::Arch => {
             if Command::new("pacman")
                 .args(["-Qo", path_str])
-                .output()
-                .map(|o| o.status.success())
+                .status()
+                .map(|s| s.success())
                 .unwrap_or(false)
             {
                 log(
-                    "utils/sys::installation_method(): Installation method detected as Pacman",
+                    "utils/sys::installation_method(): Installation method detected as AUR/Pacman",
                     0,
                 );
-
-                return InstallMethod::Aur;
+            } else {
+                log(
+                    "utils/sys::installation_method(): File not owned by pacman, assuming manual Arch install",
+                    1,
+                );
             }
 
-            log(
-                "utils/sys::installation_method(): Installation method not detected as Pacman... moving on...",
-                0,
-            );
+            InstallMethod::Aur
         }
 
-        "fedora" => {
+        DistroBase::Fedora => {
             log(
-                "utils/sys::installation_method(): Checking if installation method is DNF...",
+                "utils/sys::installation_method(): Checking if installation method is RPM...",
                 0,
             );
 
             if Command::new("rpm")
                 .args(["-qf", path_str])
-                .output()
-                .map(|o| o.status.success())
+                .status()
+                .map(|s| s.success())
                 .unwrap_or(false)
             {
                 log(
-                    "utils/sys::installation_method(): Installation method detected as DNF",
+                    "utils/sys::installation_method(): Installation method detected as RPM",
                     0,
                 );
-
-                return InstallMethod::Rpm;
+            } else {
+                log(
+                    "utils/sys::installation_method(): File not owned by RPM, assuming manual Fedora install",
+                    1,
+                );
             }
 
-            log(
-                "utils/sys::installation_method(): Installation method not detected as DNF... moving on...",
-                0,
-            );
+            InstallMethod::Rpm
         }
 
-        "debian" => {
+        DistroBase::Debian => {
             log(
                 "utils/sys::installation_method(): Checking if installation method is DPKG...",
                 0,
@@ -172,34 +158,44 @@ pub fn installation_method(path: &Path) -> InstallMethod {
 
             if Command::new("dpkg-query")
                 .args(["-S", path_str])
-                .output()
-                .map(|o| o.status.success())
+                .status()
+                .map(|s| s.success())
                 .unwrap_or(false)
             {
                 log(
                     "utils/sys::installation_method(): Installation method detected as DPKG",
                     0,
                 );
-
-                return InstallMethod::Dpkg;
+            } else {
+                log(
+                    "utils/sys::installation_method(): File not owned by DPKG, assuming manual Debian install",
+                    1,
+                );
             }
 
-            log(
-                "utils/sys::installation_method(): Installation method not detected as DPKG... moving on...",
-                0,
-            );
+            InstallMethod::Dpkg
         }
 
-        _ => log(
-            "utils/sys::installation_method(): Distro base not detected... Classifying distro as \"Other\"...",
-            1,
-        ),
-    }
+        DistroBase::Unknown => {
+            log(
+                "utils/sys::installation_method(): Distro base unknown, classifying as Other",
+                1,
+            );
 
-    InstallMethod::Other
+            InstallMethod::Other
+        }
+    }
 }
 
-pub fn get_distro_base() -> &'static str {
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum DistroBase {
+    Arch,
+    Fedora,
+    Debian,
+    Unknown,
+}
+
+pub fn get_distro_base() -> DistroBase {
     log("utils/sys::get_distro_base(): Detecting distro base...", 0);
 
     let content = read_file_to_string("/etc/os-release").to_lowercase();
@@ -219,31 +215,27 @@ pub fn get_distro_base() -> &'static str {
 
     if base.contains("arch") || base.contains("manjaro") {
         log(
-            "utils/sys::get_distro_base(): Detected distro base as \"Arch\"",
+            "utils/sys::get_distro_base(): Detected distro base as Arch",
             0,
         );
-
-        "arch"
+        DistroBase::Arch
     } else if base.contains("fedora") || base.contains("rhel") || base.contains("centos") {
         log(
-            "utils/sys::get_distro_base(): Detected distro base as \"Fedora\"",
+            "utils/sys::get_distro_base(): Detected distro base as Fedora",
             0,
         );
-
-        "fedora"
+        DistroBase::Fedora
     } else if base.contains("debian") || base.contains("ubuntu") || base.contains("linuxmint") {
         log(
-            "utils/sys::get_distro_base(): Detected distro base as \"Debian\"",
+            "utils/sys::get_distro_base(): Detected distro base as Debian",
             0,
         );
-
-        "debian"
+        DistroBase::Debian
     } else {
         log(
-            "utils/sys::get_distro_base(): Unable to detect distro base, going as \"unknown\"",
+            "utils/sys::get_distro_base(): Unable to detect distro base",
             1,
         );
-
-        "unknown"
+        DistroBase::Unknown
     }
 }
