@@ -245,10 +245,6 @@ fn build_from_source() {
 
     delete_folder(&format!("{}/.cache/cmdcreate", VARS.home));
 
-    log("cmds/update::build_from_source(): Cloning repository...", 0);
-
-    run_shell_command("git clone https://github.com/owen-debiasio/cmdcreate ~/.cache/cmdcreate");
-
     log(
         "cmds/update::build_from_source(): Retrieving distro base...",
         0,
@@ -273,18 +269,30 @@ fn build_from_source() {
     );
 
     log(
+        "cmds/update::build_from_source(): Installing dependencies...",
+        0,
+    );
+
+    run_shell_command(&format!("{pm} cargo git"));
+
+    log("cmds/update::build_from_source(): Cloning repository...", 0);
+
+    run_shell_command("git clone https://github.com/owen-debiasio/cmdcreate ~/.cache/cmdcreate");
+
+    log(
         "cmds/update::build_from_source(): Building and installing package...",
         0,
     );
 
-    run_shell_command(&format!(
-        "{pm} cargo git && \
-         cd ~/.cache/cmdcreate && \
+    run_shell_command(
+        "cd ~/.cache/cmdcreate && \
+         cargo update \
+         cargo update icu_properties_data@2.1.2 icu_local_core --precise ver \
          cargo build --release && \
          sudo cp target/release/cmdcreate /usr/bin/cmdcreate.new && \
          sudo chmod +x /usr/bin/cmdcreate.new && \
          sudo mv /usr/bin/cmdcreate.new /usr/bin/cmdcreate",
-    ));
+    );
 
     log("cmds/update::build_from_source(): Update complete...", 0);
 
