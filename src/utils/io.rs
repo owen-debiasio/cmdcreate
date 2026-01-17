@@ -19,7 +19,7 @@ pub fn ask_for_confirmation(q: &str) {
             .to_lowercase()
             != "y"
     {
-        log("utils/io::ask_for_confirmation(): Confirmation aborted.", 0);
+        log("utils/io::ask_for_confirmation(): Confirmation aborted.", 1);
 
         println!("{red}\nAborted.{reset}");
 
