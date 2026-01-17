@@ -8,6 +8,7 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{PATHS, write_to_file},
+        sys::args_contains,
     },
 };
 
@@ -25,8 +26,8 @@ pub fn log(text: &str, lvl: u8) {
 
     let log_text = format!("[{log_type}] {text}");
 
-    if crate::utils::sys::args_contains("-V")
-        || crate::utils::sys::args_contains("--verbose")
+    if args_contains("-V")
+        || args_contains("--verbose")
         || load("logs", "verbose", "").parse::<bool>().unwrap_or(false)
     {
         println!("{color}{time} {log_text}{}", COLORS.reset);
