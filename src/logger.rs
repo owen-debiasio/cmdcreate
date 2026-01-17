@@ -1,9 +1,11 @@
-use crate::{
-    PATHS,
-    configs::load,
-    utils::{colors::COLORS, fs::write_to_file, sys::args_contains},
-};
+use std::fs::create_dir_all;
+use std::path::Path;
+
 use chrono::Local;
+
+use crate::configs::load;
+use crate::utils::colors::COLORS;
+use crate::utils::fs::{PATHS, write_to_file};
 
 pub fn log(text: &str, lvl: u8) {
     let time = Local::now()
@@ -19,15 +21,22 @@ pub fn log(text: &str, lvl: u8) {
 
     let log_text = format!("[{log_type}] {text}");
 
-    if load("logs", "verbose", "").parse::<bool>().unwrap_or(false)
-        || args_contains("-V")
-        || args_contains("--verbose")
+    if crate::utils::sys::args_contains("-V")
+        || crate::utils::sys::args_contains("--verbose")
+        || load("logs", "verbose", "").parse::<bool>().unwrap_or(false)
     {
         println!("{color}{time} {log_text}{}", COLORS.reset);
     }
 
+    if !Path::new(&PATHS.log_dir).exists()
+        && let Err(e) = create_dir_all(&PATHS.log_dir)
+    {
+        eprintln!("Failed to create log directory: {e}");
+        return;
+    }
+
     write_to_file(
-        &format!("{}/{}.log", PATHS.log_dir, time),
+        &format!("{}/{time}.log", PATHS.log_dir),
         &format!("{time} {log_text}\n"),
     );
 }
