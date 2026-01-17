@@ -30,7 +30,7 @@ pub fn ask_for_confirmation(q: &str) {
 pub fn input(text: &str) -> String {
     let (blue, reset) = (COLORS.blue, COLORS.reset);
 
-    log(&format!("utils/io::input(): Input text: \"{text}\""), 0);
+    log(&format!("utils/io::input(): Input text: \"{text}\"\n"), 0);
 
     println!("{blue}{text}{reset}");
 
