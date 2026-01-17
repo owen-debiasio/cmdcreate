@@ -6,7 +6,10 @@ use chrono::Local;
 use crate::{
     configs::load,
     utils::{
-        colors::COLORS, fs::{PATHS, write_to_file}, io::error, sys::args_contains
+        colors::COLORS,
+        fs::{PATHS, write_to_file},
+        io::error,
+        sys::args_contains,
     },
 };
 
