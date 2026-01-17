@@ -10,8 +10,8 @@ use crate::{
 };
 
 pub fn init() {
-    init_configs();
     init_fs();
+    init_configs();
 
     log("init::init(): Checking CPU architecture...", 0);
 
