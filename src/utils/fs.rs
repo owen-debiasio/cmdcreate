@@ -6,7 +6,6 @@ use std::{
 };
 
 use crate::{
-    configs::init_configs,
     logger::log,
     utils::{
         io::error,
@@ -28,7 +27,7 @@ pub struct Paths {
 
 pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     changelog: format!("{}/changes.md", *MAIN_PATH),
-    configs: format!("{}/.config/cmdcreate/", VARS.home),
+    configs: format!("{}/.config/cmdcreate/config.toml", VARS.home),
     favorites: format!("{}/favorites", *MAIN_PATH),
     install_dir: format!("{}/files/", *MAIN_PATH),
     license: format!("{}/LICENSE", *MAIN_PATH),
@@ -46,8 +45,6 @@ pub fn init_fs() {
     create_folder(&MAIN_PATH);
     create_folder(&PATHS.install_dir);
     create_file(&PATHS.favorites);
-
-    init_configs();
 
     log("utils/fs::init_fs(): Initialized cmdcreate's filesystem", 0);
 }
@@ -134,10 +131,10 @@ pub fn path_exists(path: &str) -> bool {
 }
 
 pub fn create_folder(path: &str) {
-    //log(
-    // &format!("utils/fs::create_folder(): Creating folder: \"{path}\""),
-    // 0,
-    //);
+    log(
+        &format!("utils/fs::create_folder(): Creating folder: \"{path}\""),
+        0,
+    );
 
     if let Err(e) = create_dir_all(path) {
         error(
