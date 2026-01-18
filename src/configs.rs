@@ -1,8 +1,6 @@
-use std::sync::LazyLock;
-use std::{fs::read_to_string, path::Path};
+use std::{fs::read_to_string, path::Path, sync::LazyLock};
 
-use toml::Value;
-use toml::map::Map;
+use toml::{Value, map::Map};
 
 use crate::utils::fs::{PATHS, overwrite_file};
 
