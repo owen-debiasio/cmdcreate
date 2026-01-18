@@ -445,8 +445,13 @@
 - Fixed (yet again) issues with the distro detection and upgrade process
 - The unsupported architecture message now gives you an option to disable it in the configuration file
 
-## 1.0.1
+## v1.0.1
 
 - Fixed crash when first installed
 - Fixed issues regarding building from source
+- Code optimizations
+
+## v1.0.2
+
+- Fixed dependency issues when installing on `Fedora` systems
 - Code optimizations
