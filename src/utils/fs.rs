@@ -6,10 +6,12 @@ use std::{
 };
 
 use crate::{
-    configs::init_configs, logger::log, utils::{
+    configs::init_configs,
+    logger::log,
+    utils::{
         io::error,
         sys::{VARS, run_shell_command},
-    }
+    },
 };
 
 pub static MAIN_PATH: LazyLock<String> =
@@ -44,7 +46,7 @@ pub fn init_fs() {
     create_folder(&MAIN_PATH);
     create_folder(&PATHS.install_dir);
     create_file(&PATHS.favorites);
-    
+
     init_configs();
 
     log("utils/fs::init_fs(): Initialized cmdcreate's filesystem", 0);
