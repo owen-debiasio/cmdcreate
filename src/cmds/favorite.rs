@@ -58,7 +58,7 @@ fn add(cmd: &str) {
         0,
     );
 
-    write_to_file(favorites_path, &format!("{cmd}\n"));
+    write_to_file(favorites_path, &format!("{cmd}\n"), true);
 
     println!("{green}Command {blue}\"{cmd}\"{green} added to favorites.{reset}");
 }

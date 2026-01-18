@@ -45,5 +45,6 @@ pub fn log(text: &str, lvl: u8) {
     write_to_file(
         &format!("{}/{time}.log", PATHS.log_dir),
         &format!("{time} {log_text}\n"),
+        true,
     );
 }

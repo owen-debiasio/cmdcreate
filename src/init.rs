@@ -3,15 +3,15 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{init_fs, write_to_file},
+        fs::{init_fs_layout, write_to_file},
         io::input,
         sys::{ARCH, VARS},
     },
 };
 
 pub fn init() {
+    init_fs_layout();
     init_configs();
-    init_fs();
 
     log("init::init(): Checking CPU architecture...", 0);
 
@@ -48,11 +48,13 @@ pub fn init() {
         write_to_file(
             &format!("{}/.config/cmdcreate/config.toml", VARS.home),
             "[sys]",
+            true,
         );
 
         write_to_file(
             &format!("{}/.config/cmdcreate/config.toml", VARS.home),
             "\nspoof_arch = \"true\"",
+            true,
         );
     }
 }

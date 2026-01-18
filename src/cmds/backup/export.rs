@@ -63,7 +63,7 @@ pub fn export(path: &str) {
                 0,
             );
 
-            write_to_file(export_file, &line);
+            write_to_file(export_file, &line, true);
         }
     }
 
