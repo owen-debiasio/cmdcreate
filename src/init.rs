@@ -1,5 +1,5 @@
 use crate::{
-    configs::{init_configs, load},
+    configs::load,
     logger::log,
     utils::{
         colors::COLORS,
@@ -10,7 +10,6 @@ use crate::{
 };
 
 pub fn init() {
-    init_configs();
     init_fs();
 
     log("init::init(): Checking CPU architecture...", 0);
