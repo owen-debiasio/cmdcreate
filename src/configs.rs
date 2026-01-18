@@ -1,6 +1,8 @@
 use toml::{Value, from_str};
 
-use crate::utils::fs::{PATHS, create_file, create_folder, path_exists, read_file_to_string, write_to_file};
+use crate::utils::fs::{
+    PATHS, create_file, create_folder, path_exists, read_file_to_string, write_to_file,
+};
 
 pub fn load(cat: &str, var: &str, or_else: &str) -> String {
     let data: Value = from_str(&read_file_to_string(&PATHS.configs)).unwrap();
