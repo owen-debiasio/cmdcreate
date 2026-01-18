@@ -1,5 +1,4 @@
-use std::fs::create_dir_all;
-use std::path::Path;
+use std::{fs::create_dir_all, path::Path};
 
 use chrono::Local;
 
