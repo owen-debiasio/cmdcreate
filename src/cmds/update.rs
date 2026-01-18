@@ -1,7 +1,7 @@
 use reqwest::blocking::Client;
 use serde::Deserialize;
 use serde_json::Value;
-use std::{error::Error, fs::File, io::copy, path::Path, process::exit};
+use std::{error::Error, fs::File, io::copy, path::Path, process::exit, time::Duration};
 
 use crate::{
     VERSION,
@@ -30,7 +30,7 @@ struct Asset {
 
 fn http_client() -> Client {
     Client::builder()
-        .timeout(std::time::Duration::from_secs(15))
+        .timeout(Duration::from_secs(15))
         .user_agent("cmdcreate-upgrader")
         .build()
         .expect("Failed to build HTTP client")
@@ -146,7 +146,7 @@ fn upgrade_aur(git: bool) {
     run_shell_command(&format!(
         "git clone https://aur.archlinux.org/{pkg}.git ~/{pkg} && \
          cd ~/{pkg} && \
-         makepkg -si --noconfirm"
+         makepkg -si --confirm"
     ));
 
     delete_folder(&format!("{}/{pkg}", VARS.home));
