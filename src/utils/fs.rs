@@ -134,10 +134,10 @@ pub fn path_exists(path: &str) -> bool {
 }
 
 pub fn create_folder(path: &str) {
-    log(
-        &format!("utils/fs::create_folder(): Creating folder: \"{path}\""),
-        0,
-    );
+    //log(
+    // &format!("utils/fs::create_folder(): Creating folder: \"{path}\""),
+    // 0,
+    //);
 
     if let Err(e) = create_dir_all(path) {
         error(
