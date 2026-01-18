@@ -18,7 +18,7 @@ pub fn init_configs() {
     if !path_exists(&PATHS.configs) {
         create_folder(&PATHS.configs);
 
-        let file = &format!("{}/config.toml", PATHS.configs);
+        let file = &format!("{}config.toml", PATHS.configs);
 
         create_file(file);
 
