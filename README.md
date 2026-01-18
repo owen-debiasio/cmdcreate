@@ -95,6 +95,27 @@ You can the get the `x86_64` binary from the latest [release](https://github.com
 
 - Cargo
 - Rustup
+- Openssl (development, other)
+
+> [!NOTE]
+> You need the latest rust version, so install rustup and run:
+> `rustup default stable`
+
+**Debian/Ubuntu**
+
+```
+sudo apt install rustup curl libssl-dev libssl3 git nano
+```
+
+**Fedora**
+
+```
+sudo dnf install rustup curl libssl-devel openssl-libs git nano
+```
+
+**Other**
+
+- Install necessary packages from your package manager
 
 ## Clone repo
 
@@ -102,7 +123,7 @@ You can the get the `x86_64` binary from the latest [release](https://github.com
 git clone https://github.com/owen-debiasio/cmdcreate.git
 cd cmdcreate
 cargo build --release
-sudo cp target/release/cmdcreate /usr/local/bin/cmdcreate
+sudo install -Dm755 target/release/cmdcreate /usr/local/bin/cmdcreate
 ```
 
 > [!NOTE]
@@ -147,7 +168,7 @@ say-hi
 ## Configuring cmdcreate
 
 > [!NOTE]
-> You can find the avaliable configurations [here](https://github.com/owen-debiasio/cmdcreate/blob/main/config_example.toml)
+> You can find the available configurations [here](https://github.com/owen-debiasio/cmdcreate/blob/main/config_example.toml)
 
 ---
 
