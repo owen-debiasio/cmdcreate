@@ -455,3 +455,4 @@
 
 - Fixed dependency issues when installing on `Fedora` systems
 - Code optimizations
+- Fixed issue when launching for the first time
