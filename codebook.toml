@@ -1,0 +1,14 @@
+words = [
+    "aur",
+    "cmdcreate",
+    "debiasio",
+    "dnf",
+    "dpkg",
+    "makepkg",
+    "noconfirm",
+    "openssl",
+    "pacman",
+    "rustup",
+    "upgrader",
+    "uvh",
+]
