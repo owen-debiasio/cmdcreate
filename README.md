@@ -98,7 +98,7 @@ You can the get the `x86_64` binary from the latest [release](https://github.com
 - Openssl (development, other)
 
 > [!NOTE]
-> You need the latest rust version, so install rustup and run:
+> You need the latest Rust version, so install rustup and run:
 > `rustup default stable`
 
 **Debian/Ubuntu**
