@@ -93,13 +93,21 @@ You can the get the `x86_64` binary from the latest [release](https://github.com
 
 ### Dependencies
 
-- Cargo
 - Rustup
 - Openssl (development, other)
+- nano (not for building, but recommended, or you could use another text editor)
+- git
+- curl (not for building, but recommended)
 
 > [!NOTE]
 > You need the latest Rust version, so install rustup and run:
 > `rustup default stable`
+
+**Arch**
+
+```
+sudo pacman -S rustup curl openssl nano git
+```
 
 **Debian/Ubuntu**
 
@@ -117,11 +125,12 @@ sudo dnf install rustup curl libssl-devel openssl-libs git nano
 
 - Install necessary packages from your package manager
 
-## Clone repo
+## Download and install
 
 ```
 git clone https://github.com/owen-debiasio/cmdcreate.git
 cd cmdcreate
+rustup default stable
 cargo build --release
 sudo install -Dm755 target/release/cmdcreate /usr/local/bin/cmdcreate
 ```
