@@ -31,7 +31,7 @@ Version:        $VERSION
 Release:        1%{?dist}
 Summary:        Allows you to create custom commands for your custom scripts
 
-License:        MIT
+License:        GPL-2.0
 URL:            https://github.com/owen-debiasio/cmdcreate
 Source0:        $SOURCE_FILE
 
