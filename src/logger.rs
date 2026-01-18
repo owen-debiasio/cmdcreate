@@ -4,7 +4,7 @@ use std::path::Path;
 use chrono::Local;
 
 use crate::{
-    configs::load,
+    configs::{init_configs, load},
     utils::{
         colors::COLORS,
         fs::{PATHS, write_to_file},
@@ -14,6 +14,8 @@ use crate::{
 };
 
 pub fn log(text: &str, lvl: u8) {
+    init_configs();
+
     let time = Local::now()
         .format(&load("logs", "time_format", "%Y-%m-%d %H:%M:%S"))
         .to_string();
