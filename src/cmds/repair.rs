@@ -3,7 +3,7 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{PATHS, path_exists, read_file_to_string},
+        fs::{path_exists, read_file_to_string, PATHS},
     },
 };
 

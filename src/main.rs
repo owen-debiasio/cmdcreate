@@ -22,7 +22,7 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{PATHS, delete_file, init_git_fs, read_file_to_string},
+        fs::{delete_file, init_git_fs, read_file_to_string, PATHS},
         io::error,
         sys::return_args,
     },

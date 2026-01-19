@@ -17,8 +17,8 @@ pub fn init() {
 
     if ARCH == "x86_64"
         || load("sys", "spoof_arch", "")
-            .parse::<bool>()
-            .unwrap_or(false)
+        .parse::<bool>()
+        .unwrap_or(false)
     {
         return;
     }

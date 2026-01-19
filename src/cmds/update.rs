@@ -4,17 +4,17 @@ use serde_json::Value;
 use std::{error::Error, fs::File, io::copy, path::Path, process::exit, time::Duration};
 
 use crate::{
-    VERSION,
     logger::log,
     utils::{
         colors::COLORS,
         fs::delete_folder,
         io::{ask_for_confirmation, error, input},
         sys::{
-            ARCH, DistroBase, InstallMethod, VARS, args_forced, get_distro_base,
-            installation_method, run_shell_command,
+            args_forced, get_distro_base, installation_method, run_shell_command, DistroBase, InstallMethod,
+            ARCH, VARS,
         },
     },
+    VERSION,
 };
 
 #[derive(Deserialize)]
@@ -70,8 +70,8 @@ pub fn update() {
 
             if !args_forced()
                 && input(&format!(
-                    "{blue}Arch Linux{reset}-based system detected. Would you like to install through the {blue}AUR{reset}?\n({green}Y{reset} or {red}N{reset})"
-                ))
+                "{blue}Arch Linux{reset}-based system detected. Would you like to install through the {blue}AUR{reset}?\n({green}Y{reset} or {red}N{reset})"
+            ))
                 .trim()
                 .eq_ignore_ascii_case("n")
             {
@@ -82,8 +82,8 @@ pub fn update() {
 
             let use_git = !args_forced()
                 && input(&format!(
-                    "\nWould you like to install the latest git?\n({green}Y{reset} or {red}N{reset})"
-                ))
+                "\nWould you like to install the latest git?\n({green}Y{reset} or {red}N{reset})"
+            ))
                 .trim()
                 .eq_ignore_ascii_case("y");
 
@@ -95,8 +95,8 @@ pub fn update() {
 
             if !args_forced()
                 && input(&format!(
-                    "{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
-                ))
+                "{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
+            ))
                 .trim()
                 .eq_ignore_ascii_case("n")
             {
@@ -112,8 +112,8 @@ pub fn update() {
 
             if !args_forced()
                 && input(&format!(
-                    "{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
-                ))
+                "{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
+            ))
                 .trim()
                 .eq_ignore_ascii_case("n")
             {
@@ -224,7 +224,7 @@ fn upgrade_binary(latest_release: &str) {
             .expect("Download failed"),
         &mut File::create(&tmp).expect("Temp file failed"),
     )
-    .expect("Write failed");
+        .expect("Write failed");
 
     log("cmds/update::update_binary(): Installing binary...", 0);
 
@@ -328,8 +328,8 @@ fn interactive_upgrade(latest_release: &str) {
         &format!("Build from source {blue}(latest git, universal device compatibility, {red}DEBIAN/UBUNTU MAY INVOLVE MANUAL INTERVENTION{blue}){reset}"),
         "Exit",
     ]
-    .iter()
-    .enumerate()
+        .iter()
+        .enumerate()
     {
         println!("{blue}{}]{reset} {option}", i + 1);
     }

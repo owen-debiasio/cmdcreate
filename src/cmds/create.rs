@@ -2,7 +2,7 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{PATHS, overwrite_file},
+        fs::{overwrite_file, PATHS},
         io::error,
         sys::run_shell_command,
     },

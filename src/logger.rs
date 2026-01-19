@@ -6,7 +6,7 @@ use crate::{
     configs::load,
     utils::{
         colors::COLORS,
-        fs::{PATHS, write_to_file},
+        fs::{write_to_file, PATHS},
         io::error,
         sys::args_contains,
     },
