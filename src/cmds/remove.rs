@@ -3,7 +3,7 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{delete_file, path_exists, read_file_to_string, remove_from_file, PATHS},
+        fs::{PATHS, delete_file, path_exists, read_file_to_string, remove_from_file},
         io::ask_for_confirmation,
         sys::run_shell_command,
     },

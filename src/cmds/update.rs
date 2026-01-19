@@ -4,17 +4,17 @@ use serde_json::Value;
 use std::{error::Error, fs::File, io::copy, path::Path, process::exit, time::Duration};
 
 use crate::{
+    VERSION,
     logger::log,
     utils::{
         colors::COLORS,
         fs::delete_folder,
         io::{ask_for_confirmation, error, input},
         sys::{
-            args_forced, get_distro_base, installation_method, run_shell_command, DistroBase, InstallMethod,
-            ARCH, VARS,
+            ARCH, DistroBase, InstallMethod, VARS, args_forced, get_distro_base,
+            installation_method, run_shell_command,
         },
     },
-    VERSION,
 };
 
 #[derive(Deserialize)]
@@ -224,7 +224,7 @@ fn upgrade_binary(latest_release: &str) {
             .expect("Download failed"),
         &mut File::create(&tmp).expect("Temp file failed"),
     )
-        .expect("Write failed");
+    .expect("Write failed");
 
     log("cmds/update::update_binary(): Installing binary...", 0);
 

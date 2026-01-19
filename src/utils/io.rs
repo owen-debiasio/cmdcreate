@@ -15,9 +15,9 @@ pub fn ask_for_confirmation(q: &str) {
 
     if !args_forced()
         && input(&format!("{q}{reset}\n({green}Y{reset} or {red}N{reset})"))
-        .trim()
-        .to_lowercase()
-        != "y"
+            .trim()
+            .to_lowercase()
+            != "y"
     {
         log("utils/io::ask_for_confirmation(): Confirmation aborted.", 1);
 

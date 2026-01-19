@@ -3,7 +3,7 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{create_file, read_file_to_string, write_to_file, PATHS},
+        fs::{PATHS, create_file, read_file_to_string, write_to_file},
     },
 };
 
@@ -72,5 +72,5 @@ pub fn export(path: &str) {
         0,
     );
 
-    println!("{green}Successfully exported commands to:{blue} \"{export_file}\"{green}.{reset}", );
+    println!("{green}Successfully exported commands to:{blue} \"{export_file}\"{green}.{reset}",);
 }

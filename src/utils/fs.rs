@@ -1,5 +1,5 @@
 use std::{
-    fs::{create_dir_all, read_to_string, remove_dir_all, remove_file, File, OpenOptions},
+    fs::{File, OpenOptions, create_dir_all, read_to_string, remove_dir_all, remove_file},
     io::Write,
     path::Path,
     sync::LazyLock,
@@ -9,7 +9,7 @@ use crate::{
     logger::log,
     utils::{
         io::error,
-        sys::{run_shell_command, VARS},
+        sys::{VARS, run_shell_command},
     },
 };
 
