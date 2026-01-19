@@ -140,36 +140,6 @@ sudo install -Dm755 target/release/cmdcreate /usr/local/bin/cmdcreate
 
 ---
 
-## Example command usage
-
-### Creation
-
-```
-$ cmdcreate create say-hi "echo hi"
-
-Success! Created command: say-hi
-
-$ say-hi
-hi
-```
-
-### Deletion
-
-```
-$ cmdcreate remove say-hi
-Are you sure you want to delete command "say-hi"? (y/N)
-y
-
-Removed command "say-hi"
-```
-
-### List commands
-
-```
-$ cmdcreate list
-Installed commands: (1 installed)
---------
-say-hi
 ```
 
 ---
