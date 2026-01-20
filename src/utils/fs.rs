@@ -45,6 +45,8 @@ pub fn init_fs_layout() {
 }
 
 pub fn init_git_fs() {
+    log("utils/fs::init_git_fs(): Syncing offline files...", 0);
+
     retrieve_git_file(&PATHS.license, "LICENSE");
     retrieve_git_file(&PATHS.changelog, "changes.md");
 
