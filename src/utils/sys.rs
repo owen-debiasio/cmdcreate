@@ -218,24 +218,28 @@ pub fn get_distro_base() -> DistroBase {
             "utils/sys::get_distro_base(): Detected distro base as Arch",
             0,
         );
+
         DistroBase::Arch
     } else if base.contains("fedora") || base.contains("rhel") || base.contains("centos") {
         log(
             "utils/sys::get_distro_base(): Detected distro base as Fedora",
             0,
         );
+
         DistroBase::Fedora
     } else if base.contains("debian") || base.contains("ubuntu") || base.contains("linuxmint") {
         log(
             "utils/sys::get_distro_base(): Detected distro base as Debian",
             0,
         );
+
         DistroBase::Debian
     } else {
         log(
             "utils/sys::get_distro_base(): Unable to detect distro base",
             1,
         );
+
         DistroBase::Unknown
     }
 }
