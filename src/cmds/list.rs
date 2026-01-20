@@ -40,7 +40,7 @@ pub fn list() {
         );
 
         if favorites.contains(name.to_string().as_str()) {
-            println!("{} {name}", load("appearence", "favorite_indicator", "★"));
+            println!("{} {name}", load("appearance", "favorite_indicator", "★"));
             continue;
         }
 
