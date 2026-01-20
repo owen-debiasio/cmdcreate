@@ -140,10 +140,6 @@ sudo install -Dm755 target/release/cmdcreate /usr/local/bin/cmdcreate
 
 ---
 
-```
-
----
-
 ## Configuring cmdcreate
 
 > [!NOTE]
