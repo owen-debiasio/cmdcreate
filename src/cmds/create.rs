@@ -55,7 +55,9 @@ pub fn create(command: &str, contents: &str, verbose: bool) {
             "cmds/create::create(): Verbose, printing success message...",
             0,
         );
+
         println!("\n{green}Success! Created command: {blue}\"{command}\"{reset}");
+
         return;
     }
 
