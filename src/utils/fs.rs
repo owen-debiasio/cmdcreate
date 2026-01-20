@@ -136,10 +136,11 @@ pub fn create_file(path: &str) {
             &format!("Failed to create parent folder for {path}:"),
             &e.to_string(),
         );
+
         return;
     }
 
-    if !Path::new(path).exists()
+    if !path_exists(path)
         && let Err(e) = File::create(path)
     {
         error(&format!("Failed to create file {path}:"), &e.to_string());
