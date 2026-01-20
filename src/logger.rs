@@ -24,7 +24,7 @@ pub fn log(text: &str, lvl: u8) {
         _ => (COLORS.reset, "LOG"),
     };
 
-    let log_text = format!("[{log_type}] {text}");
+    let (log_text, log_dir) = (format!("[{log_type}] {text}"), &PATHS.log_dir);
 
     if args_contains("-V")
         || args_contains("--verbose")
@@ -33,8 +33,8 @@ pub fn log(text: &str, lvl: u8) {
         println!("{color}{time} {log_text}{}", COLORS.reset);
     }
 
-    if !Path::new(&PATHS.log_dir).exists()
-        && let Err(e) = create_dir_all(&PATHS.log_dir)
+    if !Path::new(log_dir).exists()
+        && let Err(e) = create_dir_all(log_dir)
     {
         error("Failed to create log directory", &e.to_string());
 
@@ -42,7 +42,7 @@ pub fn log(text: &str, lvl: u8) {
     }
 
     write_to_file(
-        &format!("{}/{time}.log", PATHS.log_dir),
+        &format!("{log_dir}/{time}.log"),
         &format!("{time} {log_text}\n"),
         true,
     );
