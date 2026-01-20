@@ -67,8 +67,13 @@ pub fn read_file_to_string(file_path: &str) -> String {
 }
 
 pub fn overwrite_file(path: &str, contents: &str) {
-    if let Some(parent) = Path::new(path).parent() {
-        let _ = create_dir_all(parent);
+    if let Some(file) = Path::new(path).parent()
+        && let Err(e) = create_dir_all(file)
+    {
+        error(
+            "Failed to overwrite file:",
+            &format!("\"{:?}\": {e}", file.display()),
+        );
     }
 
     if let Err(e) = File::create(path).and_then(|mut f| f.write_all(contents.as_bytes())) {
@@ -77,8 +82,13 @@ pub fn overwrite_file(path: &str, contents: &str) {
 }
 
 pub fn write_to_file(path: &str, contents: &str, append: bool) {
-    if let Some(parent) = Path::new(path).parent() {
-        let _ = create_dir_all(parent);
+    if let Some(file) = Path::new(path).parent()
+        && let Err(e) = create_dir_all(file)
+    {
+        error(
+            "Failed to write to file:",
+            &format!("\"{:?}\": {e}", file.display()),
+        );
     }
 
     let mut opts = OpenOptions::new();
