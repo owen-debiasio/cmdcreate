@@ -180,7 +180,7 @@ mod tests {
 
         fs::create_dir_all(&dir).unwrap();
 
-        return dir
+        return dir;
     }
 
     #[test]

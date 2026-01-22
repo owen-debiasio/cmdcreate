@@ -133,17 +133,17 @@ pub fn installation_method(path: &Path) -> InstallMethod {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::utils::io::_error_result;
+    use crate::utils::io::error_result;
 
     #[test]
     fn error_returns_err() {
-        let result: Result<(), _> = _error_result("nope");
+        let result: Result<(), _> = error_result("nope");
         assert!(result.is_err());
     }
 
     #[test]
     fn error_message_matches() {
-        assert_eq!(_error_result::<()>("bad").unwrap_err().to_string(), "bad");
+        assert_eq!(error_result::<()>("bad").unwrap_err().to_string(), "bad");
     }
 
     #[test]

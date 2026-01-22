@@ -29,7 +29,7 @@ mod tests {
             COLORS.yellow,
             COLORS.blue,
             COLORS.reset,
-        ]
+        ];
     }
 
     #[test]

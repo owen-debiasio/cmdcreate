@@ -1,28 +1,6 @@
-#![allow(clippy::cargo_common_metadata, reason = "You don't need that bullshit")]
-#![allow(clippy::mod_module_files, reason = "Fuck you")]
-#![allow(clippy::else_if_without_else, reason = "Why the fuck does this exist?")]
-#![allow(clippy::missing_docs_in_private_items, reason = "Fuck documentation")]
-#![allow(
-    clippy::print_stdout,
-    reason = "Why am I being warned about this retarded ass bullshit?"
-)]
-#![allow(clippy::used_underscore_binding, reason = "Also fucking retarded")]
-#![allow(
-    clippy::single_call_fn,
-    reason = "Hey retard I can do whatever the fuck I want I want with my fucking functions"
-)]
-#![allow(
-    clippy::multiple_crate_versions,
-    reason = "Yeah I can't control this retard"
-)]
-#![allow(
-    clippy::too_many_lines,
-    reason = "Why the fuck does it matter? It's my fucking code fucking retard"
-)]
-#![allow(
-    clippy::missing_inline_in_public_items,
-    reason = "What the fuck does this even mean?"
-)]
+#![allow(clippy::cargo_common_metadata, reason = "")]
+#![allow(clippy::multiple_crate_versions, reason = "")]
+#![allow(clippy::too_many_lines, reason = "")]
 
 mod commands;
 mod configs;

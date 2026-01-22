@@ -26,6 +26,7 @@ static CONFIG: LazyLock<Value> = LazyLock::new(|| {
         .unwrap_or_else(|| Value::Table(Map::default()))
 });
 
+#[allow(clippy::str_to_string)]
 pub fn load(cat: &str, var: &str, default: &str) -> String {
     CONFIG
         .get(cat)
