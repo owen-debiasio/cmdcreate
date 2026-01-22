@@ -7,7 +7,7 @@ die() {
     exit 1
 }
 
-[[ $# -eq 1 ]] || die "Provide cmdcreate's version (MUST NOT START WITH v)"
+[[ $# -eq 1 ]] || die "Provide package version (MUST NOT START WITH v)"
 [[ "$1" != v* ]] || die "Version must NOT start with 'v'"
 
 VERSION="$1"
