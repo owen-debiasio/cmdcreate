@@ -460,3 +460,5 @@
 ## v1.0.3
 
 - Code optimizations
+- Added ability for testing using `cargo test`
+- Added launch options for `Visual Studio Code`
