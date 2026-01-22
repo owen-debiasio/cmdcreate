@@ -7,18 +7,22 @@ use std::{
 
 use crate::{
     configs::load,
-    logger::log,
-    utils::{fs::read_file_to_string, io::error},
+    utils::{
+        fs::read_file_to_string,
+        io::{TestError, error},
+    },
 };
 
 pub struct Vars {
     pub shell: String,
     pub home: String,
+    pub _user: String,
 }
 
 pub static VARS: LazyLock<Vars> = LazyLock::new(|| Vars {
     shell: var("SHELL").unwrap_or_else(|_| "unknown".to_string()),
     home: var("HOME").unwrap_or_else(|_| "unknown".to_string()),
+    _user: var("USER").unwrap_or_else(|_| "unknown".to_string()),
 });
 
 pub static ARCH: &str = ARCHITECTURE;
@@ -28,10 +32,6 @@ pub fn return_args() -> Vec<String> {
 }
 
 pub fn args_forced() -> bool {
-    log(
-        "utils/sys::args_forced(): Checking if args are forced...",
-        0,
-    );
     args_contains("--force") || args_contains("-f")
 }
 
@@ -39,24 +39,15 @@ pub fn args_contains(arg: &str) -> bool {
     args().skip(1).any(|a| a == arg)
 }
 
-pub fn run_shell_command(cmd: &str) {
-    let shell: &str = if args_contains("--force_system_shell") || args_contains("-F") {
-        &VARS.shell
+pub fn run_shell_command_result(cmd: &str) -> Result<(), TestError> {
+    let shell = if args_contains("--force_system_shell") || args_contains("-F") {
+        VARS.shell.clone()
     } else {
-        &load("sys", "shell", "sh")
+        load("sys", "shell", "sh")
     };
 
-    log(
-        &format!("utils/sys::run_shell_command(): Using shell: \"{shell}\""),
-        0,
-    );
-
     if cmd.trim().is_empty() {
-        log(
-            "utils/sys::run_shell_command(): No command supplied, skipping...",
-            0,
-        );
-        return;
+        return Ok(());
     }
 
     match Command::new(shell)
@@ -67,13 +58,15 @@ pub fn run_shell_command(cmd: &str) {
         .stderr(Stdio::inherit())
         .status()
     {
-        Ok(_) => log(
-            &format!(
-                "utils/sys::run_shell_command(): Ran command \"{cmd}\" using shell \"{shell}\""
-            ),
-            0,
-        ),
-        Err(e) => error("Failed to run shell command:", &e.to_string()),
+        Ok(status) if status.success() => Ok(()),
+        Ok(status) => Err(TestError(format!("Command exited with code {status}"))),
+        Err(e) => Err(TestError(e.to_string())),
+    }
+}
+
+pub fn run_shell_command(cmd: &str) {
+    if let Err(e) = run_shell_command_result(cmd) {
+        error("Failed to run shell command:", &e.to_string());
     }
 }
 
@@ -85,105 +78,6 @@ pub enum InstallMethod {
     Other,
 }
 
-pub fn installation_method(path: &Path) -> InstallMethod {
-    log(
-        "utils/sys::installation_method(): Detecting installation method...",
-        0,
-    );
-
-    let Ok(path) = path.canonicalize() else {
-        return InstallMethod::Other;
-    };
-
-    let Some(path_str) = path.to_str() else {
-        return InstallMethod::Other;
-    };
-
-    match get_distro_base() {
-        DistroBase::Arch => {
-            if Command::new("pacman")
-                .args(["-Qo", path_str])
-                .status()
-                .map(|s| s.success())
-                .unwrap_or(false)
-            {
-                log(
-                    "utils/sys::installation_method(): Installation method detected as AUR/Pacman",
-                    0,
-                );
-            } else {
-                log(
-                    "utils/sys::installation_method(): File not owned by pacman, assuming manual Arch install",
-                    1,
-                );
-            }
-
-            InstallMethod::Aur
-        }
-
-        DistroBase::Fedora => {
-            log(
-                "utils/sys::installation_method(): Checking if installation method is RPM...",
-                0,
-            );
-
-            if Command::new("rpm")
-                .args(["-qf", path_str])
-                .status()
-                .map(|s| s.success())
-                .unwrap_or(false)
-            {
-                log(
-                    "utils/sys::installation_method(): Installation method detected as RPM",
-                    0,
-                );
-            } else {
-                log(
-                    "utils/sys::installation_method(): File not owned by RPM, assuming manual Fedora install",
-                    1,
-                );
-            }
-
-            InstallMethod::Rpm
-        }
-
-        DistroBase::Debian => {
-            log(
-                "utils/sys::installation_method(): Checking if installation method is DPKG...",
-                0,
-            );
-
-            if Command::new("dpkg-query")
-                .args(["-S", path_str])
-                .status()
-                .map(|s| s.success())
-                .unwrap_or(false)
-            {
-                log(
-                    "utils/sys::installation_method(): Installation method detected as DPKG",
-                    0,
-                );
-            } else {
-                log(
-                    "utils/sys::installation_method(): File not owned by DPKG, assuming manual Debian install",
-                    1,
-                );
-            }
-
-            InstallMethod::Dpkg
-        }
-
-        DistroBase::Unknown => {
-            log(
-                "utils/sys::installation_method(): Distro base unknown, classifying as Other",
-                1,
-            );
-
-            InstallMethod::Other
-        }
-    }
-}
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum DistroBase {
     Arch,
@@ -193,12 +87,9 @@ pub enum DistroBase {
 }
 
 pub fn get_distro_base() -> DistroBase {
-    log("utils/sys::get_distro_base(): Detecting distro base...", 0);
-
     let content = read_file_to_string("/etc/os-release").to_lowercase();
-
-    let mut id: &str = "";
-    let mut id_like: &str = "";
+    let mut id = "";
+    let mut id_like = "";
 
     for line in content.lines() {
         if let Some(v) = line.strip_prefix("id=") {
@@ -211,32 +102,67 @@ pub fn get_distro_base() -> DistroBase {
     let base = format!("{id} {id_like}");
 
     if base.contains("arch") || base.contains("manjaro") {
-        log(
-            "utils/sys::get_distro_base(): Detected distro base as Arch",
-            0,
-        );
-
         DistroBase::Arch
     } else if base.contains("fedora") || base.contains("rhel") || base.contains("centos") {
-        log(
-            "utils/sys::get_distro_base(): Detected distro base as Fedora",
-            0,
-        );
-
         DistroBase::Fedora
     } else if base.contains("debian") || base.contains("ubuntu") || base.contains("linuxmint") {
-        log(
-            "utils/sys::get_distro_base(): Detected distro base as Debian",
-            0,
-        );
-
         DistroBase::Debian
     } else {
-        log(
-            "utils/sys::get_distro_base(): Unable to detect distro base",
-            1,
-        );
-
         DistroBase::Unknown
+    }
+}
+
+pub fn installation_method(path: &Path) -> InstallMethod {
+    let Ok(path) = path.canonicalize() else {
+        return InstallMethod::Other;
+    };
+    let Some(_path_str) = path.to_str() else {
+        return InstallMethod::Other;
+    };
+
+    match get_distro_base() {
+        DistroBase::Arch => InstallMethod::Aur,
+        DistroBase::Fedora => InstallMethod::Rpm,
+        DistroBase::Debian => InstallMethod::Dpkg,
+        DistroBase::Unknown => InstallMethod::Other,
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::utils::io::_error_result;
+
+    #[test]
+    fn error_returns_err() {
+        let result: Result<(), _> = _error_result("nope");
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn error_message_matches() {
+        assert_eq!(_error_result::<()>("bad").unwrap_err().to_string(), "bad");
+    }
+
+    #[test]
+    fn run_shell_command_result_fails_on_invalid_command() {
+        assert!(run_shell_command_result("definitely_not_a_real_cmd").is_err());
+    }
+
+    #[test]
+    fn distro_detection_returns_known_or_unknown() {
+        let base = get_distro_base();
+        assert!(
+            base == DistroBase::Arch
+                || base == DistroBase::Fedora
+                || base == DistroBase::Debian
+                || base == DistroBase::Unknown
+        );
+    }
+
+    #[test]
+    fn vars_are_initialized() {
+        assert!(!VARS.home.is_empty());
+        assert!(!VARS._user.is_empty());
     }
 }

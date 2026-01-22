@@ -162,3 +162,99 @@ pub fn delete_folder(path: &str) {
         error(&format!("Failed to delete folder {path}:"), &e.to_string());
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::{fs, path::PathBuf};
+
+    fn test_dir(name: &str) -> PathBuf {
+        let dir = std::env::temp_dir().join(name);
+
+        let _ = fs::remove_dir_all(&dir);
+
+        fs::create_dir_all(&dir).unwrap();
+
+        dir
+    }
+
+    #[test]
+    fn create_folder_creates_directory() {
+        let dir = test_dir("cmdcreate_create_folder").join("subdir");
+
+        create_folder(dir.to_str().unwrap());
+        assert!(dir.exists());
+    }
+
+    #[test]
+    fn create_file_creates_file() {
+        let file = test_dir("cmdcreate_create_file").join("file.txt");
+
+        create_file(file.to_str().unwrap());
+        assert!(file.exists());
+    }
+
+    #[test]
+    fn write_to_file_overwrites() {
+        let file = test_dir("cmdcreate_write_file").join("file.txt");
+
+        write_to_file(file.to_str().unwrap(), "hello", false);
+
+        assert_eq!(read_file_to_string(file.to_str().unwrap()), "hello");
+    }
+
+    #[test]
+    fn write_to_file_appends() {
+        let file = test_dir("cmdcreate_append_file").join("file.txt");
+
+        write_to_file(file.to_str().unwrap(), "a\n", false);
+        write_to_file(file.to_str().unwrap(), "b\n", true);
+
+        let content = read_file_to_string(file.to_str().unwrap());
+
+        assert!(content.contains("a"));
+        assert!(content.contains("b"));
+    }
+
+    #[test]
+    fn remove_from_file_removes_line() {
+        let file = test_dir("cmdcreate_remove_from_file").join("file.txt");
+
+        write_to_file(file.to_str().unwrap(), "one\ntwo\nthree\n", false);
+
+        remove_from_file(file.to_str().unwrap(), "two");
+
+        assert!(!read_file_to_string(file.to_str().unwrap()).contains("two"));
+    }
+
+    #[test]
+    fn delete_file_removes_file() {
+        let file = test_dir("cmdcreate_delete_file").join("file.txt");
+
+        create_file(file.to_str().unwrap());
+        delete_file(file.to_str().unwrap());
+
+        assert!(!file.exists());
+    }
+
+    #[test]
+    fn delete_folder_removes_directory() {
+        let dir = test_dir("cmdcreate_delete_folder").join("dir");
+
+        create_dir_all(&dir).unwrap();
+
+        delete_folder(dir.to_str().unwrap());
+
+        assert!(!dir.exists());
+    }
+
+    #[test]
+    fn path_exists_reports_correctly() {
+        let file = test_dir("cmdcreate_exists").join("exists.txt");
+
+        assert!(!path_exists(file.to_str().unwrap()));
+        fs::write(&file, "hi").unwrap();
+
+        assert!(path_exists(file.to_str().unwrap()));
+    }
+}
