@@ -1,11 +1,11 @@
-mod cmds;
+mod commands;
 mod configs;
 mod init;
 mod logger;
 mod utils;
 
 use crate::{
-    cmds::{
+    commands::{
         backup::{export::export, import::import},
         create::create,
         display::display,
