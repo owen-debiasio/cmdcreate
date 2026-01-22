@@ -41,7 +41,7 @@ fn add(cmd: &str) {
 
     if read_file_to_string(favorites_path)
         .lines()
-        .any(|c| c == cmd)
+        .any(|c| return c == cmd)
     {
         log(
             &format!("cmds/favorite::favorite(): Command \"{cmd}\" is already in favorites..."),

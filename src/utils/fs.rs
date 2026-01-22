@@ -166,16 +166,21 @@ pub fn delete_folder(path: &str) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::{fs, path::PathBuf};
+    use std::{env::temp_dir, fs, path::PathBuf};
 
     fn test_dir(name: &str) -> PathBuf {
-        let dir = std::env::temp_dir().join(name);
+        let dir = temp_dir().join(name);
 
-        let _ = fs::remove_dir_all(&dir);
+        if let Err(e) = remove_dir_all(&dir) {
+            error(
+                &format!("Failed to delete folder \"{}\":", dir.to_string_lossy()),
+                &e.to_string(),
+            );
+        }
 
         fs::create_dir_all(&dir).unwrap();
 
-        dir
+        return dir
     }
 
     #[test]
@@ -212,8 +217,8 @@ mod tests {
 
         let content = read_file_to_string(file.to_str().unwrap());
 
-        assert!(content.contains("a"));
-        assert!(content.contains("b"));
+        assert!(content.contains('a'));
+        assert!(content.contains('b'));
     }
 
     #[test]

@@ -1,4 +1,9 @@
-use std::{io::stdin, process::exit};
+use core::fmt;
+use std::{
+    fmt::{Display, Formatter},
+    io::stdin,
+    process::exit,
+};
 
 use crate::{logger::log, utils::colors::COLORS, utils::sys::args_forced};
 
@@ -37,6 +42,9 @@ pub fn input(text: &str) -> String {
     return input.trim().to_owned()
 }
 
+#[derive(Debug)]
+pub struct TestError(pub String);
+
 pub fn error(msg: &str, err: &str) {
     let (red, reset) = (COLORS.red, COLORS.reset);
 
@@ -50,16 +58,11 @@ pub fn error(msg: &str, err: &str) {
     exit(1)
 }
 
-#[derive(Debug)]
-pub struct TestError(pub String);
-
-impl core::fmt::Display for TestError {
-    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+impl Display for TestError {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.0)
     }
 }
-
-impl core::error::Error for TestError {}
 
 pub fn _error_result<T>(msg: &str) -> Result<T, TestError> {
     return Err(TestError(msg.to_owned()))

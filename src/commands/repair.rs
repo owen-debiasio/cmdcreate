@@ -15,7 +15,7 @@ pub fn repair() {
         0,
     );
 
-    let mut count = 0;
+    let mut count = 0_i32;
     for script in get_installed_commands() {
         let name = script.file_stem().unwrap_or_default().to_string_lossy();
 
@@ -38,13 +38,13 @@ pub fn repair() {
                 false,
             );
 
-            count += 1;
+            count += 1_i32;
         }
     }
 
     log("cmds/repair::repair(): Determining results...", 0);
 
-    if count > 0 {
+    if count > 0_i32 {
         println!("{green}Broken commands have been repaired.{reset}");
 
         log(

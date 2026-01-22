@@ -19,10 +19,12 @@ pub struct Vars {
     pub _user: String,
 }
 
-pub static VARS: LazyLock<Vars> = LazyLock::new(|| Vars {
-    shell: var("SHELL").unwrap_or_else(|_| return "unknown".to_owned()),
-    home: var("HOME").unwrap_or_else(|_| return "unknown".to_owned()),
-    _user: var("USER").unwrap_or_else(|_| return "unknown".to_owned()),
+pub static VARS: LazyLock<Vars> = LazyLock::new(|| {
+    return Vars {
+        shell: var("SHELL").unwrap_or_else(|_| "unknown".to_owned()),
+        home: var("HOME").unwrap_or_else(|_| "unknown".to_owned()),
+        _user: var("USER").unwrap_or_else(|_| "unknown".to_owned()),
+    };
 });
 
 pub static ARCH: &str = ARCHITECTURE;
@@ -59,8 +61,8 @@ pub fn run_shell_command_result(cmd: &str) -> Result<(), TestError> {
         .status()
     {
         Ok(status) if status.success() => Ok(()),
-        Ok(status) => Err(TestError(format!("Command exited with code {status}"))),
-        Err(e) => Err(TestError(e.to_string())),
+        Ok(status) => return Err(TestError(format!("Command exited with code {status}"))),
+        Err(e) => return Err(TestError(e.to_string())),
     }
 }
 
@@ -74,15 +76,15 @@ pub fn run_shell_command(cmd: &str) {
 pub enum InstallMethod {
     Aur,
     Dpkg,
-    Rpm,
     Other,
+    Rpm,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum DistroBase {
     Arch,
-    Fedora,
     Debian,
+    Fedora,
     Unknown,
 }
 
@@ -121,10 +123,10 @@ pub fn installation_method(path: &Path) -> InstallMethod {
     };
 
     match get_distro_base() {
-        DistroBase::Arch => InstallMethod::Aur,
-        DistroBase::Fedora => InstallMethod::Rpm,
-        DistroBase::Debian => InstallMethod::Dpkg,
-        DistroBase::Unknown => InstallMethod::Other,
+        DistroBase::Arch => return InstallMethod::Aur,
+        DistroBase::Fedora => return InstallMethod::Rpm,
+        DistroBase::Debian => return InstallMethod::Dpkg,
+        DistroBase::Unknown => return InstallMethod::Other,
     }
 }
 

@@ -371,7 +371,8 @@ pub fn get_latest_tag(owner: &str, repo: &str) -> Result<String, Box<dyn Error>>
 
     let tag = json["tag_name"]
         .as_str()
-        .ok_or("Missing tag_name in response")?.to_owned();
+        .ok_or("Missing tag_name in response")?
+        .to_owned();
 
     log(
         &format!("cmds/update::get_latest_tag(): Latest tag: {tag}..."),

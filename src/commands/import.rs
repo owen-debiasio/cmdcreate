@@ -44,14 +44,14 @@ pub fn import(file: &str) {
             0,
         );
 
-        let name = parts[0];
+        let name = parts.first().unwrap();
         let mut data = String::new();
         let mut favorite = false;
 
         for part in parts.iter().skip(1) {
             if *part == "favorite" {
                 favorite = true;
-            } else if !part.is_empty() {
+            } else {
                 if data.is_empty() {
                     data.push('\n');
                 }

@@ -40,7 +40,10 @@ pub fn list() {
         );
 
         if favorites.contains(name.to_string().as_str()) {
-            println!("{} {name}", load("appearance", "favorite_indicator", "\u{2605}"));
+            println!(
+                "{} {name}",
+                load("appearance", "favorite_indicator", "\u{2605}")
+            );
             continue;
         }
 
