@@ -34,7 +34,7 @@ pub fn input(text: &str) -> String {
     let mut input = String::new();
     stdin().read_line(&mut input).unwrap();
 
-    input.trim().to_string()
+    return input.trim().to_owned()
 }
 
 pub fn error(msg: &str, err: &str) {
@@ -53,16 +53,16 @@ pub fn error(msg: &str, err: &str) {
 #[derive(Debug)]
 pub struct TestError(pub String);
 
-impl std::fmt::Display for TestError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+impl core::fmt::Display for TestError {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         write!(f, "{}", self.0)
     }
 }
 
-impl std::error::Error for TestError {}
+impl core::error::Error for TestError {}
 
 pub fn _error_result<T>(msg: &str) -> Result<T, TestError> {
-    Err(TestError(msg.to_string()))
+    return Err(TestError(msg.to_owned()))
 }
 
 #[cfg(test)]

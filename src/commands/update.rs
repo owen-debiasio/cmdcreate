@@ -41,7 +41,7 @@ pub fn update() {
 
     log("cmds/update::update(): Initializing upgrade process...", 0);
 
-    let latest_release = &get_latest_release().unwrap_or_else(|| VERSION.to_string());
+    let latest_release = &get_latest_release().unwrap_or_else(|| return VERSION.to_owned());
 
     log(
         "cmds/update::update(): Determining installation method...",
@@ -371,8 +371,7 @@ pub fn get_latest_tag(owner: &str, repo: &str) -> Result<String, Box<dyn Error>>
 
     let tag = json["tag_name"]
         .as_str()
-        .ok_or("Missing tag_name in response")?
-        .to_string();
+        .ok_or("Missing tag_name in response")?.to_owned();
 
     log(
         &format!("cmds/update::get_latest_tag(): Latest tag: {tag}..."),

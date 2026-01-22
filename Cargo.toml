@@ -19,9 +19,13 @@ unsafe_code = "forbid"
 [lints.clippy]
 pedantic = "deny"
 nursery = "deny"
+complexity = "deny"
+style = "deny"
 perf = "deny"
-complexity = "warn"
-style = "warn"
+cargo = "deny"
+restriction = "deny"
+correctness = "deny"
+internal = "deny"
 
 [profile.release]
 lto = true

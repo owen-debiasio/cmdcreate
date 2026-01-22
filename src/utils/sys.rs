@@ -20,9 +20,9 @@ pub struct Vars {
 }
 
 pub static VARS: LazyLock<Vars> = LazyLock::new(|| Vars {
-    shell: var("SHELL").unwrap_or_else(|_| "unknown".to_string()),
-    home: var("HOME").unwrap_or_else(|_| "unknown".to_string()),
-    _user: var("USER").unwrap_or_else(|_| "unknown".to_string()),
+    shell: var("SHELL").unwrap_or_else(|_| return "unknown".to_owned()),
+    home: var("HOME").unwrap_or_else(|_| return "unknown".to_owned()),
+    _user: var("USER").unwrap_or_else(|_| return "unknown".to_owned()),
 });
 
 pub static ARCH: &str = ARCHITECTURE;

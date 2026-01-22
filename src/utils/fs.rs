@@ -1,6 +1,6 @@
 use std::{
     fs::{File, OpenOptions, create_dir_all, read_to_string, remove_dir_all, remove_file},
-    io::Write,
+    io::Write as _,
     path::Path,
     sync::LazyLock,
 };

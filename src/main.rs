@@ -125,7 +125,7 @@ fn main() {
     cmdcreate(&args);
 }
 
-#[allow(clippy::too_many_lines)]
+#[expect(clippy::too_many_lines)]
 fn cmdcreate(args: &[String]) {
     let cmd = args[0].as_str();
     let arg = |i| args.get(i).map(String::as_str);
