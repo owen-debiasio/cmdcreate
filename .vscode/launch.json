@@ -1,0 +1,54 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Cargo: Build (release)",
+            "type": "lldb",
+            "request": "launch",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--release"
+                ]
+            },
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Cargo: Run (debug)",
+            "type": "lldb",
+            "request": "launch",
+            "cargo": {
+                "args": [
+                    "run",
+                    "--bin",
+                    "cmdcreate"
+                ]
+            },
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Cargo: Test",
+            "type": "lldb",
+            "request": "launch",
+            "cargo": {
+                "args": [
+                    "test"
+                ]
+            },
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Cargo: Clippy",
+            "type": "lldb",
+            "request": "launch",
+            "cargo": {
+                "args": [
+                    "clippy",
+                    "--all-targets",
+                    "--all-features"
+                ]
+            },
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}
