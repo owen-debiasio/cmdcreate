@@ -41,7 +41,7 @@ pub fn update() {
 
     log("cmds/update::update(): Initializing upgrade process...", 0);
 
-    let latest_release = &get_latest_release().unwrap_or_else(|| return VERSION.to_owned());
+    let latest_release = &get_latest_release().unwrap_or_else(|| VERSION.to_owned());
 
     log(
         "cmds/update::update(): Determining installation method...",

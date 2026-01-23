@@ -39,7 +39,7 @@ pub fn input(text: &str) -> String {
     let mut input = String::new();
     stdin().read_line(&mut input).unwrap();
 
-    return input.trim().to_owned();
+    input.trim().to_owned()
 }
 
 #[derive(Debug)]
@@ -60,13 +60,13 @@ pub fn error(msg: &str, err: &str) {
 
 impl Display for TestError {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        return write!(f, "{}", self.0);
+        write!(f, "{}", self.0)
     }
 }
 
 #[allow(dead_code)]
 pub fn error_result<T>(msg: &str) -> Result<T, TestError> {
-    return Err(TestError(msg.to_owned()));
+    Err(TestError(msg.to_owned()))
 }
 
 #[cfg(test)]

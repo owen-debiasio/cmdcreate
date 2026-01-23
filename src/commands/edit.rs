@@ -35,11 +35,11 @@ pub fn edit(cmd: &str) {
     ]
     .iter()
     .find(|&&ed| {
-        return Command::new("which")
+        Command::new("which")
             .arg(ed)
             .output()
-            .map(|output| return output.status.success())
-            .unwrap_or(false);
+            .map(|output| output.status.success())
+            .unwrap_or(false)
     }) else {
         error("No known editor is installed on your device.", "");
 

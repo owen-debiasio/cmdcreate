@@ -1,7 +1,3 @@
-#![allow(clippy::cargo_common_metadata, reason = "")]
-#![allow(clippy::multiple_crate_versions, reason = "")]
-#![allow(clippy::too_many_lines, reason = "")]
-
 mod commands;
 mod configs;
 mod init;
@@ -132,7 +128,7 @@ fn main() {
 
 fn cmdcreate(args: &[String]) {
     let cmd = args.first().unwrap().as_str();
-    let arg = |i| return args.get(i).map(String::as_str);
+    let arg = |i| args.get(i).map(String::as_str);
 
     let (magenta, green, blue, yellow, reset) = (
         COLORS.magenta,

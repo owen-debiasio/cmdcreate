@@ -20,11 +20,11 @@ pub struct Vars {
 }
 
 pub static VARS: LazyLock<Vars> = LazyLock::new(|| {
-    return Vars {
+    Vars {
         shell: var("SHELL").unwrap_or_else(|_| "unknown".to_owned()),
         home: var("HOME").unwrap_or_else(|_| "unknown".to_owned()),
         _user: var("USER").unwrap_or_else(|_| "unknown".to_owned()),
-    };
+    }
 });
 
 pub static ARCH: &str = ARCHITECTURE;
@@ -61,8 +61,8 @@ pub fn run_shell_command_result(cmd: &str) -> Result<(), TestError> {
         .status()
     {
         Ok(status) if status.success() => Ok(()),
-        Ok(status) => return Err(TestError(format!("Command exited with code {status}"))),
-        Err(e) => return Err(TestError(e.to_string())),
+        Ok(status) => Err(TestError(format!("Command exited with code {status}"))),
+        Err(e) => Err(TestError(e.to_string())),
     }
 }
 
@@ -118,15 +118,16 @@ pub fn installation_method(path: &Path) -> InstallMethod {
     let Ok(path) = path.canonicalize() else {
         return InstallMethod::Other;
     };
+
     let Some(_path_str) = path.to_str() else {
         return InstallMethod::Other;
     };
 
     match get_distro_base() {
-        DistroBase::Arch => return InstallMethod::Aur,
-        DistroBase::Fedora => return InstallMethod::Rpm,
-        DistroBase::Debian => return InstallMethod::Dpkg,
-        DistroBase::Unknown => return InstallMethod::Other,
+        DistroBase::Arch => InstallMethod::Aur,
+        DistroBase::Fedora => InstallMethod::Rpm,
+        DistroBase::Debian => InstallMethod::Dpkg,
+        DistroBase::Unknown => InstallMethod::Other,
     }
 }
 
