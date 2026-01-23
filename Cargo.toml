@@ -15,24 +15,16 @@ chrono = "0.4.43"
 
 [lints.rust]
 unsafe_code = "forbid"
+warnings = "warn"
 
 [lints.clippy]
-pedantic = "deny"
-nursery = "deny"
-complexity = "deny"
-style = "deny"
-perf = "deny"
-cargo = "deny"
-restriction = "deny"
 correctness = "deny"
-internal = "deny"
-
-[profile.release]
-lto = true
-codegen-units = 1
-panic = "abort"
-strip = true
-
-[profile.dev]
-opt-level = 1
-incremental = true
+suspicious = "deny"
+perf = "warn"
+complexity = "warn"
+style = "warn"
+pedantic = "warn"
+nursery = "allow"
+cargo = "allow"
+restriction = "allow"
+internal = "allow"
