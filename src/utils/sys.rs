@@ -13,7 +13,10 @@ use crate::{
     },
 };
 
-#[allow(dead_code, reason = "It says it is unused otherwise for some damn reason")]
+#[allow(
+    dead_code,
+    reason = "It says it is unused otherwise for some damn reason"
+)]
 pub struct Vars {
     pub shell: String,
     pub home: String,
