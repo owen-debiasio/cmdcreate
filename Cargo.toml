@@ -18,8 +18,8 @@ unsafe_code = "forbid"
 warnings = "warn"
 
 [lints.clippy]
-correctness = "deny"
-suspicious = "deny"
+correctness = { level = "deny", priority = -1 }
+suspicious = { level = "deny", priority = -1 }
 perf = "warn"
 complexity = "warn"
 style = "warn"

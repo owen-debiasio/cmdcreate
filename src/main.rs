@@ -126,6 +126,7 @@ fn main() {
     cmdcreate(&args);
 }
 
+#[allow(clippy::too_many_lines, reason = "I don't care")]
 fn cmdcreate(args: &[String]) {
     let cmd = args.first().unwrap().as_str();
     let arg = |i| args.get(i).map(String::as_str);
@@ -147,6 +148,7 @@ fn cmdcreate(args: &[String]) {
         "-l" | "--license" | "-c" | "--changelog" | "-g" | "--get_offline_files"
     ) {
         log("main::main(): Offline files have been requested...", 0);
+
         init_git_fs();
     }
 

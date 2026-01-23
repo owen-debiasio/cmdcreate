@@ -13,16 +13,17 @@ use crate::{
     },
 };
 
+#[allow(dead_code, reason = "It says it is unused otherwise for some damn reason")]
 pub struct Vars {
     pub shell: String,
     pub home: String,
-    pub _user: String,
+    pub user: String,
 }
 
 pub static VARS: LazyLock<Vars> = LazyLock::new(|| Vars {
     shell: var("SHELL").unwrap_or_else(|_| "unknown".to_owned()),
     home: var("HOME").unwrap_or_else(|_| "unknown".to_owned()),
-    _user: var("USER").unwrap_or_else(|_| "unknown".to_owned()),
+    user: var("USER").unwrap_or_else(|_| "unknown".to_owned()),
 });
 
 pub static ARCH: &str = ARCHITECTURE;
@@ -164,6 +165,6 @@ mod tests {
     #[test]
     fn vars_are_initialized() {
         assert!(!VARS.home.is_empty());
-        assert!(!VARS._user.is_empty());
+        assert!(!VARS.user.is_empty());
     }
 }

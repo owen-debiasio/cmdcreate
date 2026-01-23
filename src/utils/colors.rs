@@ -23,13 +23,13 @@ mod tests {
     use super::*;
 
     fn all_colors() -> Vec<&'static str> {
-        return vec![
+        vec![
             COLORS.red,
             COLORS.green,
             COLORS.yellow,
             COLORS.blue,
             COLORS.reset,
-        ];
+        ]
     }
 
     #[test]
