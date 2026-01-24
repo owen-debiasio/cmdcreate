@@ -23,6 +23,7 @@ words = [
     "openssl",
     "pacman",
     "paru",
+    "pkgdir",
     "reqwest",
     "rhel",
     "rustup",
