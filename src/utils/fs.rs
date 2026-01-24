@@ -166,14 +166,14 @@ pub fn delete_folder(path: &str) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::{env::temp_dir, fs, path::PathBuf};
+    use std::{env::temp_dir, fs::write, path::PathBuf};
 
     fn test_dir(name: &str) -> PathBuf {
         let dir = temp_dir().join(name);
 
-        let _ = fs::remove_dir_all(&dir);
+        let _ = remove_dir_all(&dir);
 
-        fs::create_dir_all(&dir).expect("Failed to create test directory");
+        create_dir_all(&dir).expect("Failed to create test directory");
 
         dir
     }
@@ -253,7 +253,7 @@ mod tests {
         let file = test_dir("cmdcreate_exists").join("exists.txt");
 
         assert!(!path_exists(file.to_str().unwrap()));
-        fs::write(&file, "hi").unwrap();
+        write(&file, "hi").unwrap();
 
         assert!(path_exists(file.to_str().unwrap()));
     }
