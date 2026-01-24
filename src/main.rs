@@ -114,7 +114,7 @@ fn main() {
         .iter()
         .any(|a| matches!(a.as_str(), "-V" | "--verbose"))
     {
-        return args.retain(|a| !matches!(a.as_str(), "-V" | "--verbose"));
+        args.retain(|a| !matches!(a.as_str(), "-V" | "--verbose"));
     }
 
     if args.is_empty() {
