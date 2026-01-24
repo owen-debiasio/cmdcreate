@@ -462,3 +462,7 @@
 - Code optimizations
 - Added ability for testing using `cargo test`
 - Added launch options for `Visual Studio Code`
+
+## v1.0.4
+
+- Code Optimizations
