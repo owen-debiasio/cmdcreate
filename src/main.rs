@@ -156,7 +156,7 @@ fn cmdcreate(args: &[String]) {
 
     match cmd {
         "create" => match (arg(1), arg(2)) {
-            (Some(c), Some(v)) => create(c, v, true),
+            (Some(command), Some(contents)) => create(command, contents, true),
             _ => println!("Usage:\ncmdcreate {blue}create {yellow}<command> <contents>{reset}"),
         },
 
@@ -181,12 +181,12 @@ fn cmdcreate(args: &[String]) {
         ),
 
         "rename" => match (arg(1), arg(2)) {
-            (Some(a), Some(b)) => rename(a, b),
+            (Some(command), Some(new_name)) => rename(command, new_name),
             _ => println!("Usage:\ncmdcreate {blue}rename {yellow}<command> <new name>{reset}"),
         },
 
         "favorite" => match (arg(1), arg(2)) {
-            (Some(op @ ("add" | "remove")), Some(c)) => favorite(op, c),
+            (Some(mode @ ("add" | "remove")), Some(command)) => favorite(mode, command),
             _ => println!("Usage:\ncmdcreate {blue}favorite {yellow}<add/remove> <command>{reset}"),
         },
 
