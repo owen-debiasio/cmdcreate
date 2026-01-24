@@ -29,7 +29,7 @@ use crate::{
     },
 };
 
-pub const VERSION: &str = "v1.0.3";
+pub const VERSION: &str = "v1.0.4";
 
 pub fn display_usage() {
     let (blue, cyan, yellow, magenta, reset) = (
