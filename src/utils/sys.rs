@@ -151,7 +151,10 @@ mod tests {
 
     #[test]
     fn run_shell_command_result_fails_on_invalid_command() {
-        assert!(run_shell_command_result("definitely_not_a_real_cmd").is_err());
+        assert!(
+            run_shell_command_result("definitely_not_a_real_cmd").is_err(),
+            "Expected error when running a non-existent command"
+        );
     }
 
     #[test]

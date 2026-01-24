@@ -22,14 +22,16 @@ pub const COLORS: Colors = Colors {
 mod tests {
     use super::*;
 
-    fn all_colors() -> Vec<&'static str> {
-        vec![
-            COLORS.red,
-            COLORS.green,
-            COLORS.yellow,
-            COLORS.blue,
-            COLORS.reset,
-        ]
+    const ALL_COLORS: [&str; 5] = [
+        COLORS.red,
+        COLORS.green,
+        COLORS.yellow,
+        COLORS.blue,
+        COLORS.reset,
+    ];
+
+    fn all_colors() -> impl Iterator<Item = &'static str> {
+        ALL_COLORS.into_iter()
     }
 
     #[test]
@@ -44,10 +46,22 @@ mod tests {
         for color in all_colors() {
             assert!(
                 color.starts_with("\x1b["),
-                "color does not start with ANSI escape"
+                "color does not start with ANSI escape: {color:?}"
             );
 
-            assert!(color.ends_with('m'), "color does not end with 'm'");
+            assert!(
+                color.ends_with('m'),
+                "color does not end with 'm': {color:?}"
+            );
+        }
+    }
+
+    #[test]
+    fn reset_is_unique() {
+        for color in all_colors() {
+            if color != COLORS.reset {
+                assert_ne!(color, COLORS.reset, "reset color must be unique");
+            }
         }
     }
 
@@ -58,9 +72,21 @@ mod tests {
         for color in all_colors() {
             let wrapped = format!("{color}{text}{}", COLORS.reset);
 
-            assert!(wrapped.contains(text));
-            assert!(wrapped.starts_with(color));
-            assert!(wrapped.ends_with(COLORS.reset));
+            assert!(
+                wrapped.starts_with(color),
+                "wrapped text does not start with color"
+            );
+
+            assert!(
+                wrapped.ends_with(COLORS.reset),
+                "wrapped text does not end with reset"
+            );
+
+            assert_eq!(
+                wrapped,
+                format!("{color}{text}{}", COLORS.reset),
+                "wrapped output mismatch"
+            );
         }
     }
 }

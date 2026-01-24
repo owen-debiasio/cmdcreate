@@ -171,14 +171,9 @@ mod tests {
     fn test_dir(name: &str) -> PathBuf {
         let dir = temp_dir().join(name);
 
-        if let Err(e) = remove_dir_all(&dir) {
-            error(
-                &format!("Failed to delete folder \"{}\":", dir.to_string_lossy()),
-                &e.to_string(),
-            );
-        }
+        let _ = fs::remove_dir_all(&dir);
 
-        fs::create_dir_all(&dir).unwrap();
+        fs::create_dir_all(&dir).expect("Failed to create test directory");
 
         dir
     }
