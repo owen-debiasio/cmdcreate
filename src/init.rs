@@ -35,7 +35,7 @@ pub fn init() {
         Use {red}x86_64{yellow} as it is supported.
 
         (You can disable this message in the configuration file){reset}
-        
+
         Do you want to disable this message?\n{red}(Y/N){reset}"
     );
 
