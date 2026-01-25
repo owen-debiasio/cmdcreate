@@ -25,9 +25,9 @@
 
 ### Formatting
 
-- `black`
-- `shfmt`
-- `cargo`
+- `black` (Python files)
+- `shfmt` (Shell files)
+- `rustfmt` (Rust files)
 
 ---
 
