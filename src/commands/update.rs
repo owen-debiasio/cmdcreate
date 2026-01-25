@@ -82,8 +82,7 @@ pub fn update() {
 
             let use_git = !args_forced()
                 && input(&format!(
-                "\nWould you like to install the latest git?\n({green}Y{reset} or {red}N{reset})"
-            ))
+                "\nWould you like to install the latest git {green}(commit: {}){reset}?\n({green}Y{reset} or {red}N{reset})", get_latest_commit("owen-debiasio", "cmdcreate", "main")))
                 .trim()
                 .eq_ignore_ascii_case("y");
 
@@ -146,7 +145,7 @@ fn upgrade_aur(git: bool) {
     run_shell_command(&format!(
         "git clone https://aur.archlinux.org/{pkg}.git ~/{pkg} && \
          cd ~/{pkg} && \
-         makepkg -si --confirm"
+         makepkg -si --noconfirm"
     ));
 
     delete_folder(&format!("{}/{pkg}", VARS.home));
@@ -159,7 +158,7 @@ fn upgrade_aur(git: bool) {
 fn upgrade_deb(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    log("cmds/update::update_deb(): Installing .deb...", 0);
+    log("cmds/update::update_deb(): Installing .deb package...", 0);
 
     let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}.deb");
 
@@ -177,7 +176,7 @@ fn upgrade_deb(latest_release: &str) {
 fn upgrade_rpm(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    log("cmds/update::update_rpm(): Installing .rpm...", 0);
+    log("cmds/update::update_rpm(): Installing .rpm package...", 0);
 
     let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}.rpm");
 
@@ -293,7 +292,9 @@ fn build_from_source() {
 }
 
 fn interactive_upgrade(latest_release: &str) {
-    let (blue, red, reset) = (COLORS.blue, COLORS.red, COLORS.reset);
+    let (blue, green, red, reset) = (COLORS.blue, COLORS.green, COLORS.red, COLORS.reset);
+
+    let latest_commit: &str = &get_latest_commit("owen-debiasio", "cmdcreate", "main");
 
     log(
         "cmds/update::interactive_upgrade(): Initializing interactive upgrade...",
@@ -321,11 +322,11 @@ fn interactive_upgrade(latest_release: &str) {
 
     for (i, option) in [
         &format!("Upgrade through AUR {blue}(universal device compatibility){reset}"),
-        &format!("Upgrade through AUR {blue}(latest git, universal device compatibility){reset}"),
+        &format!("Upgrade through AUR {blue}(latest git {green}(commit: {latest_commit}){blue}, universal device compatibility){reset}"),
         "Install via .deb file",
         "Install via .rpm file",
         "Manually install binary",
-        &format!("Build from source {blue}(latest git, universal device compatibility, {red}DEBIAN/UBUNTU MAY INVOLVE MANUAL INTERVENTION{blue}){reset}"),
+        &format!("Build from source {blue}(latest git {green}(commit: {latest_commit}){blue}, universal device compatibility, {red}DEBIAN/UBUNTU MAY INVOLVE MANUAL INTERVENTION{blue}){reset}"),
         "Exit",
     ]
         .iter()
@@ -449,8 +450,13 @@ pub fn check() {
     }
 }
 
-pub fn _get_latest_commit(owner: &str, repo: &str, branch: &str) -> String {
-    let res: Value = http_client()
+pub fn get_latest_commit(owner: &str, repo: &str, branch: &str) -> String {
+    log(
+        "commands/update::get_latest_commit(): Retrieving latest commit...",
+        0,
+    );
+
+    let commit: Value = http_client()
         .get(format!(
             "https://api.github.com/repos/{owner}/{repo}/commits/{branch}"
         ))
@@ -459,5 +465,17 @@ pub fn _get_latest_commit(owner: &str, repo: &str, branch: &str) -> String {
         .json()
         .expect("invalid json");
 
-    res["sha"].as_str().expect("missing sha")[..7].to_string()
+    let commit = commit["sha"]
+        .as_str()
+        .expect("missing sha")
+        .chars()
+        .take(7)
+        .collect::<String>();
+
+    log(
+        &format!("commands/update::get_latest_commit(): Retrieved latest commit: \"{commit}\""),
+        0,
+    );
+
+    commit
 }
