@@ -86,7 +86,7 @@ pub enum DistroBase {
 
 pub fn get_distro_base() -> DistroBase {
     let content = read_file_to_string("/etc/os-release").to_lowercase();
-    let mut (id, id_like) = ("", "");
+    let (mut id, mut id_like) = ("", "");
 
     for line in content.lines() {
         if let Some(v) = line.strip_prefix("id=") {
