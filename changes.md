@@ -398,7 +398,7 @@
 - Code optimizations
 - Fixed multiple issues with the upgrade process
 - You now have the option to build from source from the latest git in the upgrading process.
-- Installing via `AUR` should now works on any cpu architecture
+- Installing via `AUR` should now work on any cpu architecture
 
 ## v0.9.7
 
