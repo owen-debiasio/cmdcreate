@@ -56,8 +56,13 @@ pub fn run_shell_command_result(cmd: &str) -> Result<(), TestError> {
         .stderr(Stdio::inherit())
         .status()
     {
-        Ok(status) if status.success() => Ok(()),
-        Ok(status) => Err(TestError(format!("Command exited with code {status}"))),
+        Ok(status) => {
+            if status.success() {
+                Ok(())
+            } else {
+                Err(TestError(format!("Command exited with code {status}")))
+            }
+        }
         Err(e) => Err(TestError(e.to_string())),
     }
 }
