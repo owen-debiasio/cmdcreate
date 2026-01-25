@@ -423,7 +423,7 @@
 
 ---
 
-# v1.0.0 🎉
+## v1.0.0 🎉
 
 - Added logging
 - Added verbose output
@@ -466,3 +466,5 @@
 ## v1.0.4
 
 - Code Optimizations
+- When given the option to update to the latest git, it will now show you the latest commit.
+- Fixed issues when updating through the AUR
