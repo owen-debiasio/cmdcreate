@@ -119,19 +119,6 @@ pub fn remove_from_file(path: &str, contents: &str) {
 }
 
 pub fn path_exists(path: &str) -> bool {
-    log(
-        &format!("utils/fs::path_exists(): checking if \"{path}\" exists..."),
-        0,
-    );
-
-    log(
-        &format!(
-            "utils/fs::path_exists(): \"{path}\" exists={}...",
-            Path::new(path).exists()
-        ),
-        0,
-    );
-
     Path::new(path).exists()
 }
 
