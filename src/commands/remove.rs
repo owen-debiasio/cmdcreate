@@ -1,9 +1,10 @@
+use crate::commands::favorite::favorite;
 use crate::{
     commands::tools::{get_installed_commands, is_command_installed},
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{PATHS, delete_file, path_exists, read_file_to_string, remove_from_file},
+        fs::{PATHS, delete_file, path_exists, read_file_to_string},
         io::ask_for_confirmation,
         sys::run_shell_command,
     },
@@ -59,7 +60,7 @@ pub fn remove(command: &str) {
             0,
         );
 
-        remove_from_file(&PATHS.favorites, command);
+        favorite("remove", command);
     }
 
     log(

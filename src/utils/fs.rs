@@ -29,7 +29,7 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     changelog: format!("{}/changes.md", *MAIN_PATH),
     configs: format!("{}/.config/cmdcreate/config.toml", VARS.home),
     favorites: format!("{}/favorites", *MAIN_PATH),
-    install_dir: format!("{}/files", *MAIN_PATH),
+    install_dir: format!("{}/files/", *MAIN_PATH),
     license: format!("{}/LICENSE", *MAIN_PATH),
     log_dir: format!("{}/logs", *MAIN_PATH),
 });
@@ -119,6 +119,19 @@ pub fn remove_from_file(path: &str, contents: &str) {
 }
 
 pub fn path_exists(path: &str) -> bool {
+    log(
+        &format!("utils/fs::path_exists(): checking if \"{path}\" exists..."),
+        0,
+    );
+
+    log(
+        &format!(
+            "utils/fs::path_exists(): \"{path}\" exists={}...",
+            Path::new(path).exists()
+        ),
+        0,
+    );
+
     Path::new(path).exists()
 }
 
