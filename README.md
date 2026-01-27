@@ -1,6 +1,6 @@
 # cmdcreate
 
-Cmdcreate allows you to create custom commands for your Linux terminal without needing to enter the same "complex" commands over and over.
+Cmdcreate allows you to create custom commands for your convienience without needing to enter the same "complex" commands over and over.
 
 ---
   
@@ -40,7 +40,7 @@ Flags:
 
 ---
 
-## Installation (Latest release)
+## Installation
 
 > [!NOTE]
 > Only supported on x86_64 architectures (unless built from source).
@@ -62,16 +62,16 @@ yay -S cmdcreate-git
 ### Or clone AUR repo
 
 ```
-git clone --branch cmdcreate --single-branch https://github.com/archlinux/aur.git ~/cmdcreate
-cd ~/cmdcreate
+git clone --branch cmdcreate --single-branch https://github.com/archlinux/aur.git ~/.cache/cmdcreate
+cd ~/.cache/cmdcreate
 makepkg -si
 ```
 
-**Latest git (may be unstable)**
+**Latest git (may be broken/unstable)**
 
 ```
-git clone --branch cmdcreate-git --single-branch https://github.com/archlinux/aur.git ~/cmdcreate-git
-cd ~/cmdcreate-git
+git clone --branch cmdcreate-git --single-branch https://github.com/archlinux/aur.git ~/.cache/cmdcreate-git
+cd ~/.cache/cmdcreate-git
 makepkg -si
 ```
 
@@ -89,13 +89,13 @@ You can the get the `x86_64` binary from the latest [release](https://github.com
 
 ---
 
-## Building from source (Latest git)
+## Building from source (Latest git), development
 
 ### Dependencies
 
 - Rustup
 - Openssl (development, other)
-- nano (not for building, but recommended, or you could use another text editor)
+- nano (not for building, but recommended, or you could use another text editor listed [here](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/edit.rs) **(Lines 18-35)**
 - git
 - curl (not for building, but recommended)
 
@@ -149,4 +149,4 @@ sudo install -Dm755 target/release/cmdcreate /usr/local/bin/cmdcreate
 
 (C) 2026 Owen Debiasio
 
-Licensed under GPL-2.0-only
+Licensed under GPL v2.0
