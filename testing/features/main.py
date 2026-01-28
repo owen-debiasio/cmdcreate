@@ -67,7 +67,7 @@ def run_test(test):
         case "10":
             backup.test()
         case "11":
-            for i in range(1, 10):
+            for i in range(1, 11):
                 run_test(str(i))
         case _:
             main()
