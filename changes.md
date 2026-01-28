@@ -469,3 +469,7 @@
 - When given the option to update to the latest git, it will now show you the latest commit.
 - Fixed issues when updating through the AUR
 - Fixed issues when creating a command
+
+## v1.0.5
+
+- Code optimizations
