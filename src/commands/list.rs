@@ -17,9 +17,7 @@ pub fn list() {
     let amount = installed_scripts.len();
 
     log(
-        &format!(
-            "cmds/list::list(): Listing amount of installed commands ({amount})..."
-        ),
+        &format!("cmds/list::list(): Listing amount of installed commands ({amount})..."),
         0,
     );
 
