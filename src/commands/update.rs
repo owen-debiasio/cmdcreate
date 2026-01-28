@@ -257,7 +257,7 @@ fn build_from_source() {
 
     run_shell_command(match get_distro_base() {
         DistroBase::Arch => "sudo pacman -S --needed --noconfirm cargo git",
-        DistroBase::Debian => "sudo apt install -y cargo git",
+        DistroBase::Debian => "sudo apt install -y cargo git build-essential pkg-config libssl-dev",
         DistroBase::Fedora => "sudo dnf install -y cargo git-core openssl-devel openssl-libs",
         DistroBase::Unknown => {
             error(
