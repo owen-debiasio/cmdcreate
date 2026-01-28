@@ -18,7 +18,7 @@ pub fn list() {
 
     log(
         &format!(
-            "cmds/list::list(): Listing amount of installed commands ({blue}{amount}{reset})..."
+            "cmds/list::list(): Listing amount of installed commands ({green}{amount}{reset})..."
         ),
         0,
     );
