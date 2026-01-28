@@ -24,7 +24,7 @@ pub fn repair() {
             0,
         );
 
-        if !path_exists(&format!("/usr/bin/local/{name}")) {
+        if !path_exists(&format!("/usr/local/bin/{name}")) {
             log(
                 &format!("cmds/repair::repair(): Repairing command \"{name}\"..."),
                 0,
