@@ -1,3 +1,4 @@
+use crate::utils::sys::args_forced;
 use crate::{
     VERSION,
     commands::{
@@ -41,7 +42,7 @@ pub fn parse(cmd: &str, args: &[String]) {
 
         "remove" => arg(1).map_or_else(
             || println!("Usage:\ncmdcreate {blue}remove {yellow}<command>{reset}"),
-            remove,
+            |cmd| remove(cmd, args_forced()),
         ),
 
         "edit" => arg(1).map_or_else(

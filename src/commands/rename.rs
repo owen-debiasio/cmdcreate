@@ -1,3 +1,6 @@
+use crate::commands::remove::remove;
+use crate::utils::fs::path_exists;
+use crate::utils::io::{error, input};
 use crate::{
     commands::tools::{get_installed_commands, is_command_installed},
     logger::log,
@@ -5,10 +8,16 @@ use crate::{
 };
 
 pub fn rename(old: &str, new: &str) {
-    let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
-    let install_dir = &PATHS.install_dir;
+    let (blue, red, yellow, green, reset) = (
+        COLORS.blue,
+        COLORS.red,
+        COLORS.yellow,
+        COLORS.green,
+        COLORS.reset,
+    );
+    let (install_dir, installed_commands) = (&PATHS.install_dir, get_installed_commands());
 
-    if get_installed_commands().is_empty() {
+    if installed_commands.is_empty() {
         log("cmds/rename::rename(): Command is empty, exiting...", 0);
         return;
     }
@@ -25,7 +34,26 @@ pub fn rename(old: &str, new: &str) {
         0,
     );
 
-    is_command_installed(new);
+    if path_exists(&format!("{}/{new}", PATHS.install_dir)) {
+        log(
+            &format!(
+                "cmds/rename::rename(): Command \"{new}\" is installed... Requesting removal..."
+            ),
+            0,
+        );
+
+        println!(
+            "{red}The new name ({yellow}{new}{red}) is already installed! Do you want to delete it?\n({green}Y{red} or {yellow}N{red})",
+        );
+
+        if input("").to_lowercase() == "y" {
+            log("cmds/rename::rename(): Accepting... Continuing...", 0);
+
+            remove(new, true);
+        } else {
+            error("You need to remove the old command before proceeding!", "");
+        }
+    }
 
     log(
         &format!("cmds/rename::rename(): Renaming command \"{old}\" to \"{new}\"..."),

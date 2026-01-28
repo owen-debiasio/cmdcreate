@@ -10,7 +10,7 @@ use crate::{
     },
 };
 
-pub fn remove(command: &str) {
+pub fn remove(command: &str, forced: bool) {
     let (blue, yellow, red, green, reset) = (
         COLORS.blue,
         COLORS.yellow,
@@ -38,9 +38,11 @@ pub fn remove(command: &str) {
         0,
     );
 
-    ask_for_confirmation(&format!(
-        "{red}Are you sure you want to delete command{yellow} \"{command}\"{red}?{reset}"
-    ));
+    if !forced {
+        ask_for_confirmation(&format!(
+            "{red}Are you sure you want to delete command{yellow} \"{command}\"{red}?{reset}"
+        ));
+    }
 
     log(
         &format!("cmds/remove::remove(): Deleting command \"{command}\"..."),
