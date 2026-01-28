@@ -20,5 +20,8 @@ Steps to reproduce the behavior:
 **Distro**
 - Examples: `Linux Mint`, `Arch`, `Zorin OS`
 
+**CPU Architecture**
+- Examples: `x86_64`, `aarch64`, `risc-v`
+
 **Additional context**
 Add any other context about the problem here.
