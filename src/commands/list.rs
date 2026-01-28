@@ -21,7 +21,7 @@ pub fn list() {
         0,
     );
 
-    println!("Installed commands: ({green}{amount}{reset})\n--------");
+    println!("Installed commands: ({blue}{amount}{reset})\n--------");
 
     log("cmds/list::list(): Listing installed commands...", 0);
 
