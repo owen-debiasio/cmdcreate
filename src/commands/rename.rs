@@ -1,10 +1,15 @@
-use crate::commands::remove::remove;
-use crate::utils::fs::path_exists;
-use crate::utils::io::{error, input};
 use crate::{
-    commands::tools::{get_installed_commands, is_command_installed},
+    commands::{
+        remove::remove,
+        tools::{get_installed_commands, is_command_installed},
+    },
     logger::log,
-    utils::{colors::COLORS, fs::PATHS, sys::run_shell_command},
+    utils::{
+        colors::COLORS,
+        fs::{PATHS, path_exists},
+        io::{error, input},
+        sys::{args_forced, run_shell_command},
+    },
 };
 
 pub fn rename(old: &str, new: &str) {
@@ -46,7 +51,7 @@ pub fn rename(old: &str, new: &str) {
             "{red}The new name ({yellow}{new}{red}) is already installed! Do you want to delete it?\n({green}Y{red} or {yellow}N{red})",
         );
 
-        if input("").to_lowercase() == "y" {
+        if input("").to_lowercase() == "y" || args_forced() {
             log("cmds/rename::rename(): Accepting... Continuing...", 0);
 
             remove(new, true);
