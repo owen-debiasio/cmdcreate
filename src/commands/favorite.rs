@@ -74,18 +74,20 @@ fn remove(cmd: &str) {
     );
 
     log(
-        &format!("cmds/favorite::favorite(): Checking if \"{cmd}\" is already favorites..."),
+        &format!("cmds/favorite::favorite(): Checking if \"{cmd}\" is in favorites..."),
         0,
     );
 
-    if read_file_to_string(favorites_path).contains(&format!("{cmd}\n")) {
+    if !read_file_to_string(favorites_path)
+        .lines()
+        .any(|c| c == cmd)
+    {
         error("Command isn't in favorites:", cmd);
+        return;
     }
 
     log(
-        &format!(
-            "cmds/favorite::favorite(): Command \"{cmd}\" is not in favorites... Continuing..."
-        ),
+        &format!("cmds/favorite::favorite(): Command \"{cmd}\" found in favorites... Removing..."),
         0,
     );
 
