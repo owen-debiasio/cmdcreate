@@ -79,7 +79,7 @@ fn remove(cmd: &str) {
     );
 
     if read_file_to_string(favorites_path).contains(&format!("{cmd}\n")) {
-        error("Command is already in favorites:", cmd);
+        error("Command isn't in favorites:", cmd);
     }
 
     log(
