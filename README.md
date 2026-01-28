@@ -112,7 +112,7 @@ sudo pacman -S rustup curl openssl nano git
 **Debian/Ubuntu**
 
 ```
-sudo apt install rustup curl libssl-dev libssl3 git nano
+sudo apt install rustup curl libssl-dev libssl3 build-essential pkg-config git nano
 ```
 
 **Fedora**
