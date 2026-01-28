@@ -4,6 +4,7 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{PATHS, read_file_to_string, remove_from_file, write_to_file},
+        io::error,
     },
 };
 
@@ -65,13 +66,30 @@ fn add(cmd: &str) {
 
 fn remove(cmd: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
+    let favorites_path = &PATHS.favorites;
 
     log(
         &format!("cmds/favorite::favorite(): Removing command \"{cmd}\" from favorites..."),
         0,
     );
 
-    remove_from_file(&PATHS.favorites, cmd);
+    log(
+        &format!("cmds/favorite::favorite(): Checking if \"{cmd}\" is already favorites..."),
+        0,
+    );
+
+    if read_file_to_string(favorites_path).contains(&format!("{cmd}\n")) {
+        error("Command is already in favorites:", cmd);
+    }
+
+    log(
+        &format!(
+            "cmds/favorite::favorite(): Command \"{cmd}\" is not in favorites... Continuing..."
+        ),
+        0,
+    );
+
+    remove_from_file(favorites_path, cmd);
 
     println!("{green}Command {blue}\"{cmd}\"{green} removed from favorites.{reset}");
 }
