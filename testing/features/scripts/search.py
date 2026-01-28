@@ -1,5 +1,5 @@
-from lib.sys import command
-from shared import create_multiple_commands, delete_multiple_commands
+from features.lib import command
+from features.shared import create_multiple_commands, delete_multiple_commands
 
 
 def test():

@@ -1,5 +1,6 @@
-from lib.sys import command
-from shared import create_single_command, delete_single_command
+from click import command
+
+from features.shared import create_single_command, delete_single_command
 
 
 def test():

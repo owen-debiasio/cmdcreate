@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from features.lib import command
 from scripts import (
     backup,
     create,
@@ -12,9 +13,7 @@ from scripts import (
     search,
 )
 
-from lib.sys import command
-
-VERSION = "v0.1.3"
+VERSION = "v0.1.4"
 
 
 def main():

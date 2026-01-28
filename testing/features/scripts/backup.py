@@ -1,7 +1,5 @@
-import os
-from lib.sys import command
-from lib.path import home
-from shared import create_multiple_commands, delete_multiple_commands
+from features.lib import home, command
+from features.shared import delete_multiple_commands, create_multiple_commands
 
 
 def test():
@@ -28,80 +26,80 @@ def test():
 
     input("\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("Creating command for test 1...")
     command('cargo run create test_command "echo Test succeeded"')
     input("\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("\nExporting command to ~/.cache/export.cmdcreate...\n\n")
     command(f"cargo run export {home}/.cache/")
     input("\n\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("Cleaning up for a clean slate...\n")
     command("cargo run remove test_command -f")
     input("\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("\nImporting exported file...\n\n")
     command(f"cargo run import {home}/.cache/export.cmdcreate")
     input("\n\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("\nListing commands...\n\n")
     command("test_command")
     input("\n\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("Cleaning up for test 2...\n")
     command("cargo run remove test_command -f")
     input("\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("Creating test 2 commands...")
     create_multiple_commands()
     input("\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("\nExporting commands to ~/.cache/export.cmdcreate...\n\n")
     command(f"cargo run export {home}/.cache/")
     input("\n\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("Cleaning up for a clean slate...\n")
     delete_multiple_commands()
     input("\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("\nImporting exported file...\n\n")
     command(f"cargo run import {home}/.cache/export.cmdcreate")
     input("\n\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("\nListing commands...\n\n")
     command("test_command")
     input("\n\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("Cleaning up...\n")
     delete_multiple_commands()
     command(f"rm {home}/.cache/export.cmdcreate")
     input("\nPress enter to continue...")
 
-    os.system("clear")
+    command("clear")
 
     print("\nCommand test completed.\n")
     input("Press enter to continue...")

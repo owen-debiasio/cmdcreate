@@ -1,5 +1,6 @@
 import os
-from lib.sys import command
+
+from features.lib import command
 
 
 def create_single_command():
