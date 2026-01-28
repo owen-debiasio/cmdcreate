@@ -31,7 +31,8 @@ def main():
         "8] Rename command",
         "9] Repair command(s)",
         "10] Importing/exporting command(s)\n",
-        "11] All tests",
+        "11] All tests\n",
+        "0]  Abort\n",
     ]
 
     for line in options:
@@ -42,6 +43,9 @@ def main():
 
 def run_test(test):
     match test:
+        case "0":
+            print("Aborted.")
+            return
         case "1":
             create.test()
         case "2":
