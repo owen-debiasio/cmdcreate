@@ -9,7 +9,7 @@ use crate::{
 };
 
 pub fn list() {
-    let (green, reset) = (COLORS.green, COLORS.reset);
+    let (blue, reset) = (COLORS.blue, COLORS.reset);
 
     log("cmds/list::list(): Gathering installed commands...", 0);
 
@@ -18,7 +18,7 @@ pub fn list() {
 
     log(
         &format!(
-            "cmds/list::list(): Listing amount of installed commands ({green}{amount}{reset})..."
+            "cmds/list::list(): Listing amount of installed commands ({amount})..."
         ),
         0,
     );
