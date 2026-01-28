@@ -473,3 +473,4 @@
 ## v1.0.5
 
 - Code optimizations
+- When running the testing Python script, you now have the ability to easily abort.
