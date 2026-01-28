@@ -51,9 +51,8 @@ pub fn rename(old: &str, new: &str) {
             "{red}The new name ({yellow}{new}{red}) is already installed! Do you want to delete it?\n({green}Y{red} or {yellow}N{red})",
         );
 
-        if input("").to_lowercase() == "y" || args_forced() {
+        if args_forced() || input("").trim().eq_ignore_ascii_case("y") {
             log("cmds/rename::rename(): Accepting... Continuing...", 0);
-
             remove(new, true);
         } else {
             error("You need to remove the old command before proceeding!", "");
