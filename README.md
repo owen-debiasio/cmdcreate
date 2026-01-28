@@ -16,7 +16,7 @@ Commands:
   reset                              Removes all installed commands
   display  <command>                 Display contents of a command
   rename   <command>    <new name>   Renames a command
-  favorite <add/remove> <command>    Renames a command
+  favorite <add/remove> <command>    Adds or removes a command from favorites
   repair                             Repairs installed commands if needed
 
  Update:
