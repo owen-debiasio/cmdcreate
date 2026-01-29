@@ -1,12 +1,15 @@
 from testing.features.lib import command
 
+
 def enter_to_continue():
     input("\n\nPress enter to continue...")
     command("clear")
 
+
 def test_completed():
     print("\nCommand test completed.\n")
     input("Press enter to continue...")
+
 
 def create_single_command():
     command('cargo run create test_command "echo Test succeeded"')
@@ -33,6 +36,7 @@ def list_commands():
     input("\nPress enter to continue...")
     command("clear")
 
+
 def multiple_command_desc() -> list:
     var = [
         "Command 1:",
@@ -49,6 +53,7 @@ def multiple_command_desc() -> list:
 
     return var
 
+
 def single_command_desc() -> list:
     var = [
         'Command name: "test_command"',
@@ -57,6 +62,7 @@ def single_command_desc() -> list:
 
     return var
 
+
 def simple_cleanup():
     print("Cleaning up...\n")
     delete_single_command()
@@ -64,6 +70,7 @@ def simple_cleanup():
     enter_to_continue()
 
     test_completed()
+
 
 def bigger_cleanup():
     print("Cleaning up...\n")

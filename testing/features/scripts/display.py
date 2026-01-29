@@ -1,5 +1,5 @@
 from testing.features.lib import command
-from testing.features.shared import create_single_command, delete_single_command, test_completed, enter_to_continue, \
+from testing.features.shared import create_single_command, enter_to_continue, \
     single_command_desc, simple_cleanup
 
 

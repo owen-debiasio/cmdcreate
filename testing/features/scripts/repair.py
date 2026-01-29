@@ -1,6 +1,6 @@
 from testing.features.lib import command
-from testing.features.shared import delete_single_command, create_multiple_commands, delete_multiple_commands, \
-    enter_to_continue, test_completed, bigger_cleanup
+from testing.features.shared import delete_single_command, create_multiple_commands, \
+    enter_to_continue, bigger_cleanup
 
 
 def test():

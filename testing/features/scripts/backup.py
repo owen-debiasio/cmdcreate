@@ -27,7 +27,6 @@ def test():
     print("Cleaning up for a clean slate...\n")
     command("cargo run remove test_command -f")
 
-
     print("Cleaning up for test 2...\n")
     command("cargo run remove test_command -f")
 
@@ -57,6 +56,7 @@ def test():
 
     test_completed()
 
+
 def import_fn():
     enter_to_continue()
 
@@ -69,6 +69,7 @@ def import_fn():
     command("test_command")
 
     enter_to_continue()
+
 
 if __name__ == "__main__":
     test()
