@@ -1,5 +1,6 @@
 from testing.features.lib import command
-from testing.features.shared import multiple_command_desc, create_multiple_commands, delete_multiple_commands
+from testing.features.shared import multiple_command_desc, create_multiple_commands, delete_multiple_commands, \
+    test_completed, enter_to_continue
 
 
 def test():
@@ -14,26 +15,25 @@ def test():
 
     print("Creating commands...\n")
     create_multiple_commands()
-    input("\nPress enter to continue...")
-    command("clear")
+
+    enter_to_continue()
 
     print('Searching for command that contains "2"...\n')
     command("cargo run search 2")
-    input("\nPress enter to continue...")
-    command("clear")
+
+    enter_to_continue()
 
     print('Searching for no matches using "none"...\n')
     command("cargo run search none")
-    input("\nPress enter to continue...")
-    command("clear")
+
+    enter_to_continue()
 
     print("Removing/cleaning up...\n")
     delete_multiple_commands()
-    input("\nPress enter to continue...")
-    command("clear")
 
-    print("\nCommand test completed.\n")
-    input("Press enter to continue...")
+    enter_to_continue()
+
+    test_completed()
 
 
 if __name__ == "__main__":

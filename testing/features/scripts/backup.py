@@ -1,5 +1,6 @@
 from testing.features.lib import command, home
-from testing.features.shared import multiple_command_desc, create_multiple_commands, delete_multiple_commands
+from testing.features.shared import multiple_command_desc, create_multiple_commands, delete_multiple_commands, \
+    test_completed, enter_to_continue
 
 
 def test():
@@ -11,21 +12,17 @@ def test():
     for line in desc:
         print(line)
 
-    input("\nPress enter to continue...")
-
-    command("clear")
+    enter_to_continue()
 
     print("Creating command for test 1...")
     command('cargo run create test_command "echo Test succeeded"')
-    input("\nPress enter to continue...")
 
-    command("clear")
+    enter_to_continue()
 
     print("\nExporting command to ~/.cache/export.cmdcreate...\n\n")
     command(f"cargo run export {home}/.cache/")
-    input("\n\nPress enter to continue...")
 
-    command("clear")
+    enter_to_continue()
 
     print("Cleaning up for a clean slate...\n")
     command("cargo run remove test_command -f")
@@ -33,21 +30,19 @@ def test():
 
     print("Cleaning up for test 2...\n")
     command("cargo run remove test_command -f")
-    input("\nPress enter to continue...")
 
-    command("clear")
+    enter_to_continue()
 
     print("Creating test 2 commands...")
     create_multiple_commands()
-    input("\nPress enter to continue...")
 
-    command("clear")
+    enter_to_continue()
 
     print("\nExporting commands to ~/.cache/export.cmdcreate...\n\n")
     command(f"cargo run export {home}/.cache/")
     input("\n\nPress enter to continue...")
 
-    command("clear")
+    enter_to_continue()
 
     print("Cleaning up for a clean slate...\n")
     delete_multiple_commands()
@@ -58,27 +53,22 @@ def test():
     command(f"rm {home}/.cache/export.cmdcreate")
     input("\nPress enter to continue...")
 
-    command("clear")
+    enter_to_continue()
 
-    print("\nCommand test completed.\n")
-    input("Press enter to continue...")
+    test_completed()
 
 def import_fn():
-    input("\nPress enter to continue...")
-
-    command("clear")
+    enter_to_continue()
 
     print("\nImporting exported file...\n\n")
     command(f"cargo run import {home}/.cache/export.cmdcreate")
-    input("\n\nPress enter to continue...")
 
-    command("clear")
+    enter_to_continue()
 
     print("\nListing commands...\n\n")
     command("test_command")
-    input("\n\nPress enter to continue...")
 
-    command("clear")
+    enter_to_continue()
 
 if __name__ == "__main__":
     test()

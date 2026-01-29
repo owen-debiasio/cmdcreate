@@ -1,5 +1,5 @@
 from testing.features.lib import command
-from testing.features.shared import create_single_command
+from testing.features.shared import create_single_command, test_completed, enter_to_continue
 
 
 def test():
@@ -14,30 +14,29 @@ def test():
     for line in desc:
         print(line)
 
-    input("\nPress enter to continue...")
-    command("clear")
+    enter_to_continue()
 
     print("Creating command...")
     create_single_command()
-    input("\nPress enter to continue...")
-    command("clear")
+
+    enter_to_continue()
 
     print("\nRenaming created command...\n\n")
     command("cargo run rename test_command renamed_test_command")
-    input("\n\nPress enter to continue...")
+
+    enter_to_continue()
 
     print("\nRunning renamed command...\n\n")
     command("renamed_test_command")
-    input("\n\nPress enter to continue...")
-    command("clear")
+
+    enter_to_continue()
 
     print("Cleaning up...\n")
     command("cargo run remove renamed_test_command -f")
-    input("\nPress enter to continue...")
-    command("clear")
 
-    print("\nCommand test completed.\n")
-    input("Press enter to continue...")
+    enter_to_continue()
+
+    test_completed()
 
 
 if __name__ == "__main__":

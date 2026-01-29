@@ -2,6 +2,13 @@ import os
 
 from testing.features.lib import command
 
+def enter_to_continue():
+    input("\n\nPress enter to continue...")
+    command("clear")
+
+def test_completed():
+    print("\nCommand test completed.\n")
+    input("Press enter to continue...")
 
 def create_single_command():
     command('cargo run create test_command "echo Test succeeded"')

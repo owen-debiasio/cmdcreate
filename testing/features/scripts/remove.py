@@ -1,5 +1,5 @@
 from testing.features.lib import command
-from testing.features.shared import create_single_command, delete_single_command
+from testing.features.shared import create_single_command, delete_single_command, test_completed, enter_to_continue
 
 
 def test(forced):
@@ -13,13 +13,12 @@ def test(forced):
     if forced:
         print("Forced mode enabled (-f)")
 
-    input("\nPress enter to continue...")
-    command("clear")
+    enter_to_continue()
 
     print("\nCreating command...\n")
     create_single_command()
-    input("\nPress enter to continue...")
-    command("clear")
+
+    enter_to_continue()
 
     print("\nRemoving created command...\n")
     if forced:
@@ -27,11 +26,9 @@ def test(forced):
     else:
         command("cargo run remove test_command")
 
-    input("\nPress enter to continue...")
-    command("clear")
+    enter_to_continue()
 
-    print("\nCommand test completed.\n")
-    input("Press enter to continue...")
+    test_completed()
 
 
 if __name__ == "__main__":
