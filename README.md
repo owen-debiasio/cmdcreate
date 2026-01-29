@@ -93,6 +93,10 @@ You can the get the `x86_64` binary from the latest [release](https://github.com
 
 ### Dependencies
 
+> [!NOTE]
+> You can find more about developing cmdcreate here:
+> [Development Documentation](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/developing.md)
+
 - Rustup
 - Openssl (development, other)
 - nano (not for building, but recommended, or you could use another text editor listed [here](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/edit.rs) **(Lines 18-35)**
@@ -144,6 +148,9 @@ sudo install -Dm755 target/release/cmdcreate /usr/local/bin/cmdcreate
 
 > [!NOTE]
 > You can find the available configurations [here](https://github.com/owen-debiasio/cmdcreate/blob/main/config_example.toml)
+
+## Documentation
+`placeholder,will be adding here`
 
 ---
 
