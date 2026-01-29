@@ -1,9 +1,13 @@
 [package]
 name = "cmdcreate"
-authors = ["Owen Debiasio <owen.debiasio@gmail.com>"]
 license = "GPL-2.0-only"
 version = "1.0.5"
 edition = "2024"
+authors = ["Owen Debiasio <owen.debiasio@gmail.com>"]
+repository = "https://github.com/owen-debiasio/cmdcreate"
+description = "Cmdcreate allows you to create custom commands for your convienience without needing to enter the same 'complex' commands over and over."
+readme = "README.md"
+license-file = "LICENSE"
 
 [dependencies]
 reqwest = { version = "0.12", features = ["blocking", "json"] }
