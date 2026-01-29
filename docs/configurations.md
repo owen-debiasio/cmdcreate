@@ -1,6 +1,6 @@
 # Configuring cmdcreate
 
-You are able to configure cmdcreate in various ways. All are listed here. You can find an example `.toml` configuration [here](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/config_example.toml).
+You are able to configure cmdcreate in various ways. All are listed here. You can find an example `.toml` configuration [here](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/resources/config_example.toml).
 
 ## Categories
 
