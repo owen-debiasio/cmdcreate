@@ -11,4 +11,4 @@ The only version I support is the latest. If you have any issues, open one and t
 
 ## Reporting a Vulnerability
 
-Open an issue, and descrive the issue you are having.
+Open an issue, and describe the issue you are having.
