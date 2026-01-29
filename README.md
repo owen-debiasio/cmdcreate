@@ -150,7 +150,9 @@ sudo install -Dm755 target/release/cmdcreate /usr/local/bin/cmdcreate
 > You can find the available configurations [here](https://github.com/owen-debiasio/cmdcreate/blob/main/config_example.toml)
 
 ## Documentation
-You can view the table of contents and information [here](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/README.md)
+
+> [!NOTE]
+> You can view the table of contents and information [here](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/README.md)
 
 ---
 
