@@ -79,3 +79,14 @@ def bigger_cleanup():
     enter_to_continue()
 
     test_completed()
+
+def simple_init():
+    for line in single_command_desc():
+        print(line)
+
+    enter_to_continue()
+
+    print("Creating command...")
+    create_single_command()
+
+    enter_to_continue()
