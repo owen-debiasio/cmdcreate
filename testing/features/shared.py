@@ -1,6 +1,6 @@
 import os
 
-from features.lib import command
+from testing.features.lib import command
 
 
 def create_single_command():
@@ -27,3 +27,19 @@ def list_commands():
     command("cargo run list")
     input("\nPress enter to continue...")
     os.system("clear")
+
+def multiple_command_desc() -> list:
+    var = [
+        "Command 1:",
+        "    name: test_command",
+        '    contents: "echo Test succeeded"',
+        "Command 2:",
+        "    name: test_command2",
+        '    contents: "echo Test succeeded 2"',
+        "Command 3:",
+        "    name: test_command3",
+        '    contents: "echo Test succeeded 3"',
+
+    ]
+
+    return var

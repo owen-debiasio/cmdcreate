@@ -1,9 +1,5 @@
-from features.lib import command
-from features.shared import (
-    create_multiple_commands,
-    delete_single_command,
-    delete_multiple_commands,
-)
+from testing.features.lib import command
+from testing.features.shared import delete_single_command, create_multiple_commands, delete_multiple_commands
 
 
 def test():

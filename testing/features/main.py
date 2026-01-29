@@ -1,19 +1,8 @@
 #!/usr/bin/env python3
+from testing.features.lib import command
+from testing.features.scripts import remove, create, listandfavorite, search, edit, display, rename, repair, backup
 
-from features.lib import command
-from scripts import (
-    backup,
-    create,
-    display,
-    edit,
-    listandfavorite,
-    remove,
-    rename,
-    repair,
-    search,
-)
-
-VERSION = "v0.1.4"
+VERSION = "v0.1.5"
 
 
 def main():

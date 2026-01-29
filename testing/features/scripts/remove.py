@@ -1,5 +1,5 @@
-from features.lib import command
-from features.shared import create_single_command, delete_single_command
+from testing.features.lib import command
+from testing.features.shared import create_single_command, delete_single_command
 
 
 def test(forced):
@@ -30,7 +30,6 @@ def test(forced):
     input("\nPress enter to continue...")
     command("clear")
 
-    # End of test
     print("\nCommand test completed.\n")
     input("Press enter to continue...")
 

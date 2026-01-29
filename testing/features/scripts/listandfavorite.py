@@ -1,27 +1,13 @@
-from features.lib import command
-from features.shared import (
-    create_multiple_commands,
-    list_commands,
-    delete_multiple_commands,
-)
+from testing.features.lib import command
+from testing.features.shared import create_multiple_commands, list_commands, delete_multiple_commands, \
+    multiple_command_desc
 
 
 def test():
     command("clear")
 
     print("\nRunning tests: Command listing\n")
-    desc = [
-        "Command 1:",
-        "    name: test_command",
-        '    contents: "echo Test succeeded"',
-        "Command 2:",
-        "    name: test_command2",
-        '    contents: "echo Test succeeded 2"',
-        "Command 3:",
-        "    name: test_command3",
-        '    contents: "echo Test succeeded 3"',
-    ]
-    for line in desc:
+    for line in multiple_command_desc():
         print(line)
 
     input("\nPress enter to continue...")

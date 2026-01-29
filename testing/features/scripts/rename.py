@@ -1,5 +1,5 @@
-from features.lib import command
-from features.shared import create_single_command
+from testing.features.lib import command
+from testing.features.shared import create_single_command
 
 
 def test():
