@@ -474,7 +474,10 @@
 
 - Code optimizations
 - When running the testing Python script, you now have the ability to easily abort.
-- Provided documentation for commands and how to use them
+- Provided tons of documentation
+    - Commands and how to use them
+    - Developing cmdcreate
+    - Configuring cmdcreate
 - You will now be warned if a command that you want to rename another command to with the same name
 - You will now be thrown an error for trying to remove a command from favorites that isn't in there
 - Fixed incorrect paths when repairing commands
