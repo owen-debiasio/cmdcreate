@@ -48,7 +48,6 @@ def multiple_command_desc() -> list:
         "Command 3:",
         "    name: test_command3",
         '    contents: "echo Test succeeded 3"',
-
     ]
 
     return var
@@ -79,6 +78,7 @@ def bigger_cleanup():
     enter_to_continue()
 
     test_completed()
+
 
 def simple_init():
     for line in single_command_desc():

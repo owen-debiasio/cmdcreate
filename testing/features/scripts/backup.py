@@ -1,6 +1,11 @@
 from testing.features.lib import command, home
-from testing.features.shared import multiple_command_desc, create_multiple_commands, delete_multiple_commands, \
-    test_completed, enter_to_continue
+from testing.features.shared import (
+    multiple_command_desc,
+    create_multiple_commands,
+    delete_multiple_commands,
+    test_completed,
+    enter_to_continue,
+)
 
 
 def test():

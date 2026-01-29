@@ -1,6 +1,5 @@
 from testing.features.lib import command
-from testing.features.shared import enter_to_continue, \
-     simple_cleanup, simple_init
+from testing.features.shared import enter_to_continue, simple_cleanup, simple_init
 
 
 def test():

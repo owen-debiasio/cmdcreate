@@ -1,6 +1,16 @@
 #!/usr/bin/env python3
 from testing.features.lib import command
-from testing.features.scripts import remove, create, listandfavorite, search, edit, display, rename, repair, backup
+from testing.features.scripts import (
+    remove,
+    create,
+    listandfavorite,
+    search,
+    edit,
+    display,
+    rename,
+    repair,
+    backup,
+)
 
 VERSION = "v0.1.5"
 

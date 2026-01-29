@@ -1,6 +1,10 @@
 from testing.features.lib import command
-from testing.features.shared import multiple_command_desc, create_multiple_commands, \
-    enter_to_continue, bigger_cleanup
+from testing.features.shared import (
+    multiple_command_desc,
+    create_multiple_commands,
+    enter_to_continue,
+    bigger_cleanup,
+)
 
 
 def test():
