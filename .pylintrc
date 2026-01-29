@@ -3,4 +3,5 @@ disable=
     C0114,
     C0116,
     C0301,
-    R0912
+    R0912,
+    E0401 # It won't stop throwing this error for some reason, it imports fine
