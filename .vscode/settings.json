@@ -28,9 +28,10 @@
         "reqwest",
         "rhel",
         "rustup",
+        "shfmt",
         "upgrader",
         "uvh",
         "vscodium",
-        "yay",
+        "yay"
     ]
 }
