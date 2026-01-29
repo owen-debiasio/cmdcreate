@@ -56,3 +56,19 @@ def single_command_desc() -> list:
     ]
 
     return var
+
+def simple_cleanup():
+    print("Cleaning up...\n")
+    delete_single_command()
+
+    enter_to_continue()
+
+    test_completed()
+
+def bigger_cleanup():
+    print("Cleaning up...\n")
+    delete_multiple_commands()
+
+    enter_to_continue()
+
+    test_completed()

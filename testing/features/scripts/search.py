@@ -1,6 +1,6 @@
 from testing.features.lib import command
 from testing.features.shared import multiple_command_desc, create_multiple_commands, delete_multiple_commands, \
-    test_completed, enter_to_continue
+    test_completed, enter_to_continue, bigger_cleanup
 
 
 def test():
@@ -28,12 +28,7 @@ def test():
 
     enter_to_continue()
 
-    print("Removing/cleaning up...\n")
-    delete_multiple_commands()
-
-    enter_to_continue()
-
-    test_completed()
+    bigger_cleanup()
 
 
 if __name__ == "__main__":
