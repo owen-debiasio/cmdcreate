@@ -481,3 +481,4 @@
 - You will now be warned if a command that you want to rename another command to with the same name
 - You will now be thrown an error for trying to remove a command from favorites that isn't in there
 - Fixed incorrect paths when repairing commands
+- When upgrading, you are now asked if you want to upgrade before anything else.
