@@ -1,7 +1,7 @@
 # Documentation table of contents
 
 - **[Command Usage and Functions](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/commands.md)**
-- **[Setting up cmdcreate's development enviornment](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/developing.md)**
+- **[Setting up cmdcreate's development environment](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/developing.md)**
 - **[Configuring cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/configurations.md)**
 
 > [!WARNING]

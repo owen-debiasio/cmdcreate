@@ -4,10 +4,10 @@
 
 The only version I support is the latest. If you have any issues, open one and the fix should be available in the next version.
 
-| Version | Supported          |
-| ------- | ------------------ |
+| Version          | Supported          |
+|------------------|--------------------|
 | Latest release   | :white_check_mark: |
-| < Latest release   | :x:                |
+| < Latest release | :x:                |
 
 ## Reporting a Vulnerability
 

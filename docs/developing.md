@@ -29,7 +29,7 @@ sudo dnf install rustup curl libssl-devel openssl-libs git shfmt python3-black
 
 - Install necessary packages from your package manager
 
-## Setup enviorment
+## Setup environment
 
 ```
 rustup default stable
@@ -58,11 +58,11 @@ chmod +x *.sh
 ## IDEs I recommend for their purposes
 
 - **RustRover**
-    - Main IDE for developing cmdcreate
+  - Main IDE for developing cmdcreate
 - **PyCharm**
-    - Working with the testing scripts
+  - Working with the testing scripts
 - **Visual Studio Code**
-    - Editing and revising documentation
+  - Editing and revising documentation
 
 > [!NOTE]
 > In the end, I don't care what you use, these are just my recommendations.
@@ -70,25 +70,27 @@ chmod +x *.sh
 ## Utilities I provide
 
 ### Testing purposes
+
 - [testing/install.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/install.sh)
-    - **Install a test version of cmdcreate, like a non productive ready version.**
+  - **Install a test version of cmdcreate, like a non productive ready version.**
 - [testing/uninstall.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/uninstall.sh)
-    - **Remove that testing version.**
+  - **Remove that testing version.**
 - [testing/features/main.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/features/main.py)
-    - **Run a script that goes through the features of cmdcreate and runs them.**
+  - **Run a script that goes through the features of cmdcreate and runs them.**
   
 > [!NOTE]
 > You can read more [here](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/README.md)
 
 ### Packaging cmdcreate
+
 - [package/format.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/format.sh)
-    - **Formats all of the code in cmdcreate, including Bash, Python, and main Rust source code.**
+  - **Formats all of the code in cmdcreate, including Bash, Python, and main Rust source code.**
 - [package/create_bin.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_bin.sh)
-    - **Packages a standalone `x86_46` binary.**
+  - **Packages a standalone `x86_46` binary.**
 - [package/create_deb.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_deb.sh)
-    - **Packages a `Debian` package.**
+  - **Packages a `Debian` package.**
 - [package/create_rpm.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_rpm.sh)
-    - **Packages an `RPM` package.**
+  - **Packages an `RPM` package.**
   
 > [!NOTE]
 > You can read more [here](https://github.com/owen-debiasio/cmdcreate/blob/main/package/README.md)

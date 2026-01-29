@@ -12,7 +12,7 @@ You are able to configure cmdcreate in various ways. All are listed here. You ca
 - Default: `sh`
 
 > [!NOTE]
-> I recommend using `bash` just for compatability sake.
+> I recommend using `bash` just for compatibility sake.
 
 ### spoof_arch
 
