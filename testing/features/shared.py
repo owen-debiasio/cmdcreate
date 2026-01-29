@@ -48,3 +48,11 @@ def multiple_command_desc() -> list:
     ]
 
     return var
+
+def single_command_desc() -> list:
+    var = [
+        'Command name: "test_command"',
+        'Command contents: "echo Test succeeded"',
+    ]
+
+    return var

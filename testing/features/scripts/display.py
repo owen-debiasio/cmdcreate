@@ -1,13 +1,14 @@
 from testing.features.lib import command
-from testing.features.shared import create_single_command, delete_single_command, test_completed, enter_to_continue
+from testing.features.shared import create_single_command, delete_single_command, test_completed, enter_to_continue, \
+    single_command_desc
 
 
 def test():
     command("clear")
 
     print("\nRunning tests: Display command contents\n")
-    desc = ['Command name: "test_command"', 'Command contents: "echo Test succeeded"']
-    for line in desc:
+
+    for line in single_command_desc():
         print(line)
 
     enter_to_continue()
