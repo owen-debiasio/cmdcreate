@@ -123,7 +123,7 @@ Installed commands: (1)
 
 > [!NOTE]
 > You can modify the favorite command indicator (default is "★")
-> See [here](https://github.com/owen-debiasio/cmdcreate/blob/main/config_example.toml) for more
+> See [here](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/config_example.toml) for more
 
 *If commands are not installed*
 
