@@ -1,5 +1,3 @@
-import os
-
 from testing.features.lib import command
 
 def enter_to_continue():
@@ -33,7 +31,7 @@ def delete_multiple_commands():
 def list_commands():
     command("cargo run list")
     input("\nPress enter to continue...")
-    os.system("clear")
+    command("clear")
 
 def multiple_command_desc() -> list:
     var = [
