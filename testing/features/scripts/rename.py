@@ -1,7 +1,7 @@
 from testing.features.lib import command
 from testing.features.shared import create_single_command, test_completed, enter_to_continue
 
-
+# pylint: disable=R0801
 def test():
     command("clear")
 
