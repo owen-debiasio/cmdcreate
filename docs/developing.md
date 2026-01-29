@@ -66,3 +66,29 @@ chmod +x *.sh
 
 > [!NOTE]
 > In the end, I don't care what you use, these are just my recommendations.
+
+## Utilities I provide
+
+### Testing purposes
+- [testing/install.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/install.sh)
+    - **Install a test version of cmdcreate, like a non productive ready version.**
+- [testing/uninstall.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/uninstall.sh)
+    - **Remove that testing version.**
+- [testing/features/main.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/features/main.py)
+    - **Run a script that goes through the features of cmdcreate and runs them.**
+  
+> [!NOTE]
+> You can read more [here](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/README.md)
+
+### Packaging cmdcreate
+- [package/format.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/format.sh)
+    - **Formats all of the code in cmdcreate, including Bash, Python, and main Rust source code.**
+- [package/create_bin.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_bin.sh)
+    - **Packages a standalone `x86_46` binary.**
+- [package/create_deb.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_deb.sh)
+    - **Packages a `Debian` package.**
+- [package/create_rpm.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_rpm.sh)
+    - **Packages an `RPM` package.**
+  
+> [!NOTE]
+> You can read more [here](https://github.com/owen-debiasio/cmdcreate/blob/main/package/README.md)
