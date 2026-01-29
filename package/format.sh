@@ -2,9 +2,6 @@
 
 set -Eeuo pipefail
 
-SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-ROOT_DIR="$(realpath "$SCRIPT_DIR/..")"
-
 echo "Formatting cmdcreate..."
 
 command -v cargo >/dev/null || {
@@ -21,17 +18,16 @@ command -v shfmt >/dev/null || {
 }
 
 echo "Formatting Rust source..."
-cd "$ROOT_DIR"
 cargo fmt
 
-if [[ -d "$ROOT_DIR/testing/features" ]]; then
+if [[ -d "../testing/features" ]]; then
     echo "Formatting Python testing scripts..."
-    black "$ROOT_DIR/testing/features"
+    black "../testing/features"
 else
     echo "Skipping Python formatting (testing/features not found)"
 fi
 
 echo "Formatting shell scripts..."
-shfmt -w -i 4 "$SCRIPT_DIR"
+shfmt -w -i 4 ../
 
 echo "Formatting complete."

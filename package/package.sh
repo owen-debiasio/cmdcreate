@@ -11,12 +11,11 @@ die() {
 [[ "$1" != v* ]] || die "Version must NOT start with 'v'"
 
 VERSION="$1"
-SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-
-cd "$SCRIPT_DIR/package"
 
 echo "Cleaning up before packaging..."
 cargo clean
+
+cd package
 
 echo "Formatting code..."
 ./format.sh
@@ -33,5 +32,4 @@ echo "Creating RPM package..."
 echo "Cleaning up..."
 cargo clean
 
-echo
-echo "All release artifacts created successfully"
+echo -e "\nAll release artifacts created successfully"

@@ -55,6 +55,18 @@ pub fn update() {
         .map(Path::new)
         .find(|p| p.exists());
 
+    log(
+        "cmds/update::interactive_upgrade(): Requesting permission to upgrade...",
+        0,
+    );
+
+    ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
+
+    log(
+        "cmds/update::interactive_upgrade(): Continuing with upgrade...",
+        0,
+    );
+
     let Some(install_path) = install_path else {
         log(
             "cmds/update::update(): cmdcreate not found, falling back to interactive upgrade",
@@ -70,7 +82,7 @@ pub fn update() {
 
             if !args_forced()
                 && input(&format!(
-                "{blue}Arch Linux{reset}-based system detected. Would you like to install through the {blue}AUR{reset}?\n({green}Y{reset} or {red}N{reset})"
+                "\n{blue}Arch Linux{reset}-based system detected. Would you like to install through the {blue}AUR{reset}?\n({green}Y{reset} or {red}N{reset})"
             ))
                 .trim()
                 .eq_ignore_ascii_case("n")
@@ -94,7 +106,7 @@ pub fn update() {
 
             if !args_forced()
                 && input(&format!(
-                "{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
+                "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
             ))
                 .trim()
                 .eq_ignore_ascii_case("n")
@@ -111,7 +123,7 @@ pub fn update() {
 
             if !args_forced()
                 && input(&format!(
-                "{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
+                "\n{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
             ))
                 .trim()
                 .eq_ignore_ascii_case("n")
@@ -298,18 +310,6 @@ fn interactive_upgrade(latest_release: &str) {
 
     log(
         "cmds/update::interactive_upgrade(): Initializing interactive upgrade...",
-        0,
-    );
-
-    log(
-        "cmds/update::interactive_upgrade(): Requesting permission to upgrade...",
-        0,
-    );
-
-    ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
-
-    log(
-        "cmds/update::interactive_upgrade(): Continuing with upgrade...",
         0,
     );
 
