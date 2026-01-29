@@ -34,7 +34,7 @@ You are able to configure cmdcreate in various ways. All are listed here. You ca
 - If "true", logs will be printed to output
 - Default: `false`
 
-## [appearence]
+## [appearance]
 
 ### favorite_indicator
 
