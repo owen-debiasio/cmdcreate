@@ -86,11 +86,13 @@ chmod +x *.sh
 - [package/format.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/format.sh)
   - **Formats all of the code in cmdcreate, including Bash, Python, and main Rust source code.**
 - [package/create_bin.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_bin.sh)
-  - **Packages a standalone `x86_46` binary.**
+  - **Packages a standalone `x86_64` binary.**
 - [package/create_deb.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_deb.sh)
   - **Packages a `Debian` package.**
 - [package/create_rpm.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_rpm.sh)
   - **Packages an `RPM` package.**
+- [package/package.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/package.sh)
+  - **Goes through and packages cmdcreate to .deb, .rpm, and binary files.**
   
 > [!NOTE]
 > You can read more [here](https://github.com/owen-debiasio/cmdcreate/blob/main/package/README.md)
