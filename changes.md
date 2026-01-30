@@ -488,3 +488,7 @@
 - Code optimizations
 - You can now stack arguments
   - Example: `$ cmdcreate -Vvcr`
+- Various documentation improvements and additions
+  - Added information about resources
+  - Added information updates
+  - Various quality of life changes
