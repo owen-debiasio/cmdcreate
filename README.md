@@ -109,7 +109,7 @@ You can the get the `x86_64` binary from the latest [release](https://github.com
 
 - Rustup
 - Openssl (development, other)
-- nano (not for building, but recommended, or you could use another text editor listed [here](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/edit.rs) **(Lines 18-35)**
+- nano (not for building, but recommended, or you could use another text editor listed in this source code file: [cmdcreate/src/commands/edit.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/edit.rs) **(Lines 18-35)**
 - git
 - curl (not for building, but recommended)
 
@@ -154,15 +154,10 @@ sudo install -Dm755 target/release/cmdcreate /usr/local/bin/cmdcreate
 
 ---
 
-## Configuring cmdcreate
+## Documentation and Resources
 
 > [!NOTE]
-> You can find the available configurations [here](https://github.com/owen-debiasio/cmdcreate/blob/main/config_example.toml)
-
-## Documentation
-
-> [!NOTE]
-> You can view the table of contents and information [here](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/README.md)
+> You can view the table of contents and information here: [Intro to Documentation and Resources](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/README.md)
 
 ---
 
