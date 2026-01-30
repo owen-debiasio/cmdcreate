@@ -78,7 +78,7 @@ cmdcreate update
 - Download and install through the latest `Fedora` package file (`.rpm`)
   - **Stable version only**
   - **x86_64 architectures only**
-- Download the raw cmdcreate binary file 
+- Download the raw cmdcreate binary file
   - **Stable version only**
   - **x86_64 architectures only**
   - **Should work on any distro**
@@ -105,9 +105,9 @@ It's very rare that I add any new features in one update. I usually add less fea
 
 | Update type      | Formatting         | Frequency
 |------------------|--------------------|--------------------
-| Normal           | x.x.1              | Every few days     
-| Semi-Major       | x.1.x              | 1-3 Months         
-| Major            | 1.x.x              | About a year       
+| Normal           | x.x.1              | Every few days
+| Semi-Major       | x.1.x              | 1-3 Months
+| Major            | 1.x.x              | About a year
 
 #### More information
 
