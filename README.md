@@ -3,40 +3,10 @@
 Cmdcreate allows you to create custom commands for your convenience without needing to enter the same "complex" commands over and over.
 
 ---
-  
-## Usage
 
-```none
-Commands:
-  create   <command>    <contents>   Create a custom command
-  remove   <command>                 Remove a custom command
-  edit     <command>                 Modify contents of a command
-  list                               Display custom commands
-  search   <command>                 Searches for matched command
-  reset                              Removes all installed commands
-  display  <command>                 Display contents of a command
-  rename   <command>    <new name>   Renames a command
-  favorite <add/remove> <command>    Adds or removes a command from favorites
-  repair                             Repairs installed commands if needed
+## Documentation and Resources
 
- Update:
-    check                            Checks for updates
-    update                           Updates your system
-
- Backup:
-    export <output directory>        Checks for updates
-    import <file input>              Updates your system
-
-Flags:
-  -v, --version                      Displays version
-  -c, --changelog                    Displays changelog
-  -l, --license                      Displays license
-  -d, --debugging                    Displays flags used for debugging
-
-  Offline:
-    -g, --get_offline_files          Downloads files for offline use
-    -r, --remove_offline_files       Removes files for offline use
-```
+I do my best to provide as much documentation as I can. You can view the table of contents and information here: [Intro to Documentation and Resources](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/README.md)
 
 ---
 
@@ -45,17 +15,17 @@ Flags:
 > [!NOTE]
 > Only supported on x86_64 architectures (unless built from source).
 
-## Arch Linux
+### Arch Linux
 
-### Install through an AUR manager
+#### Install through an AUR manager
 
-#### Stable
+##### Stable
 
 ```bash
 yay -S cmdcreate
 ```
 
-#### Latest git
+##### Latest git
 
 > [!WARNING]
 > Latest git builds have a possibility of being broken, unfinished, and potentially dangerous to your system. Use with caution.
@@ -64,9 +34,9 @@ yay -S cmdcreate
 yay -S cmdcreate-git
 ```
 
-### Or clone AUR repo
+#### Clone AUR repo
 
-#### Stable
+##### Stable
 
 ```bash
 git clone --branch cmdcreate --single-branch https://github.com/archlinux/aur.git ~/.cache/cmdcreate
@@ -74,7 +44,7 @@ cd ~/.cache/cmdcreate
 makepkg -si
 ```
 
-#### Latest git (may be broken/unstable)
+##### Latest git (may be broken/unstable)
 
 > [!WARNING]
 > Latest git builds have a possibility of being broken, unfinished, and potentially dangerous to your system. Use with caution.
@@ -85,15 +55,15 @@ cd ~/.cache/cmdcreate-git
 makepkg -si
 ```
 
-## Debian/Ubuntu
+### Debian/Ubuntu
 
 You can get the `.deb` package file from the latest [release](https://github.com/owen-debiasio/cmdcreate/releases)
 
-## Fedora
+### Fedora
 
 You can get the `.rpm` package file from the latest [release](https://github.com/owen-debiasio/cmdcreate/releases)
 
-## Other
+### Other
 
 You can the get the `x86_64` binary from the latest [release](https://github.com/owen-debiasio/cmdcreate/releases)
 
@@ -148,15 +118,6 @@ rustup default stable
 cargo build --release
 sudo install -Dm755 target/release/cmdcreate /usr/local/bin/cmdcreate
 ```
-
----
-
-## Documentation and Resources
-
-> [!NOTE]
-> You can view the table of contents and information here: [Intro to Documentation and Resources](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/README.md)
-
----
 
 (C) 2026 Owen Debiasio
 
