@@ -487,4 +487,4 @@
 
 - Code optimizations
 - You can now stack arguments
-    - Example: `$ cmdcreate -Vvcr`
+  - Example: `$ cmdcreate -Vvcr`
