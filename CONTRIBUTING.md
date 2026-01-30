@@ -18,7 +18,7 @@ I HIGHLY recommend using what I recommend for a cmdcreate development environmen
 
 ### AI usage
 
-I will tolerate the usage of AI, but in order to submit AI-written code, please verify that the code does what it's supposed to.
+I will tolerate the usage of AI, but in order to submit AI-written code, it must be human-verified where the code does what it's supposed to.
 
 ## Resources
 
