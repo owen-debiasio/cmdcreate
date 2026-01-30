@@ -482,3 +482,9 @@
 - You will now be thrown an error for trying to remove a command from favorites that isn't in there
 - Fixed incorrect paths when repairing commands
 - When upgrading, you are now asked if you want to upgrade before anything else.
+
+## v1.0.6
+
+- Code optimizations
+- You can now stack arguments
+    - Example: `$ cmdcreate -Vvcr`
