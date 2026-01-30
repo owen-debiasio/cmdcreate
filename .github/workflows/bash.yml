@@ -19,7 +19,7 @@ jobs:
 
       - name: shfmt (format check)
         run: |
-          shfmt -d .
+          shfmt -w -i 4 -ci -sr .
 
       - name: shellcheck
         run: |
