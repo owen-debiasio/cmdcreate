@@ -1,6 +1,6 @@
 # cmdcreate
 
-Cmdcreate allows you to create custom commands for your convienience without needing to enter the same "complex" commands over and over.
+Cmdcreate allows you to create custom commands for your convenience without needing to enter the same "complex" commands over and over.
 
 ---
   
