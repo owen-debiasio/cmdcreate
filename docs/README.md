@@ -8,6 +8,7 @@ Here in this directory I provide key resources and areas of documentation. These
 - **[Setting up cmdcreate's Development Environment](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/developing.md)**
 - **[Configuring cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/configurations.md)**
 - **[Information Regarding cmdcreate and Updates](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/updates.md)**
+- **[The file structure of cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/structure.md)**
 
 ## Resources
 
