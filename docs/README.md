@@ -7,6 +7,7 @@ Here in this directory I provide key resources and areas of documentation. These
 - **[Command Usage and Functions](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/commands.md)**
 - **[Setting up cmdcreate's Development Environment](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/developing.md)**
 - **[Configuring cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/configurations.md)**
+- **[Information Regarding cmdcreate and Updates](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/updates.md)**
 
 ## Resources
 
@@ -23,5 +24,5 @@ Here in this directory I provide key resources and areas of documentation. These
 - **[Code of Conduct](https://github.com/owen-debiasio/cmdcreate/blob/main/CODE_OF_CONDUCT.md)**
 - **[Contributing to cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/CONTRIBUTING.md)**
 
-> [!WARNING]
+> [!NOTE]
 > This documentation is fairly new, and I'm doing the best I can. Info is bound to be incorrect, so please let me know.
