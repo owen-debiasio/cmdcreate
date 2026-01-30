@@ -490,5 +490,6 @@
   - Example: `$ cmdcreate -Vvcr`
 - Various documentation improvements and additions
   - Added information about resources
-  - Added information updates
+  - Added information about updates
+  - Added information about the file structure
   - Various quality of life changes
