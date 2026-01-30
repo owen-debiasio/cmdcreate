@@ -510,3 +510,4 @@
   - Added information about updates
   - Added information about the file structure
   - Various quality of life changes
+- I've hopefully made cmdcreate more developer-friendly
