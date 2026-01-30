@@ -19,7 +19,7 @@ I do my best to provide as much documentation as I can. You can view the table o
 > [!WARNING]
 > cmdcreate is mainly supported on systems with the `x86_64` CPU architecture.
 > It should work, but currently the only way I recommend to install it is to build it from source.
-> If you follow the **[steps for building from source](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md#building-from-source-latest-git-development)**, (or using the [AUR](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md#arch-linux)).
+> If you follow the **[steps for building from source](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md#building-from-source-latest-git-development)**, (or using the [AUR](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md#arch-linux)), you should be fine.
 
 ### Arch Linux
 
