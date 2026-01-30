@@ -149,9 +149,6 @@ cargo build --release
 sudo install -Dm755 target/release/cmdcreate /usr/local/bin/cmdcreate
 ```
 
-> [!NOTE]
-> The binary should be located at `target/release/cmdcreate`
-
 ---
 
 ## Documentation and Resources
