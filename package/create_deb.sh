@@ -31,7 +31,7 @@ fi
 
 mkdir -p "$PKGDIR/DEBIAN" "$PKGDIR/usr/bin"
 
-cat >"$PKGDIR/DEBIAN/control" <<EOF
+cat > "$PKGDIR/DEBIAN/control" << EOF
 Package: cmdcreate
 Version: $VERSION
 Section: utils

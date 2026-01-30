@@ -25,7 +25,7 @@ mkdir -p "$RPMTOP"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
 cp "$BINARY_SRC" "$RPMTOP/SOURCES/$SOURCE_FILE"
 
-cat >"$SPEC_FILE" <<EOF
+cat > "$SPEC_FILE" << EOF
 Name:           cmdcreate
 Version:        $VERSION
 Release:        1%{?dist}

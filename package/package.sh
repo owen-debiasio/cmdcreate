@@ -15,7 +15,7 @@ VERSION="$1"
 echo "Cleaning up before packaging..."
 cargo clean
 
-SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 
 cd "$SCRIPT_DIR"
 
