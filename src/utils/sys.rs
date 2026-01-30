@@ -26,7 +26,19 @@ pub static VARS: LazyLock<Vars> = LazyLock::new(|| Vars {
 pub static ARCH: &str = ARCHITECTURE;
 
 pub fn return_args() -> Vec<String> {
-    args().skip(1).collect()
+    let mut supplied_args = Vec::new();
+
+    for arg in args().skip(1) {
+        if arg.starts_with('-') && !arg.starts_with("--") && arg.len() > 2 {
+            for ch in arg.chars().skip(1) {
+                supplied_args.push(format!("-{ch}"));
+            }
+        } else {
+            supplied_args.push(arg);
+        }
+    }
+
+    supplied_args
 }
 
 pub fn args_forced() -> bool {
@@ -34,7 +46,7 @@ pub fn args_forced() -> bool {
 }
 
 pub fn args_contains(arg: &str) -> bool {
-    args().skip(1).any(|a| a == arg)
+    return_args().iter().any(|a| a == arg)
 }
 
 pub fn run_shell_command_result(cmd: &str) -> Result<(), TestError> {

@@ -12,7 +12,7 @@ use crate::{
     utils::{colors::COLORS, fs::init_git_fs, sys::return_args},
 };
 
-pub const VERSION: &str = "v1.0.5";
+pub const VERSION: &str = "v1.0.6";
 
 pub fn display_usage() {
     let (blue, cyan, yellow, magenta, reset) = (
@@ -110,21 +110,34 @@ fn main() {
 }
 
 fn cmdcreate(args: &[String]) {
-    let cmd = args.first().unwrap().as_str();
+    let mut i = 0;
 
-    if matches!(cmd, "-V" | "--verbose") {
-        return;
+    while let Some(cmd) = args.get(i).map(String::as_str) {
+        if !cmd.starts_with('-') {
+            break;
+        }
+
+        if matches!(cmd, "-V" | "--verbose") {
+            i += 1;
+            continue;
+        }
+
+        if matches!(
+            cmd,
+            "-l" | "--license" | "-c" | "--changelog" | "-g" | "--get_offline_files"
+        ) {
+            log("main::main(): Offline files have been requested...", 0);
+            init_git_fs();
+        }
+
+        log(&format!("main::main(): Processing command \"{cmd}\"..."), 0);
+        parse(cmd, args);
+
+        i += 1;
     }
 
-    if matches!(
-        cmd,
-        "-l" | "--license" | "-c" | "--changelog" | "-g" | "--get_offline_files"
-    ) {
-        log("main::main(): Offline files have been requested...", 0);
-        init_git_fs();
+    if let Some(cmd) = args.get(i).map(String::as_str) {
+        log(&format!("main::main(): Processing command \"{cmd}\"..."), 0);
+        parse(cmd, &args[i..]);
     }
-
-    log(&format!("main::main(): Processing command \"{cmd}\"..."), 0);
-
-    parse(cmd, args);
 }
