@@ -16,6 +16,7 @@ Here in this directory I provide key resources and areas of documentation. These
 - **[Changelog](https://github.com/owen-debiasio/cmdcreate/blob/main/changes.md)**
 
 ### Repository Resources
+
 - **[Repository README](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md)**
 - **[License (GPL v2.0)](https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE)**
 - **[Security Information](https://github.com/owen-debiasio/cmdcreate/blob/main/SECURITY.md)**
