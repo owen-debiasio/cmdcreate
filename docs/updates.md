@@ -87,6 +87,7 @@ cmdcreate update
   - **Should work on any CPU architecture**
   - **Should work on any distro**
 
+<!-- markdownlint-disable-file MD032 -->
 > [!WARNING]
 > - Latest git builds have a possibility of being broken, unfinished, and potentially dangerous to your system. Use with caution.
 > - Building from source on `Debian/Ubuntu` systems may involve manual intervention
@@ -103,10 +104,10 @@ It's very rare that I add any new features in one update. I usually add less fea
 ### How I version cmdcreate
 
 | Update type      | Formatting         | Frequency
-|------------------|--------------------|--------------------|
-| Normal           | x.x.1              | Every few days     |
-| Semi-Major       | x.1.x              | 1-3 Months         |
-| Major            | 1.x.x              | About a year       |
+|------------------|--------------------|--------------------
+| Normal           | x.x.1              | Every few days     
+| Semi-Major       | x.1.x              | 1-3 Months         
+| Major            | 1.x.x              | About a year       
 
 #### More information
 
