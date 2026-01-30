@@ -1,11 +1,13 @@
 # Developing cmdcreate
 
-Developing shouldn't be too hard, just install dependencies and follow the instructions listed below.
+Developing shouldn't be too hard, just install dependencies and follow the
+instructions listed below.
 
 ## Installing dependencies
 
-> [!NOTE]
-> Packages I've listed may be incorrect. Please let me know if I'm missing any or got names wrong.
+> [!NOTE]  
+> Packages I've listed may be incorrect. Please let me know if I'm missing any
+> or got names wrong.
 
 ### Arch
 
@@ -40,7 +42,7 @@ chmod +x *.sh
 
 ## Installing/Uninstalling test version
 
-> [!NOTE]
+> [!NOTE]  
 > Provided command is for when you are in cmdcreate's parent directory.
 
 ### Installing
@@ -64,7 +66,7 @@ chmod +x *.sh
 - **Visual Studio Code**
   - Editing and revising documentation
 
-> [!NOTE]
+> [!NOTE]  
 > In the end, I don't care what you use, these are just my recommendations.
 
 ## Utilities I provide
@@ -72,19 +74,22 @@ chmod +x *.sh
 ### Testing purposes
 
 - [testing/install.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/install.sh)
-  - **Install a test version of cmdcreate, like a non productive ready version.**
+  - **Install a test version of cmdcreate, like a non productive ready
+    version.**
 - [testing/uninstall.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/uninstall.sh)
   - **Remove that testing version.**
 - [testing/features/main.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/features/main.py)
   - **Run a script that goes through the features of cmdcreate and runs them.**
-  
-> [!NOTE]
-> You can read more here: [Testing cmdcreate and its features](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/README.md)
+
+> [!NOTE]  
+> You can read more here:
+> [Testing the Features of cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/README.md)
 
 ### Packaging cmdcreate
 
 - [package/format.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/format.sh)
-  - **Formats all of the code in cmdcreate, including Bash, Python, and main Rust source code.**
+  - **Formats all of the code in cmdcreate, including Bash, Python, and main
+    Rust source code.**
 - [package/create_bin.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_bin.sh)
   - **Packages a standalone `x86_64` binary.**
 - [package/create_deb.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_deb.sh)
@@ -93,6 +98,13 @@ chmod +x *.sh
   - **Packages an `RPM` package.**
 - [package/package.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/package.sh)
   - **Goes through and packages cmdcreate to .deb, .rpm, and binary files.**
-  
-> [!NOTE]
-> You can read more here: [Packaging cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/package/README.md)
+
+> [!NOTE]  
+> You can read more here:
+> [Packaging cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/package/README.md)
+
+## Get to know cmdcreate
+
+I highly recommend checking out
+[The File Structure of cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/structure.md).
+Get to know the file system a little bit.

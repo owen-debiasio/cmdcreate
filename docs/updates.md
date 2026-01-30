@@ -1,16 +1,18 @@
 # Information Regarding cmdcreate and Updates
 
-Here I provide information regarding update cycles and how you should update cmdcreate based on your situation.
+Here I provide information regarding update cycles and how you should update
+cmdcreate based on your situation.
 
 ## Checking for updates
 
-You can also manually check for updates. You must run this manually because there is currently no way to automate this.
+You can also manually check for updates. You must run this manually because
+there is currently no way to automate this.
 
 ```bash
 cmdcreate check
 ```
 
-> [!NOTE]
+> [!NOTE]  
 > This only checks for the latest stable version, not latest git commits.
 
 ## Updating cmdcreate
@@ -27,8 +29,9 @@ yay -S cmdcreate
 
 ##### Latest git
 
-> [!WARNING]
-> Latest git builds have a possibility of being broken, unfinished, and potentially dangerous to your system. Use with caution.
+> [!WARNING]  
+> Latest git builds have a possibility of being broken, unfinished, and
+> potentially dangerous to your system. Use with caution.
 
 ```bash
 yay -S cmdcreate-git
@@ -46,8 +49,9 @@ makepkg -si
 
 ##### Latest git (may be broken/unstable)
 
-> [!WARNING]
-> Latest git builds have a possibility of being broken, unfinished, and potentially dangerous to your system. Use with caution.
+> [!WARNING]  
+> Latest git builds have a possibility of being broken, unfinished, and
+> potentially dangerous to your system. Use with caution.
 
 ```bash
 git clone --branch cmdcreate-git --single-branch https://github.com/archlinux/aur.git ~/.cache/cmdcreate-git
@@ -57,7 +61,8 @@ makepkg -si
 
 ### Everyone else
 
-This applies to people running Ubuntu, Fedora, Debian, and any other distro that isn't Arch Linux.
+This applies to people running Ubuntu, Fedora, Debian, and any other distro that
+isn't Arch Linux.
 
 #### How to update
 
@@ -88,27 +93,33 @@ cmdcreate update
   - **Should work on any distro**
 
 <!-- markdownlint-disable-file MD032 -->
-> [!WARNING]
-> - Latest git builds have a possibility of being broken, unfinished, and potentially dangerous to your system. Use with caution.
-> - Building from source on `Debian/Ubuntu` systems may involve manual intervention
 
-> [!NOTE]
+> [!WARNING]
+>
+> - Latest git builds have a possibility of being broken, unfinished, and
+>   potentially dangerous to your system. Use with caution.
+> - Building from source on `Debian/Ubuntu` systems may involve manual
+>   intervention
+
+> [!NOTE]  
 > This tool is always available to you regardless of your distro
 
 ## Update cycles and when cmdcreate gets updated
 
 I usually update cmdcreate every few days, or maybe weeks if I've been busy.
 
-It's very rare that I add any new features in one update. I usually add less features over time, but I guess the frequent updates make up for it.
+It's very rare that I add any new features in one update. I usually add less
+features over time, but I guess the frequent updates make up for it.
 
 ### How I version cmdcreate
 
-| Update type      | Formatting         | Frequency
-|------------------|--------------------|--------------------
-| Normal           | x.x.1              | Every few days
-| Semi-Major       | x.1.x              | 1-3 Months
-| Major            | 1.x.x              | About a year
+| Update type | Formatting | Frequency      |
+| ----------- | ---------- | -------------- |
+| Normal      | x.x.1      | Every few days |
+| Semi-Major  | x.1.x      | 1-3 Months     |
+| Major       | 1.x.x      | About a year   |
 
 #### More information
 
-You can find more information about updates here: **[Version Support Information](https://github.com/owen-debiasio/cmdcreate/blob/main/SECURITY.md)**
+You can find more information about updates here:
+**[Version Support Information](https://github.com/owen-debiasio/cmdcreate/blob/main/SECURITY.md)**

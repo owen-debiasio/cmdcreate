@@ -1,6 +1,9 @@
 # Commands and how to use them
 
-Here I provide the available commands present in cmdcreate and how they are used. Information in this file is subject to change, and not all possibilities are recorded. This file just covers the main ideas of what should happen and how commands should function.
+Here I provide the available commands present in cmdcreate and how they are
+used. Information in this file is subject to change, and not all possibilities
+are recorded. This file just covers the main ideas of what should happen and how
+commands should function.
 
 ## Usage of all main commands
 
@@ -85,7 +88,7 @@ $ cmdcreate remove hijk
 Error: Command "hijk" is not installed
 ```
 
-> [!NOTE]
+> [!NOTE]  
 > Can be forced when applying arg(s): `-f`, `--force`
 
 ## Edit
@@ -104,8 +107,10 @@ $ cmdcreate edit abc
 *Open up in text editor*
 ```
 
-> ![NOTE]
-> Your text editor may not be detected! Check supported editors [here](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/edit.rs) (Lines 18-35)
+> [!NOTE]  
+> Your text editor may not be detected! Check supported editors
+> [here](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/edit.rs)
+> (Lines 18-35)
 
 ## List
 
@@ -135,9 +140,10 @@ Installed commands: (1)
 ★ abc
 ```
 
-> [!NOTE]
-> You can modify the favorite command indicator (default is "★")
-> See [here](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/resources/config_example.toml) for more
+> [!NOTE]  
+> You can modify the favorite command indicator (default is "★") See
+> [here](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/resources/config_example.toml)
+> for more
 
 ##### If commands are not installed
 
@@ -177,7 +183,7 @@ cba
 Found 2 matches for "a".
 ```
 
-##### If no commands aere matched
+##### If no commands are matched
 
 ```bash
 $ cmdcreate search d
@@ -237,7 +243,7 @@ The new name (cba) is already installed! Do you want to delete it?
 (Y or N)
 
 n
-Error: You need to remove the old command before proceeding! 
+Error: You need to remove the old command before proceeding!
 ```
 
 ##### Rename command, name conflict (forced)
@@ -249,7 +255,7 @@ Removed command "cba"
 Successfully renamed command "xyz" to "cba"
 ```
 
-> [!NOTE]
+> [!NOTE]  
 > Can be forced when applying arg(s): `-f`, `--force`
 
 ## Favorite
@@ -316,8 +322,9 @@ $ cmdcreate repair
 No commands needed repairs.
 ```
 
-> [!NOTE]
-> `cmdcreate repair` repairs commands that are missing files in `/usr/local/bin/`
+> [!NOTE]  
+> `cmdcreate repair` repairs commands that are missing files in
+> `/usr/local/bin/`
 
 ## Export
 
@@ -336,7 +343,7 @@ $ cmdcreate export ~/Downloads
 Successfully exported commands to: "/home/owen/Downloads/export.cmdcreate"
 ```
 
-> [!NOTE]
+> [!NOTE]  
 > `cmdcreate export *` Exports files in this format:
 > `<command> | <contents> (| favorite) (If command is a favorite)`
 

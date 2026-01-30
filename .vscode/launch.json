@@ -6,10 +6,7 @@
             "type": "lldb",
             "request": "launch",
             "cargo": {
-                "args": [
-                    "build",
-                    "--release"
-                ]
+                "args": ["build", "--release"]
             },
             "cwd": "${workspaceFolder}"
         },
@@ -18,11 +15,7 @@
             "type": "lldb",
             "request": "launch",
             "cargo": {
-                "args": [
-                    "run",
-                    "--bin",
-                    "cmdcreate"
-                ]
+                "args": ["run", "--bin", "cmdcreate"]
             },
             "cwd": "${workspaceFolder}"
         },
@@ -31,9 +24,7 @@
             "type": "lldb",
             "request": "launch",
             "cargo": {
-                "args": [
-                    "test"
-                ]
+                "args": ["test"]
             },
             "cwd": "${workspaceFolder}"
         },
@@ -42,11 +33,7 @@
             "type": "lldb",
             "request": "launch",
             "cargo": {
-                "args": [
-                    "clippy",
-                    "--all-targets",
-                    "--all-features"
-                ]
+                "args": ["clippy", "--all-targets", "--all-features"]
             },
             "cwd": "${workspaceFolder}"
         }

@@ -55,7 +55,8 @@
 
 - Bug fix
 - Partially enhanced error handling
-- `--get_offline_files` argument: Downloads files needed to use cmdcreate offline.
+- `--get_offline_files` argument: Downloads files needed to use cmdcreate
+  offline.
 - Added `vscodium` as a supported text editor
 
 ## v0.4.8
@@ -79,26 +80,29 @@
   - Now shows the number of commands that contain your input
   - Cleaned up code
 - Misc enhancements:
-  - When you don't enter enough arguments for a command, it will display its usage.
+  - When you don't enter enough arguments for a command, it will display its
+    usage.
 
 ## v0.5.1
 
 - New arguments:
   - `--credits`: Displays credits for cmdcreate
   - `--debugging`: Displays flags used for debugging
-    - Flags for debugging:
-          - `--arg_count`: Displays number of arguments supplied
-          - `--force_system_shell`: Forces system shell to be used when running commands
+    - Flags for debugging: - `--arg_count`: Displays number of arguments
+      supplied - `--force_system_shell`: Forces system shell to be used when
+      running commands
 - Cleaned up code a bit
 
 ## v0.5.2
 
-- Fixed bug where cmdcreate would allow you to delete a command that doesn't exist
+- Fixed bug where cmdcreate would allow you to delete a command that doesn't
+  exist
 - Cleaned up code a bit
 
 ## v0.5.3
 
-- Fixed bug where cmdcreate would allow you to delete a command that didn't exist
+- Fixed bug where cmdcreate would allow you to delete a command that didn't
+  exist
 - Fixed bug where you would have insufficient write access to commands.
 
 ## v0.5.4
@@ -109,7 +113,8 @@
 
 ## v0.5.5
 
-- Updated AUR update method by cloning the `cmdcreate` branch from the AUR directly.
+- Updated AUR update method by cloning the `cmdcreate` branch from the AUR
+  directly.
 - Code optimizations and cleanup
 - Other small changes
 
@@ -122,7 +127,8 @@
 ## v0.5.7
 
 - When resetting cmdcreate, it will now have a double check just in case
-- cmdcreate no longer checks for updates when running `cmdcreate` with no arguments/flags
+- cmdcreate no longer checks for updates when running `cmdcreate` with no
+  arguments/flags
 
 ## v0.5.8
 
@@ -143,7 +149,8 @@
 - Heavy code optimizations
 - Fixed bug in command `display`
   - Fixed the output of `%` at the end of the output
-- Debugging flag: `--offline`: Allows you to run commands without an internet connection
+- Debugging flag: `--offline`: Allows you to run commands without an internet
+  connection
 
 ## v0.6.1
 
@@ -397,27 +404,32 @@
 
 - Code optimizations
 - Fixed multiple issues with the upgrade process
-- You now have the option to build from source from the latest git in the upgrading process.
+- You now have the option to build from source from the latest git in the
+  upgrading process.
 - Installing via `AUR` should now work on any cpu architecture
 
 ## v0.9.7
 
 - Code optimizations
-- You now have the option to build from source from the latest git from the AUR in the upgrading process
-- Downgraded dependency `reqwest` to version `0.12` due to build issues AUR installation
+- You now have the option to build from source from the latest git from the AUR
+  in the upgrading process
+- Downgraded dependency `reqwest` to version `0.12` due to build issues AUR
+  installation
 
 ## v0.9.8
 
 - Code optimizations
 - Random tweaks
 - Config `fake_arch` has been renamed to `spoof_arch`
-- Added additional message about disabling unsupported architectures in the configuration file
+- Added additional message about disabling unsupported architectures in the
+  configuration file
 
 ## v0.9.9
 
 - Fixed dependency issues when installing on `Debian`/`Ubuntu` systems
 - Code optimizations
-- Fixed bug where that cmdcreate would crash if it tried to delete a folder that didn't exist
+- Fixed bug where that cmdcreate would crash if it tried to delete a folder that
+  didn't exist
 - Fixed misdetection of architecture
 - Overhauled the upgrade process to be more reliable
 
@@ -443,7 +455,8 @@
 - File structure changes and organizations
 - Installation of commands have now moved to `/usr/local/bin/<command name>`
 - Fixed (yet again) issues with the distro detection and upgrade process
-- The unsupported architecture message now gives you an option to disable it in the configuration file
+- The unsupported architecture message now gives you an option to disable it in
+  the configuration file
 
 ## v1.0.1
 
@@ -466,20 +479,24 @@
 ## v1.0.4
 
 - Code Optimizations
-- When given the option to update to the latest git, it will now show you the latest commit.
+- When given the option to update to the latest git, it will now show you the
+  latest commit.
 - Fixed issues when updating through the AUR
 - Fixed issues when creating a command
 
 ## v1.0.5
 
 - Code optimizations
-- When running the testing Python script, you now have the ability to easily abort.
+- When running the testing Python script, you now have the ability to easily
+  abort.
 - Provided tons of documentation
   - Commands and how to use them
   - Developing cmdcreate
   - Configuring cmdcreate
-- You will now be warned if a command that you want to rename another command to with the same name
-- You will now be thrown an error for trying to remove a command from favorites that isn't in there
+- You will now be warned if a command that you want to rename another command to
+  with the same name
+- You will now be thrown an error for trying to remove a command from favorites
+  that isn't in there
 - Fixed incorrect paths when repairing commands
 - When upgrading, you are now asked if you want to upgrade before anything else.
 

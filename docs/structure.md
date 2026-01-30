@@ -1,6 +1,7 @@
-# The file structure of cmdcreate
+# The File Structure of cmdcreate
 
-Here I provide the organization of the cmdcreate Github repository. Subject to change.
+Here I provide the organization of the cmdcreate Github repository. Subject to
+change.
 
 ## Github templates, actions, workflows
 

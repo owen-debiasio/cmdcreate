@@ -1,25 +1,35 @@
 # cmdcreate
 
-Cmdcreate allows you to create custom commands for your convenience without needing to enter the same "complex" commands over and over.
+Cmdcreate allows you to create custom commands for your convenience without
+needing to enter the same "complex" commands over and over.
 
 ---
 
 ## Documentation and Resources
 
-I do my best to provide as much documentation as I can. You can view the table of contents and information here: [Intro to Documentation and Resources](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/README.md)
+I do my best to provide as much documentation as I can. You can view the table
+of contents and information here:
+[Intro to Documentation and Resources](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/README.md)
 
 ---
 
 ## Installation
 
-> [!NOTE]
-> If you are looking for information on updates and how to update, check out **[Information Regarding cmdcreate and Updates](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/updates.md)**.
-> While you are at it, also check out the **[Version Support Information](https://github.com/owen-debiasio/cmdcreate/blob/main/SECURITY.md)** for more information about updates.
+> [!NOTE]  
+> If you are looking for information on updates and how to update, check out
+> **[Information Regarding cmdcreate and Updates](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/updates.md)**.
+> While you are at it, also check out the
+> **[Version Support Information](https://github.com/owen-debiasio/cmdcreate/blob/main/SECURITY.md)**
+> for more information about updates.
 
-> [!WARNING]
+> [!WARNING]  
 > cmdcreate is mainly supported on systems with the `x86_64` CPU architecture.
-> It should work, but currently the only way I recommend to install it is to build it from source.
-> If you follow the **[steps for building from source](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md#building-from-source-latest-git-development)**, (or using the [AUR](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md#arch-linux)), you should be fine.
+> It should work, but currently the only way I recommend to install it is to
+> build it from source. If you follow the
+> **[steps for building from source](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md#building-from-source-latest-git-development)**,
+> (or using the
+> [AUR](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md#arch-linux)),
+> you should be fine.
 
 ### Arch Linux
 
@@ -33,8 +43,9 @@ yay -S cmdcreate
 
 ##### Latest git
 
-> [!WARNING]
-> Latest git builds have a possibility of being broken, unfinished, and potentially dangerous to your system. Use with caution.
+> [!WARNING]  
+> Latest git builds have a possibility of being broken, unfinished, and
+> potentially dangerous to your system. Use with caution.
 
 ```bash
 yay -S cmdcreate-git
@@ -52,8 +63,9 @@ makepkg -si
 
 ##### Latest git (may be broken/unstable)
 
-> [!WARNING]
-> Latest git builds have a possibility of being broken, unfinished, and potentially dangerous to your system. Use with caution.
+> [!WARNING]  
+> Latest git builds have a possibility of being broken, unfinished, and
+> potentially dangerous to your system. Use with caution.
 
 ```bash
 git clone --branch cmdcreate-git --single-branch https://github.com/archlinux/aur.git ~/.cache/cmdcreate-git
@@ -63,15 +75,18 @@ makepkg -si
 
 ### Debian/Ubuntu
 
-You can get the `.deb` package file from the latest [release](https://github.com/owen-debiasio/cmdcreate/releases)
+You can get the `.deb` package file from the latest
+[release](https://github.com/owen-debiasio/cmdcreate/releases)
 
 ### Fedora
 
-You can get the `.rpm` package file from the latest [release](https://github.com/owen-debiasio/cmdcreate/releases)
+You can get the `.rpm` package file from the latest
+[release](https://github.com/owen-debiasio/cmdcreate/releases)
 
 ### Other
 
-You can the get the `x86_64` binary from the latest [release](https://github.com/owen-debiasio/cmdcreate/releases)
+You can the get the `x86_64` binary from the latest
+[release](https://github.com/owen-debiasio/cmdcreate/releases)
 
 ---
 
@@ -79,17 +94,20 @@ You can the get the `x86_64` binary from the latest [release](https://github.com
 
 ### Dependencies
 
-> [!NOTE]
+> [!NOTE]  
 > You can find more about developing cmdcreate here:
 > [Development Documentation](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/developing.md)
 
 - Rustup
 - Openssl (development, other)
-- nano (not for building, but recommended, or you could use another text editor listed in this source code file: [cmdcreate/src/commands/edit.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/edit.rs) **(Lines 18-35)**
+- nano (not for building, but recommended, or you could use another text editor
+  listed in this source code file:
+  [cmdcreate/src/commands/edit.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/edit.rs)
+  **(Lines 18-35)**
 - git
 - curl (not for building, but recommended)
 
-> [!NOTE]
+> [!NOTE]  
 > You need the latest Rust version, so install rustup and run:
 > `rustup default stable`
 
@@ -127,4 +145,4 @@ sudo install -Dm755 target/release/cmdcreate /usr/local/bin/cmdcreate
 
 (C) 2026 Owen Debiasio
 
-Licensed under GPL v2.0
+Licensed under **GPL v2.0**
