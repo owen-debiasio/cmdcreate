@@ -27,7 +27,7 @@ sudo dnf install rustup curl libssl-devel openssl-libs git shfmt python3-black
 
 ### Other
 
-- Install necessary packages from your package manager
+- Install necessary packages from your package manager.
 
 ## Setup environment
 
@@ -79,7 +79,7 @@ chmod +x *.sh
   - **Run a script that goes through the features of cmdcreate and runs them.**
   
 > [!NOTE]
-> You can read more [here](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/README.md)
+> You can read more here: [Testing cmdcreate and its features](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/README.md)
 
 ### Packaging cmdcreate
 
@@ -95,4 +95,4 @@ chmod +x *.sh
   - **Goes through and packages cmdcreate to .deb, .rpm, and binary files.**
   
 > [!NOTE]
-> You can read more [here](https://github.com/owen-debiasio/cmdcreate/blob/main/package/README.md)
+> You can read more here: [Packaging cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/package/README.md)
