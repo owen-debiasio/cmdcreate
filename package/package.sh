@@ -15,10 +15,12 @@ VERSION="$1"
 echo "Cleaning up before packaging..."
 cargo clean
 
-cd package
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+
+cd "$SCRIPT_DIR"
 
 echo "Formatting code..."
-./format.sh
+"$SCRIPT_DIR/format.sh"
 
 echo "Creating binary ($VERSION)..."
 ./create_bin.sh "$VERSION"
