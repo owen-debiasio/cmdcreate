@@ -4,15 +4,13 @@
 
 ### Create a command
 
-**Usage**
+#### Usage
 
-```
-cmdcreate create <name> "<contents of command>"
-```
+`cmdcreate create <name> "<contents of command>`
 
-**Example output**
+#### Example output
 
-```
+```bash
 $ cmdcreate create abc "echo xyz"
 
 Success! Created command: "abc"
@@ -22,17 +20,15 @@ Success! Created command: "abc"
 
 ### Remove a command
 
-**Usage**
+#### Usage
 
-```
-cmdcreate remove <name> (<contents of command>)
-```
+`cmdcreate remove <name> (<contents of command>)`
 
-**Example outputs**
+#### Example output
 
-*Normal*
+##### Normal
 
-```
+```bash
 $ cmdcreate remove abc
 Are you sure you want to delete command "abc"?
 (Y or N)
@@ -41,9 +37,9 @@ y
 Removed command "abc"
 ```
 
-*Aborted*
+##### Aborted
 
-```
+```bash
 Are you sure you want to delete command "abc"?
 (Y or N)
 n
@@ -51,17 +47,17 @@ n
 Aborted.
 ```
 
-*Forced*
+##### Forced
 
-```
+```bash
 $ cmdcreate remove abc -f (or "--force")
 
 Removed command "abc"
 ```
 
-*Attempt to remove command that doesn't exist*
+##### Attempt to remove command that doesn't exist
 
-```
+```bash
 $ cmdcreate remove hijk
 
 Error: Command "hijk" is not installed
@@ -74,15 +70,13 @@ Error: Command "hijk" is not installed
 
 ### Modify contents of a command
 
-**Usage**
+#### Usage
 
-```
-cmdcreate edit <name>
-```
+`cmdcreate edit <name>`
 
-**Example output**
+#### Example output
 
-```
+```bash
 $ cmdcreate edit abc
 
 *Open up in text editor*
@@ -95,26 +89,24 @@ $ cmdcreate edit abc
 
 ### Display installed commands
 
-**Usage**
+#### Usage
 
-```
-cmdcreate list
-```
+`cmdcreate list`
 
-**Example outputs**
+#### Example output
 
-*If commands are installed*
+##### If commands are installed
 
-```
+```bash
 $ cmdcreate list
 Installed commands: (1)
 --------
 abc
 ```
 
-*If command is in favorites*
+##### If command is in favorites
 
-```
+```bash
 $ cmdcreate list
 Installed commands: (1)
 --------
@@ -125,9 +117,9 @@ Installed commands: (1)
 > You can modify the favorite command indicator (default is "★")
 > See [here](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/resources/config_example.toml) for more
 
-*If commands are not installed*
+##### If commands are not installed
 
-```
+```bash
 $ cmdcreate list
 Error: No commands are installed.
 ```
@@ -136,17 +128,15 @@ Error: No commands are installed.
 
 ### Searches for matched command
 
-**Usage**
+#### Usage
 
-```
-cmdcreate search <command to match>
-```
+`cmdcreate search <command to match>`
 
-**Example outputs**
+#### Example outputs
 
-*If one command is matched*
+##### If one command is matched
 
-```
+```bash
 $ cmdcreate search a
 --------
 abc
@@ -154,9 +144,9 @@ abc
 Found one match for "a"
 ```
 
-*If more than command is matched*
+##### If more than one command is matched
 
-```
+```bash
 $ cmdcreate search a
 --------
 abc
@@ -165,9 +155,9 @@ cba
 Found 2 matches for "a".
 ```
 
-*If no commands are matched*
+##### If no commands aere matched
 
-```
+```bash
 $ cmdcreate search d
 Error: No installed commands contain: "d"
 ```
@@ -176,42 +166,37 @@ Error: No installed commands contain: "d"
 
 ### Display contents of a command
 
-**Usage**
+#### Usage
 
-```
-cmdcreate edit <name>
-```
+`cmdcreate display <name>`
 
-**Example output**
+#### Example output
 
-```
+```bash
 $ cmdcreate edit abc
-
-*Open up in text editor*
+*Print to output*
 ```
 
 ## Rename
 
 ### Rename a command
 
-**Usage**
+#### Usage
 
-```
-cmdcreate rename <command> <new name>
-```
+`cmdcreate rename <command> <new name>`
 
-**Example output**
+#### Example output
 
-*Rename command, no conflicts*
+##### Rename command, no conflicts
 
-```
+```bash
 $ cmdcreate rename abc xyz
 Successfully renamed command "abc" to "xyz"
 ```
 
-*Rename command, name conflict*
+##### Rename command, name conflict
 
-```
+```bash
 $ cmdcreate rename xyz cba
 The new name (cba) is already installed! Do you want to delete it?
 (Y or N)
@@ -222,9 +207,9 @@ Removed command "cba"
 Successfully renamed command "xyz" to "cba"
 ```
 
-*Rename command, name conflict (aborted)*
+##### Rename command, name conflict (aborted)
 
-```
+```bash
 $ cmdcreate rename xyz cba
 The new name (cba) is already installed! Do you want to delete it?
 (Y or N)
@@ -233,9 +218,9 @@ n
 Error: You need to remove the old command before proceeding! 
 ```
 
-*Rename command, name conflict (forced)*
+##### Rename command, name conflict (forced)
 
-```
+```bash
 $ cmdcreate rename xyz cba -f (or --force)
 
 Removed command "cba"
@@ -249,38 +234,36 @@ Successfully renamed command "xyz" to "cba"
 
 ### Adds or removes a command from favorites
 
-**Usage**
+#### Usage
 
-```
-cmdcreate favorite <add/remove> <command>
-```
+`cmdcreate favorite <add/remove> <command>`
 
-**Example output**
+#### Example output
 
-**Add command to favorites**
+##### Add command to favorites
 
-```
+```bash
 $ cmdcreate favorite add cba
 Command "cba" added to favorites.
 ```
 
-**Add command to favorites thats already in there**
+##### Add command to favorites thats already in there
 
-```
+```bash
 $ cmdcreate favorite add cba
 Command "cba" is already in favorites.
 ```
 
-**Remove command from favorites**
+##### Remove command from favorites
 
-```
+```bash
 $ cmdcreate favorite remove cba
 Command "cba" removed from favorites.
 ```
 
-**Remove command from favorites that isn't in there**
+##### Remove command from favorites that isn't in there
 
-```
+```bash
 $ cmdcreate favorite remove cba
 Error: Command isn't in favorites: cba
 ```
@@ -289,26 +272,24 @@ Error: Command isn't in favorites: cba
 
 ### Repairs installed commands if needed
 
-**Usage**
+#### Usage
 
-```
-cmdcreate repair
-```
+`cmdcreate repair`
 
-**Example output**
+#### Example output
 
-*Successful repair*
+##### Successful repair
 
-```
+```bash
 $ cmdcreate repair
 Repairing command: "cba"
 
 Broken commands have been repaired.
 ```
 
-*No commands need repairs*
+##### No commands need repairs
 
-```
+```bash
 $ cmdcreate repair
 No commands needed repairs.
 ```
@@ -320,17 +301,15 @@ No commands needed repairs.
 
 ### Exports your installed commands
 
-**Usage**
+#### Usage
 
-```
-cmdcreate export <output directory>
-```
+`cmdcreate export <output directory>`
 
-**Example output**
+#### Example output
 
-*Successful export*
+##### Successful export
 
-```
+```bash
 $ cmdcreate export ~/Downloads
 Successfully exported commands to: "/home/owen/Downloads/export.cmdcreate"
 ```
@@ -343,17 +322,15 @@ Successfully exported commands to: "/home/owen/Downloads/export.cmdcreate"
 
 ### Imports your installed commands
 
-**Usage**
+#### Usage
 
-```
-cmdcreate import <input file>
-```
+`cmdcreate import <input file>`
 
-**Example output**
+#### Example output
 
-*Successful import*
+##### Successful import
 
-```
+```bash
 $ cmdcreate import ~/Downloads/export.cmdcreate
 Installing command: "xyz"
 Installing command: "cba"
