@@ -6,6 +6,7 @@
         "clippy",
         "cmdcreate",
         "cmdcreate's",
+        "codebook",
         "debiasio",
         "dnf",
         "dominiquini",
@@ -15,6 +16,7 @@
         "gedit",
         "kwrite",
         "linuxmint",
+        "listandfavorite",
         "lvl",
         "makepkg",
         "manjaro",
@@ -25,6 +27,8 @@
         "pacman",
         "paru",
         "pkgdir",
+        "pylint",
+        "pylintrc",
         "reqwest",
         "rhel",
         "rustup",
@@ -44,4 +48,5 @@
         "MD040": false,
         "MD059": false
     },
+    "markdown.validate.enabled": true
 }
