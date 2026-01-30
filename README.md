@@ -6,7 +6,7 @@ Cmdcreate allows you to create custom commands for your convenience without need
   
 ## Usage
 
-```
+```none
 Commands:
   create   <command>    <contents>   Create a custom command
   remove   <command>                 Remove a custom command
@@ -49,27 +49,37 @@ Flags:
 
 ### Install through an AUR manager
 
-```
+#### Stable
+
+```bash
 yay -S cmdcreate
 ```
 
-**Latest git**
+#### Latest git
 
-```
+> [!WARNING]
+> Latest git builds have a possibility of being broken, unfinished, and potentially dangerous to your system. Use with caution.
+
+```bash
 yay -S cmdcreate-git
 ```
 
 ### Or clone AUR repo
 
-```
+#### Stable
+
+```bash
 git clone --branch cmdcreate --single-branch https://github.com/archlinux/aur.git ~/.cache/cmdcreate
 cd ~/.cache/cmdcreate
 makepkg -si
 ```
 
-**Latest git (may be broken/unstable)**
+#### Latest git (may be broken/unstable)
 
-```
+> [!WARNING]
+> Latest git builds have a possibility of being broken, unfinished, and potentially dangerous to your system. Use with caution.
+
+```bash
 git clone --branch cmdcreate-git --single-branch https://github.com/archlinux/aur.git ~/.cache/cmdcreate-git
 cd ~/.cache/cmdcreate-git
 makepkg -si
@@ -107,31 +117,31 @@ You can the get the `x86_64` binary from the latest [release](https://github.com
 > You need the latest Rust version, so install rustup and run:
 > `rustup default stable`
 
-**Arch**
+#### Arch Linux
 
-```
+```bash
 sudo pacman -S rustup curl openssl nano git
 ```
 
-**Debian/Ubuntu**
+#### Debian/Ubuntu
 
-```
+```bash
 sudo apt install rustup curl libssl-dev libssl3 build-essential pkg-config git nano
 ```
 
-**Fedora**
+#### Fedora
 
-```
+```bash
 sudo dnf install rustup curl libssl-devel openssl-libs git nano
 ```
 
-**Other**
+#### Other distros
 
 - Install necessary packages from your package manager
 
 ## Download and install
 
-```
+```bash
 git clone https://github.com/owen-debiasio/cmdcreate.git
 cd cmdcreate
 rustup default stable
