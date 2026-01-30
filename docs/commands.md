@@ -2,6 +2,26 @@
 
 Here I provide the available commands present in cmdcreate and how they are used. Information in this file is subject to change, and not all possibilities are recorded. This file just covers the main ideas of what should happen and how commands should function.
 
+## Usage of all main commands
+
+```none
+Commands:
+  create   <command>    <contents>   Create a custom command
+  remove   <command>                 Remove a custom command
+  edit     <command>                 Modify contents of a command
+  list                               Display custom commands
+  search   <command>                 Searches for matched command
+  reset                              Removes all installed commands
+  display  <command>                 Display contents of a command
+  rename   <command>    <new name>   Renames a command
+  favorite <add/remove> <command>    Adds or removes a command from favorites
+  repair                             Repairs installed commands if needed
+
+ Backup:
+    export <output directory>        Checks for updates
+    import <file input>              Updates your system
+```
+
 ## Create
 
 ### Create a command
