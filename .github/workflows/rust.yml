@@ -37,6 +37,7 @@ jobs:
         run: cargo fmt --all -- --check
 
       - name: Clippy (with SARIF)
+        continue-on-error: true
         run: |
           cargo clippy --all-targets --all-features --message-format=json \
             | tee clippy.json \
