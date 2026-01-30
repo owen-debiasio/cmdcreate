@@ -32,6 +32,9 @@ else
     echo "Skipping Python formatting (testing/features not found)"
 fi
 
+echo "Linting shell scripts..."
+find . -name "*.sh" -exec shellcheck {} +
+
 echo "Formatting shell scripts..."
 shfmt -w -i 4 "$ROOT_DIR"
 
