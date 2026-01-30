@@ -12,19 +12,25 @@ instructions listed below.
 ### Arch
 
 ```bash
-sudo pacman -S rustup curl openssl git python-black shfmt base-devel
+sudo pacman -S rustup curl openssl git python-black shfmt base-devel python-pylint shellcheck
 ```
 
 ### Debian/Ubuntu
 
 ```bash
-sudo apt install rustup curl libssl-dev libssl3 build-essential pkg-config git shfmt python3-black
+sudo apt install curl libssl-dev libssl3 build-essential pkg-config git shfmt python3-black pylint shellcheck
+```
+
+#### Install Rustup
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
 ### Fedora
 
 ```bash
-sudo dnf install rustup curl libssl-devel openssl-libs git shfmt python3-black
+sudo dnf install rustup curl libssl-devel openssl-libs git shfmt python3-black pylint shellcheck
 ```
 
 ### Other
@@ -65,6 +71,30 @@ chmod +x *.sh
   - Working with the testing scripts
 - **Visual Studio Code**
   - Editing and revising documentation
+
+## Linters
+
+I recommend using the following linters and formatters to keep the cmdcreate codebase clean:
+
+### Rust
+
+- RustFmt
+- Rust-Analyzer
+
+### Python
+
+- PyLint
+- Black
+
+### Shell Scripts
+
+- Shfmt
+- Shellcheck
+
+### Markdown, other
+
+- Prettier
+- Markdownlint
 
 > [!NOTE]  
 > In the end, I don't care what you use, these are just my recommendations.
