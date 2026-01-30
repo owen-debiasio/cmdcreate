@@ -1,37 +1,37 @@
 # Developing cmdcreate
 
-Developing shouldn't be too hard, just install dependencies listed below.
+Developing shouldn't be too hard, just install dependencies and follow the instructions listed below.
 
 ## Installing dependencies
 
 > [!NOTE]
 > Packages I've listed may be incorrect. Please let me know if I'm missing any or got names wrong.
 
-**Arch**
+### Arch
 
-```
+```bash
 sudo pacman -S rustup curl openssl git python-black shfmt base-devel
 ```
 
-**Debian/Ubuntu**
+### Debian/Ubuntu
 
-```
+```bash
 sudo apt install rustup curl libssl-dev libssl3 build-essential pkg-config git shfmt python3-black
 ```
 
-**Fedora**
+### Fedora
 
-```
+```bash
 sudo dnf install rustup curl libssl-devel openssl-libs git shfmt python3-black
 ```
 
-**Other**
+### Other
 
 - Install necessary packages from your package manager
 
 ## Setup environment
 
-```
+```bash
 rustup default stable
 git clone https://github.com/owen-debiasio/cmdcreate.git <desired directory>
 cd <desired directory>
@@ -43,15 +43,15 @@ chmod +x *.sh
 > [!NOTE]
 > Provided command is for when you are in cmdcreate's parent directory.
 
-*Installing*
+### Installing
 
-```
+```bash
 ./testing/install.sh
 ```
 
-*Uninstalling*
+### Uninstalling
 
-```
+```bash
 ./testing/uninstall.sh
 ```
 
