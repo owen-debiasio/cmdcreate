@@ -1,5 +1,7 @@
 # Commands and how to use them
 
+Here I provide the available commands present in cmdcreate and how they are used. Information in this file is subject to change, and not all possibilities are recorded. This file just covers the main ideas of what should happen and how commands should function.
+
 ## Create
 
 ### Create a command
