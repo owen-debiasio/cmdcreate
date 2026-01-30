@@ -1,45 +1,55 @@
-name: Rust CI
+name: Rust Lint
 
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 permissions:
-    contents: read
+  contents: read
+  security-events: write
 
 env:
-    CARGO_TERM_COLOR: always
-    RUSTFLAGS: "-Dwarnings"
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-Dwarnings"
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  ci:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-            - name: Install Rust
-              uses: dtolnay/rust-toolchain@stable
-              with:
-                  toolchain: stable
-                  components: rustfmt, clippy
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
 
-            - name: Cache cargo
-              uses: Swatinem/rust-cache@v2
-              with:
-                  shared-key: ci
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
 
-            - name: Format check
-              run: cargo fmt --all -- --check
+      - name: Install clippy SARIF tools
+        run: cargo install clippy-sarif sarif-fmt
 
-            - name: Clippy
-              run: cargo clippy --all-targets --all-features
+      - name: Format check
+        run: cargo fmt --all -- --check
 
-            - name: Build (release)
-              run: cargo build --release
+      - name: Clippy (with SARIF)
+        run: |
+          cargo clippy --all-targets --all-features --message-format=json \
+            | tee clippy.json \
+            | clippy-sarif \
+            | sarif-fmt > clippy.sarif
 
-            - name: Run tests
-              run: cargo test
+      - name: Upload Clippy results
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: clippy.sarif
+
+      - name: Build (release)
+        run: cargo build --release
+
+      - name: Run tests
+        run: cargo test

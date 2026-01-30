@@ -1,0 +1,26 @@
+name: Bash Lint
+
+on: [push]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          sudo apt update
+          sudo apt install -y shfmt shellcheck
+
+      - name: shfmt (format check)
+        run: |
+          shfmt -d .
+
+      - name: shellcheck
+        run: |
+          shellcheck $(git ls-files '*.sh')
