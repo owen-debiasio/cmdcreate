@@ -28,6 +28,6 @@ else
 fi
 
 echo "Formatting shell scripts..."
-shfmt -w -i 4 ../
+shfmt -w -i 4 ./
 
 echo "Formatting complete."
