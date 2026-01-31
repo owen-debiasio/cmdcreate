@@ -12,7 +12,7 @@ instructions listed below.
 ### Arch
 
 ```bash
-sudo pacman -S rustup curl openssl git python-black shfmt base-devel python-pylint shellcheck
+sudo pacman -S rustup curl openssl git python-black shfmt base-devel python-pylint shellcheck markdownlint-cli2
 ```
 
 ### Debian/Ubuntu
@@ -36,6 +36,33 @@ sudo dnf install rustup curl libssl-devel openssl-libs git shfmt python3-black p
 ### Other
 
 - Install necessary packages from your package manager.
+
+## Install Markdownlint
+
+> [!NOTE]  
+> If you use Arch Linux, skip this step. You can install it using:
+>
+> `sudo pacman -S markdownlint-cli2`
+
+### Install NPM
+
+#### Ubuntu/Debian
+
+```bash
+sudo apt install nodejs npm
+```
+
+#### Fedora
+
+```bash
+sudo dnf install nodejs npm
+```
+
+### Download and install markdownlint
+
+```bash
+npm install -g markdownlint-cli2
+```
 
 ## Setup environment
 
