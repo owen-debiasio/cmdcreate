@@ -15,7 +15,7 @@ curl -sSL https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/dev/set
 
 ### Manual setup
 
-If you want to set things up yourself, don't worry. I've got instruction below.
+If you want to set things up yourself, don't worry. I've got instructions below.
 
 #### Installing dependencies
 
@@ -84,7 +84,7 @@ npm install -g markdownlint-cli2
 rustup default stable
 git clone https://github.com/owen-debiasio/cmdcreate.git <desired directory>
 cd <desired directory>
-chmod +x *.sh
+find . -maxdepth 1 -name "*.sh" -exec chmod +x {} +
 ```
 
 #### Installing/Uninstalling test version
