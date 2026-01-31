@@ -12,7 +12,7 @@ use crate::{
     utils::{colors::COLORS, fs::init_git_fs, sys::return_args},
 };
 
-pub const VERSION: &str = "v1.0.6";
+pub const VERSION: &str = "v1.0.7";
 
 pub fn display_usage() {
     let (blue, cyan, yellow, magenta, reset) = (
