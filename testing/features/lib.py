@@ -9,4 +9,5 @@ def command(cmd):
         print(f"Error: Command {cmd} failed... exiting...")
         exit(1)
 
+
 home = os.path.expanduser("~")
