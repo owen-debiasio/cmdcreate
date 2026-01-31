@@ -1,7 +1,11 @@
 use crate::{
     commands::tools::is_command_installed,
     logger::log,
-    utils::{fs::PATHS, io::error, sys::run_shell_command},
+    utils::{
+        fs::PATHS,
+        io::error,
+        sys::{VARS, run_shell_command},
+    },
 };
 use std::process::Command;
 
@@ -15,7 +19,8 @@ pub fn edit(cmd: &str) {
 
     log("cmds/edit::edit(): Checking editors...", 0);
 
-    let Some(editor) = [
+    let editors: &[&str] = &[
+        &VARS.editor, // Used when user runs something like "EDITOR=vi cmdcreate edit abc"
         "nvim",
         "vi",
         "vim",
@@ -32,17 +37,20 @@ pub fn edit(cmd: &str) {
         "zed",
         "zed-preview",
         "mousepad",
-    ]
-    .iter()
-    .find(|&&ed| {
+    ];
+
+    let editor = editors.iter().find(|&&ed| {
         Command::new("which")
             .arg(ed)
             .output()
-            .map(|output| output.status.success())
+            .map(|o| o.status.success())
             .unwrap_or(false)
-    }) else {
-        error("No known editor is installed on your device.", "");
+    });
 
+    let editor = if let Some(ed) = editor {
+        *ed
+    } else {
+        error("No known editor is installed on your device.", "");
         return;
     };
 

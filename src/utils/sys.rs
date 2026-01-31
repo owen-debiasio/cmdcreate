@@ -16,11 +16,13 @@ use crate::{
 pub struct Vars {
     pub shell: String,
     pub home: String,
+    pub editor: String,
 }
 
 pub static VARS: LazyLock<Vars> = LazyLock::new(|| Vars {
     shell: var("SHELL").unwrap_or_else(|_| "unknown".to_owned()),
     home: var("HOME").unwrap_or_else(|_| "unknown".to_owned()),
+    editor: var("EDITOR").unwrap_or_else(|_| "unknown".to_owned()),
 });
 
 pub static ARCH: &str = ARCHITECTURE;
@@ -185,5 +187,6 @@ mod tests {
     fn vars_are_initialized() {
         assert!(!VARS.home.is_empty());
         assert!(!VARS.shell.is_empty());
+        assert!(!VARS.editor.is_empty());
     }
 }
