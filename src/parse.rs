@@ -130,9 +130,6 @@ pub fn parse(cmd: &str, args: &[String]) {
             for line in [
                 format!("Usage: cmdcreate {magenta}(flags){reset} [run]"),
                 format!(
-                    "  {magenta}-F{reset}, {magenta}--force_system_shell{reset}          Force system shell"
-                ),
-                format!(
                     "  {magenta}-f{reset}, {magenta}--force{reset}                       Force commands"
                 ),
                 format!(
