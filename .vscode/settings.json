@@ -35,6 +35,7 @@
         "pylintrc",
         "reqwest",
         "rhel",
+        "rpmbuild",
         "Rusterminal",
         "RUSTFLAGS",
         "rustup",
