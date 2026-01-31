@@ -511,3 +511,4 @@
   - Added information about the file structure
   - Various quality of life changes
 - I've hopefully made cmdcreate more developer-friendly
+- Fixed ~/rpmbuild from not being deleted
