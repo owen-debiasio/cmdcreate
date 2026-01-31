@@ -1,4 +1,3 @@
-use crate::utils::sys::args_forced;
 use crate::{
     VERSION,
     commands::{
@@ -20,6 +19,7 @@ use crate::{
         colors::COLORS,
         fs::{PATHS, delete_file, init_git_fs, read_file_to_string},
         io::error,
+        sys::args_forced,
     },
 };
 
