@@ -75,18 +75,18 @@ makepkg -si
 
 ### Debian/Ubuntu
 
-You can get the `.deb` package file from the latest
-[release](https://github.com/owen-debiasio/cmdcreate/releases)
+You can get the `.deb` package file here:
+[Latest Release](https://github.com/owen-debiasio/cmdcreate/releases/latest)
 
 ### Fedora
 
-You can get the `.rpm` package file from the latest
-[release](https://github.com/owen-debiasio/cmdcreate/releases)
+You can get the `.rpm` package file file here:
+[Latest Release](https://github.com/owen-debiasio/cmdcreate/releases/latest)
 
 ### Other
 
-You can the get the `x86_64` binary from the latest
-[release](https://github.com/owen-debiasio/cmdcreate/releases)
+You can the get the standalone `x86_64` binary file here:
+[Latest Release](https://github.com/owen-debiasio/cmdcreate/releases/latest)
 
 ---
 
