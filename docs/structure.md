@@ -37,6 +37,7 @@ change.
 ## VSCode files
 
 - 📁 [.vscode](https://github.com/owen-debiasio/cmdcreate/blob/main/.vscode)
+  - [cmdcreate.code-workspace](https://github.com/owen-debiasio/cmdcreate/blob/main/.vscode/cmdcreate.code-workspace)
   - [launch.json](https://github.com/owen-debiasio/cmdcreate/blob/main/.vscode/launch.json)
   - [settings.json](https://github.com/owen-debiasio/cmdcreate/blob/main/.vscode/settings.json)
 
