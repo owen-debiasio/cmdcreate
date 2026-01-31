@@ -16,16 +16,6 @@ can find an example `.toml` configuration
 > [!NOTE]  
 > I recommend using `bash` just for compatibility sake.
 
-### spoof_arch
-
-- If "true", the architecture will be spoofed to x86_64 **(Useful when running
-  on a non-x86_64 CPU)**
-- Default: `false`
-
-> [!NOTE]  
-> Architectures of `x86_64` aren't really supported by me. If you have an issue,
-> please report it.
-
 ## logs
 
 ### time_format

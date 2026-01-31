@@ -1,13 +1,10 @@
-use crate::utils::fs::read_file_to_string;
 use crate::{
     VERSION,
     commands::update::get_install_path,
-    configs::{init_configs, load},
+    configs::init_configs,
     logger::log,
     utils::{
-        colors::COLORS,
-        fs::{init_fs_layout, write_to_file},
-        io::input,
+        fs::init_fs_layout,
         sys::{ARCH, VARS, get_distro_base, installation_method},
     },
 };
@@ -42,41 +39,4 @@ pub fn init() {
         ),
         0,
     );
-
-    log("init::init(): Checking CPU architecture...", 0);
-
-    if ARCH == "x86_64" || load("sys", "spoof_arch", "false") == "true" {
-        return;
-    }
-
-    let (yellow, red, reset) = (COLORS.yellow, COLORS.red, COLORS.reset);
-
-    log(
-        "init::init(): Unsupported CPU architecture detected... Displaying warning...",
-        1,
-    );
-
-    eprintln!(
-        "{yellow}Your current CPU architecture {red}({ARCH}){yellow} is not currently supported.
-Use {red}x86_64{yellow} as it is supported.
-
-(You can disable this message in the configuration file){reset}
-
-Do you want to disable this message? {red}(y/n){reset}"
-    );
-
-    log(
-        "init::init(): Asking for confirmation to disable the warning...",
-        0,
-    );
-
-    let response = input("Enable Arch spoofing? (y/n): ").to_lowercase();
-
-    if matches!(response.as_str(), "y" | "yes") {
-        let path = format!("{}/.config/cmdcreate/config.toml", VARS.home);
-
-        if !read_file_to_string(&path).contains("spoof_arch") {
-            write_to_file(&path, "\n[sys]\nspoof_arch = \"true\"\n", true);
-        }
-    }
 }

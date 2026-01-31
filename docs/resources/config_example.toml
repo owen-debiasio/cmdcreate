@@ -2,7 +2,6 @@
 
 [sys]
 shell = "bash" # Your preferred shell
-spoof_arch = "true" # If "true", the architecture will be spoofed to x86_64
 
 [logs]
 time_format = "%Y-%m-%d %H:%M:%S" # Formatting of time
