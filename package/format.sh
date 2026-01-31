@@ -29,6 +29,10 @@ command -v pylint > /dev/null || {
     echo "pylint not found"
     exit 1
 }
+command -v markdownlint-cli2 > /dev/null || {
+    echo "markdownlint-cli2 not found"
+    exit 1
+}
 
 echo "Formatting Rust source..."
 cargo fmt
@@ -46,5 +50,8 @@ find . -name "*.sh" -exec shellcheck {} +
 
 echo "Formatting shell scripts..."
 shfmt -w -i 4 -ci -sr "$ROOT_DIR"
+
+echo "Linting markdown files..."
+markdownlint-cli2 "**/*.md" --config .markdownlint.json
 
 echo "Formatting complete."
