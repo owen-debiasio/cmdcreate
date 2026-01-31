@@ -73,7 +73,9 @@ pub fn init() {
         0,
     );
 
-    if input("").to_lowercase() == "y" {
+    let x = input("").to_lowercase();
+
+    if x == "y" {
         write_to_file(
             &format!("{}/.config/cmdcreate/config.toml", VARS.home),
             "[sys]",
