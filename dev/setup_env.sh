@@ -36,7 +36,7 @@ install_dependencies() {
             sudo dnf install -y \
                 rustup curl openssl-devel git \
                 shfmt shellcheck \
-                black pylint \
+                python3-black pylint \
                 nodejs npm
             sudo npm install -g markdownlint-cli2
             ;;
@@ -45,7 +45,7 @@ install_dependencies() {
             sudo apt install -y \
                 curl libssl-dev build-essential pkg-config git \
                 shfmt shellcheck \
-                python3-black pylint \
+                black pylint \
                 nodejs npm
             sudo npm install -g markdownlint-cli2
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
