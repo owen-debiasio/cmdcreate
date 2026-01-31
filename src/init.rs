@@ -45,11 +45,7 @@ pub fn init() {
 
     log("init::init(): Checking CPU architecture...", 0);
 
-    if ARCH == "x86_64"
-        || load("sys", "spoof_arch", "")
-            .parse::<bool>()
-            .unwrap_or(false)
-    {
+    if ARCH == "x86_64" || load("sys", "spoof_arch", "false") == "true" {
         return;
     }
 
