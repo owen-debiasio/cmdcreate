@@ -522,3 +522,8 @@
 - Added documentation info about cmdcreate
 - Improved documentation
 - You can now use the `EDITOR` environment variable when using `cmdcreate edit`
+
+## v1.0.8
+
+- Removed the CPU Arch. warning from the init process
+- Code optimizations
