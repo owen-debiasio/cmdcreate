@@ -73,19 +73,9 @@ pub fn init() {
         0,
     );
 
-    let x = input("").to_lowercase();
+    if input("Enable Arch spoofing? (y/n)").to_lowercase() == "y" {
+        let path = format!("{}/.config/cmdcreate/config.toml", VARS.home);
 
-    if x == "y" {
-        write_to_file(
-            &format!("{}/.config/cmdcreate/config.toml", VARS.home),
-            "[sys]",
-            true,
-        );
-
-        write_to_file(
-            &format!("{}/.config/cmdcreate/config.toml", VARS.home),
-            "\nspoof_arch = \"true\"",
-            true,
-        );
+        write_to_file(&path, "[sys]\nspoof_arch = \"true\"", true);
     }
 }
