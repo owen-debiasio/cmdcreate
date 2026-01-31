@@ -39,7 +39,12 @@ pub fn input(text: &str) -> String {
     let mut input = String::new();
     stdin().read_line(&mut input).unwrap();
 
-    input.trim().to_owned()
+    log(
+        &format!("utils/io::input(): Response: \"{}\"", input.trim()),
+        0,
+    );
+
+    input.trim().to_string()
 }
 
 #[derive(Debug)]
