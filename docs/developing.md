@@ -1,70 +1,84 @@
 # Developing cmdcreate
 
-Developing shouldn't be too hard, just install dependencies and follow the
+Developing shouldn't be too hard, just follow the
 instructions listed below.
 
-## Installing dependencies
+## Setting up developing environment
+
+### Run setup script **(recommended)**
+
+You can just setup the environment through a Bash script I've written.
+
+```bash
+curl -sSL https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/dev/setup_env.sh | bash
+```
+
+### Manual setup
+
+If you want to set things up yourself, don't worry. I've got instruction below.
+
+#### Installing dependencies
 
 > [!NOTE]  
 > Packages I've listed may be incorrect. Please let me know if I'm missing any
 > or got names wrong.
 
-### Arch
+##### Arch
 
 ```bash
 sudo pacman -S rustup curl openssl git python-black shfmt base-devel python-pylint shellcheck markdownlint-cli2
 ```
 
-### Debian/Ubuntu
+##### Debian/Ubuntu
 
 ```bash
 sudo apt install curl libssl-dev libssl3 build-essential pkg-config git shfmt python3-black pylint shellcheck
 ```
 
-#### Install Rustup
+###### Install Rustup
 
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-### Fedora
+##### Fedora
 
 ```bash
 sudo dnf install rustup curl libssl-devel openssl-libs git shfmt python3-black pylint shellcheck
 ```
 
-### Other
+##### Other
 
 - Install necessary packages from your package manager.
 
-## Install Markdownlint
+#### Install Markdownlint
 
 > [!NOTE]  
 > If you use Arch Linux, skip this step. You can install it using:
 >
 > `sudo pacman -S markdownlint-cli2`
 
-### Install NPM
+##### Install NPM
 
-#### Ubuntu/Debian
+###### Ubuntu/Debian
 
 ```bash
 sudo apt install nodejs npm
 ```
 
-#### Fedora
+###### Fedora
 
 ```bash
 sudo dnf install nodejs npm
 ```
 
-### Download and install markdownlint
+##### Download and install markdownlint
 
 ```bash
 npm install -g markdownlint-cli2
 ```
 
-## Setup environment
+#### Setup environment
 
 ```bash
 rustup default stable
@@ -73,24 +87,24 @@ cd <desired directory>
 chmod +x *.sh
 ```
 
-## Installing/Uninstalling test version
+#### Installing/Uninstalling test version
 
 > [!NOTE]  
 > Provided command is for when you are in cmdcreate's parent directory.
 
-### Installing
+##### Installing
 
 ```bash
 ./testing/install.sh
 ```
 
-### Uninstalling
+##### Uninstalling
 
 ```bash
 ./testing/uninstall.sh
 ```
 
-## IDEs I recommend for their purposes
+#### IDEs I recommend for their purposes
 
 - **RustRover**
   - Main IDE for developing cmdcreate
@@ -99,26 +113,26 @@ chmod +x *.sh
 - **Visual Studio Code**
   - Editing and revising documentation
 
-## Linters
+#### Linters
 
 I recommend using the following linters and formatters to keep the cmdcreate codebase clean:
 
-### Rust
+##### Rust
 
 - RustFmt
 - Rust-Analyzer
 
-### Python
+##### Python
 
 - PyLint
 - Black
 
-### Shell Scripts
+##### Shell Scripts
 
 - Shfmt
 - Shellcheck
 
-### Markdown, other
+##### Markdown, other
 
 - Prettier
 - Markdownlint
@@ -126,9 +140,9 @@ I recommend using the following linters and formatters to keep the cmdcreate cod
 > [!NOTE]  
 > In the end, I don't care what you use, these are just my recommendations.
 
-## Utilities I provide
+#### Utilities I provide
 
-### Testing purposes
+##### Testing purposes
 
 - [testing/install.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/install.sh)
   - **Install a test version of cmdcreate, like a non productive ready
@@ -142,7 +156,7 @@ I recommend using the following linters and formatters to keep the cmdcreate cod
 > You can read more here:
 > [Testing the Features of cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/README.md)
 
-### Packaging cmdcreate
+##### Packaging cmdcreate
 
 - [package/format.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/format.sh)
   - **Formats all of the code in cmdcreate, including Bash, Python, and main
