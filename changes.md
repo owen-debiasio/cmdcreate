@@ -521,3 +521,4 @@
 - Using `format.sh` now uses markdownlint
 - Added documentation info about cmdcreate
 - Improved documentation
+- You can now use the `EDITOR` environment variable when using `cmdcreate edit`

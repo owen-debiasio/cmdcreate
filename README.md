@@ -103,7 +103,7 @@ You can the get the `x86_64` binary from the latest
 - nano (not for building, but recommended, or you could use another text editor
   listed in this source code file:
   [cmdcreate/src/commands/edit.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/edit.rs)
-  **(Lines 18-35)**
+  **(Lines 24-39)**
 - git
 - curl (not for building, but recommended)
 

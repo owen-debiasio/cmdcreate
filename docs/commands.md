@@ -22,7 +22,6 @@ Commands:
 
  Backup:
     export <output directory>        Checks for updates
-    import <file input>              Updates your system
 ```
 
 ## Create
@@ -101,16 +100,26 @@ Error: Command "hijk" is not installed
 
 #### Example output
 
+##### Normal (automatic)
+
 ```bash
 $ cmdcreate edit abc
 
 *Open up in text editor*
 ```
 
+##### Using `EDITOR` environment variable
+
+```bash
+$ EDITOR=nano cmdcreate edit abc
+
+*Open up in nano*
+```
+
 > [!NOTE]  
 > Your text editor may not be detected! Check supported editors
 > [here](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/edit.rs)
-> (Lines 18-35)
+> (Lines 24-39)
 
 ## List
 
