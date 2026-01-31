@@ -10,7 +10,8 @@ instructions listed below.
 You can just setup the environment through a Bash script I've written.
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/dev/setup_env.sh | bash
+curl -sSL https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/dev/setup_env.sh -o /tmp/setup_env.sh
+bash -i /tmp/setup_env.sh
 ```
 
 ### Manual setup
