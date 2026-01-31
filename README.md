@@ -151,4 +151,5 @@ sudo install -Dm755 target/release/cmdcreate /usr/local/bin/cmdcreate
 
 (C) 2026 Owen Debiasio
 
-Licensed under **GPL v2.0**
+Licensed under
+**[MIT](https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE.md)**
