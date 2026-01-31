@@ -36,7 +36,7 @@ install_dependencies() {
             sudo dnf install -y \
                 rustup curl openssl-devel git \
                 shfmt shellcheck \
-                python3-black pylint \
+                black pylint \
                 nodejs npm
             sudo npm install -g markdownlint-cli2
             ;;

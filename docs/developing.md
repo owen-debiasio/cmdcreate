@@ -32,7 +32,7 @@ sudo pacman -S rustup curl openssl git python-black shfmt base-devel python-pyli
 ##### Debian/Ubuntu
 
 ```bash
-sudo apt install curl libssl-dev libssl3 build-essential pkg-config git shfmt python3-black pylint shellcheck
+sudo apt install curl libssl-dev libssl3 build-essential pkg-config git shfmt black pylint shellcheck
 ```
 
 ###### Install Rustup
