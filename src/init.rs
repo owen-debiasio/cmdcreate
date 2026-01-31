@@ -80,7 +80,7 @@ Do you want to disable this message? {red}(y/n){reset}"
         let path = format!("{}/.config/cmdcreate/config.toml", VARS.home);
 
         if !read_file_to_string(&path).contains("spoof_arch") {
-            write_to_file(&path, "\n[sys]\nspoof_arch = true", true);
+            write_to_file(&path, "\n[sys]\nspoof_arch = \"true\"\n", true);
         }
     }
 }
