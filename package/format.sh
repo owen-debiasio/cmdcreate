@@ -21,6 +21,14 @@ command -v shfmt > /dev/null || {
     echo "shfmt not found"
     exit 1
 }
+command -v shellcheck > /dev/null || {
+    echo "shellcheck not found"
+    exit 1
+}
+command -v pylint > /dev/null || {
+    echo "pylint not found"
+    exit 1
+}
 
 echo "Formatting Rust source..."
 cargo fmt
@@ -28,6 +36,7 @@ cargo fmt
 if [[ -d "$ROOT_DIR/testing/features" ]]; then
     echo "Formatting Python testing scripts..."
     black "$ROOT_DIR/testing/features"
+    pylint testing/features/*
 else
     echo "Skipping Python formatting (testing/features not found)"
 fi
