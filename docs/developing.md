@@ -1,7 +1,6 @@
 # Developing cmdcreate
 
-Developing shouldn't be too hard, just follow the
-instructions listed below.
+Developing shouldn't be too hard, just follow the instructions listed below.
 
 ## Setting up developing environment
 
@@ -116,7 +115,8 @@ find . -maxdepth 1 -name "*.sh" -exec chmod +x {} +
 
 #### Linters
 
-I recommend using the following linters and formatters to keep the cmdcreate codebase clean:
+I recommend using the following linters and formatters to keep the cmdcreate
+codebase clean:
 
 ##### Rust
 
@@ -160,8 +160,8 @@ I recommend using the following linters and formatters to keep the cmdcreate cod
 ##### Packaging cmdcreate
 
 - [package/format.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/format.sh)
-  - **Formats all the code in cmdcreate, including Bash, Python, and main
-    Rust source code.**
+  - **Formats all the code in cmdcreate, including Bash, Python, and main Rust
+    source code.**
 - [package/create_bin.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_bin.sh)
   - **Packages a standalone `x86_64` binary.**
 - [package/create_deb.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_deb.sh)

@@ -6,10 +6,12 @@ change.
 ## Github templates, actions, workflows
 
 - 📁 [.github](https://github.com/owen-debiasio/cmdcreate/tree/main/.github)
-  - 📁 [ISSUE_TEMPLATE](https://github.com/owen-debiasio/cmdcreate/tree/main/.github/ISSUE_TEMPLATE)
+  - 📁
+    [ISSUE_TEMPLATE](https://github.com/owen-debiasio/cmdcreate/tree/main/.github/ISSUE_TEMPLATE)
     - [bug_report.md](https://github.com/owen-debiasio/cmdcreate/blob/main/.github/ISSUE_TEMPLATE/bug_report.md)
     - [feature_request.md](https://github.com/owen-debiasio/cmdcreate/blob/main/.github/ISSUE_TEMPLATE/feature_request.md)
-  - 📁 [workflows](https://github.com/owen-debiasio/cmdcreate/tree/main/.github/workflows)
+  - 📁
+    [workflows](https://github.com/owen-debiasio/cmdcreate/tree/main/.github/workflows)
     - [bash.yml](https://github.com/owen-debiasio/cmdcreate/blob/main/.github/workflows/bash.yml)
     - [markdown.yml](https://github.com/owen-debiasio/cmdcreate/blob/main/.github/workflows/markdown.yml)
     - [python.yml](https://github.com/owen-debiasio/cmdcreate/blob/main/.github/workflows/python.yml)
@@ -18,9 +20,11 @@ change.
 ## JetBrains files
 
 - 📁 [.idea](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea)
-  - 📁 [dictionaries](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/dictionaries)
+  - 📁
+    [dictionaries](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/dictionaries)
     - [project.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/dictionaries/project.xml)
-  - 📁 [runConfigurations](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/runConfigurations)
+  - 📁
+    [runConfigurations](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/runConfigurations)
     - [Run_cmdcreate_Tests.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/runConfigurations/Run_cmdcreate_Tests.xml)
   - [.cmdcreate.iml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/cmdcreate.iml)
   - [.gitignore](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/.gitignore)
@@ -39,7 +43,8 @@ change.
 ## Documentation
 
 - 📁 [docs](https://github.com/owen-debiasio/cmdcreate/tree/main/docs)
-  - 📁 [resources](https://github.com/owen-debiasio/cmdcreate/tree/main/docs/resources)
+  - 📁
+    [resources](https://github.com/owen-debiasio/cmdcreate/tree/main/docs/resources)
     - [config_example.toml](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/resources/config_example.toml)
   - [about.md](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/about.md)
   - [README.md](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/README.md)
@@ -67,7 +72,8 @@ change.
 ## Main source code
 
 - 📁 [src](https://github.com/owen-debiasio/cmdcreate/tree/main/src)
-  - 📁 [commands](https://github.com/owen-debiasio/cmdcreate/tree/main/src/commands)
+  - 📁
+    [commands](https://github.com/owen-debiasio/cmdcreate/tree/main/src/commands)
     - [create.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/create.rs)
     - [display.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/display.rs)
     - [edit.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/edit.rs)
@@ -97,8 +103,10 @@ change.
 ## Testing cmdcreate
 
 - 📁 [testing](https://github.com/owen-debiasio/cmdcreate/tree/main/testing)
-  - 📁 [features](https://github.com/owen-debiasio/cmdcreate/tree/main/testing/features)
-    - 📁 [scripts](https://github.com/owen-debiasio/cmdcreate/tree/main/testing/features/scripts)
+  - 📁
+    [features](https://github.com/owen-debiasio/cmdcreate/tree/main/testing/features)
+    - 📁
+      [scripts](https://github.com/owen-debiasio/cmdcreate/tree/main/testing/features/scripts)
       - [backup.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/features/scripts/backup.py)
       - [create.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/features/scripts/create.py)
       - [display.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/features/scripts/display.py)
