@@ -35,6 +35,7 @@
         "pylintrc",
         "reqwest",
         "rhel",
+        "Rusterminal",
         "RUSTFLAGS",
         "rustup",
         "sarif",
