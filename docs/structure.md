@@ -41,6 +41,7 @@ change.
 - 📁 [docs](https://github.com/owen-debiasio/cmdcreate/tree/main/docs)
   - 📁 [resources](https://github.com/owen-debiasio/cmdcreate/tree/main/docs/resources)
     - [config_example.toml](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/resources/config_example.toml)
+  - [about.md](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/about.md)
   - [README.md](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/README.md)
   - [commands.md](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/commands.md)
   - [configurations.md](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/configurations.md)

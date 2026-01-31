@@ -5,6 +5,7 @@ files are subject to change.
 
 ## Documentation
 
+- **[About cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/about.md)**
 - **[Command Usage and Functions](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/commands.md)**
 - **[Setting up cmdcreate's Development Environment](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/developing.md)**
 - **[Configuring cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/configurations.md)**
