@@ -14,7 +14,7 @@ can find an example `.toml` configuration
 - Default: `sh`
 
 > [!NOTE]  
-> I recommend using `bash` just for compatibility sake.
+> I recommend using `bash` just for compatibility’s sake.
 
 ## logs
 

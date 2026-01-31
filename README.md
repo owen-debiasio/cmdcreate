@@ -61,7 +61,7 @@ cd ~/.cache/cmdcreate
 makepkg -si
 ```
 
-##### Latest git (may be broken/unstable)
+##### Latest git
 
 > [!WARNING]  
 > Latest git builds have a possibility of being broken, unfinished, and

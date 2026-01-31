@@ -7,7 +7,7 @@ instructions listed below.
 
 ### Run setup script **(recommended)**
 
-You can just setup the environment through a Bash script I've written.
+You can just set up the environment through a Bash script I've written.
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/dev/setup_env.sh -o /tmp/setup_env.sh
@@ -146,7 +146,7 @@ I recommend using the following linters and formatters to keep the cmdcreate cod
 ##### Testing purposes
 
 - [testing/install.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/install.sh)
-  - **Install a test version of cmdcreate, like a non productive ready
+  - **Install a test version of cmdcreate, like a non-production ready
     version.**
 - [testing/uninstall.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/uninstall.sh)
   - **Remove that testing version.**
@@ -160,7 +160,7 @@ I recommend using the following linters and formatters to keep the cmdcreate cod
 ##### Packaging cmdcreate
 
 - [package/format.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/format.sh)
-  - **Formats all of the code in cmdcreate, including Bash, Python, and main
+  - **Formats all the code in cmdcreate, including Bash, Python, and main
     Rust source code.**
 - [package/create_bin.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_bin.sh)
   - **Packages a standalone `x86_64` binary.**
