@@ -15,7 +15,7 @@ files are subject to change.
 
 ### cmdcreate Resources
 
-- **[Example configuration](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/resources/config_example.toml)**
+- **[Example cmdcreate Configurations](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/resources/config_example.toml)**
 - **[Changelog](https://github.com/owen-debiasio/cmdcreate/blob/main/changes.md)**
 
 ### Repository Resources
