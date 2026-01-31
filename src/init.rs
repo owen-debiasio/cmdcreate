@@ -1,3 +1,4 @@
+use crate::utils::fs::read_file_to_string;
 use crate::{
     VERSION,
     commands::update::get_install_path,
@@ -37,7 +38,7 @@ pub fn init() {
     log(
         &format!(
             "init::init(): Starting cmdcreate...\n         {}",
-            &debug_intro()
+            debug_intro()
         ),
         0,
     );
@@ -61,11 +62,11 @@ pub fn init() {
 
     eprintln!(
         "{yellow}Your current CPU architecture {red}({ARCH}){yellow} is not currently supported.
-        Use {red}x86_64{yellow} as it is supported.
+Use {red}x86_64{yellow} as it is supported.
 
-        (You can disable this message in the configuration file){reset}
+(You can disable this message in the configuration file){reset}
 
-        Do you want to disable this message?\n{red}(Y/N){reset}"
+Do you want to disable this message? {red}(y/n){reset}"
     );
 
     log(
@@ -73,9 +74,13 @@ pub fn init() {
         0,
     );
 
-    if input("Enable Arch spoofing? (y/n)").to_lowercase() == "y" {
+    let response = input("Enable Arch spoofing? (y/n): ").to_lowercase();
+
+    if matches!(response.as_str(), "y" | "yes") {
         let path = format!("{}/.config/cmdcreate/config.toml", VARS.home);
 
-        write_to_file(&path, "[sys]\nspoof_arch = \"true\"", true);
+        if !read_file_to_string(&path).contains("spoof_arch") {
+            write_to_file(&path, "\n[sys]\nspoof_arch = true", true);
+        }
     }
 }
