@@ -518,3 +518,4 @@
 - Fixed license file from not being downloaded
 - Code optimizations
 - Created splash screen for verbose output
+- Using `format.sh` now uses markdownlint
