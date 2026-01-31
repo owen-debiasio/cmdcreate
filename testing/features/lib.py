@@ -3,7 +3,10 @@ import os
 
 
 def command(cmd):
-    subprocess.run(cmd, shell=True, check=True)
-
+    try:
+        subprocess.run(cmd, shell=True, check=True)
+    except subprocess.CalledProcessError:
+        print(f"Error: Command {cmd} failed... exiting...")
+        exit(1)
 
 home = os.path.expanduser("~")
