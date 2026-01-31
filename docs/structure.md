@@ -10,10 +10,29 @@ change.
     - [bug_report.md](https://github.com/owen-debiasio/cmdcreate/blob/main/.github/ISSUE_TEMPLATE/bug_report.md)
     - [feature_request.md](https://github.com/owen-debiasio/cmdcreate/blob/main/.github/ISSUE_TEMPLATE/feature_request.md)
   - [workflows](https://github.com/owen-debiasio/cmdcreate/tree/main/.github/workflows)
+    - [bash.yml](https://github.com/owen-debiasio/cmdcreate/blob/main/.github/workflows/bash.yml)
     - [markdown.yml](https://github.com/owen-debiasio/cmdcreate/blob/main/.github/workflows/markdown.yml)
-    - [pylint.yml](https://github.com/owen-debiasio/cmdcreate/blob/main/.github/workflows/pylint.yml)
-    - [rust-clippy.yml](https://github.com/owen-debiasio/cmdcreate/blob/main/.github/workflows/rust-clippy.yml)
+    - [python.yml](https://github.com/owen-debiasio/cmdcreate/blob/main/.github/workflows/python.yml)
     - [rust.yml](https://github.com/owen-debiasio/cmdcreate/blob/main/.github/workflows/rust.yml)
+
+## JetBrains files
+
+- [.idea](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea)
+  - [.cmdcreate.iml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/cmdcreate.iml)
+  - [.gitignore](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/.gitignore)
+  - [misc.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/misc.xml)
+  - [modules.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/modules.xml)
+  - [rust.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/rust.xml)
+  - [vcs.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/vcs.xml)
+  - [workspace.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/workspace.xml)
+  - [Run_cmdcreate_Tests.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/runConfigurations/Run_cmdcreate_Tests.xml)
+  - [project.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/dictionaries/project.xml)
+
+## VSCode files
+
+- [.vscode](https://github.com/owen-debiasio/cmdcreate/blob/main/.vscode)
+  - [launch.json](https://github.com/owen-debiasio/cmdcreate/blob/main/.vscode/launch.json)
+  - [settings.json](https://github.com/owen-debiasio/cmdcreate/blob/main/.vscode/settings.json)
 
 ## Documentation
 
@@ -26,6 +45,11 @@ change.
   - [developing.md](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/developing.md)
   - [structure.md](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/structure.md)
   - [updates.md](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/updates.md)
+
+## Developer Environment Setup
+
+- [dev](https://github.com/owen-debiasio/cmdcreate/tree/main/dev)
+  - [setup_env.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/setup_env.sh)
 
 ## Packaging cmdcreate
 
@@ -90,7 +114,6 @@ change.
 
 ## Linting files
 
-- [.gitignore](https://github.com/owen-debiasio/cmdcreate/blob/main/.gitignore)
 - [.markdownlint.json](https://github.com/owen-debiasio/cmdcreate/blob/main/.markdownlint.json)
 - [.pylintrc](https://github.com/owen-debiasio/cmdcreate/blob/main/.pylintrc)
 - [.prettierrc](https://github.com/owen-debiasio/cmdcreate/blob/main/.prettierrc)
@@ -100,8 +123,9 @@ change.
 - [CODE_OF_CONDUCT.md](https://github.com/owen-debiasio/cmdcreate/blob/main/CODE_OF_CONDUCT.md)
 - [CONTRIBUTING.md](https://github.com/owen-debiasio/cmdcreate/blob/main/CONTRIBUTING.md)
 - [Cargo.toml](https://github.com/owen-debiasio/cmdcreate/blob/main/Cargo.toml)
-- [LICENSE](https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE)
+- [LICENSE.md](https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE.md)
 - [README.md](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md)
 - [SECURITY.md](https://github.com/owen-debiasio/cmdcreate/blob/main/SECURITY.md)
 - [changes.md](https://github.com/owen-debiasio/cmdcreate/blob/main/changes.md)
 - [codebook.toml](https://github.com/owen-debiasio/cmdcreate/blob/main/codebook.toml)
+- [.gitignore](https://github.com/owen-debiasio/cmdcreate/blob/main/.gitignore)
