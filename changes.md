@@ -519,3 +519,5 @@
 - Code optimizations
 - Created splash screen for verbose output
 - Using `format.sh` now uses markdownlint
+- Added documentation info about cmdcreate
+- Improved documentation
