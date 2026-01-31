@@ -100,11 +100,11 @@ pub fn write_to_file(path: &str, contents: &str, append: bool) {
         opts.truncate(true);
     }
 
-    if let Err(e) = opts
+    if let Err(err) = opts
         .open(path)
-        .and_then(|mut f| f.write_all(contents.as_bytes()))
+        .and_then(|mut file| file.write_all(contents.as_bytes()))
     {
-        error(&format!("Failed writing {path}:"), &e.to_string());
+        error(&format!("Failed writing {path}:"), &err.to_string());
     }
 }
 
