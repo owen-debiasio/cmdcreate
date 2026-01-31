@@ -1,17 +1,40 @@
 use crate::{
+    VERSION,
+    commands::update::get_install_path,
     configs::{init_configs, load},
     logger::log,
     utils::{
         colors::COLORS,
         fs::{init_fs_layout, write_to_file},
         io::input,
-        sys::{ARCH, VARS},
+        sys::{ARCH, VARS, get_distro_base, installation_method},
     },
 };
+
+pub fn debug_intro() -> String {
+    format!(
+        "                               ----------------
+        Welcome to cmdcreate!           Version: {VERSION}
+            Created by:                 CPU Architecture: {ARCH}
+           Owen Debiasio                Distro Base: {:?}
+       owen.debiasio@gmail.com          Preferred installation method: {:?}
+                                        ----------------",
+        get_distro_base(),
+        installation_method(Option::from(get_install_path()))
+    )
+}
 
 pub fn init() {
     init_fs_layout();
     init_configs();
+
+    log(
+        &format!(
+            "init::init(): Starting cmdcreate...\n         {}",
+            &debug_intro()
+        ),
+        0,
+    );
 
     log("init::init(): Checking CPU architecture...", 0);
 

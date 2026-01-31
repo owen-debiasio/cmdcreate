@@ -1,8 +1,3 @@
-use reqwest::blocking::Client;
-use serde::Deserialize;
-use serde_json::Value;
-use std::{error::Error, fs::File, io::copy, path::Path, process::exit, time::Duration};
-
 use crate::{
     VERSION,
     logger::log,
@@ -16,6 +11,10 @@ use crate::{
         },
     },
 };
+use reqwest::blocking::Client;
+use serde::Deserialize;
+use serde_json::Value;
+use std::{error::Error, fs::File, io::copy, path::Path, process::exit, time::Duration};
 
 #[derive(Deserialize)]
 struct Release {
@@ -26,6 +25,15 @@ struct Release {
 struct Asset {
     name: String,
     browser_download_url: String,
+}
+
+pub fn get_install_path() -> &'static Path {
+    let install_path = ["/usr/bin/cmdcreate", "/usr/local/bin/cmdcreate"]
+        .iter()
+        .map(Path::new)
+        .find(|p| p.exists());
+
+    install_path.unwrap()
 }
 
 fn http_client() -> Client {
@@ -50,11 +58,6 @@ pub fn update() {
 
     log("cmds/update::update(): Getting installation paths...", 0);
 
-    let install_path = ["/usr/bin/cmdcreate", "/usr/local/bin/cmdcreate"]
-        .iter()
-        .map(Path::new)
-        .find(|p| p.exists());
-
     log(
         "cmds/update::interactive_upgrade(): Requesting permission to upgrade...",
         0,
@@ -67,16 +70,7 @@ pub fn update() {
         0,
     );
 
-    let Some(install_path) = install_path else {
-        log(
-            "cmds/update::update(): cmdcreate not found, falling back to interactive upgrade",
-            1,
-        );
-        interactive_upgrade(latest_release);
-        return;
-    };
-
-    match installation_method(install_path) {
+    match installation_method(Option::from(get_install_path())) {
         InstallMethod::Aur => {
             log("cmds/update::update(): Arch Linux detected...", 0);
 

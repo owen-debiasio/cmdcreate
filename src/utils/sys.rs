@@ -126,8 +126,11 @@ pub fn get_distro_base() -> DistroBase {
     }
 }
 
-pub fn installation_method(path: &Path) -> InstallMethod {
-    let Ok(path) = path.canonicalize() else {
+pub fn installation_method(path: Option<&Path>) -> InstallMethod {
+    let Ok(path) = path
+        .expect("Failed to retrieve installation method")
+        .canonicalize()
+    else {
         return InstallMethod::Other;
     };
 
