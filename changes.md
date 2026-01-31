@@ -512,3 +512,9 @@
   - Various quality of life changes
 - I've hopefully made cmdcreate more developer-friendly
 - Fixed ~/rpmbuild from not being deleted
+
+## v1.0.7
+
+- Fixed license file from not being downloaded
+- Code optimizations
+- Created splash screen for verbose output
