@@ -6,7 +6,8 @@ Developing shouldn't be too hard, just follow the instructions listed below.
 
 ### Run setup script **(recommended)**
 
-You can set up the entire development environment using the provided Bash script.
+You can set up the entire development environment using the provided Bash
+script.
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/dev/setup_env.sh -o /tmp/setup_env.sh
@@ -189,7 +190,8 @@ codebase clean:
   Run a script that exercises cmdcreate features.
 
 > [!NOTE]  
-> You can read more here: [Testing the Features of cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/README.md)
+> You can read more here:
+> [Testing the Features of cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/README.md)
 
 ---
 
@@ -211,10 +213,13 @@ codebase clean:
   Builds all supported package formats.
 
 > [!NOTE]  
-> You can read more here: [Packaging cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/package/README.md)
+> You can read more here:
+> [Packaging cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/package/README.md)
 
 ---
 
 ## Get to know cmdcreate
 
-I highly recommend checking out [The File Structure of cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/structure.md). Get familiar with the project layout before making changes.
+I highly recommend checking out
+[The File Structure of cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/structure.md).
+Get familiar with the project layout before making changes.
