@@ -9,6 +9,8 @@ else
     exit 1
 fi
 
+ID_LIKE="${ID_LIKE:-}"
+
 ask_yn() {
     read -r -p "$1 [y/N]: " answer
     answer="${answer,,}"
@@ -34,32 +36,42 @@ install_dependencies() {
             ;;
         fedora)
             sudo dnf install -y \
-                rustup curl openssl-devel git \
-                shfmt shellcheck \
-                python3-black pylint \
+                curl openssl-devel git \
+                shfmt ShellCheck \
+                python3-black python3-pylint \
                 nodejs npm
-            sudo npm install -g markdownlint-cli2
+            sudo npm install -g markdownlint-cli2 || true
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+            # shellcheck source=/dev/null
+            source "$HOME/.cargo/env"
             ;;
         debian | ubuntu)
             sudo apt update
             sudo apt install -y \
                 curl libssl-dev build-essential pkg-config git \
                 shfmt shellcheck \
-                black pylint \
+                python3-black python3-pylint \
                 nodejs npm
-            sudo npm install -g markdownlint-cli2
+            sudo npm install -g markdownlint-cli2 || true
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+            # shellcheck source=/dev/null
+            source "$HOME/.cargo/env"
             ;;
         *)
-            if [[ "$ID_LIKE" == *"debian"* ]]; then
+            if [[ "$ID_LIKE" == *debian* ]]; then
                 sudo apt update
                 sudo apt install -y \
                     curl libssl-dev build-essential pkg-config git \
                     shfmt shellcheck \
-                    black pylint \
+                    python3-black python3-pylint \
                     nodejs npm
-                sudo npm install -g markdownlint-cli2
+                sudo npm install -g markdownlint-cli2 || true
                 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+                # shellcheck source=/dev/null
+                source "$HOME/.cargo/env"
             else
                 echo "Unsupported distro: $ID"
                 exit 1
@@ -71,6 +83,10 @@ install_dependencies() {
 install_dependencies
 
 echo "--- Setting up Rust..."
+
+# shellcheck source=/dev/null
+source "$HOME/.cargo/env" 2> /dev/null || true
+
 rustup default stable
 
 read -r -p "Enter directory for cmdcreate dev environment: " dev_dir
