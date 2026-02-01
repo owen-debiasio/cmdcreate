@@ -528,3 +528,4 @@
 - Removed the CPU Arch. warning from the init process
 - Code optimizations
 - Removed `-F`/`--force_system_shell` flags
+- Improved the developer environment setup script.
