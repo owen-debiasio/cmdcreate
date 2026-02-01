@@ -90,6 +90,7 @@ source "$HOME/.cargo/env" 2> /dev/null || true
 rustup default stable
 
 read -r -p "Enter directory for cmdcreate dev environment: " dev_dir
+dev_dir="$(eval echo "$dev_dir")"
 git clone https://github.com/owen-debiasio/cmdcreate.git "$dev_dir"
 cd "$dev_dir" || exit 1
 
