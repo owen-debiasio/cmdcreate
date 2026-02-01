@@ -14,6 +14,7 @@ use crate::{
 use reqwest::blocking::Client;
 use serde::Deserialize;
 use serde_json::Value;
+use std::cmp::Ordering;
 use std::{error::Error, fs::File, io::copy, path::Path, process::exit, time::Duration};
 
 #[derive(Deserialize)]
@@ -28,12 +29,11 @@ struct Asset {
 }
 
 pub fn get_install_path() -> &'static Path {
-    let install_path = ["/usr/bin/cmdcreate", "/usr/local/bin/cmdcreate"]
+    ["/usr/bin/cmdcreate", "/usr/local/bin/cmdcreate"]
         .iter()
         .map(Path::new)
-        .find(|p| p.exists());
-
-    install_path.unwrap()
+        .find(|p| p.exists())
+        .unwrap()
 }
 
 fn http_client() -> Client {
@@ -86,13 +86,11 @@ pub fn update() {
                 return;
             }
 
-            let use_git = !args_forced()
+            upgrade_aur(!args_forced()
                 && input(&format!(
                 "\nWould you like to install the latest git {green}(commit: {}){reset}?\n({green}Y{reset} or {red}N{reset})", get_latest_commit("owen-debiasio", "cmdcreate", "main")))
                 .trim()
-                .eq_ignore_ascii_case("y");
-
-            upgrade_aur(use_git);
+                .eq_ignore_ascii_case("y"));
         }
 
         InstallMethod::Dpkg => {
@@ -117,7 +115,8 @@ pub fn update() {
 
             if !args_forced()
                 && input(&format!(
-                "\n{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
+                "\n{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\
+                 \n({green}Y{reset} or {red}N{reset})"
             ))
                 .trim()
                 .eq_ignore_ascii_case("n")
@@ -149,12 +148,12 @@ fn upgrade_aur(git: bool) {
     delete_folder(&format!("{}/{pkg}", VARS.home));
 
     run_shell_command(&format!(
-        "git clone https://aur.archlinux.org/{pkg}.git ~/{pkg} && \
-         cd ~/{pkg} && \
+        "git clone https://aur.archlinux.org/{pkg}.git /tmp/{pkg} && \
+         cd /tmp/{pkg} && \
          makepkg -si --noconfirm"
     ));
 
-    delete_folder(&format!("{}/{pkg}", VARS.home));
+    delete_folder(&format!("{}/tmp/{pkg}", VARS.home));
 
     log("cmds/update::update_aur(): Update completed.", 0);
 
@@ -316,11 +315,13 @@ fn interactive_upgrade(latest_release: &str) {
 
     for (i, option) in [
         &format!("Upgrade through AUR {blue}(universal device compatibility){reset}"),
-        &format!("Upgrade through AUR {blue}(latest git {green}(commit: {latest_commit}){blue}, universal device compatibility){reset}"),
+        &format!("Upgrade through AUR {blue}(latest git {green}(commit: {latest_commit}){blue}, \
+         universal device compatibility){reset}"),
         "Install via .deb file",
         "Install via .rpm file",
         "Manually install binary",
-        &format!("Build from source {blue}(latest git {green}(commit: {latest_commit}){blue}, universal device compatibility, {red}DEBIAN/UBUNTU MAY INVOLVE MANUAL INTERVENTION{blue}){reset}"),
+        &format!("Build from source {blue}(latest git {green}(commit: {latest_commit}){blue}, \
+          universal device compatibility, {red}DEBIAN/UBUNTU MAY INVOLVE MANUAL INTERVENTION{blue}){reset}"),
         "Exit",
     ]
         .iter()
@@ -396,7 +397,14 @@ pub fn check() {
 
     println!("\nChecking for updates...");
 
-    let (current, latest) = (VERSION, get_latest_release().unwrap_or_default());
+    let current = VERSION;
+    let Some(latest) = get_latest_release() else {
+        error(
+            "Failed to check for updates. Ensure you are connected to the internet.",
+            "",
+        );
+        return;
+    };
 
     log(
         &format!(
@@ -405,42 +413,56 @@ pub fn check() {
         0,
     );
 
-    match get_latest_release() {
-        Some(latest) if latest != VERSION => {
+    let parse_version = |v: &str| -> (u32, u32, u32) {
+        let nums: Vec<u32> = v
+            .trim_start_matches('v')
+            .split('.')
+            .map(|s| s.parse().unwrap_or(0))
+            .collect();
+        (
+            *nums.first().unwrap_or(&0),
+            *nums.get(1).unwrap_or(&0),
+            *nums.get(2).unwrap_or(&0),
+        )
+    };
+
+    match parse_version(current).cmp(&parse_version(&latest)) {
+        Ordering::Less => {
             log(
                 &format!(
                     "cmds/update::check_for_updates(): Found available update from \"{current}\" to \"{latest}\"..."
                 ),
                 0,
             );
-
-            println!("{green}\nUpdate available: {VERSION} -> {latest}{reset}");
+            println!("{green}\nUpdate available: {current} -> {latest}{reset}");
 
             log(
                 "cmds/update::check_for_updates(): Asking user for confirmation...",
                 0,
             );
-
             ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
 
             log(
                 "cmds/update::check_for_updates(): Launching upgrade process...",
                 0,
             );
-
             update();
         }
-
-        Some(_) => {
+        Ordering::Greater => {
+            log(
+                "cmds/update::check_for_updates(): Current version is newer than the latest release.",
+                1,
+            );
+            println!(
+                "You are running a newer version {}({current}){reset} than the latest release {green}({latest}){reset}.\
+                \nAssuming it's a development build.",
+                COLORS.blue,
+            );
+        }
+        Ordering::Equal => {
             log("cmds/update::check_for_updates(): No updates available.", 1);
-
             println!("Already up to date.");
         }
-
-        None => error(
-            "Failed to check for updates. Ensure you are connected to the internet.",
-            "",
-        ),
     }
 }
 
