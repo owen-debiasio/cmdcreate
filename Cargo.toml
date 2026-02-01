@@ -27,7 +27,7 @@ style = "warn"
 
 [profile.release]
 lto = true
-codeBin-units = 1
+codegen-units = 1
 panic = "abort"
 strip = true
 
