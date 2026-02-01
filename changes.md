@@ -529,3 +529,4 @@
 - Code optimizations
 - Removed `-F`/`--force_system_shell` flags
 - Improved the developer environment setup script.
+- Checking for updates can now detect if you are running a development build
