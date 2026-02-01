@@ -276,7 +276,7 @@ fn build_from_source() {
     log("cmds/update::build_from_source(): Cloning repository...", 0);
 
     run_shell_command(&format!(
-        "git clone --depth=1 https://github.com/owen-debiasio/cmdcreate {cache_dir}",
+        "git clone https://github.com/owen-debiasio/cmdcreate {cache_dir}",
     ));
 
     log(
