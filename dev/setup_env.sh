@@ -96,4 +96,4 @@ cd "$dev_dir" || exit 1
 echo "--- Activating shell scripts..."
 find . -maxdepth 1 -name "*.sh" -exec chmod +x {} +
 
-echo -e "--- Dev environment ready!\nOpen the environment in your chosen text editor or IDE!"
+echo -e "--- Dev environment ready...\nOpen the environment in your chosen text editor or IDE..."
