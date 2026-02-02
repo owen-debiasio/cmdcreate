@@ -22,7 +22,7 @@ pub struct Vars {
 pub static VARS: LazyLock<Vars> = LazyLock::new(|| Vars {
     shell: var("SHELL").unwrap_or_else(|_| "unknown".to_owned()),
     home: var("HOME").unwrap_or_else(|_| "unknown".to_owned()),
-    editor: var("EDITOR").unwrap_or_else(|_| "unknown".to_owned()),
+    editor: var("EDITOR").unwrap_or_else(|_| "auto".to_owned()),
 });
 
 pub static ARCH: &str = ARCHITECTURE;
