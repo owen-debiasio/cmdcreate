@@ -90,7 +90,7 @@ You can the get the standalone `x86_64` binary file here:
 
 ---
 
-## Building from source (Latest git), development
+## Building from source (Latest git)
 
 ### Dependencies
 
@@ -99,13 +99,9 @@ You can the get the standalone `x86_64` binary file here:
 > [Development Documentation](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/developing.md)
 
 - Rustup
-- Openssl (development, other)
-- nano (not for building, but recommended, or you could use another text editor
-  listed in this source code file:
-  [cmdcreate/src/commands/edit.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/edit.rs)
-  **(Lines 24-39)**
+- Openssl
 - git
-- curl (not for building, but recommended)
+- curl
 
 > [!NOTE]  
 > You need the latest Rust version, so install rustup and run:
