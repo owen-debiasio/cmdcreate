@@ -47,10 +47,7 @@ pub fn input(text: &str) -> String {
     input.trim().to_string()
 }
 
-#[derive(Debug)]
-pub struct TestError(pub String);
-
-pub fn error(msg: &str, err: &str) {
+pub fn error(msg: &str, err: &str) -> ! {
     let (red, reset) = (COLORS.red, COLORS.reset);
 
     log(
@@ -62,6 +59,9 @@ pub fn error(msg: &str, err: &str) {
 
     exit(1)
 }
+
+#[derive(Debug)]
+pub struct TestError(pub String);
 
 impl Display for TestError {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {

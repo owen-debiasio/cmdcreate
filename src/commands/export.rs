@@ -10,21 +10,21 @@ use crate::{
 pub fn export(path: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
-    log("cmds/backup/export::export(): Getting file to export...", 0);
+    log("commands/export::export(): Getting file to export...", 0);
 
     let export_file = &format!("{path}/export.cmdcreate");
 
     log(
-        &format!("cmds/backup/export::export(): Exporting commands to: \"{export_file}\"..."),
+        &format!("commands/export::export(): Exporting commands to: \"{export_file}\"..."),
         0,
     );
 
-    log("cmds/backup/export::export(): Creating export file...", 0);
+    log("commands/export::export(): Creating export file...", 0);
 
     create_file(export_file);
 
     log(
-        "cmds/backup/export::export(): Initializing export process...",
+        "commands/export::export(): Initializing export process...",
         0,
     );
 
@@ -33,7 +33,7 @@ pub fn export(path: &str) {
             let cmd = stem.to_string_lossy();
 
             log(
-                &format!("cmds/backup/export::export(): Exporting command: \"{cmd}\"..."),
+                &format!("commands/export::export(): Exporting command: \"{cmd}\"..."),
                 0,
             );
 
@@ -42,13 +42,13 @@ pub fn export(path: &str) {
 
             log(
                 &format!(
-                    "cmds/backup/export::export(): Exporting command contents for command \"{cmd}\": \"{cmd_contents}\"..."
+                    "commands/export::export(): Exporting command contents for command \"{cmd}\": \"{cmd_contents}\"..."
                 ),
                 0,
             );
 
             log(
-                &format!("cmds/backup/export::export(): Formatting command: \"{cmd}\"..."),
+                &format!("commands/export::export(): Formatting command: \"{cmd}\"..."),
                 0,
             );
 
@@ -59,7 +59,7 @@ pub fn export(path: &str) {
             };
 
             log(
-                &format!("cmds/backup/export::export(): Writing line to file: \"{line}\"..."),
+                &format!("commands/export::export(): Writing line to file: \"{line}\"..."),
                 0,
             );
 
@@ -68,7 +68,7 @@ pub fn export(path: &str) {
     }
 
     log(
-        "cmds/backup/export::export(): Exporting process completed...",
+        "commands/export::export(): Exporting process completed...",
         0,
     );
 

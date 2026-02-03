@@ -1,6 +1,5 @@
-use crate::commands::favorite::favorite;
 use crate::{
-    commands::tools::{get_installed_commands, is_command_installed},
+    commands::{favorite::favorite, tools::command_is_installed},
     logger::log,
     utils::{
         colors::COLORS,
@@ -19,21 +18,21 @@ pub fn remove(command: &str, forced: bool) {
         COLORS.reset,
     );
 
-    if get_installed_commands().is_empty() {
-        log("cmds/remove::remove(): Command is empty, exiting...", 0);
+    if command.is_empty() {
+        log("commands/remove::remove(): Command is empty, exiting...", 0);
         return;
     }
 
     log(
-        &format!("cmds/remove::remove(): Determining if command \"{command}\" is installed..."),
+        &format!("commands/remove::remove(): Determining if command \"{command}\" is installed..."),
         0,
     );
 
-    is_command_installed(command);
+    command_is_installed(command);
 
     log(
         &format!(
-            "cmds/remove::remove(): Asking for confirmation to delete command \"{command}\"..."
+            "commands/remove::remove(): Asking for confirmation to delete command \"{command}\"..."
         ),
         0,
     );
@@ -45,20 +44,24 @@ pub fn remove(command: &str, forced: bool) {
     }
 
     log(
-        &format!("cmds/remove::remove(): Deleting command \"{command}\"..."),
+        &format!("commands/remove::remove(): Deleting command \"{command}\"..."),
         0,
     );
 
     delete_file(&format!("{}{command}", PATHS.install_dir));
 
     log(
-        &format!("cmds/remove::remove(): Determining if command \"{command}\" is in favorites..."),
+        &format!(
+            "commands/remove::remove(): Determining if command \"{command}\" is in favorites..."
+        ),
         0,
     );
 
     if read_file_to_string(&PATHS.favorites).contains(command) && path_exists(&PATHS.favorites) {
         log(
-            &format!("cmds/remove::remove(): Command \"{command}\" is in favorites, removing..."),
+            &format!(
+                "commands/remove::remove(): Command \"{command}\" is in favorites, removing..."
+            ),
             0,
         );
 
@@ -66,12 +69,14 @@ pub fn remove(command: &str, forced: bool) {
     }
 
     log(
-        &format!("cmds/remove::remove(): Command \"{command}\" is not in favorites, skipping..."),
+        &format!(
+            "commands/remove::remove(): Command \"{command}\" is not in favorites, skipping..."
+        ),
         1,
     );
 
     log(
-        &format!("cmds/remove::remove(): Removing link of command \"{command}\"..."),
+        &format!("commands/remove::remove(): Removing link of command \"{command}\"..."),
         0,
     );
 

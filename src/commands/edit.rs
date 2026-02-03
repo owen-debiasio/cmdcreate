@@ -1,5 +1,5 @@
 use crate::{
-    commands::tools::is_command_installed,
+    commands::tools::command_is_installed,
     logger::log,
     utils::{
         fs::PATHS,
@@ -11,13 +11,13 @@ use std::process::Command;
 
 pub fn edit(cmd: &str) {
     log(
-        &format!("cmds/edit::edit(): Checking if command \"{cmd}\" is installed..."),
+        &format!("commands/edit::edit(): Checking if command \"{cmd}\" is installed..."),
         0,
     );
 
-    is_command_installed(cmd);
+    command_is_installed(cmd);
 
-    log("cmds/edit::edit(): Checking editors...", 0);
+    log("commands/edit::edit(): Checking editors...", 0);
 
     let editors: &[&str] = &[
         &VARS.editor, // Used when user runs something like "EDITOR=vi cmdcreate edit abc"
@@ -47,15 +47,15 @@ pub fn edit(cmd: &str) {
             .unwrap_or(false)
     });
 
-    let editor = if let Some(ed) = editor {
-        *ed
-    } else {
-        error("No known editor is installed on your device.", "");
-        return;
-    };
+    let editor = editor.map_or_else(
+        || {
+            error("No known editor is installed on your device.", "");
+        },
+        |ed| *ed,
+    );
 
     log(
-        &format!("cmds/edit::edit(): Launching editor \"{editor}\"..."),
+        &format!("commands/edit::edit(): Launching editor \"{editor}\"..."),
         0,
     );
 

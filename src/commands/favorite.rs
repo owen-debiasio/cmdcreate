@@ -1,5 +1,5 @@
 use crate::{
-    commands::tools::is_command_installed,
+    commands::tools::command_is_installed,
     logger::log,
     utils::{
         colors::COLORS,
@@ -12,7 +12,9 @@ pub fn favorite(mode: &str, command: &str) {
     let (blue, yellow, reset) = (COLORS.blue, COLORS.yellow, COLORS.reset);
 
     log(
-        &format!("cmds/favorite::favorite(): Managing favorite status of command \"{command}\"..."),
+        &format!(
+            "commands/favorite::favorite(): Managing favorite status of command \"{command}\"..."
+        ),
         0,
     );
 
@@ -29,14 +31,14 @@ fn add(cmd: &str) {
     let favorites_path = &PATHS.favorites;
 
     log(
-        &format!("cmds/favorite::favorite(): Checking if command \"{cmd}\" is installed..."),
+        &format!("commands/favorite::favorite(): Checking if command \"{cmd}\" is installed..."),
         0,
     );
 
-    is_command_installed(cmd);
+    command_is_installed(cmd);
 
     log(
-        &format!("cmds/favorite::favorite(): Getting contents of command \"{cmd}\"..."),
+        &format!("commands/favorite::favorite(): Getting contents of command \"{cmd}\"..."),
         0,
     );
 
@@ -45,7 +47,7 @@ fn add(cmd: &str) {
         .any(|c| c == cmd)
     {
         log(
-            &format!("cmds/favorite::favorite(): Command \"{cmd}\" is already in favorites..."),
+            &format!("commands/favorite::favorite(): Command \"{cmd}\" is already in favorites..."),
             1,
         );
 
@@ -55,7 +57,7 @@ fn add(cmd: &str) {
     }
 
     log(
-        &format!("cmds/favorite::favorite(): Adding command \"{cmd}\" to favorites..."),
+        &format!("commands/favorite::favorite(): Adding command \"{cmd}\" to favorites..."),
         0,
     );
 
@@ -69,12 +71,12 @@ fn remove(cmd: &str) {
     let favorites_path = &PATHS.favorites;
 
     log(
-        &format!("cmds/favorite::favorite(): Removing command \"{cmd}\" from favorites..."),
+        &format!("commands/favorite::favorite(): Removing command \"{cmd}\" from favorites..."),
         0,
     );
 
     log(
-        &format!("cmds/favorite::favorite(): Checking if \"{cmd}\" is in favorites..."),
+        &format!("commands/favorite::favorite(): Checking if \"{cmd}\" is in favorites..."),
         0,
     );
 
@@ -83,11 +85,12 @@ fn remove(cmd: &str) {
         .any(|c| c == cmd)
     {
         error("Command isn't in favorites:", cmd);
-        return;
     }
 
     log(
-        &format!("cmds/favorite::favorite(): Command \"{cmd}\" found in favorites... Removing..."),
+        &format!(
+            "commands/favorite::favorite(): Command \"{cmd}\" found in favorites... Removing..."
+        ),
         0,
     );
 

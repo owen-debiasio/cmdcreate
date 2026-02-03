@@ -13,7 +13,7 @@ pub fn create(command: &str, contents: &str, verbose: bool) {
 
     log(
         &format!(
-            "cmds/create::create(): Creating command \"{command}\": With contents \"{contents}\" | (verbose={verbose})"
+            "commands/create::create(): Creating command \"{command}\": With contents \"{contents}\" | (verbose={verbose})"
         ),
         0,
     );
@@ -21,7 +21,7 @@ pub fn create(command: &str, contents: &str, verbose: bool) {
     let script = &format!("{}{command}", PATHS.install_dir);
 
     log(
-        &format!("cmds/create::create(): Script path: \"{script}\""),
+        &format!("commands/create::create(): Script path: \"{script}\""),
         0,
     );
 
@@ -30,18 +30,18 @@ pub fn create(command: &str, contents: &str, verbose: bool) {
     }
 
     log(
-        "cmds/create::create(): Command isn't empty, continuing...",
+        "commands/create::create(): Command isn't empty, continuing...",
         0,
     );
 
     log(
-        &format!("cmds/create::create(): Writing contents to script: \"{script}\""),
+        &format!("commands/create::create(): Writing contents to script: \"{script}\""),
         0,
     );
 
     overwrite_file(script, contents);
 
-    log("cmds/create::create(): Activating command...", 0);
+    log("commands/create::create(): Activating command...", 0);
 
     run_shell_command(&format!(
         "
@@ -52,7 +52,7 @@ pub fn create(command: &str, contents: &str, verbose: bool) {
 
     if verbose {
         log(
-            "cmds/create::create(): Verbose, printing success message...",
+            "commands/create::create(): Verbose, printing success message...",
             0,
         );
 
@@ -62,7 +62,7 @@ pub fn create(command: &str, contents: &str, verbose: bool) {
     }
 
     log(
-        "cmds/create::create(): Not verbose, not printing success message...",
+        "commands/create::create(): Not verbose, not printing success message...",
         0,
     );
 }

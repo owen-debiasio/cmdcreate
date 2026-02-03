@@ -13,7 +13,7 @@ pub fn search(cmd: &str) {
 
         log(
             &format!(
-                "cmds/search::search(): Determining if command \"{file_stem}\" matches \"{cmd}\"..."
+                "commands/search::search(): Determining if command \"{file_stem}\" matches \"{cmd}\"..."
             ),
             0,
         );
@@ -24,7 +24,7 @@ pub fn search(cmd: &str) {
             }
 
             log(
-                &format!("cmds/search::search(): Found match: \"{cmd}\"..."),
+                &format!("commands/search::search(): Found match: \"{cmd}\"..."),
                 0,
             );
 
@@ -45,7 +45,7 @@ pub fn search(cmd: &str) {
 
     if count == 1 {
         log(
-            &format!("cmds/search::search(): Found only 1 match for command \"{cmd}\"..."),
+            &format!("commands/search::search(): Found only 1 match for command \"{cmd}\"..."),
             0,
         );
 
@@ -55,7 +55,7 @@ pub fn search(cmd: &str) {
     }
 
     log(
-        &format!("cmds/search::search(): Found multiple matches for command \"{cmd}\"..."),
+        &format!("commands/search::search(): Found multiple matches for command \"{cmd}\"..."),
         0,
     );
 

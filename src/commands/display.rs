@@ -1,5 +1,5 @@
 use crate::{
-    commands::tools::is_command_installed,
+    commands::tools::command_is_installed,
     logger::log,
     utils::{
         colors::COLORS,
@@ -8,22 +8,17 @@ use crate::{
 };
 
 pub fn display(cmd: &str) {
-    let (blue, reset) = (COLORS.blue, COLORS.reset);
+    command_is_installed(cmd);
 
     log(
-        &format!("cmds/display::display(): Checking if command \"{cmd}\" is installed..."),
-        0,
-    );
-
-    is_command_installed(cmd);
-
-    log(
-        "cmds/display::display(): Printing contents of command...",
+        "commands/display::display(): Printing contents of command...",
         0,
     );
 
     println!(
-        "Contents of command: {blue}\"{cmd}\"{reset}\n--------\n{}",
-        read_file_to_string(&format!("{}{cmd}", PATHS.install_dir)).trim()
+        "Contents of command: {}\"{cmd}\"{}\n--------\n{}",
+        COLORS.blue,
+        COLORS.reset,
+        read_file_to_string(&format!("{}{cmd}", PATHS.install_dir)).trim() // Remove extra whitespace just in case
     );
 }

@@ -62,7 +62,6 @@ pub fn retrieve_git_file(dest: &str, file_path: &str) {
 pub fn read_file_to_string(file_path: &str) -> String {
     read_to_string(file_path).unwrap_or_else(|e| {
         error("Error reading file:", &format!("\"{file_path}\": {e}"));
-        String::new()
     })
 }
 
@@ -136,8 +135,6 @@ pub fn create_file(path: &str) {
             &format!("Failed to create parent folder for {path}:"),
             &e.to_string(),
         );
-
-        return;
     }
 
     if !path_exists(path)

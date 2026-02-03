@@ -9,10 +9,39 @@ use crate::{
     },
 };
 
-pub fn is_command_installed(cmd: &str) {
+pub fn command_is_installed(cmd: &str) -> bool {
     log(
         &format!(
-            "cmds/tools::is_command_installed(): Checking if command \"{cmd}\" is installed..."
+            "commands/tools::command_is_installed(): Checking if command \"{cmd}\" is installed..."
+        ),
+        0,
+    );
+
+    if path_exists(&format!("{}/{cmd}", PATHS.install_dir)) {
+        log(
+            &format!(
+                "commands/tools::command_is_installed(): Command \"{cmd}\" is installed... Continuing..."
+            ),
+            0,
+        );
+
+        true
+    } else {
+        log(
+            &format!(
+                "commands/tools::command_is_installed(): Command \"{cmd}\" is not installed... Exiting..."
+            ),
+            0,
+        );
+
+        error(&format!("Command \"{cmd}\" is not installed"), "");
+    }
+}
+
+pub fn _is_command_installed(cmd: &str) -> bool {
+    log(
+        &format!(
+            "commands/tools::is_command_installed(): Checking if command \"{cmd}\" is installed..."
         ),
         0,
     );
@@ -23,17 +52,19 @@ pub fn is_command_installed(cmd: &str) {
 
     log(
         &format!(
-            "cmds/tools::is_command_installed(): Command \"{cmd}\" is installed, continuing..."
+            "commands/tools::is_command_installed(): Command \"{cmd}\" is installed, continuing..."
         ),
         0,
     );
+
+    true
 }
 
 pub fn get_installed_commands() -> Vec<PathBuf> {
     let (red, reset) = (COLORS.red, COLORS.reset);
 
     log(
-        "cmds/tools::get_installed_commands(): Getting installed commands...",
+        "commands/tools::get_installed_commands(): Getting installed commands...",
         0,
     );
 

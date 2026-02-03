@@ -8,7 +8,7 @@ pub fn import(file: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
     log(
-        &format!("cmds/backup/import::import(): Importing commands from file: \"{file}\"..."),
+        &format!("commands/import::import(): Importing commands from file: \"{file}\"..."),
         0,
     );
 
@@ -16,33 +16,25 @@ pub fn import(file: &str) {
 
     if contents.trim().is_empty() {
         error("Import file is empty or unreadable.", "");
-
-        return;
     }
 
     log(
-        "cmds/backup/import::import(): Initializing import process...",
+        "commands/import::import(): Initializing import process...",
         0,
     );
 
     for line in contents.replace("[|", "|").lines() {
-        log("cmds/backup/import::import(): Splitting lines...", 0);
+        log("commands/import::import(): Splitting lines...", 0);
 
         let parts: Vec<&str> = line.split('|').map(str::trim).collect();
 
         if line.trim().is_empty() && !parts.is_empty() {
-            log(
-                "cmds/backup/import::import(): Line is empty, skipping...",
-                1,
-            );
+            log("commands/import::import(): Line is empty, skipping...", 1);
 
             continue;
         }
 
-        log(
-            "cmds/backup/import::import(): Gathering command parts...",
-            0,
-        );
+        log("commands/import::import(): Gathering command parts...", 0);
 
         let name = parts.first().unwrap();
         let mut data = String::new();
@@ -61,19 +53,19 @@ pub fn import(file: &str) {
         }
 
         log(
-            "cmds/backup/import::import(): Initializing import process...",
+            "commands/import::import(): Initializing import process...",
             0,
         );
 
         log(
-            &format!("cmds/backup/import::import(): Installing command \"{name}\"..."),
+            &format!("commands/import::import(): Installing command \"{name}\"..."),
             0,
         );
 
         println!("{blue}Installing command: \"{green}{name}{reset}\"");
 
         log(
-            &format!("cmds/backup/import::import(): Creating command \"{name}\"..."),
+            &format!("commands/import::import(): Creating command \"{name}\"..."),
             0,
         );
 
@@ -81,7 +73,7 @@ pub fn import(file: &str) {
 
         if favorite {
             log(
-                &format!("cmds/backup/import::import(): Adding command \"{name}\" to favorites..."),
+                &format!("commands/import::import(): Adding command \"{name}\" to favorites..."),
                 0,
             );
 
@@ -89,10 +81,7 @@ pub fn import(file: &str) {
         }
     }
 
-    log(
-        "cmds/backup/import::import(): Import process completed...",
-        0,
-    );
+    log("commands/import::import(): Import process completed...", 0);
 
     println!("\n{green}Successfully imported commands.{reset}");
 }

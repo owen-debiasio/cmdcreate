@@ -1,7 +1,7 @@
 use crate::{
     commands::{
         remove::remove,
-        tools::{get_installed_commands, is_command_installed},
+        tools::{command_is_installed, get_installed_commands},
     },
     logger::log,
     utils::{
@@ -23,26 +23,26 @@ pub fn rename(old: &str, new: &str) {
     let (install_dir, installed_commands) = (&PATHS.install_dir, get_installed_commands());
 
     if installed_commands.is_empty() {
-        log("cmds/rename::rename(): Command is empty, exiting...", 0);
+        log("commands/rename::rename(): Command is empty, exiting...", 0);
         return;
     }
 
     log(
-        &format!("cmds/rename::rename(): Determining if old command \"{old}\" is installed..."),
+        &format!("commands/rename::rename(): Determining if old command \"{old}\" is installed..."),
         0,
     );
 
-    is_command_installed(old);
+    command_is_installed(old);
 
     log(
-        &format!("cmds/rename::rename(): Determining if new command \"{new}\" is installed..."),
+        &format!("commands/rename::rename(): Determining if new command \"{new}\" is installed..."),
         0,
     );
 
     if path_exists(&format!("{}/{new}", PATHS.install_dir)) {
         log(
             &format!(
-                "cmds/rename::rename(): Command \"{new}\" is installed... Requesting removal..."
+                "commands/rename::rename(): Command \"{new}\" is installed... Requesting removal..."
             ),
             0,
         );
@@ -52,7 +52,7 @@ pub fn rename(old: &str, new: &str) {
         );
 
         if args_forced() || input("").trim().eq_ignore_ascii_case("y") {
-            log("cmds/rename::rename(): Accepting... Continuing...", 0);
+            log("commands/rename::rename(): Accepting... Continuing...", 0);
             remove(new, true);
         } else {
             error("You need to remove the old command before proceeding!", "");
@@ -60,7 +60,7 @@ pub fn rename(old: &str, new: &str) {
     }
 
     log(
-        &format!("cmds/rename::rename(): Renaming command \"{old}\" to \"{new}\"..."),
+        &format!("commands/rename::rename(): Renaming command \"{old}\" to \"{new}\"..."),
         0,
     );
 

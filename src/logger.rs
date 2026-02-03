@@ -37,8 +37,6 @@ pub fn log(text: &str, lvl: u8) {
         && let Err(e) = create_dir_all(log_dir)
     {
         error("Failed to create log directory", &e.to_string());
-
-        return;
     }
 
     write_to_file(

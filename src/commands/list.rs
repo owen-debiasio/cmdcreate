@@ -11,19 +11,19 @@ use crate::{
 pub fn list() {
     let (blue, reset) = (COLORS.blue, COLORS.reset);
 
-    log("cmds/list::list(): Gathering installed commands...", 0);
+    log("commands/list::list(): Gathering installed commands...", 0);
 
     let installed_scripts = get_installed_commands();
     let amount = installed_scripts.len();
 
     log(
-        &format!("cmds/list::list(): Listing amount of installed commands ({amount})..."),
+        &format!("commands/list::list(): Listing amount of installed commands ({amount})..."),
         0,
     );
 
     println!("Installed commands: ({blue}{amount}{reset})\n--------");
 
-    log("cmds/list::list(): Listing installed commands...", 0);
+    log("commands/list::list(): Listing installed commands...", 0);
 
     for script in installed_scripts {
         let name = script.file_stem().unwrap_or_default().to_string_lossy();
@@ -31,7 +31,7 @@ pub fn list() {
 
         log(
             &format!(
-                "cmds/list::list(): Current command: \"{name}\" (favorited={})",
+                "commands/list::list(): Current command: \"{name}\" (favorited={})",
                 favorites.contains(name.to_string().as_str())
             ),
             0,

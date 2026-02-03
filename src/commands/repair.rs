@@ -11,7 +11,7 @@ pub fn repair() {
     let (green, yellow, blue, reset) = (COLORS.green, COLORS.yellow, COLORS.blue, COLORS.reset);
 
     log(
-        "cmds/repair::repair(): Initializing command repair process...",
+        "commands/repair::repair(): Initializing command repair process...",
         0,
     );
 
@@ -20,13 +20,13 @@ pub fn repair() {
         let name = script.file_stem().unwrap_or_default().to_string_lossy();
 
         log(
-            &format!("cmds/repair::repair(): Checking if command \"{name}\" needs repair..."),
+            &format!("commands/repair::repair(): Checking if command \"{name}\" needs repair..."),
             0,
         );
 
         if !path_exists(&format!("/usr/local/bin/{name}")) {
             log(
-                &format!("cmds/repair::repair(): Repairing command \"{name}\"..."),
+                &format!("commands/repair::repair(): Repairing command \"{name}\"..."),
                 0,
             );
 
@@ -42,20 +42,23 @@ pub fn repair() {
         }
     }
 
-    log("cmds/repair::repair(): Determining results...", 0);
+    log("commands/repair::repair(): Determining results...", 0);
 
     if count > 0_i32 {
         println!("{green}Broken commands have been repaired.{reset}");
 
         log(
-            "cmds/repair::repair(): Broken commands have been repaired",
+            "commands/repair::repair(): Broken commands have been repaired",
             0,
         );
 
         return;
     }
 
-    log("cmds/repair::repair(): No commands needed repairs...", 0);
+    log(
+        "commands/repair::repair(): No commands needed repairs...",
+        0,
+    );
 
     println!("{yellow}No commands needed repairs.{reset}");
 }
