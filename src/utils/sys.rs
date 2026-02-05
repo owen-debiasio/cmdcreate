@@ -35,9 +35,11 @@ pub fn return_args() -> Vec<String> {
             for ch in arg.chars().skip(1) {
                 supplied_args.push(format!("-{ch}"));
             }
-        } else {
-            supplied_args.push(arg);
+
+            continue;
         }
+
+        supplied_args.push(arg);
     }
 
     supplied_args
