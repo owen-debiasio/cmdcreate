@@ -11,11 +11,14 @@ use crate::{
         },
     },
 };
+
+use std::{
+    cmp::Ordering, error::Error, fs::File, io::copy, path::Path, process::exit, time::Duration,
+};
+
 use reqwest::blocking::Client;
 use serde::Deserialize;
 use serde_json::Value;
-use std::cmp::Ordering;
-use std::{error::Error, fs::File, io::copy, path::Path, process::exit, time::Duration};
 
 #[derive(Deserialize)]
 struct Release {
@@ -55,16 +58,6 @@ pub fn update() {
     let latest_release = &get_latest_release().unwrap_or_else(|| VERSION.to_owned());
 
     log(
-        "commands/update::update(): Determining installation method...",
-        0,
-    );
-
-    log(
-        "commands/update::update(): Getting installation paths...",
-        0,
-    );
-
-    log(
         "commands/update::interactive_upgrade(): Requesting permission to upgrade...",
         0,
     );
@@ -73,6 +66,11 @@ pub fn update() {
 
     log(
         "commands/update::interactive_upgrade(): Continuing with upgrade...",
+        0,
+    );
+
+    log(
+        "commands/update::update(): Determining installation method...",
         0,
     );
 
@@ -87,8 +85,8 @@ pub fn update() {
                 .trim()
                 .eq_ignore_ascii_case("n")
             {
-                println!();
                 interactive_upgrade(latest_release);
+
                 return;
             }
 
@@ -110,6 +108,7 @@ pub fn update() {
                 .eq_ignore_ascii_case("n")
             {
                 interactive_upgrade(latest_release);
+
                 return;
             }
 
@@ -128,6 +127,7 @@ pub fn update() {
                 .eq_ignore_ascii_case("n")
             {
                 interactive_upgrade(latest_release);
+
                 return;
             }
 
@@ -139,6 +139,7 @@ pub fn update() {
                 "commands/update::update(): No distro detected... Moving on to interactive upgrade...",
                 1,
             );
+
             interactive_upgrade(latest_release);
         }
     }
@@ -419,7 +420,6 @@ pub fn check() {
 
     println!("\nChecking for updates...");
 
-    let current = VERSION;
     let Some(latest) = get_latest_release() else {
         error(
             "Failed to check for updates. Ensure you are connected to the internet.",
@@ -429,7 +429,7 @@ pub fn check() {
 
     log(
         &format!(
-            "commands/update::check_for_updates(): Comparing versions \"{current} (Current)\" to \"{latest}\" (Latest)..."
+            "commands/update::check_for_updates(): Comparing versions \"{VERSION} (Current)\" to \"{latest}\" (Latest)..."
         ),
         0,
     );
@@ -447,26 +447,29 @@ pub fn check() {
         )
     };
 
-    match parse_version(current).cmp(&parse_version(&latest)) {
+    match parse_version(VERSION).cmp(&parse_version(&latest)) {
         Ordering::Less => {
             log(
                 &format!(
-                    "commands/update::check_for_updates(): Found available update from \"{current}\" to \"{latest}\"..."
+                    "commands/update::check_for_updates(): Found available update from \"{VERSION}\" to \"{latest}\"..."
                 ),
                 0,
             );
-            println!("{green}\nUpdate available: {current} -> {latest}{reset}");
+
+            println!("{green}\nUpdate available: {VERSION} -> {latest}{reset}");
 
             log(
                 "commands/update::check_for_updates(): Asking user for confirmation...",
                 0,
             );
+
             ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
 
             log(
                 "commands/update::check_for_updates(): Launching upgrade process...",
                 0,
             );
+
             update();
         }
         Ordering::Greater => {
@@ -474,8 +477,9 @@ pub fn check() {
                 "commands/update::check_for_updates(): Current version is newer than the latest release.",
                 1,
             );
+
             println!(
-                "You are running a newer version {}({current}){reset} than the latest release {green}({latest}){reset}.\
+                "\nYou are running a newer version {}({VERSION}){reset} than the latest release {green}({latest}){reset}.\
                 \nAssuming it's a development build.",
                 COLORS.blue,
             );
@@ -485,6 +489,7 @@ pub fn check() {
                 "commands/update::check_for_updates(): No updates available.",
                 1,
             );
+
             println!("Already up to date.");
         }
     }
