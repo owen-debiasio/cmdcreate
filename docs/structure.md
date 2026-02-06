@@ -93,6 +93,7 @@ change.
     - [colors.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/colors.rs)
     - [fs.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/fs.rs)
     - [io.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/io.rs)
+    - [misc.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/misc.rs)
     - [mod.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/mod.rs)
     - [sys.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/sys.rs)
   - [configs.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/configs.rs)
@@ -100,6 +101,8 @@ change.
   - [logger.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/logger.rs)
   - [main.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/main.rs)
   - [parse.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/parse.rs)
+  - [usage.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/usage.rs)
+  - [version.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/version.rs)
 
 ## Testing cmdcreate
 
