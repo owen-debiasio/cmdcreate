@@ -1,24 +1,20 @@
 use crate::{
-    VERSION,
     logger::log,
     utils::{
         colors::COLORS,
         fs::delete_folder,
         io::{ask_for_confirmation, error, input},
+        misc::http_client,
         sys::{
             ARCH, DistroBase, InstallMethod, VARS, args_forced, get_distro_base,
             installation_method, run_shell_command,
         },
     },
+    version::{VERSION, get_latest_commit, get_latest_release, is_development_version},
 };
 
-use std::{
-    cmp::Ordering, error::Error, fs::File, io::copy, path::Path, process::exit, time::Duration,
-};
-
-use reqwest::blocking::Client;
 use serde::Deserialize;
-use serde_json::Value;
+use std::{fs::File, io::copy, path::Path, process::exit};
 
 #[derive(Deserialize)]
 struct Release {
@@ -37,14 +33,6 @@ pub fn get_install_path() -> &'static Path {
         .map(Path::new)
         .find(|p| p.exists())
         .unwrap()
-}
-
-fn http_client() -> Client {
-    Client::builder()
-        .timeout(Duration::from_secs(15))
-        .user_agent("cmdcreate-upgrader")
-        .build()
-        .expect("Failed to build HTTP client")
 }
 
 pub fn update() {
@@ -143,6 +131,8 @@ pub fn update() {
             interactive_upgrade(latest_release);
         }
     }
+
+    exit(0)
 }
 
 fn upgrade_aur(git: bool) {
@@ -375,41 +365,6 @@ fn interactive_upgrade(latest_release: &str) {
     exit(0)
 }
 
-pub fn get_latest_tag(owner: &str, repo: &str) -> Result<String, Box<dyn Error>> {
-    log(
-        "commands/update::get_latest_tag(): Retrieving latest tag...",
-        0,
-    );
-
-    let json: Value = http_client()
-        .get(format!(
-            "https://api.github.com/repos/{owner}/{repo}/releases/latest"
-        ))
-        .send()?
-        .json()?;
-
-    let tag = json["tag_name"]
-        .as_str()
-        .ok_or("Missing tag_name in response")?
-        .to_owned();
-
-    log(
-        &format!("commands/update::get_latest_tag(): Latest tag: {tag}..."),
-        0,
-    );
-
-    Ok(tag)
-}
-
-pub fn get_latest_release() -> Option<String> {
-    log(
-        "commands/update::get_latest_release(): Retrieving latest release...",
-        0,
-    );
-
-    get_latest_tag("owen-debiasio", "cmdcreate").ok()
-}
-
 pub fn check() {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
@@ -434,93 +389,52 @@ pub fn check() {
         0,
     );
 
-    let parse_version = |v: &str| -> (u32, u32, u32) {
-        let nums: Vec<u32> = v
-            .trim_start_matches('v')
-            .split('.')
-            .map(|s| s.parse().unwrap_or(0))
-            .collect();
-        (
-            *nums.first().unwrap_or(&0),
-            *nums.get(1).unwrap_or(&0),
-            *nums.get(2).unwrap_or(&0),
-        )
-    };
+    if is_development_version(VERSION) {
+        log(
+            "commands/update::check_for_updates(): Current version is newer than the latest release.",
+            1,
+        );
 
-    match parse_version(VERSION).cmp(&parse_version(&latest)) {
-        Ordering::Less => {
-            log(
-                &format!(
-                    "commands/update::check_for_updates(): Found available update from \"{VERSION}\" to \"{latest}\"..."
-                ),
-                0,
-            );
-
-            println!("{green}\nUpdate available: {VERSION} -> {latest}{reset}");
-
-            log(
-                "commands/update::check_for_updates(): Asking user for confirmation...",
-                0,
-            );
-
-            ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
-
-            log(
-                "commands/update::check_for_updates(): Launching upgrade process...",
-                0,
-            );
-
-            update();
-        }
-        Ordering::Greater => {
-            log(
-                "commands/update::check_for_updates(): Current version is newer than the latest release.",
-                1,
-            );
-
-            println!(
-                "\nYou are running a newer version {}({VERSION}){reset} than the latest release {green}({latest}){reset}.\
+        println!(
+            "\nYou are running a newer version {}({VERSION}){reset} than the latest release {green}({latest}){reset}.\
                 \nAssuming it's a development build.",
-                COLORS.blue,
-            );
-        }
-        Ordering::Equal => {
-            log(
-                "commands/update::check_for_updates(): No updates available.",
-                1,
-            );
+            COLORS.blue,
+        );
 
-            println!("Already up to date.");
-        }
+        exit(0)
     }
-}
 
-pub fn get_latest_commit(owner: &str, repo: &str, branch: &str) -> String {
+    if VERSION != latest {
+        log(
+            &format!(
+                "commands/update::check_for_updates(): Found available update from \"{VERSION}\" to \"{latest}\"..."
+            ),
+            0,
+        );
+
+        println!("{green}\nUpdate available: {VERSION} -> {latest}{reset}");
+
+        log(
+            "commands/update::check_for_updates(): Asking user for confirmation...",
+            0,
+        );
+
+        ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
+
+        log(
+            "commands/update::check_for_updates(): Launching upgrade process...",
+            0,
+        );
+
+        update();
+
+        return;
+    }
+
     log(
-        "commands/update::get_latest_commit(): Retrieving latest commit...",
-        0,
+        "commands/update::check_for_updates(): No updates available.",
+        1,
     );
 
-    let commit: Value = http_client()
-        .get(format!(
-            "https://api.github.com/repos/{owner}/{repo}/commits/{branch}"
-        ))
-        .send()
-        .expect("request failed")
-        .json()
-        .expect("invalid json");
-
-    let commit = commit["sha"]
-        .as_str()
-        .expect("missing sha")
-        .chars()
-        .take(7)
-        .collect::<String>();
-
-    log(
-        &format!("commands/update::get_latest_commit(): Retrieved latest commit: \"{commit}\""),
-        0,
-    );
-
-    commit
+    println!("Already up to date.");
 }

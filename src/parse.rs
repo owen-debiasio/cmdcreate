@@ -15,6 +15,7 @@ use crate::{
         update::{check, update},
     },
     logger::log,
+    usage::debug_usage,
     utils::{
         colors::COLORS,
         fs::{PATHS, delete_file, init_git_fs, read_file_to_string},
@@ -24,13 +25,7 @@ use crate::{
 };
 
 pub fn parse(cmd: &str, args: &[String]) {
-    let (magenta, green, blue, yellow, reset) = (
-        COLORS.magenta,
-        COLORS.green,
-        COLORS.blue,
-        COLORS.yellow,
-        COLORS.reset,
-    );
+    let (green, blue, yellow, reset) = (COLORS.green, COLORS.blue, COLORS.yellow, COLORS.reset);
 
     let arg = |i| args.get(i).map(String::as_str);
 
@@ -124,21 +119,7 @@ pub fn parse(cmd: &str, args: &[String]) {
             println!("{}", read_file_to_string(&PATHS.changelog).trim());
         }
 
-        "--debugging" | "-d" => {
-            log("main::main(): Displaying debug info...", 0);
-
-            for line in [
-                format!("Usage: cmdcreate {magenta}(flags){reset} [run]"),
-                format!(
-                    "  {magenta}-f{reset}, {magenta}--force{reset}                       Force commands"
-                ),
-                format!(
-                    "  {magenta}-V{reset}, {magenta}--verbose{reset}                     Print logs"
-                ),
-            ] {
-                println!("{line}");
-            }
-        }
+        "--debugging" | "-d" => debug_usage(),
 
         _ if cmd.starts_with('-') => {
             error("Invalid argument:", cmd);
