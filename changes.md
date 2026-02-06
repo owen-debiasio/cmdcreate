@@ -534,3 +534,4 @@
 ## v1.0.9
 
 - Code optimizations
+- Reorganized file structure
