@@ -6,8 +6,8 @@ use crate::{
         io::{ask_for_confirmation, error, input},
         misc::http_client,
         sys::{
-            ARCH, DistroBase, InstallMethod, VARS, args_forced, cpu_arch_check, get_distro_base,
-            installation_method, run_shell_command,
+            ARCH, DistroBase, InstallMethod, VARS, arch_is_supported, args_forced, cpu_arch_check,
+            get_distro_base, installation_method, run_shell_command,
         },
     },
     version::{VERSION, get_latest_commit, get_latest_release, is_development_version},
@@ -88,13 +88,10 @@ pub fn update() {
         }
 
         InstallMethod::Dpkg => {
-            log("commands/update::update(): Debian/Ubuntu detected...", 0);
+            if arch_is_supported() {
+                log("commands/update::update(): Debian/Ubuntu detected...", 0);
 
-            cpu_arch_check(
-                "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
-            );
-
-            if !args_forced()
+                if !args_forced()
                 && input(&format!(
                 "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
             ))
@@ -106,17 +103,15 @@ pub fn update() {
                 return;
             }
 
-            upgrade_deb(latest_release);
+                upgrade_deb(latest_release);
+            }
         }
 
         InstallMethod::Rpm => {
-            log("commands/update::update(): Fedora detected...", 0);
+            if arch_is_supported() {
+                log("commands/update::update(): Fedora detected...", 0);
 
-            cpu_arch_check(
-                "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
-            );
-
-            if !args_forced()
+                if !args_forced()
                 && input(&format!(
                 "\n{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\
                  \n({green}Y{reset} or {red}N{reset})"
@@ -129,7 +124,8 @@ pub fn update() {
                 return;
             }
 
-            upgrade_rpm(latest_release);
+                upgrade_rpm(latest_release);
+            }
         }
 
         InstallMethod::Other => {
@@ -170,6 +166,10 @@ fn upgrade_aur(git: bool) {
 fn upgrade_deb(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
+    cpu_arch_check(
+        "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
+    );
+
     log(
         "commands/update::update_deb(): Installing .deb package...",
         0,
@@ -190,6 +190,10 @@ fn upgrade_deb(latest_release: &str) {
 
 fn upgrade_rpm(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
+
+    cpu_arch_check(
+        "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
+    );
 
     log(
         "commands/update::update_rpm(): Installing .rpm package...",
@@ -332,7 +336,7 @@ fn interactive_upgrade(latest_release: &str) {
 
     println!("\nSelect an upgrade method:\n");
 
-    for (i, option) in [
+    for (mut i, option) in [
         &format!("Upgrade through AUR {blue}(universal device compatibility){reset}"),
         &format!("Upgrade through AUR {blue}(latest git {green}(commit: {latest_commit}){blue}, \
          universal device compatibility){reset}"),
@@ -346,7 +350,8 @@ fn interactive_upgrade(latest_release: &str) {
         .iter()
         .enumerate()
     {
-        println!("{blue}{}]{reset} {option}", i + 1);
+        i += 1;
+        println!("{blue}{i}]{reset} {option}");
     }
 
     log(
