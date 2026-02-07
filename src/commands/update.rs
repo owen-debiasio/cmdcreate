@@ -43,6 +43,8 @@ pub fn update() {
         0,
     );
 
+    log("commands/update::update(): Retrieving latest release...", 0);
+
     let latest_release = &get_latest_release().unwrap_or_else(|| VERSION.to_owned());
 
     log(
@@ -256,11 +258,6 @@ fn build_from_source() {
     delete_folder(&cache_dir);
 
     log(
-        "commands/update::build_from_source(): Retrieving distro base...",
-        0,
-    );
-
-    log(
         "commands/update::build_from_source(): Installing build dependencies...",
         0,
     );
@@ -389,7 +386,7 @@ pub fn check() {
         0,
     );
 
-    if is_development_version(VERSION) {
+    if is_development_version() {
         log(
             "commands/update::check_for_updates(): Current version is newer than the latest release.",
             1,

@@ -4,7 +4,7 @@ use std::{cmp::Ordering, error::Error};
 
 pub const VERSION: &str = "v1.0.9";
 
-pub fn is_development_version(_version: &str) -> bool {
+pub fn is_development_version() -> bool {
     let parse_version = |v: &str| -> (u32, u32, u32) {
         let nums: Vec<u32> = v
             .trim_start_matches('v')
