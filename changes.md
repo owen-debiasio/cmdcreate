@@ -535,3 +535,4 @@
 
 - Code optimizations
 - Reorganized file structure
+- Added restrictions for updating on unsupported architectures
