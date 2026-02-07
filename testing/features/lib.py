@@ -3,7 +3,7 @@ import os
 import sys
 
 
-def command(cmd):
+def command(cmd: str) -> None:
     try:
         subprocess.run(cmd, shell=True, check=True)
     except subprocess.CalledProcessError:

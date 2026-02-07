@@ -12,9 +12,8 @@ def test():
     command("clear")
 
     print("\nRunning tests: Command importing/exporting\n")
-    desc = multiple_command_desc(), "\nOutput path: ~/.cache/export.cmdcreate"
 
-    for line in desc:
+    for line in [multiple_command_desc(), "\nOutput path: ~/.cache/export.cmdcreate"]:
         print(line)
 
     enter_to_continue()

@@ -11,8 +11,10 @@ def test():
     command("clear")
 
     print("\nRunning tests: Command editing\n")
-    desc = ['Command name: "test_command"', 'Command contents: "echo Test succeeded"']
-    for line in desc:
+    for line in [
+        'Command name: "test_command"',
+        'Command contents: "echo Test succeeded"',
+    ]:
         print(line)
 
     enter_to_continue()
