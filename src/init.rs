@@ -7,6 +7,7 @@ use crate::{
         fs::init_fs_layout,
         sys::{ARCH, VARS, get_distro_base, installation_method},
     },
+    version::is_development_version,
 };
 
 pub fn debug_intro() -> String {
@@ -19,12 +20,14 @@ pub fn debug_intro() -> String {
                                         Preferred text editor: {}
     Have an issue? Copy this text       Home directory: {}
           and open an issue             Shell in use: {}
+                                        Development version: {}
                                         ----------------",
         get_distro_base(),
         installation_method(Option::from(get_install_path())),
         VARS.editor,
         VARS.home,
-        VARS.shell
+        VARS.shell,
+        is_development_version()
     )
 }
 
