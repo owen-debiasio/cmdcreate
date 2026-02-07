@@ -104,6 +104,8 @@ pub fn update() {
             }
 
                 upgrade_deb(latest_release);
+            } else {
+                interactive_upgrade(latest_release);
             }
         }
 
@@ -125,6 +127,8 @@ pub fn update() {
             }
 
                 upgrade_rpm(latest_release);
+            } else {
+                interactive_upgrade(latest_release);
             }
         }
 
