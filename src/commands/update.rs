@@ -6,7 +6,7 @@ use crate::{
         io::{ask_for_confirmation, error, input},
         misc::http_client,
         sys::{
-            ARCH, DistroBase, InstallMethod, VARS, args_forced, get_distro_base,
+            ARCH, DistroBase, InstallMethod, VARS, args_forced, cpu_arch_check, get_distro_base,
             installation_method, run_shell_command,
         },
     },
@@ -90,6 +90,10 @@ pub fn update() {
         InstallMethod::Dpkg => {
             log("commands/update::update(): Debian/Ubuntu detected...", 0);
 
+            cpu_arch_check(
+                "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
+            );
+
             if !args_forced()
                 && input(&format!(
                 "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
@@ -107,6 +111,10 @@ pub fn update() {
 
         InstallMethod::Rpm => {
             log("commands/update::update(): Fedora detected...", 0);
+
+            cpu_arch_check(
+                "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
+            );
 
             if !args_forced()
                 && input(&format!(
@@ -203,6 +211,10 @@ fn upgrade_rpm(latest_release: &str) {
 
 fn upgrade_binary(latest_release: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
+
+    cpu_arch_check(
+        "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
+    );
 
     log(
         "commands/update::update_binary(): Fetching release info...",

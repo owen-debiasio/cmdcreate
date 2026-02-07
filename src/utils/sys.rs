@@ -5,6 +5,7 @@ use std::{
     sync::LazyLock,
 };
 
+use crate::logger::log;
 use crate::{
     configs::load,
     utils::{
@@ -81,6 +82,26 @@ pub fn run_shell_command(cmd: &str) {
     if let Err(e) = run_shell_command_result(cmd) {
         error("Failed to run shell command:", &e.to_string());
     }
+}
+
+pub fn arch_is_supported() -> bool {
+    ARCH == "x86_64"
+}
+
+pub fn cpu_arch_check(err_reason: &str) {
+    log(
+        "utils/sys::cpu_arch_check(): Double checking if CPU arch. is supported...",
+        0,
+    );
+
+    if !arch_is_supported() {
+        error(err_reason, "")
+    }
+
+    log(
+        "utils/sys::cpu_arch_check(): CPU arch. is supported... Continuing action...",
+        0,
+    );
 }
 
 #[derive(Debug)]
