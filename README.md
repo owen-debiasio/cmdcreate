@@ -141,6 +141,18 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 - Install necessary packages from your package manager
 
+### Download and install
+
+```bash
+git clone https://github.com/owen-debiasio/cmdcreate.git
+cd cmdcreate
+rustup default stable
+cargo build --release
+sudo install -Dm755 target/release/cmdcreate /usr/local/bin/cmdcreate
+```
+
+---
+
 (C) 2026 Owen Debiasio
 
 Licensed under
