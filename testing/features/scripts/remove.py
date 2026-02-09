@@ -27,9 +27,9 @@ def test(forced):
 
     print("\nRemoving created command...\n")
     if forced:
-        delete_single_command()
+        command("cargo run remove -f test_command")
     else:
-        command("cargo run remove test_command")
+        delete_single_command()
 
     enter_to_continue()
 
