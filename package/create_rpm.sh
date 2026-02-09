@@ -12,7 +12,7 @@ ARCH="x86_64"
 BINARY_NAME="cmdcreate-v${VERSION}-linux-${ARCH}-bin"
 BINARY_SRC="$HOME/Downloads/$BINARY_NAME"
 
-RPMTOP="$HOME/rpmbuild"
+RPMTOP="$HOME/.cache/rpmbuild"
 SPEC_FILE="$RPMTOP/SPECS/cmdcreate.spec"
 SOURCE_FILE="cmdcreate-${VERSION}-linux-${ARCH}-bin"
 
