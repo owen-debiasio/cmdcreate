@@ -63,6 +63,6 @@ FINAL_RPM="$HOME/Downloads/cmdcreate-v${VERSION}-linux-${ARCH}.rpm"
 
 cp "$RPM_FILE" "$FINAL_RPM"
 
-rm -rf ~/rpmbuild/
+rm -rf "$HOME/.cache/rpmbuild/"
 
 echo -e "\nBuilt and moved $FINAL_RPM to ~/Downloads"
