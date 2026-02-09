@@ -20,7 +20,7 @@ cargo build --release
 
 cp ../target/release/cmdcreate ~/Downloads/
 
-mv $HOME/Downloads/cmdcreate $BINARY_SRC
+mv "$HOME/Downloads/cmdcreate" $BINARY_SRC
 
 if [[ ! -f "$BINARY_SRC" ]]; then
     echo "Binary not found: $BINARY_SRC"
