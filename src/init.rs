@@ -13,21 +13,24 @@ use crate::{
 pub fn debug_intro() -> String {
     format!(
         "                               ----------------
-        Welcome to cmdcreate!           Version: {VERSION}
+        Welcome to cmdcreate!           Version: {VERSION} {}
             Created by:                 CPU Architecture: {ARCH}
            Owen Debiasio                Distro Base: {:?}
        owen.debiasio@gmail.com          Preferred installation method: {:?}
                                         Preferred text editor: {}
     Have an issue? Copy this text       Home directory: {}
           and open an issue             Shell in use: {}
-                                        Development version: {}
                                         ----------------",
+        if is_development_version() {
+            "(Devel)"
+        } else {
+            "(Stable)"
+        },
         get_distro_base(),
         installation_method(Option::from(get_install_path())),
         VARS.editor,
         VARS.home,
         VARS.shell,
-        is_development_version()
     )
 }
 
