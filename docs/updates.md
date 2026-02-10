@@ -24,7 +24,7 @@ cmdcreate check
 ##### Stable
 
 ```bash
-yay -S cmdcreate
+yay -Syyu cmdcreate
 ```
 
 ##### Latest git
@@ -34,7 +34,7 @@ yay -S cmdcreate
 > potentially dangerous to your system. Use with caution.
 
 ```bash
-yay -S cmdcreate-git
+yay -Syyu cmdcreate-git
 ```
 
 #### Clone AUR repo
