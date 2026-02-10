@@ -534,6 +534,7 @@
 ## v1.0.9
 
 - Code optimizations
+- Cleaned up code
 - Reorganized file structure
 - Added restrictions for updating on unsupported architectures
 - The verbose intro now shows whether the installation is a stable or development build
