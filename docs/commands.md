@@ -22,6 +22,7 @@ Commands:
 
  Backup:
     export <output directory>        Checks for updates
+    import <file input>              Imports your exported commands
 ```
 
 ## Create
