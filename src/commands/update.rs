@@ -4,7 +4,6 @@ use crate::{
         colors::COLORS,
         fs::delete_folder,
         io::{ask_for_confirmation, error, input},
-        misc::http_client,
         sys::{
             ARCH, DistroBase, InstallMethod, VARS, arch_is_supported, args_forced, cpu_arch_check,
             get_distro_base, installation_method, run_shell_command,
@@ -13,19 +12,7 @@ use crate::{
     version::{VERSION, get_latest_commit, get_latest_release, is_development_version},
 };
 
-use serde::Deserialize;
-use std::{fs::File, io::copy, path::Path, process::exit};
-
-#[derive(Deserialize)]
-struct Release {
-    assets: Vec<Asset>,
-}
-
-#[derive(Deserialize)]
-struct Asset {
-    name: String,
-    browser_download_url: String,
-}
+use std::{path::Path, process::exit};
 
 pub fn get_install_path() -> &'static Path {
     ["/usr/bin/cmdcreate", "/usr/local/bin/cmdcreate"]
@@ -224,42 +211,15 @@ fn upgrade_binary(latest_release: &str) {
         "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
     );
 
-    log(
-        "commands/update::update_binary(): Fetching release info...",
-        0,
-    );
+    log("commands/update::upgrade_binary(): Installing binary...", 0);
 
-    let release: Release = http_client()
-        .get("https://api.github.com/repos/owen-debiasio/cmdcreate/releases/latest")
-        .send()
-        .expect("Failed to fetch release info")
-        .json()
-        .expect("Invalid release JSON");
+    let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}-bin");
 
-    let asset = release
-        .assets
-        .into_iter()
-        .find(|a| a.name == format!("cmdcreate-{latest_release}-linux-{ARCH}-bin"))
-        .unwrap_or_else(|| {
-            error("Binary not found in latest release.", "");
-        });
-
-    let tmp = format!("/tmp/{}", asset.name);
-
-    log("commands/update::update_binary(): Downloading binary...", 0);
-
-    copy(
-        &mut http_client()
-            .get(&asset.browser_download_url)
-            .send()
-            .expect("Download failed"),
-        &mut File::create(&tmp).expect("Temp file failed"),
-    )
-    .expect("Write failed");
-
-    log("commands/update::update_binary(): Installing binary...", 0);
-
-    run_shell_command(&format!("sudo install -Dm755 {tmp} /usr/bin/cmdcreate"));
+    run_shell_command(&format!(
+        "curl -Lf -o /tmp/{pkg} \
+         https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
+         sudo install -Dm755 /tmp/{pkg} /usr/local/bin/cmdcreate"
+    ));
 
     log("commands/update::update_binary(): Update completed.", 0);
 
