@@ -75,18 +75,48 @@ makepkg -si
 
 ### Debian/Ubuntu
 
+#### Package installation (recommended)
+
 You can get the `.deb` package file here:
-[Latest Release](https://github.com/owen-debiasio/cmdcreate/releases/latest)
+**[Latest Release](https://github.com/owen-debiasio/cmdcreate/releases/latest)**
+
+#### Using curl
+
+```bash
+curl -Lf -o /tmp/cmdcreate-{version}-linux-x86_64.deb \
+https://github.com/owen-debiasio/cmdcreate/releases/latest/download/cmdcreate-{version}-linux-x86_64.deb && \
+sudo dpkg -i /tmp/cmdcreate-{version}-linux-x86_64.deb
+```
 
 ### Fedora
 
+#### Package installation (recommended)
+
 You can get the `.rpm` package file file here:
-[Latest Release](https://github.com/owen-debiasio/cmdcreate/releases/latest)
+**[Latest Release](https://github.com/owen-debiasio/cmdcreate/releases/latest)**
+
+#### Using curl
+
+```bash
+curl -Lf -o /tmp/cmdcreate-{version}-linux-x86_64.rpm \
+https://github.com/owen-debiasio/cmdcreate/releases/latest/download/cmdcreate-{version}-linux-x86_64.rpm && \
+sudo rpm -Uvh /tmp/cmdcreate-{version}-linux-x86_64.rpm
+```
 
 ### Other
 
+#### Standalone binary
+
 You can the get the standalone `x86_64` binary file here:
-[Latest Release](https://github.com/owen-debiasio/cmdcreate/releases/latest)
+**[Latest Release](https://github.com/owen-debiasio/cmdcreate/releases/latest)**
+
+#### Using curl
+
+```bash
+curl -Lf -o /tmp/cmdcreate-{version}-linux-x86_64-bin \
+https://github.com/owen-debiasio/cmdcreate/releases/latest/download/cmdcreate-{version}-linux-x86_64-bin && \
+sudo install -Dm755 /tmp/cmdcreate-{version}-linux-x86_64-bin /usr/bin/cmdcreate
+```
 
 ---
 
