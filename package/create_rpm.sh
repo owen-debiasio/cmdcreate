@@ -12,7 +12,7 @@ ARCH="x86_64"
 BINARY_NAME="cmdcreate-v${VERSION}-linux-${ARCH}-bin"
 BINARY_SRC="$HOME/Downloads/$BINARY_NAME"
 
-RPMTOP="$HOME/.cache/rpmbuild"
+RPMTOP="$HOME/rpmbuild"
 SPEC_FILE="$RPMTOP/SPECS/cmdcreate.spec"
 SOURCE_FILE="cmdcreate-${VERSION}-linux-${ARCH}-bin"
 
@@ -63,6 +63,6 @@ FINAL_RPM="$HOME/Downloads/cmdcreate-v${VERSION}-linux-${ARCH}.rpm"
 
 cp "$RPM_FILE" "$FINAL_RPM"
 
-rm -rf "$HOME/.cache/rpmbuild/"
+rm -rf ~/rpmbuild/
 
 echo -e "\nBuilt and moved $FINAL_RPM to ~/Downloads"

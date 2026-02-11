@@ -9,7 +9,7 @@ fi
 VERSION="$1"
 ARCH="x86_64"
 PKGDIR="cmdcreate-${VERSION}-linux-${ARCH}-deb"
-BINARY_NAME="cmdcreate-${VERSION}-linux-${ARCH}-bin"
+BINARY_NAME="cmdcreate-v${VERSION}-linux-${ARCH}-bin"
 BINARY_SRC="$HOME/Downloads/$BINARY_NAME"
 
 cleanup() {
@@ -50,6 +50,6 @@ FINAL_DEB="cmdcreate-v${VERSION}-linux-${ARCH}.deb"
 
 mv "${PKGDIR}.deb" "$FINAL_DEB"
 mv "$FINAL_DEB" "$HOME/Downloads/"
-mv "$BINARY_SRC" "$HOME/Downloads/cmdcreate-v${VERSION}-linux-x86_64-bin"
+#mv "$BINARY_SRC" "$HOME/Downloads/cmdcreate-v${VERSION}-linux-x86_64-bin"
 
 echo -e "\nBuilt and moved $FINAL_DEB to ~/Downloads"
