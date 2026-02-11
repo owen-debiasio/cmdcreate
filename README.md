@@ -115,7 +115,7 @@ You can the get the standalone `x86_64` binary file here:
 ```bash
 curl -Lf -o /tmp/cmdcreate-{version}-linux-x86_64-bin \
 https://github.com/owen-debiasio/cmdcreate/releases/latest/download/cmdcreate-{version}-linux-x86_64-bin && \
-sudo install -Dm755 /tmp/cmdcreate-{version}-linux-x86_64-bin /usr/bin/cmdcreate
+sudo install -Dm755 /tmp/cmdcreate-{version}-linux-x86_64-bin /usr/local/bin/cmdcreate
 ```
 
 ---
