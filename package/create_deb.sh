@@ -50,6 +50,5 @@ FINAL_DEB="cmdcreate-v${VERSION}-linux-${ARCH}.deb"
 
 mv "${PKGDIR}.deb" "$FINAL_DEB"
 mv "$FINAL_DEB" "$HOME/Downloads/"
-#mv "$BINARY_SRC" "$HOME/Downloads/cmdcreate-v${VERSION}-linux-x86_64-bin"
 
 echo -e "\nBuilt and moved $FINAL_DEB to ~/Downloads"
