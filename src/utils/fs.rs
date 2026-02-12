@@ -30,7 +30,7 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     configs: format!("{}/.config/cmdcreate/config.toml", VARS.home),
     favorites: format!("{}/favorites", *MAIN_PATH),
     install_dir: format!("{}/files/", *MAIN_PATH),
-    license: format!("{}/LICENSE.md", *MAIN_PATH),
+    license: format!("{}/LICENSE", *MAIN_PATH),
     log_dir: format!("{}/logs", *MAIN_PATH),
 });
 
@@ -47,7 +47,7 @@ pub fn init_fs_layout() {
 pub fn init_git_fs() {
     log("utils/fs::init_git_fs(): Syncing offline files...", 0);
 
-    retrieve_git_file(&PATHS.license, "LICENSE.md");
+    retrieve_git_file(&PATHS.license, "LICENSE");
     retrieve_git_file(&PATHS.changelog, "changes.md");
 
     log("utils/fs::init_git_fs(): Offline files synced", 0);
