@@ -3,6 +3,12 @@
 Here I provide information regarding update cycles and how you should update
 cmdcreate based on your situation.
 
+## Packaging information
+
+<a href="https://repology.org/project/cmdcreate/versions">
+    <img src="https://repology.org/badge/vertical-allrepos/cmdcreate.svg" alt="Packaging status" align="right">
+</a>
+
 ## Checking for updates
 
 You can also manually check for updates. You must run this manually because

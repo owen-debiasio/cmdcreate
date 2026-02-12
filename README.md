@@ -3,10 +3,6 @@
 Create your own custom commands for your convenience without needing to enter
 the same "complex" commands over and over.
 
-<a href="https://repology.org/project/cmdcreate/versions">
-    <img src="https://repology.org/badge/vertical-allrepos/cmdcreate.svg" alt="Packaging status" align="right">
-</a>
-
 ---
 
 ## Documentation and Resources
@@ -34,6 +30,12 @@ of contents and information here:
 > (or using the
 > [AUR](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md#arch-linux)),
 > you should be fine.
+
+## Packaging information
+
+<a href="https://repology.org/project/cmdcreate/versions">
+    <img src="https://repology.org/badge/vertical-allrepos/cmdcreate.svg" alt="Packaging status" align="right">
+</a>
 
 ### Arch Linux
 
