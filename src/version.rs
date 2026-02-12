@@ -25,8 +25,6 @@ pub fn is_development_version() -> bool {
 }
 
 pub fn get_latest_tag(owner: &str, repo: &str) -> Result<String, Box<dyn Error>> {
-    log("version::get_latest_tag(): Retrieving latest tag...", 0);
-
     let json: Value = http_client()
         .get(format!(
             "https://api.github.com/repos/{owner}/{repo}/releases/latest"
@@ -57,11 +55,6 @@ pub fn get_latest_release() -> Option<String> {
 }
 
 pub fn get_latest_commit(owner: &str, repo: &str, branch: &str) -> String {
-    log(
-        "version::get_latest_commit(): Retrieving latest commit...",
-        0,
-    );
-
     let commit: Value = http_client()
         .get(format!(
             "https://api.github.com/repos/{owner}/{repo}/commits/{branch}"

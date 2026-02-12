@@ -1,4 +1,5 @@
 use crate::{logger::log, utils::colors::COLORS, version::VERSION};
+use std::process::exit;
 
 pub fn cmdcreate_usage() {
     let (blue, cyan, yellow, magenta, reset) = (
@@ -69,6 +70,8 @@ pub fn cmdcreate_usage() {
     ] {
         println!("{line}");
     }
+
+    exit(1)
 }
 
 pub fn debug_usage() {
@@ -85,4 +88,6 @@ pub fn debug_usage() {
     ] {
         println!("{line}");
     }
+
+    exit(0)
 }

@@ -10,14 +10,7 @@ use crate::{
 use std::process::Command;
 
 pub fn edit(cmd: &str) {
-    log(
-        &format!("commands/edit::edit(): Checking if command \"{cmd}\" is installed..."),
-        0,
-    );
-
     command_is_installed(cmd);
-
-    log("commands/edit::edit(): Checking editors...", 0);
 
     let editors: &[&str] = &[
         &VARS.editor, // Used when user runs something like "EDITOR=vi cmdcreate edit abc"
@@ -55,7 +48,7 @@ pub fn edit(cmd: &str) {
     );
 
     log(
-        &format!("commands/edit::edit(): Launching editor \"{editor}\"..."),
+        &format!("commands/edit::edit(): Using editor \"{editor}\"..."),
         0,
     );
 

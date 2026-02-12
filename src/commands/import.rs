@@ -18,23 +18,12 @@ pub fn import(file: &str) {
         error("Import file is empty or unreadable.", "");
     }
 
-    log(
-        "commands/import::import(): Initializing import process...",
-        0,
-    );
-
     for line in contents.replace("[|", "|").lines() {
-        log("commands/import::import(): Splitting lines...", 0);
-
         let parts: Vec<&str> = line.split('|').map(str::trim).collect();
 
         if line.trim().is_empty() && !parts.is_empty() {
-            log("commands/import::import(): Line is empty, skipping...", 1);
-
             continue;
         }
-
-        log("commands/import::import(): Gathering command parts...", 0);
 
         let name = parts.first().unwrap();
         let mut data = String::new();
@@ -52,36 +41,14 @@ pub fn import(file: &str) {
             }
         }
 
-        log(
-            "commands/import::import(): Initializing import process...",
-            0,
-        );
-
-        log(
-            &format!("commands/import::import(): Installing command \"{name}\"..."),
-            0,
-        );
-
         println!("{blue}Installing command: \"{green}{name}{reset}\"");
-
-        log(
-            &format!("commands/import::import(): Creating command \"{name}\"..."),
-            0,
-        );
 
         create(name, &data, false);
 
         if favorite {
-            log(
-                &format!("commands/import::import(): Adding command \"{name}\" to favorites..."),
-                0,
-            );
-
             add_favorite("add", name);
         }
     }
-
-    log("commands/import::import(): Import process completed...", 0);
 
     println!("\n{green}Successfully imported commands.{reset}");
 }

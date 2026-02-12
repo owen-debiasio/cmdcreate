@@ -10,8 +10,6 @@ use crate::{
 pub fn export(path: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
-    log("commands/export::export(): Getting file to export...", 0);
-
     let export_file = &format!("{path}/export.cmdcreate");
 
     log(
@@ -22,11 +20,6 @@ pub fn export(path: &str) {
     log("commands/export::export(): Creating export file...", 0);
 
     create_file(export_file);
-
-    log(
-        "commands/export::export(): Initializing export process...",
-        0,
-    );
 
     for script in get_installed_commands() {
         if let Some(stem) = script.file_stem() {
@@ -40,30 +33,18 @@ pub fn export(path: &str) {
             let cmd_contents =
                 read_file_to_string(&format!("{}{cmd}", PATHS.install_dir)).replace('|', "[|");
 
-            log(
-                &format!(
-                    "commands/export::export(): Exporting command contents for command \"{cmd}\": \"{cmd_contents}\"..."
-                ),
-                0,
-            );
-
-            log(
-                &format!("commands/export::export(): Formatting command: \"{cmd}\"..."),
-                0,
-            );
-
-            let line = if read_file_to_string(&PATHS.favorites).contains(cmd.as_ref()) {
+            let data = if read_file_to_string(&PATHS.favorites).contains(cmd.as_ref()) {
                 format!("{cmd} | {cmd_contents} | favorite\n")
             } else {
                 format!("{cmd} | {cmd_contents}\n")
             };
 
             log(
-                &format!("commands/export::export(): Writing line to file: \"{line}\"..."),
+                &format!("commands/export::export(): Writing data to file: \"{data}\"..."),
                 0,
             );
 
-            write_to_file(export_file, &line, true);
+            write_to_file(export_file, &data, true);
         }
     }
 

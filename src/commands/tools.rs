@@ -10,13 +10,6 @@ use crate::{
 };
 
 pub fn command_is_installed(cmd: &str) -> bool {
-    log(
-        &format!(
-            "commands/tools::command_is_installed(): Checking if command \"{cmd}\" is installed..."
-        ),
-        0,
-    );
-
     if path_exists(&format!("{}/{cmd}", PATHS.install_dir)) {
         log(
             &format!(
@@ -27,13 +20,6 @@ pub fn command_is_installed(cmd: &str) -> bool {
 
         return true;
     }
-
-    log(
-        &format!(
-            "commands/tools::command_is_installed(): Command \"{cmd}\" is not installed... Exiting..."
-        ),
-        0,
-    );
 
     error(&format!("Command \"{cmd}\" is not installed"), "");
 }

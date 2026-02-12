@@ -25,36 +25,14 @@ pub fn get_install_path() -> &'static Path {
 pub fn update() {
     let (green, blue, red, reset) = (COLORS.green, COLORS.blue, COLORS.red, COLORS.reset);
 
-    log(
-        "commands/update::update(): Initializing upgrade process...",
-        0,
-    );
-
-    log("commands/update::update(): Retrieving latest release...", 0);
-
     let latest_release = &get_latest_release().unwrap_or_else(|| VERSION.to_owned());
-
-    log(
-        "commands/update::interactive_upgrade(): Requesting permission to upgrade...",
-        0,
-    );
 
     ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
 
-    log(
-        "commands/update::interactive_upgrade(): Continuing with upgrade...",
-        0,
-    );
-
-    log(
-        "commands/update::update(): Determining installation method...",
-        0,
-    );
-
     match installation_method(Option::from(get_install_path())) {
-        InstallMethod::Aur => {
-            log("commands/update::update(): Arch Linux detected...", 0);
+        InstallMethod::Other => interactive_upgrade(latest_release),
 
+        InstallMethod::Aur => {
             if !args_forced()
                 && input(&format!(
                 "\n{blue}Arch Linux{reset}-based system detected. Would you like to install through the {blue}AUR{reset}?\n({green}Y{reset} or {red}N{reset})"
@@ -91,15 +69,11 @@ pub fn update() {
             }
 
                 upgrade_deb(latest_release);
-            } else {
-                interactive_upgrade(latest_release);
             }
         }
 
         InstallMethod::Rpm => {
             if arch_is_supported() {
-                log("commands/update::update(): Fedora detected...", 0);
-
                 if !args_forced()
                 && input(&format!(
                 "\n{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\
@@ -114,18 +88,7 @@ pub fn update() {
             }
 
                 upgrade_rpm(latest_release);
-            } else {
-                interactive_upgrade(latest_release);
             }
-        }
-
-        InstallMethod::Other => {
-            log(
-                "commands/update::update(): No distro detected... Moving on to interactive upgrade...",
-                1,
-            );
-
-            interactive_upgrade(latest_release);
         }
     }
 
@@ -137,8 +100,6 @@ fn upgrade_aur(git: bool) {
 
     let pkg = if git { "cmdcreate-git" } else { "cmdcreate" };
 
-    log("commands/update::update_aur(): Installing from AUR...", 0);
-
     delete_folder(&format!("{}/{pkg}", VARS.home));
 
     run_shell_command(&format!(
@@ -148,8 +109,6 @@ fn upgrade_aur(git: bool) {
     ));
 
     delete_folder(&format!("{}/tmp/{pkg}", VARS.home));
-
-    log("commands/update::update_aur(): Update completed.", 0);
 
     println!("{green}Update complete!{reset}");
 }
@@ -161,11 +120,6 @@ fn upgrade_deb(latest_release: &str) {
         "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
     );
 
-    log(
-        "commands/update::update_deb(): Installing .deb package...",
-        0,
-    );
-
     let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}.deb");
 
     run_shell_command(&format!(
@@ -173,8 +127,6 @@ fn upgrade_deb(latest_release: &str) {
          https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
          sudo dpkg -i /tmp/{pkg}"
     ));
-
-    log("commands/update::update_deb(): Update completed.", 0);
 
     println!("\n{green}Update complete!{reset}");
 }
@@ -186,11 +138,6 @@ fn upgrade_rpm(latest_release: &str) {
         "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
     );
 
-    log(
-        "commands/update::update_rpm(): Installing .rpm package...",
-        0,
-    );
-
     let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}.rpm");
 
     run_shell_command(&format!(
@@ -198,8 +145,6 @@ fn upgrade_rpm(latest_release: &str) {
          https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
          sudo rpm -Uvh /tmp/{pkg}"
     ));
-
-    log("commands/update::update_rpm(): Update completed.", 0);
 
     println!("\n{green}Update complete!{reset}");
 }
@@ -211,8 +156,6 @@ fn upgrade_binary(latest_release: &str) {
         "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
     );
 
-    log("commands/update::upgrade_binary(): Installing binary...", 0);
-
     let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}-bin");
 
     run_shell_command(&format!(
@@ -221,26 +164,14 @@ fn upgrade_binary(latest_release: &str) {
          sudo install -Dm755 /tmp/{pkg} /usr/local/bin/cmdcreate"
     ));
 
-    log("commands/update::update_binary(): Update completed.", 0);
-
     println!("\n{green}Update complete!{reset}");
 }
 
 fn build_from_source() {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    log(
-        "commands/update::build_from_source(): Deleting temp folder (if exists)...",
-        0,
-    );
-
     let cache_dir = format!("{}/.cache/cmdcreate", VARS.home);
     delete_folder(&cache_dir);
-
-    log(
-        "commands/update::build_from_source(): Installing build dependencies...",
-        0,
-    );
 
     run_shell_command(match get_distro_base() {
         DistroBase::Arch => "sudo pacman -S --needed --noconfirm cargo git",
@@ -254,19 +185,9 @@ fn build_from_source() {
         }
     });
 
-    log(
-        "commands/update::build_from_source(): Cloning repository...",
-        0,
-    );
-
     run_shell_command(&format!(
         "git clone https://github.com/owen-debiasio/cmdcreate {cache_dir}",
     ));
-
-    log(
-        "commands/update::build_from_source(): Building and installing package...",
-        0,
-    );
 
     run_shell_command(&format!(
         "set -e && \
@@ -275,11 +196,6 @@ fn build_from_source() {
          sudo install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate",
     ));
 
-    log(
-        "commands/update::build_from_source(): Update complete...",
-        0,
-    );
-
     println!("\n{green}Update complete!{reset}");
 }
 
@@ -287,16 +203,6 @@ fn interactive_upgrade(latest_release: &str) {
     let (blue, green, red, reset) = (COLORS.blue, COLORS.green, COLORS.red, COLORS.reset);
 
     let latest_commit: &str = &get_latest_commit("owen-debiasio", "cmdcreate", "main");
-
-    log(
-        "commands/update::interactive_upgrade(): Initializing interactive upgrade...",
-        0,
-    );
-
-    log(
-        "commands/update::interactive_upgrade(): Providing upgrade options...",
-        0,
-    );
 
     println!("\nSelect an upgrade method:\n");
 
@@ -318,11 +224,6 @@ fn interactive_upgrade(latest_release: &str) {
         println!("{blue}{i}]{reset} {option}");
     }
 
-    log(
-        "commands/update::interactive_upgrade(): Allowing user to select upgrade method...",
-        0,
-    );
-
     match input("").trim() {
         "1" => upgrade_aur(false),
         "2" => upgrade_aur(true),
@@ -334,11 +235,6 @@ fn interactive_upgrade(latest_release: &str) {
 
         _ => error("Invalid selection.", ""),
     }
-
-    log(
-        "commands/update::interactive_upgrade(): Interactive update completed...",
-        0,
-    );
 
     exit(0)
 }
@@ -360,19 +256,7 @@ pub fn check() {
         );
     };
 
-    log(
-        &format!(
-            "commands/update::check_for_updates(): Comparing versions \"{VERSION} (Current)\" to \"{latest}\" (Latest)..."
-        ),
-        0,
-    );
-
     if is_development_version() {
-        log(
-            "commands/update::check_for_updates(): Current version is newer than the latest release.",
-            1,
-        );
-
         println!(
             "\nYou are running a newer version {}({VERSION}){reset} than the latest release {green}({latest}){reset}.\
                 \nAssuming it's a development build.",
@@ -383,36 +267,13 @@ pub fn check() {
     }
 
     if VERSION != latest {
-        log(
-            &format!(
-                "commands/update::check_for_updates(): Found available update from \"{VERSION}\" to \"{latest}\"..."
-            ),
-            0,
-        );
-
-        println!("{green}\nUpdate available: {VERSION} -> {latest}{reset}");
-
-        log(
-            "commands/update::check_for_updates(): Asking user for confirmation...",
-            0,
-        );
-
-        ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
-
-        log(
-            "commands/update::check_for_updates(): Launching upgrade process...",
-            0,
-        );
-
+        ask_for_confirmation(&format!(
+            "{green}\nUpdate available: {VERSION} -> {latest}{reset}\nDo you want to upgrade cmdcreate?"
+        ));
         update();
 
         return;
     }
-
-    log(
-        "commands/update::check_for_updates(): No updates available.",
-        1,
-    );
 
     println!("Already up to date.");
 }

@@ -10,11 +10,6 @@ use crate::{
 pub fn repair() {
     let (green, yellow, blue, reset) = (COLORS.green, COLORS.yellow, COLORS.blue, COLORS.reset);
 
-    log(
-        "commands/repair::repair(): Initializing command repair process...",
-        0,
-    );
-
     let mut count = 0_i32;
     for script in get_installed_commands() {
         let name = script.file_stem().unwrap_or_default().to_string_lossy();
@@ -25,11 +20,6 @@ pub fn repair() {
         );
 
         if !path_exists(&format!("/usr/local/bin/{name}")) {
-            log(
-                &format!("commands/repair::repair(): Repairing command \"{name}\"..."),
-                0,
-            );
-
             println!("{green}Repairing command: {blue}\"{name}\"{reset}");
 
             create(
@@ -42,23 +32,11 @@ pub fn repair() {
         }
     }
 
-    log("commands/repair::repair(): Determining results...", 0);
-
     if count > 0_i32 {
         println!("{green}Broken commands have been repaired.{reset}");
 
-        log(
-            "commands/repair::repair(): Broken commands have been repaired",
-            0,
-        );
-
         return;
     }
-
-    log(
-        "commands/repair::repair(): No commands needed repairs...",
-        0,
-    );
 
     println!("{yellow}No commands needed repairs.{reset}");
 }

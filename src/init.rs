@@ -22,9 +22,9 @@ pub fn debug_intro() -> String {
           and open an issue             Shell in use: {}
                                         ----------------",
         if is_development_version() {
-            "(Devel)"
+            "(devel)"
         } else {
-            "(Stable)"
+            "(stable)"
         },
         get_distro_base(),
         installation_method(Option::from(get_install_path())),

@@ -22,19 +22,11 @@ fn main() {
     log("main::main(): Retrieving args...", 0);
 
     let mut args = return_args();
+
+    args.retain(|a| !matches!(a.as_str(), "-V" | "--verbose"));
+
     if args.is_empty() {
-        log("main::main(): Args are empty, displaying usage...", 1);
-
         cmdcreate_usage();
-
-        return;
-    }
-
-    if args
-        .iter()
-        .any(|a| matches!(a.as_str(), "-V" | "--verbose"))
-    {
-        args.retain(|a| !matches!(a.as_str(), "-V" | "--verbose"));
     }
 
     cmdcreate(&args);
@@ -57,18 +49,15 @@ fn cmdcreate(args: &[String]) {
             cmd,
             "-l" | "--license" | "-c" | "--changelog" | "-g" | "--get_offline_files"
         ) {
-            log("main::main(): Offline files have been requested...", 0);
             init_git_fs();
         }
 
-        log(&format!("main::main(): Processing command \"{cmd}\"..."), 0);
         parse(cmd, args);
 
         i += 1;
     }
 
     if let Some(cmd) = args.get(i).map(String::as_str) {
-        log(&format!("main::main(): Processing command \"{cmd}\"..."), 0);
         parse(cmd, &args[i..]);
     }
 }

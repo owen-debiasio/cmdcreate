@@ -13,7 +13,12 @@ pub fn create(command: &str, contents: &str, verbose: bool) {
 
     log(
         &format!(
-            "commands/create::create(): Creating command \"{command}\": With contents \"{contents}\" | (verbose={verbose})"
+            "commands/create::create(): Creating command \"{command}\": With contents \"{contents}\"{}",
+            if verbose {
+                ", and is verbose..."
+            } else {
+                "..."
+            }
         ),
         0,
     );
@@ -28,11 +33,6 @@ pub fn create(command: &str, contents: &str, verbose: bool) {
     if contents.is_empty() {
         error("The contents of your command can not be empty.", "");
     }
-
-    log(
-        "commands/create::create(): Command isn't empty, continuing...",
-        0,
-    );
 
     log(
         &format!("commands/create::create(): Writing contents to script: \"{script}\""),
@@ -51,18 +51,6 @@ pub fn create(command: &str, contents: &str, verbose: bool) {
     ));
 
     if verbose {
-        log(
-            "commands/create::create(): Verbose, printing success message...",
-            0,
-        );
-
         println!("\n{green}Success! Created command: {blue}\"{command}\"{reset}");
-
-        return;
     }
-
-    log(
-        "commands/create::create(): Not verbose, not printing success message...",
-        0,
-    );
 }

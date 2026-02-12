@@ -1,6 +1,5 @@
 use crate::{
     commands::tools::command_is_installed,
-    logger::log,
     utils::{
         colors::COLORS,
         fs::{PATHS, read_file_to_string},
@@ -9,11 +8,6 @@ use crate::{
 
 pub fn display(cmd: &str) {
     command_is_installed(cmd);
-
-    log(
-        "commands/display::display(): Printing contents of command...",
-        0,
-    );
 
     println!(
         "Contents of command: {}\"{cmd}\"{}\n--------\n{}",

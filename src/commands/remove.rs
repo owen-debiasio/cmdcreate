@@ -3,7 +3,7 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{PATHS, delete_file, path_exists, read_file_to_string},
+        fs::{PATHS, delete_file, read_file_to_string},
         io::ask_for_confirmation,
         sys::run_shell_command,
     },
@@ -23,19 +23,7 @@ pub fn remove(command: &str, forced: bool) {
         return;
     }
 
-    log(
-        &format!("commands/remove::remove(): Determining if command \"{command}\" is installed..."),
-        0,
-    );
-
     command_is_installed(command);
-
-    log(
-        &format!(
-            "commands/remove::remove(): Asking for confirmation to delete command \"{command}\"..."
-        ),
-        0,
-    );
 
     if !forced {
         ask_for_confirmation(&format!(
@@ -44,36 +32,15 @@ pub fn remove(command: &str, forced: bool) {
     }
 
     log(
-        &format!("commands/remove::remove(): Deleting command \"{command}\"..."),
+        &format!("commands/remove::remove(): Deleting command file \"{command}\"..."),
         0,
     );
 
     delete_file(&format!("{}{command}", PATHS.install_dir));
 
-    log(
-        &format!(
-            "commands/remove::remove(): Determining if command \"{command}\" is in favorites..."
-        ),
-        0,
-    );
-
-    if read_file_to_string(&PATHS.favorites).contains(command) && path_exists(&PATHS.favorites) {
-        log(
-            &format!(
-                "commands/remove::remove(): Command \"{command}\" is in favorites, removing..."
-            ),
-            0,
-        );
-
+    if read_file_to_string(&PATHS.favorites).contains(command) {
         favorite("remove", command);
     }
-
-    log(
-        &format!(
-            "commands/remove::remove(): Command \"{command}\" is not in favorites, skipping..."
-        ),
-        1,
-    );
 
     log(
         &format!("commands/remove::remove(): Removing link of command \"{command}\"..."),
