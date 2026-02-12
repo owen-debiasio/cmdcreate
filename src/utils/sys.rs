@@ -5,9 +5,9 @@ use std::{
     sync::LazyLock,
 };
 
-use crate::logger::log;
 use crate::{
     configs::load,
+    logger::log,
     utils::{
         fs::read_file_to_string,
         io::{TestError, error},
