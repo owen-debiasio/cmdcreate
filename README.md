@@ -33,9 +33,7 @@ of contents and information here:
 
 ## Packaging information
 
-<a href="https://repology.org/project/cmdcreate/versions">
-    <img src="https://repology.org/badge/vertical-allrepos/cmdcreate.svg" alt="Packaging status" align="right">
-</a>
+[![Repository status](https://repology.org/badge/repository-big/aur.svg)](https://repology.org/repository/aur)
 
 ### Arch Linux
 
