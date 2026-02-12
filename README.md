@@ -3,6 +3,10 @@
 Create your own custom commands for your convenience without needing to enter
 the same "complex" commands over and over.
 
+<a href="https://repology.org/project/cmdcreate/versions">
+    <img src="https://repology.org/badge/vertical-allrepos/_.svg" alt="Packaging status" align="right">
+</a>
+
 ---
 
 ## Documentation and Resources
