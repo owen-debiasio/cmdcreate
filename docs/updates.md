@@ -5,7 +5,7 @@ cmdcreate based on your situation.
 
 ## Packaging information
 
-[![Repository status](https://repology.org/badge/repository-big/aur.svg)](https://repology.org/repository/aur)
+[![Repository status](https://repology.org/badge/repository-big/cmdcreate.svg)](https://repology.org/repository/cmdcreate)
 
 ## Checking for updates
 

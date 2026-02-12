@@ -16,7 +16,7 @@ Open an issue, and describe the issue you are having.
 
 ## More information
 
-[![Repository status](https://repology.org/badge/repository-big/aur.svg)](https://repology.org/repository/aur)
+[![Repository status](https://repology.org/badge/repository-big/cmdcreate.svg)](https://repology.org/repository/cmdcreate)
 
 ### Extras
 
