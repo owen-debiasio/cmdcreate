@@ -1,13 +1,10 @@
-use std::{fs::create_dir_all, path::Path};
-
 use chrono::Local;
 
 use crate::{
     configs::load,
     utils::{
         colors::COLORS,
-        fs::{PATHS, write_to_file},
-        io::error,
+        fs::{PATHS, create_folder, write_to_file},
         sys::args_contains,
     },
 };
@@ -33,11 +30,7 @@ pub fn log(text: &str, lvl: u8) {
         println!("{color}{time} {log_text}{}", COLORS.reset);
     }
 
-    if !Path::new(log_dir).exists()
-        && let Err(e) = create_dir_all(log_dir)
-    {
-        error("Failed to create log directory", &e.to_string());
-    }
+    create_folder(log_dir);
 
     write_to_file(
         &format!("{log_dir}/{time}.log"),
