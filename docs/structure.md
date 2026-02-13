@@ -138,7 +138,7 @@ change.
 - [CODE_OF_CONDUCT.md](https://github.com/owen-debiasio/cmdcreate/blob/main/CODE_OF_CONDUCT.md)
 - [CONTRIBUTING.md](https://github.com/owen-debiasio/cmdcreate/blob/main/CONTRIBUTING.md)
 - [Cargo.toml](https://github.com/owen-debiasio/cmdcreate/blob/main/Cargo.toml)
-- [LICENSE.md](https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE.md)
+- [LICENSE](https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE)
 - [README.md](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md)
 - [SECURITY.md](https://github.com/owen-debiasio/cmdcreate/blob/main/SECURITY.md)
 - [changes.md](https://github.com/owen-debiasio/cmdcreate/blob/main/changes.md)

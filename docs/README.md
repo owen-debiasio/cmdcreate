@@ -22,7 +22,7 @@ files are subject to change.
 ### Repository Resources
 
 - **[Repository README](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md)**
-- **[License (MIT)](https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE.md)**
+- **[License](https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE)**
 - **[Security Information](https://github.com/owen-debiasio/cmdcreate/blob/main/SECURITY.md)**
 - **[Code of Conduct](https://github.com/owen-debiasio/cmdcreate/blob/main/CODE_OF_CONDUCT.md)**
 - **[Contributing to cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/CONTRIBUTING.md)**
