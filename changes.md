@@ -545,3 +545,5 @@
 - You will now be kicked out from checking for updates or updating cmdcreate if
   you have no internet
 - Optimized internal updating process
+- Added command: `clean`
+  - Can clean up old and unused files
