@@ -1,6 +1,7 @@
 use crate::{
     VERSION,
     commands::{
+        clean::clean,
         create::create,
         display::display,
         edit::edit,
@@ -28,6 +29,8 @@ pub fn parse(cmd: &str, args: &[String]) {
     let (green, blue, yellow, reset) = (COLORS.green, COLORS.blue, COLORS.yellow, COLORS.reset);
 
     let arg = |i| args.get(i).map(String::as_str);
+
+    log(&format!("parse::parse(): Parsing command: {cmd}"), 0);
 
     match cmd {
         "create" => match (arg(1), arg(2)) {
@@ -69,6 +72,7 @@ pub fn parse(cmd: &str, args: &[String]) {
         "list" => list(),
         "check" => check(),
         "update" => update(),
+        "clean" => clean(),
 
         "import" => arg(1).map_or_else(
             || println!("Usage:\ncmdcreate {blue}import {yellow}<input file>{reset}"),
@@ -103,8 +107,6 @@ pub fn parse(cmd: &str, args: &[String]) {
 
             delete_file(&PATHS.changelog);
             delete_file(&PATHS.license);
-
-            log("main::main(): Removed offline files", 0);
 
             println!("{green}Files removed successfully.{reset}");
         }

@@ -40,6 +40,9 @@ pub fn cmdcreate_usage() {
         format!(
             "  {blue}repair{reset}                            Repairs installed commands if needed"
         ),
+        format!(
+            "  {blue}clean{reset}                             Can clean up old and unused files"
+        ),
         "\n  Update:".into(),
         format!("    {blue}check{reset}                           Checks for updates"),
         format!("    {blue}update{reset}                          Updates cmdcreate"),
