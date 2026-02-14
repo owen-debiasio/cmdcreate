@@ -1,4 +1,4 @@
-use crate::{logger::log, utils::misc::http_client};
+use crate::{logger::log, utils::net::http_client};
 use serde_json::Value;
 use std::{cmp::Ordering, error::Error};
 
