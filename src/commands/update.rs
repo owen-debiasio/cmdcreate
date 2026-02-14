@@ -4,6 +4,7 @@ use crate::{
         colors::COLORS,
         fs::delete_folder,
         io::{ask_for_confirmation, error, input},
+        net::connected_to_internet,
         sys::{
             ARCH, DistroBase, InstallMethod, VARS, arch_is_supported, args_forced, cpu_arch_check,
             get_distro_base, installation_method, run_shell_command,
@@ -25,12 +26,17 @@ pub fn get_install_path() -> &'static Path {
 pub fn update() {
     let (green, blue, red, reset) = (COLORS.green, COLORS.blue, COLORS.red, COLORS.reset);
 
-    let latest_release = &get_latest_release().unwrap_or_else(|| VERSION.to_owned());
+    if !connected_to_internet() {
+        error(
+            "You must have internet to continue with this operation!",
+            "",
+        )
+    }
 
     ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
 
     match installation_method(Option::from(get_install_path())) {
-        InstallMethod::Other => interactive_upgrade(latest_release),
+        InstallMethod::Other => interactive_upgrade(),
 
         InstallMethod::Aur => {
             if !args_forced()
@@ -40,16 +46,15 @@ pub fn update() {
                 .trim()
                 .eq_ignore_ascii_case("n")
             {
-                interactive_upgrade(latest_release);
+                interactive_upgrade();
 
                 return;
             }
 
-            upgrade_aur(!args_forced()
-                && input(&format!(
+            upgrade_via(if input(&format!(
                 "\nWould you like to install the latest git {green}(commit: {}){reset}?\n({green}Y{reset} or {red}N{reset})", get_latest_commit("owen-debiasio", "cmdcreate", "main")))
                 .trim()
-                .eq_ignore_ascii_case("y"));
+                .eq_ignore_ascii_case("y") && !args_forced() { "aur-git" } else { "aur" });
         }
 
         InstallMethod::Dpkg => {
@@ -63,12 +68,12 @@ pub fn update() {
                 .trim()
                 .eq_ignore_ascii_case("n")
             {
-                interactive_upgrade(latest_release);
+                interactive_upgrade();
 
                 return;
             }
 
-                upgrade_deb(latest_release);
+                upgrade_via("deb");
             }
         }
 
@@ -82,12 +87,12 @@ pub fn update() {
                 .trim()
                 .eq_ignore_ascii_case("n")
             {
-                interactive_upgrade(latest_release);
+                interactive_upgrade();
 
                 return;
             }
 
-                upgrade_rpm(latest_release);
+                upgrade_via("rpm");
             }
         }
     }
@@ -95,76 +100,82 @@ pub fn update() {
     exit(0)
 }
 
-fn upgrade_aur(git: bool) {
+fn upgrade_via(method: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    let pkg = if git { "cmdcreate-git" } else { "cmdcreate" };
+    let latest_release = get_latest_release().unwrap_or_else(|| VERSION.to_owned());
 
-    delete_folder(&format!("{}/{pkg}", VARS.home));
+    match method {
+        "aur" | "aur-git" => {
+            let pkg = if method == "aur-git" {
+                "cmdcreate-git"
+            } else {
+                "cmdcreate"
+            };
 
-    run_shell_command(&format!(
-        "git clone https://aur.archlinux.org/{pkg}.git /tmp/{pkg} && \
-         cd /tmp/{pkg} && \
-         makepkg -si --noconfirm"
-    ));
+            run_shell_command(&format!(
+                "rm -rf /tmp/{pkg} && \
+                 git clone https://aur.archlinux.org/{pkg}.git /tmp/{pkg} && \
+                 cd /tmp/{pkg} && \
+                 makepkg -si --noconfirm && \
+                 rm -rf /tmp/{pkg}"
+            ));
 
-    delete_folder(&format!("{}/tmp/{pkg}", VARS.home));
+            println!("{green}Update complete!{reset}");
+        }
+        "deb" => {
+            cpu_arch_check(
+                "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
+            );
 
-    println!("{green}Update complete!{reset}");
-}
+            let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}.deb");
 
-fn upgrade_deb(latest_release: &str) {
-    let (green, reset) = (COLORS.green, COLORS.reset);
+            run_shell_command(&format!(
+                "curl -Lf -o /tmp/{pkg} \
+                 https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
+                 sudo dpkg -i /tmp/{pkg} && \
+                 rm /tmp/{pkg}"
+            ));
 
-    cpu_arch_check(
-        "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
-    );
+            println!("\n{green}Update complete!{reset}");
+        }
+        "rpm" => {
+            cpu_arch_check(
+                "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
+            );
 
-    let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}.deb");
+            let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}.rpm");
 
-    run_shell_command(&format!(
-        "curl -Lf -o /tmp/{pkg} \
-         https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
-         sudo dpkg -i /tmp/{pkg}"
-    ));
+            run_shell_command(&format!(
+                "curl -Lf -o /tmp/{pkg} \
+                 https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
+                 sudo rpm -Uvh /tmp/{pkg} \
+                 rm /tmp/{pkg}"
+            ));
 
-    println!("\n{green}Update complete!{reset}");
-}
+            println!("\n{green}Update complete!{reset}");
+        }
+        "bin" => {
+            cpu_arch_check(
+                "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
+            );
 
-fn upgrade_rpm(latest_release: &str) {
-    let (green, reset) = (COLORS.green, COLORS.reset);
+            let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}-bin");
 
-    cpu_arch_check(
-        "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
-    );
+            run_shell_command(&format!(
+                "curl -Lf -o /tmp/{pkg} \
+                 https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
+                 sudo install -Dm755 /tmp/{pkg} /usr/local/bin/cmdcreate \
+                 rm /tmp/{pkg}"
+            ));
 
-    let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}.rpm");
-
-    run_shell_command(&format!(
-        "curl -Lf -o /tmp/{pkg} \
-         https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
-         sudo rpm -Uvh /tmp/{pkg}"
-    ));
-
-    println!("\n{green}Update complete!{reset}");
-}
-
-fn upgrade_binary(latest_release: &str) {
-    let (green, reset) = (COLORS.green, COLORS.reset);
-
-    cpu_arch_check(
-        "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
-    );
-
-    let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}-bin");
-
-    run_shell_command(&format!(
-        "curl -Lf -o /tmp/{pkg} \
-         https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
-         sudo install -Dm755 /tmp/{pkg} /usr/local/bin/cmdcreate"
-    ));
-
-    println!("\n{green}Update complete!{reset}");
+            println!("\n{green}Update complete!{reset}");
+        }
+        _ => error(
+            "Developer error: INVALID METHOD: (YOU SHOULDN'T BE ABLE TO SEE THIS)",
+            method,
+        ),
+    }
 }
 
 fn build_from_source() {
@@ -199,7 +210,7 @@ fn build_from_source() {
     println!("\n{green}Update complete!{reset}");
 }
 
-fn interactive_upgrade(latest_release: &str) {
+fn interactive_upgrade() {
     let (blue, green, red, reset) = (COLORS.blue, COLORS.green, COLORS.red, COLORS.reset);
 
     let latest_commit: &str = &get_latest_commit("owen-debiasio", "cmdcreate", "main");
@@ -225,11 +236,11 @@ fn interactive_upgrade(latest_release: &str) {
     }
 
     match input("").trim() {
-        "1" => upgrade_aur(false),
-        "2" => upgrade_aur(true),
-        "3" => upgrade_deb(latest_release),
-        "4" => upgrade_rpm(latest_release),
-        "5" => upgrade_binary(latest_release),
+        "1" => upgrade_via("aur"),     // AUR
+        "2" => upgrade_via("aur-git"), // AUR (git)
+        "3" => upgrade_via("deb"),     // .deb
+        "4" => upgrade_via("rpm"),     // .rpm
+        "5" => upgrade_via("bin"),     // bin
         "6" => build_from_source(),
         "7" => error("Aborted.", ""),
 
@@ -242,10 +253,12 @@ fn interactive_upgrade(latest_release: &str) {
 pub fn check() {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    log(
-        "commands/update::check_for_updates(): Beginning update check...",
-        0,
-    );
+    if !connected_to_internet() {
+        error(
+            "You must have internet to continue with this operation!",
+            "",
+        )
+    }
 
     println!("\nChecking for updates...");
 
