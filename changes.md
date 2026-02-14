@@ -537,4 +537,11 @@
 - Cleaned up code
 - Reorganized file structure
 - Added restrictions for updating on unsupported architectures
-- The verbose intro now shows whether the installation is a stable or development build
+- The verbose intro now shows whether the installation is a stable or
+  development build
+
+## v1.1.0
+
+- You will now be kicked out from checking for updates or updating cmdcreate if
+  you have no internet
+- Optimized internal updating process
