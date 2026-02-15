@@ -1,6 +1,0 @@
-[submodule "AUR"]
-	path = AUR
-	url = https://github.com/archlinux/aur/tree/cmdcreate
-[submodule "cmdcreate-git"]
-	path = cmdcreate-git
-	url = https://github.com/archlinux/aur/tree/cmdcreate-git
