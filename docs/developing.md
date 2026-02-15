@@ -178,15 +178,26 @@ codebase clean:
 
 ## Utilities I provide
 
-### Testing purposes
+### Standard Utilities
 
-- `testing/install.sh`  
+- `dev/setup_env.sh`  
+  Sets up the development environment.
+
+- `dev/clean.sh`  
+  Cleans up the development environment.
+
+- `dev/format.sh`  
+  Formats all Bash, Python, and Rust code.
+
+- `dev/install.sh`  
   Install a test (non-production) version of cmdcreate.
 
-- `testing/uninstall.sh`  
+- `dev/uninstall.sh`  
   Remove the testing version.
 
-- `testing/features/main.py`  
+### Testing Purposes
+
+- `testing/main.py`  
   Run a script that exercises cmdcreate features.
 
 > [!NOTE]  
@@ -196,9 +207,6 @@ codebase clean:
 ---
 
 ### Packaging cmdcreate
-
-- `package/format.sh`  
-  Formats all Bash, Python, and Rust code.
 
 - `package/create_bin.sh`  
   Packages a standalone `x86_64` binary.

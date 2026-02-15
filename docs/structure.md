@@ -58,6 +58,8 @@ change.
 ## Developer Environment Setup
 
 - 📁 [dev](https://github.com/owen-debiasio/cmdcreate/tree/main/dev)
+  - [format.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/dev/clean.sh)
+  - [format.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/dev/format.sh)
   - [setup_env.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/setup_env.sh)
 
 ## Packaging cmdcreate
@@ -67,7 +69,6 @@ change.
   - [create_bin.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_bin.sh)
   - [create_deb.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_deb.sh)
   - [create_rpm.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/create_rpm.sh)
-  - [format.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/format.sh)
   - [package.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/package/package.sh)
 
 ## Main source code
