@@ -2,7 +2,7 @@ use crate::{logger::log, utils::net::http_client};
 use serde_json::Value;
 use std::{cmp::Ordering, error::Error};
 
-pub const VERSION: &str = "v1.1.0";
+pub const VERSION: &str = "v1.1.1";
 
 pub fn is_development_version() -> bool {
     let parse_version = |v: &str| -> (u32, u32, u32) {
