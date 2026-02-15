@@ -1,6 +1,8 @@
 {
     "cSpell.words": [
         "aur",
+        "bindir",
+        "buildroot",
         "centos",
         "chmod",
         "chrono",
@@ -39,6 +41,8 @@
         "reqwest",
         "rhel",
         "rpmbuild",
+        "RPMS",
+        "RPMTOP",
         "Rusterminal",
         "RUSTFLAGS",
         "rustup",
@@ -46,6 +50,7 @@
         "serde",
         "shellcheck",
         "shfmt",
+        "SRPMS",
         "Swatinem",
         "tlsv",
         "upgrader",
