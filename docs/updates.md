@@ -16,8 +16,10 @@ there is currently no way to automate this.
 cmdcreate check
 ```
 
-> [!NOTE]  
-> This only checks for the latest stable version, not latest git commits.
+> [!NOTE]
+>
+> - This only checks for the latest stable version, not latest git commits.
+> - You can't update on Arch-based distros via this method. Please use an AUR manager.
 
 ## Updating cmdcreate
 
@@ -78,9 +80,6 @@ cmdcreate update
 
 ##### Available options
 
-- Updating through the AUR
-  - **Stable or latest git options available**
-  - **Should work on any CPU architecture**
 - Download and install through the latest `Ubuntu/Debian` package file (`.deb`)
   - **Stable version only**
   - **x86_64 architectures only**

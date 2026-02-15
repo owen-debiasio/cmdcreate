@@ -18,7 +18,6 @@ Commands:
   display  <command>                 Display contents of a command
   rename   <command>    <new name>   Renames a command
   favorite <add/remove> <command>    Adds or removes a command from favorites
-  repair                             Repairs installed commands if needed
   clean                              Can clean up old and unused files
 
  Backup:
@@ -306,8 +305,6 @@ Command "cba" removed from favorites.
 $ cmdcreate favorite remove cba
 Error: Command isn't in favorites: cba
 ```
-
-## Repair
 
 ### Repairs installed commands if needed
 
