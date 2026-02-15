@@ -120,7 +120,6 @@ change.
       - [listandfavorite.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/features/scripts/listandfavorite.py)
       - [remove.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/features/scripts/remove.py)
       - [rename.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/features/scripts/rename.py)
-      - [repair.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/features/scripts/repair.py)
       - [search.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/features/scripts/search.py)
     - [lib.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/features/lib.py)
     - [main.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/features/main.py)
