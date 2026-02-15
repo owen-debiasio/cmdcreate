@@ -547,3 +547,8 @@
 - Optimized internal updating process
 - Added command: `clean`
   - Can clean up old and unused files
+- New developer utility: `dev/clean.sh`
+  - Cleans up the development environment
+- Reorganized file structure
+  - Only applies to development tools
+- Made shell files look nicer
