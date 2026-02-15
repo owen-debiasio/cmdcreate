@@ -11,7 +11,6 @@ use crate::{
         list::list,
         remove::remove,
         rename::rename,
-        repair::repair,
         search::search,
         update::{check, update},
     },
@@ -68,7 +67,6 @@ pub fn parse(cmd: &str, args: &[String]) {
             _ => println!("Usage:\ncmdcreate {blue}favorite {yellow}<add/remove> <command>{reset}"),
         },
 
-        "repair" => repair(),
         "list" => list(),
         "check" => check(),
         "update" => update(),
