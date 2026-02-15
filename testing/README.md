@@ -2,12 +2,11 @@
 
 ## Files
 
-- ./install.sh
-  - Builds cmdcreate and installs it to `/usr/local/bin/`
-- ./uninstall.sh
-  - Does the opposite of `install.sh`, removes it from `/usr/local/bin/`
-- ./testing/main.py
+- ./main.py
   - Tests features for cmdcreate **(See below)**
+
+- Other files
+  - Utilities and scripts for the main script
 
 ---
 
