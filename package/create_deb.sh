@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
+
 set -euo pipefail
 
 if [[ $# -ne 1 ]]; then
-    echo "Usage: $0 <version> (no leading v)"
+    echo -e "\n> Usage: $0 <version> (no leading v)"
     exit 1
 fi
 
@@ -18,14 +19,14 @@ cleanup() {
 trap cleanup EXIT
 
 if [[ ! -x ./create_bin.sh ]]; then
-    echo "create_bin.sh missing or not executable"
+    echo -e "\n> create_bin.sh missing or not executable"
     exit 1
 fi
 
 ./create_bin.sh "$VERSION"
 
 if [[ ! -f "$BINARY_SRC" ]]; then
-    echo "Binary $BINARY_SRC not found. Build failed?"
+    echo -e "\n> Binary $BINARY_SRC not found. Build failed?"
     exit 1
 fi
 
@@ -51,4 +52,4 @@ FINAL_DEB="cmdcreate-v${VERSION}-linux-${ARCH}.deb"
 mv "${PKGDIR}.deb" "$FINAL_DEB"
 mv "$FINAL_DEB" "$HOME/Downloads/"
 
-echo -e "\nBuilt and moved $FINAL_DEB to ~/Downloads"
+echo -e "\n> Built and moved $FINAL_DEB to ~/Downloads"

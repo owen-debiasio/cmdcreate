@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 
 die() {
-    echo "error: $*" >&2
+    echo -e "\n> error: $*" >&2
     exit 1
 }
 
@@ -11,29 +11,26 @@ die() {
 [[ "$1" != v* ]] || die "Version must NOT start with 'v'"
 
 VERSION="$1"
-
-echo "Cleaning up before packaging..."
-cargo clean
-
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 
-echo "Formatting code..."
 ./dev/format.sh
+
+echo -e "\n> Creating packages for version $VERSION..."
 
 cd "$SCRIPT_DIR"
 
-echo "Creating binary ($VERSION)..."
+echo -e "\n> Creating binary..."
 ./create_bin.sh "$VERSION"
 
-echo "Creating Debian package..."
+echo -e "\n> Creating Debian package..."
 ./create_deb.sh "$VERSION"
 
-echo "Creating RPM package..."
+echo -e "\n> Creating RPM package..."
 ./create_rpm.sh "$VERSION"
 
 cd ..
 
-echo "Cleaning up..."
+echo -e "\n> Cleaning up..."
 ./dev/clean.sh
 
-echo -e "\nAll release artifacts created successfully"
+echo -e "\n> release artifacts created successfully"

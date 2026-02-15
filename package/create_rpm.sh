@@ -3,7 +3,7 @@
 set -euo pipefail
 
 if [[ $# -ne 1 ]]; then
-    echo "Usage: $0 <version> (no leading v)"
+    echo -e "\n> Usage: $0 <version> (no leading v)"
     exit 1
 fi
 
@@ -18,7 +18,7 @@ SPEC_FILE="$RPMTOP/SPECS/cmdcreate.spec"
 SOURCE_FILE="cmdcreate-${VERSION}-linux-${ARCH}-bin"
 
 if [[ ! -f "$BINARY_SRC" ]]; then
-    echo "Binary not found: $BINARY_SRC"
+    echo -e "\n> Binary not found: $BINARY_SRC"
     exit 1
 fi
 
@@ -66,4 +66,4 @@ cp "$RPM_FILE" "$FINAL_RPM"
 
 rm -rf ~/rpmbuild/
 
-echo -e "\nBuilt and moved $FINAL_RPM to ~/Downloads"
+echo -e "\n> Built and moved $FINAL_RPM to ~/Downloads"

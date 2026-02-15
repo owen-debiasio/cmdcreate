@@ -3,7 +3,7 @@
 set -euo pipefail
 
 if [[ $# -ne 1 ]]; then
-    echo "Usage: $0 <version> (no leading v)"
+    echo -e "\n> Usage: $0 <version> (no leading v)"
     exit 1
 fi
 
@@ -27,4 +27,4 @@ if [[ ! -f "$BINARY_SRC" ]]; then
     exit 1
 fi
 
-echo -e "\nPackaged cmdcreate to \"$BINARY_NAME\""
+echo -e "\n> Packaged cmdcreate to \"$BINARY_NAME\""
