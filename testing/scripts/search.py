@@ -1,5 +1,5 @@
-from testing.features.lib import command
-from testing.features.shared import (
+from testing.lib import command
+from testing.shared import (
     multiple_command_desc,
     create_multiple_commands,
     enter_to_continue,

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-from testing.features.lib import command
-from testing.features.scripts import (
+from lib import command
+from scripts import (
     remove,
     create,
     listandfavorite,

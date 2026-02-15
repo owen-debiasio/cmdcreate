@@ -1,4 +1,4 @@
-from testing.features.lib import command
+from lib import command
 
 
 def enter_to_continue():
