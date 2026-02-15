@@ -17,10 +17,10 @@ cargo clean
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 
-cd "$SCRIPT_DIR"
-
 echo "Formatting code..."
-"$SCRIPT_DIR/format.sh"
+./dev/format.sh
+
+cd "$SCRIPT_DIR"
 
 echo "Creating binary ($VERSION)..."
 ./create_bin.sh "$VERSION"
@@ -31,7 +31,9 @@ echo "Creating Debian package..."
 echo "Creating RPM package..."
 ./create_rpm.sh "$VERSION"
 
+cd ..
+
 echo "Cleaning up..."
-cargo clean
+./dev/clean.sh
 
 echo -e "\nAll release artifacts created successfully"

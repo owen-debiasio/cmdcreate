@@ -22,8 +22,8 @@ ask_yn() {
     fi
 }
 
-ask_yn "--- Do you want to set up cmdcreate's dev environment?"
-echo "--- Installing dependencies..."
+ask_yn "> Do you want to set up cmdcreate's dev environment?"
+echo -e "\n> Installing dependencies..."
 
 install_dependencies() {
     case "$ID" in
@@ -42,9 +42,6 @@ install_dependencies() {
                 nodejs npm
             sudo npm install -g markdownlint-cli2 || true
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-
-            # shellcheck source=/dev/null
-            source "$HOME/.cargo/env"
             ;;
         debian | ubuntu)
             sudo apt update
@@ -55,9 +52,6 @@ install_dependencies() {
                 nodejs npm
             sudo npm install -g markdownlint-cli2 || true
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-
-            # shellcheck source=/dev/null
-            source "$HOME/.cargo/env"
             ;;
         *)
             if [[ "$ID_LIKE" == *debian* ]]; then
@@ -69,11 +63,8 @@ install_dependencies() {
                     nodejs npm
                 sudo npm install -g markdownlint-cli2 || true
                 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-
-                # shellcheck source=/dev/null
-                source "$HOME/.cargo/env"
             else
-                echo "Unsupported distro: $ID"
+                echo -e "\n> Unsupported distro: $ID"
                 exit 1
             fi
             ;;
@@ -82,10 +73,10 @@ install_dependencies() {
 
 install_dependencies
 
-echo "--- Setting up Rust..."
+echo -e "\n> Setting up Rust..."
 
 # shellcheck source=/dev/null
-source "$HOME/.cargo/env" 2> /dev/null || true
+source "$HOME/.cargo/env"
 
 rustup default stable
 
@@ -94,7 +85,7 @@ dev_dir="$(eval echo "$dev_dir")"
 git clone https://github.com/owen-debiasio/cmdcreate.git "$dev_dir"
 cd "$dev_dir" || exit 1
 
-echo "--- Activating shell scripts..."
+echo -e "\n> Activating shell scripts..."
 find . -maxdepth 1 -name "*.sh" -exec chmod +x {} +
 
-echo -e "--- Dev environment ready...\nOpen the environment in your chosen text editor or IDE..."
+echo -e "\n> Dev environment ready...\nOpen the environment in your chosen text editor or IDE..."

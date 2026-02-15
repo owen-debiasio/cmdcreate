@@ -6,22 +6,22 @@ BIN_NAME="cmdcreate"
 TARGET="target/release/$BIN_NAME"
 INSTALL_DIR="/usr/local/bin"
 
-echo "Updating Rust toolchain..."
+echo -e "\n> Updating Rust toolchain..."
 rustup update stable
 rustup default stable
 
-echo "Updating Cargo..."
+echo -e "\n> Updating Cargo..."
 cargo update
 
-./package/format.sh
+./dev/format.sh
 
-echo "Running clippy..."
+echo -e "\n> Running clippy..."
 cargo clippy --fix --allow-no-vcs
 
-echo "Building release..."
+echo -e "\n> Building release..."
 cargo build --release
 
-echo "Installing binary..."
+echo -e "\n> Installing binary..."
 sudo install -Dm755 "$TARGET" "$INSTALL_DIR/$BIN_NAME"
 
-echo "Done. $BIN_NAME installed to $INSTALL_DIR"
+echo -e "\n> Done. $BIN_NAME installed to $INSTALL_DIR"
