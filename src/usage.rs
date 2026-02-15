@@ -38,9 +38,6 @@ pub fn cmdcreate_usage() {
             "  {blue}favorite {yellow}<add/remove> <command>{reset}   Adds or removes a command from favorites"
         ),
         format!(
-            "  {blue}repair{reset}                            Repairs installed commands if needed"
-        ),
-        format!(
             "  {blue}clean{reset}                             Can clean up old and unused files"
         ),
         "\n  Update:".into(),
