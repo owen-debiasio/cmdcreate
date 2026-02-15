@@ -552,3 +552,9 @@
 - Reorganized file structure
   - Only applies to development tools
 - Made shell files look nicer
+
+## v1.1.1
+
+- You now need to run cmdcreate as root (like using sudo)
+- Installation of commands has moved to /usr/local/bin/(command)
+- Removed command `repair`: No longer needed
