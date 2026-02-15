@@ -33,6 +33,7 @@
         "pacman",
         "paru",
         "pkgdir",
+        "pycache",
         "pylint",
         "pylintrc",
         "reqwest",
