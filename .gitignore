@@ -1,4 +1,7 @@
-AUR
+AUR/.git
+AUR/aur_setup.sh
+AUR/aur_update.sh
+cmdcreate-git/.git
 Cargo.lock
 target
 *.pyc 
