@@ -1,0 +1,3 @@
+[submodule "AUR"]
+	path = AUR
+	url = https://github.com/archlinux/aur/tree/cmdcreate
