@@ -1,11 +1,11 @@
 use crate::{
     VERSION,
-    commands::update::get_install_path,
     configs::init_configs,
     logger::log,
     utils::{
         fs::init_fs_layout,
-        sys::{ARCH, VARS, get_distro_base, installation_method},
+        io::error,
+        sys::{ARCH, VARS, get_distro_base, installation_method, is_root},
     },
     version::is_development_version,
 };
@@ -27,7 +27,7 @@ pub fn debug_intro() -> String {
             "(stable)"
         },
         get_distro_base(),
-        installation_method(Option::from(get_install_path())),
+        installation_method(),
         VARS.editor,
         VARS.home,
         VARS.shell,
@@ -35,6 +35,10 @@ pub fn debug_intro() -> String {
 }
 
 pub fn init() {
+    if !is_root() {
+        error("Please run cmdcreate as root.", "")
+    }
+
     init_fs_layout();
     init_configs();
 

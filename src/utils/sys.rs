@@ -1,9 +1,10 @@
 use std::{
     env::{args, consts::ARCH as ARCHITECTURE, var},
-    path::Path,
     process::{Command, Stdio},
     sync::LazyLock,
 };
+
+use rustix::process::geteuid;
 
 use crate::{
     configs::load,
@@ -13,6 +14,10 @@ use crate::{
         io::{TestError, error},
     },
 };
+
+pub fn is_root() -> bool {
+    geteuid().as_raw() == 0
+}
 
 pub struct Vars {
     pub shell: String,
@@ -146,18 +151,7 @@ pub fn get_distro_base() -> DistroBase {
     }
 }
 
-pub fn installation_method(path: Option<&Path>) -> InstallMethod {
-    let Ok(path) = path
-        .expect("Failed to retrieve installation method")
-        .canonicalize()
-    else {
-        return InstallMethod::Other;
-    };
-
-    let Some(_path_str) = path.to_str() else {
-        return InstallMethod::Other;
-    };
-
+pub fn installation_method() -> InstallMethod {
     match get_distro_base() {
         DistroBase::Arch => InstallMethod::Aur,
         DistroBase::Fedora => InstallMethod::Rpm,

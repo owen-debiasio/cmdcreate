@@ -46,13 +46,7 @@ pub fn rename(old: &str, new: &str) {
         0,
     );
 
-    run_shell_command(&format!(
-        "
-        mv {install_dir}{old} {install_dir}{new}; \
-        sudo mv /usr/local/bin/{old} /usr/local/bin/{new}; \
-        sudo ln -sf {install_dir}{new} /usr/local/bin/{new}; \
-        "
-    ));
+    run_shell_command(&format!("mv {install_dir}{old} {install_dir}{new}"));
 
     println!("{green}Successfully renamed command {blue}\"{old}\" to {blue}\"{new}\"{reset}");
 }

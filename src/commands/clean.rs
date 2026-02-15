@@ -1,11 +1,8 @@
-use crate::{
-    commands::repair::repair,
-    utils::{
-        colors::COLORS,
-        fs::{PATHS, delete_file, delete_folder},
-        io::{ask_for_confirmation, input},
-        sys::{VARS, args_forced},
-    },
+use crate::utils::{
+    colors::COLORS,
+    fs::{PATHS, delete_file, delete_folder},
+    io::{ask_for_confirmation, input},
+    sys::{VARS, args_forced},
 };
 pub fn clean() {
     let (green, _blue, red, reset) = (COLORS.green, COLORS.blue, COLORS.red, COLORS.reset);
@@ -22,16 +19,6 @@ pub fn clean() {
         delete_folder(&format!("{}/.local/share/cmdcreate/logs/", VARS.home));
 
         println!("{green}\nLog files cleared.{reset}");
-    }
-
-    if !args_forced()
-        && input(&format!(
-            "\nDo you want to repair broken commands?{reset}\n({green}Y{reset} or {red}N{reset})"
-        ))
-        .trim()
-        .eq_ignore_ascii_case("y")
-    {
-        repair();
     }
 
     if !args_forced()

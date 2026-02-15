@@ -43,12 +43,7 @@ pub fn create(command: &str, contents: &str, verbose: bool) {
 
     log("commands/create::create(): Activating command...", 0);
 
-    run_shell_command(&format!(
-        "
-        chmod +x {script}; \
-        sudo ln -sf {script} /usr/local/bin/{command}
-        ",
-    ));
+    run_shell_command(&format!("chmod +x {script}"));
 
     if verbose {
         println!("\n{green}Success! Created command: {blue}\"{command}\"{reset}");

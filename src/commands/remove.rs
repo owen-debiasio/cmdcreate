@@ -5,7 +5,6 @@ use crate::{
         colors::COLORS,
         fs::{PATHS, delete_file, read_file_to_string},
         io::ask_for_confirmation,
-        sys::run_shell_command,
     },
 };
 
@@ -31,23 +30,16 @@ pub fn remove(command: &str, forced: bool) {
         ));
     }
 
-    log(
-        &format!("commands/remove::remove(): Deleting command file \"{command}\"..."),
-        0,
-    );
-
-    delete_file(&format!("{}{command}", PATHS.install_dir));
-
     if read_file_to_string(&PATHS.favorites).contains(command) {
         favorite("remove", command);
     }
 
     log(
-        &format!("commands/remove::remove(): Removing link of command \"{command}\"..."),
+        &format!("commands/remove::remove(): Removing command \"{command}\"..."),
         0,
     );
 
-    run_shell_command(&format!("sudo rm -f /usr/local/bin/{command}"));
+    delete_file(&format!("{}{command}", PATHS.install_dir));
 
     println!("\n{green}Removed command {blue}\"{command}\"{reset}");
 }

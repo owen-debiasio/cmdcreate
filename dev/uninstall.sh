@@ -3,7 +3,7 @@
 set -euo pipefail
 
 BIN="cmdcreate"
-INSTALL_DIR="/usr/local/bin"
+INSTALL_DIR="/usr/bin/"
 
 if [ -f "$INSTALL_DIR/$BIN" ]; then
     sudo rm "$INSTALL_DIR/$BIN"

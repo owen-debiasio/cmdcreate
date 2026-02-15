@@ -5,7 +5,7 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{PATHS, create_folder, write_to_file},
-        sys::args_contains,
+        sys::{args_contains, is_root},
     },
 };
 
@@ -28,6 +28,10 @@ pub fn log(text: &str, lvl: u8) {
         || load("logs", "verbose", "").parse::<bool>().unwrap_or(false)
     {
         println!("{color}{time} {log_text}{}", COLORS.reset);
+    }
+
+    if !is_root() {
+        return;
     }
 
     create_folder(log_dir);

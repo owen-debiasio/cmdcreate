@@ -13,15 +13,7 @@ use crate::{
     version::{VERSION, get_latest_commit, get_latest_release, is_development_version},
 };
 
-use std::{path::Path, process::exit};
-
-pub fn get_install_path() -> &'static Path {
-    ["/usr/bin/cmdcreate", "/usr/local/bin/cmdcreate"]
-        .iter()
-        .map(Path::new)
-        .find(|p| p.exists())
-        .unwrap()
-}
+use std::process::exit;
 
 pub fn update() {
     let (green, blue, red, reset) = (COLORS.green, COLORS.blue, COLORS.red, COLORS.reset);
@@ -35,26 +27,24 @@ pub fn update() {
 
     ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
 
-    match installation_method(Option::from(get_install_path())) {
+    match installation_method() {
         InstallMethod::Other => interactive_upgrade(),
 
         InstallMethod::Aur => {
             if !args_forced()
                 && input(&format!(
-                "\n{blue}Arch Linux{reset}-based system detected. Would you like to install through the {blue}AUR{reset}?\n({green}Y{reset} or {red}N{reset})"
+                "\n{blue}Arch Linux{reset}-based system detected. Updating on Arch-based distros using this method is not supported. \
+                Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{reset})"
             ))
                 .trim()
-                .eq_ignore_ascii_case("n")
+                .eq_ignore_ascii_case("y")
             {
                 interactive_upgrade();
 
                 return;
             }
 
-            upgrade_via(if input(&format!(
-                "\nWould you like to install the latest git {green}(commit: {}){reset}?\n({green}Y{reset} or {red}N{reset})", get_latest_commit("owen-debiasio", "cmdcreate", "main")))
-                .trim()
-                .eq_ignore_ascii_case("y") && !args_forced() { "aur-git" } else { "aur" });
+            error("Aborted.", "")
         }
 
         InstallMethod::Dpkg => {
@@ -66,7 +56,7 @@ pub fn update() {
                 "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
             ))
                 .trim()
-                .eq_ignore_ascii_case("n")
+                .eq_ignore_ascii_case("y")
             {
                 interactive_upgrade();
 
@@ -85,7 +75,7 @@ pub fn update() {
                  \n({green}Y{reset} or {red}N{reset})"
             ))
                 .trim()
-                .eq_ignore_ascii_case("n")
+                .eq_ignore_ascii_case("y")
             {
                 interactive_upgrade();
 
@@ -106,23 +96,6 @@ fn upgrade_via(method: &str) {
     let latest_release = get_latest_release().unwrap_or_else(|| VERSION.to_owned());
 
     match method {
-        "aur" | "aur-git" => {
-            let pkg = if method == "aur-git" {
-                "cmdcreate-git"
-            } else {
-                "cmdcreate"
-            };
-
-            run_shell_command(&format!(
-                "rm -rf /tmp/{pkg} && \
-                 git clone https://aur.archlinux.org/{pkg}.git /tmp/{pkg} && \
-                 cd /tmp/{pkg} && \
-                 makepkg -si --noconfirm && \
-                 rm -rf /tmp/{pkg}"
-            ));
-
-            println!("{green}Update complete!{reset}");
-        }
         "deb" => {
             cpu_arch_check(
                 "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
@@ -165,7 +138,7 @@ fn upgrade_via(method: &str) {
             run_shell_command(&format!(
                 "curl -Lf -o /tmp/{pkg} \
                  https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
-                 sudo install -Dm755 /tmp/{pkg} /usr/local/bin/cmdcreate \
+                 sudo install -Dm755 /tmp/{pkg} /usr/bin/cmdcreate \
                  rm /tmp/{pkg}"
             ));
 
@@ -218,9 +191,6 @@ fn interactive_upgrade() {
     println!("\nSelect an upgrade method:\n");
 
     for (mut i, option) in [
-        &format!("Upgrade through AUR {blue}(universal device compatibility){reset}"),
-        &format!("Upgrade through AUR {blue}(latest git {green}(commit: {latest_commit}){blue}, \
-         universal device compatibility){reset}"),
         "Install via .deb file",
         "Install via .rpm file",
         "Manually install binary",
@@ -236,13 +206,11 @@ fn interactive_upgrade() {
     }
 
     match input("").trim() {
-        "1" => upgrade_via("aur"),     // AUR
-        "2" => upgrade_via("aur-git"), // AUR (git)
-        "3" => upgrade_via("deb"),     // .deb
-        "4" => upgrade_via("rpm"),     // .rpm
-        "5" => upgrade_via("bin"),     // bin
-        "6" => build_from_source(),
-        "7" => error("Aborted.", ""),
+        "1" => upgrade_via("deb"),
+        "2" => upgrade_via("rpm"),
+        "3" => upgrade_via("bin"),
+        "4" => build_from_source(),
+        "5" => error("Aborted.", ""),
 
         _ => error("Invalid selection.", ""),
     }
