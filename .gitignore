@@ -1,5 +1,4 @@
-AUR/.git
-AUR/cmdcreate-git/.git
+AUR
 Cargo.lock
 target
 *.pyc 
