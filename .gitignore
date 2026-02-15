@@ -1,5 +1,3 @@
-AUR/aur_setup.sh
-AUR/aur_update.sh
 Cargo.lock
 target
 *.pyc 
