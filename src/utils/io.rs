@@ -1,4 +1,3 @@
-use core::fmt;
 use std::{
     fmt::{Display, Formatter},
     io::stdin,
@@ -64,7 +63,7 @@ pub fn error(msg: &str, err: &str) -> ! {
 pub struct TestError(pub String);
 
 impl Display for TestError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
         write!(f, "{}", self.0)
     }
 }
