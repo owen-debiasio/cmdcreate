@@ -28,8 +28,6 @@ pub fn update() {
     ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
 
     match installation_method() {
-        InstallMethod::Other => interactive_upgrade(),
-
         InstallMethod::Aur => {
             if !args_forced()
                 && input(&format!(
@@ -85,9 +83,9 @@ pub fn update() {
                 upgrade_via("rpm");
             }
         }
-    }
 
-    exit(0)
+        InstallMethod::Other => interactive_upgrade(),
+    }
 }
 
 fn upgrade_via(method: &str) {
