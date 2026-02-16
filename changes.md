@@ -560,3 +560,4 @@
 - Removed command `repair`: No longer needed
 - Update methods are only listed if they apply to your system
 - Removed `repair` test
+- Code optimizations
