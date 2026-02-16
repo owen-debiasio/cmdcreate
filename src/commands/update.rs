@@ -63,6 +63,8 @@ pub fn update() {
 
                 upgrade_via("deb");
             }
+
+            error("Aborted.", "")
         }
 
         InstallMethod::Rpm => {
@@ -70,7 +72,7 @@ pub fn update() {
                 if !args_forced()
                 && input(&format!(
                 "\n{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\
-                 \n({green}Y{reset} or {red}N{reset})"
+                \n({green}Y{reset} or {red}N{reset})"
             ))
                 .trim()
                 .eq_ignore_ascii_case("y")
@@ -82,6 +84,8 @@ pub fn update() {
 
                 upgrade_via("rpm");
             }
+
+            error("Aborted.", "")
         }
 
         InstallMethod::Other => interactive_upgrade(),
@@ -103,9 +107,9 @@ fn upgrade_via(method: &str) {
 
             run_shell_command(&format!(
                 "curl -Lf -o /tmp/{pkg} \
-                 https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
-                 sudo dpkg -i /tmp/{pkg} && \
-                 rm /tmp/{pkg}"
+                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
+                sudo dpkg -i /tmp/{pkg} && \
+                rm /tmp/{pkg}"
             ));
 
             println!("\n{green}Update complete!{reset}");
@@ -119,9 +123,9 @@ fn upgrade_via(method: &str) {
 
             run_shell_command(&format!(
                 "curl -Lf -o /tmp/{pkg} \
-                 https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
-                 sudo rpm -Uvh /tmp/{pkg} \
-                 rm /tmp/{pkg}"
+                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
+                sudo rpm -Uvh /tmp/{pkg} \
+                rm /tmp/{pkg}"
             ));
 
             println!("\n{green}Update complete!{reset}");
@@ -173,13 +177,14 @@ fn build_from_source() {
 
     run_shell_command(&format!(
         "set -e && \
-         cd \"{cache_dir}\" && \
-         cargo build --release && \
-         sudo install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate",
+        cd \"{cache_dir}\" && \
+        cargo build --release && \
+        sudo install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate",
     ));
 
     println!("\n{green}Update complete!{reset}");
 }
+
 fn interactive_upgrade() {
     let (blue, green, red, reset) = (COLORS.blue, COLORS.green, COLORS.red, COLORS.reset);
 
@@ -196,10 +201,12 @@ fn interactive_upgrade() {
     }
 
     options.push(("bin", "Manually install binary".to_string()));
+
     options.push(("src", format!(
         "Build from source {blue}(latest git {green}(commit: {}){blue}, \
         universal device compatibility, {red}DEBIAN/UBUNTU MAY INVOLVE MANUAL INTERVENTION{blue}){reset}"
     , get_latest_commit("owen-debiasio", "cmdcreate", "main"))));
+
     options.push(("exit", "Exit".to_string()));
 
     for (i, (_, text)) in options.iter().enumerate() {
@@ -243,9 +250,9 @@ pub fn check() {
 
     if is_development_version() {
         println!(
-            "\nYou are running a newer version {}({VERSION}){reset} than the latest release {green}({latest}){reset}.\
-                \nAssuming it's a development build.",
-            COLORS.blue,
+            "\nYou are running a newer version {}({VERSION}){reset} \
+            than the latest release {green}({latest}){reset}.",
+            COLORS.blue
         );
 
         exit(0)
@@ -255,6 +262,7 @@ pub fn check() {
         ask_for_confirmation(&format!(
             "{green}\nUpdate available: {VERSION} -> {latest}{reset}\nDo you want to upgrade cmdcreate?"
         ));
+
         update();
 
         return;

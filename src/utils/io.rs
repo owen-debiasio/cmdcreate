@@ -15,16 +15,14 @@ pub fn ask_for_confirmation(q: &str) {
     );
 
     if !args_forced()
-        && input(&format!("{q}{reset}\n({green}Y{reset} or {red}N{reset})"))
+        && !input(&format!("{q}{reset}\n({green}Y{reset} or {red}N{reset})"))
             .trim()
             .to_lowercase()
-            != "y"
+            .eq_ignore_ascii_case("y")
     {
-        log("utils/io::ask_for_confirmation(): Confirmation aborted.", 1);
-
         println!("{red}\nAborted.{reset}");
 
-        exit(0)
+        exit(1)
     }
 }
 
