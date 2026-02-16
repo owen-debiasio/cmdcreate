@@ -182,40 +182,46 @@ fn build_from_source() {
 
     println!("\n{green}Update complete!{reset}");
 }
-
 fn interactive_upgrade() {
     let (blue, green, red, reset) = (COLORS.blue, COLORS.green, COLORS.red, COLORS.reset);
 
-    let latest_commit: &str = &get_latest_commit("owen-debiasio", "cmdcreate", "main");
+    println!("\nSelect an available upgrade method:\n");
 
-    println!("\nSelect an upgrade method:\n");
+    let mut options = Vec::new();
+    let distro = get_distro_base();
 
-    for (mut i, option) in [
-        "Install via .deb file",
-        "Install via .rpm file",
-        "Manually install binary",
-        &format!("Build from source {blue}(latest git {green}(commit: {latest_commit}){blue}, \
-          universal device compatibility, {red}DEBIAN/UBUNTU MAY INVOLVE MANUAL INTERVENTION{blue}){reset}"),
-        "Exit",
-    ]
-        .iter()
-        .enumerate()
-    {
-        i += 1;
-        println!("{blue}{i}]{reset} {option}");
+    if distro == DistroBase::Debian {
+        options.push(("deb", "Install via .deb file".to_string()));
+    }
+    if distro == DistroBase::Fedora {
+        options.push(("rpm", "Install via .rpm file".to_string()));
     }
 
-    match input("").trim() {
-        "1" => upgrade_via("deb"),
-        "2" => upgrade_via("rpm"),
-        "3" => upgrade_via("bin"),
-        "4" => build_from_source(),
-        "5" => error("Aborted.", ""),
+    options.push(("bin", "Manually install binary".to_string()));
+    options.push(("src", format!(
+        "Build from source {blue}(latest git {green}(commit: {}){blue}, \
+        universal device compatibility, {red}DEBIAN/UBUNTU MAY INVOLVE MANUAL INTERVENTION{blue}){reset}"
+    , get_latest_commit("owen-debiasio", "cmdcreate", "main"))));
+    options.push(("exit", "Exit".to_string()));
 
+    for (i, (_, text)) in options.iter().enumerate() {
+        println!("{blue}{idx}]{reset} {text}", idx = i + 1);
+    }
+
+    let selection = input("").trim().parse::<usize>().unwrap_or(0);
+
+    if selection == 0 || selection > options.capacity() {
+        error("Invalid selection: ", &selection.to_string());
+    }
+
+    match options[selection - 1].0 {
+        "deb" => upgrade_via("deb"),
+        "rpm" => upgrade_via("rpm"),
+        "bin" => upgrade_via("bin"),
+        "src" => build_from_source(),
+        "exit" => error("Aborted.", ""),
         _ => error("Invalid selection.", ""),
     }
-
-    exit(0)
 }
 
 pub fn check() {
