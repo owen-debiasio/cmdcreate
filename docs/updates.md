@@ -20,6 +20,7 @@ cmdcreate check
 >
 > - This only checks for the latest stable version, not latest git commits.
 > - You can't update on Arch-based distros via this method. Please use an AUR manager.
+> - Update methods are only listed if they apply to your system
 
 ## Updating cmdcreate
 
