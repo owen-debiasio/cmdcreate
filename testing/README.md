@@ -21,7 +21,6 @@
 - Searching for commands
 - Displaying command contents
 - Renaming commands
-- Repairing commands
 - Importing/Exporting commands
 
 ---

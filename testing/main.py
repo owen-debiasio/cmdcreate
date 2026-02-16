@@ -8,11 +8,10 @@ from scripts import (
     edit,
     display,
     rename,
-    repair,
     backup,
 )
 
-VERSION = "v0.1.6"
+VERSION = "v0.1.8"
 
 
 def main():
@@ -28,9 +27,8 @@ def main():
         "6] Searching for commands",
         "7] Displaying command contents",
         "8] Rename command",
-        "9] Repair command(s)",
-        "10] Importing/exporting command(s)\n",
-        "11] All tests\n",
+        "9] Importing/exporting command(s)\n",
+        "10] All tests\n",
         "0]  Abort\n",
     ]
 
@@ -62,11 +60,9 @@ def run_test(test):
         case "8":
             rename.test()
         case "9":
-            repair.test()
-        case "10":
             backup.test()
-        case "11":
-            for i in range(1, 11):
+        case "10":
+            for i in range(1, 10):
                 run_test(str(i))
         case _:
             main()
