@@ -558,3 +558,5 @@
 - You now need to run cmdcreate as root (like using sudo)
 - Installation of commands has moved to /usr/local/bin/(command)
 - Removed command `repair`: No longer needed
+- Update methods are only listed if they apply to your system
+- Removed `repair` test
