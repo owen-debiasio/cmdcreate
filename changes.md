@@ -561,3 +561,8 @@
 - Update methods are only listed if they apply to your system
 - Removed `repair` test
 - Code optimizations
+- Added flag: `-o`, `--offline`
+  - Used when you want to use cmdcreate offline
+- Removed home directory information from verbose init
+- Added internet connection status to verbose init
+- Certain things are now restricted if you don't have an internet connection
