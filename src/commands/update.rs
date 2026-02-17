@@ -139,9 +139,9 @@ fn upgrade_via(method: &str) {
 
             run_shell_command(&format!(
                 "curl -Lf -o /tmp/{pkg} \
-                 https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
-                 sudo install -Dm755 /tmp/{pkg} /usr/bin/cmdcreate \
-                 rm /tmp/{pkg}"
+                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
+                sudo install -Dm755 /tmp/{pkg} /usr/bin/cmdcreate \
+                rm /tmp/{pkg}"
             ));
 
             println!("\n{green}Update complete!{reset}");
