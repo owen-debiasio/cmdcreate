@@ -48,10 +48,5 @@ pub fn export(path: &str) {
         }
     }
 
-    log(
-        "commands/export::export(): Exporting process completed...",
-        0,
-    );
-
     println!("{green}Successfully exported commands to:{blue} \"{export_file}\"{green}.{reset}",);
 }
