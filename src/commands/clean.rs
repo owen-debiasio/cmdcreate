@@ -5,7 +5,7 @@ use crate::utils::{
     sys::{VARS, args_forced},
 };
 pub fn clean() {
-    let (green, _blue, red, reset) = (COLORS.green, COLORS.blue, COLORS.red, COLORS.reset);
+    let (green, red, reset) = (COLORS.green, COLORS.red, COLORS.reset);
 
     ask_for_confirmation("Do you want to clean cmdcreate?");
 
