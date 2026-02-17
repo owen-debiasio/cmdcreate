@@ -4,6 +4,8 @@ use std::{
     time::Duration,
 };
 
+use crate::utils::sys::args_contains;
+
 pub fn http_client() -> Client {
     Client::builder()
         .timeout(Duration::from_secs(15))
@@ -12,14 +14,18 @@ pub fn http_client() -> Client {
         .expect("Failed to build HTTP client")
 }
 
-pub fn connected_to_internet() -> bool {
+pub fn is_offline() -> bool {
+    if args_contains("-o") || args_contains("--offline") {
+        return true;
+    }
+
     match "1.1.1.1:53".to_socket_addrs() {
         Ok(mut addrs) => {
             if let Some(addr) = addrs.next() {
-                return TcpStream::connect_timeout(&addr, Duration::from_secs(3)).is_ok();
+                return TcpStream::connect_timeout(&addr, Duration::from_secs(3)).is_err();
             }
-            false
+            true
         }
-        Err(_) => false,
+        Err(_) => true,
     }
 }
