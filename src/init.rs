@@ -5,6 +5,7 @@ use crate::{
     utils::{
         fs::init_fs_layout,
         io::error,
+        net::is_offline,
         sys::{ARCH, VARS, get_distro_base, installation_method, is_root},
     },
     version::is_development_version,
@@ -17,8 +18,8 @@ pub fn debug_intro() -> String {
             Created by:                 CPU Architecture: {ARCH}
            Owen Debiasio                Distro Base: {:?}
        owen.debiasio@gmail.com          Preferred installation method: {:?}
-                                        Preferred text editor: {}
-    Have an issue? Copy this text       Home directory: {}
+                                        Internet status: {}
+    Have an issue? Copy this text       Preferred text editor: {}
           and open an issue             Shell in use: {}
                                         ----------------",
         if is_development_version() {
@@ -28,8 +29,8 @@ pub fn debug_intro() -> String {
         },
         get_distro_base(),
         installation_method(),
+        if is_offline() { "offline" } else { "connected" },
         VARS.editor,
-        VARS.home,
         VARS.shell,
     )
 }
