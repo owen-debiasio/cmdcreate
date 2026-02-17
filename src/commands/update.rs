@@ -4,13 +4,13 @@ use crate::{
         colors::COLORS,
         fs::delete_folder,
         io::{ask_for_confirmation, error, input},
-        net::connected_to_internet,
+        net::is_offline,
         sys::{
             ARCH, DistroBase, InstallMethod, VARS, arch_is_supported, args_forced, cpu_arch_check,
             get_distro_base, installation_method, run_shell_command,
         },
     },
-    version::{VERSION, get_latest_commit, get_latest_release, is_development_version},
+    version::{VERSION, get_latest_commit, get_latest_tag, is_development_version},
 };
 
 use std::process::exit;
@@ -18,7 +18,7 @@ use std::process::exit;
 pub fn update() {
     let (green, blue, red, reset) = (COLORS.green, COLORS.blue, COLORS.red, COLORS.reset);
 
-    if !connected_to_internet() {
+    if is_offline() {
         error(
             "You must have internet to continue with this operation!",
             "",
@@ -95,7 +95,7 @@ pub fn update() {
 fn upgrade_via(method: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    let latest_release = get_latest_release().unwrap_or_else(|| VERSION.to_owned());
+    let latest_release = get_latest_tag("owen-debiasio", "cmdcreate");
 
     match method {
         "deb" => {
@@ -232,7 +232,7 @@ fn interactive_upgrade() {
 pub fn check() {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    if !connected_to_internet() {
+    if is_offline() {
         error(
             "You must have internet to continue with this operation!",
             "",
@@ -241,12 +241,7 @@ pub fn check() {
 
     println!("\nChecking for updates...");
 
-    let Some(latest) = get_latest_release() else {
-        error(
-            "Failed to check for updates. Ensure you are connected to the internet.",
-            "",
-        );
-    };
+    let latest = get_latest_tag("owen-debiasio", "cmdcreate");
 
     if is_development_version() {
         println!(

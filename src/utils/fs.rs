@@ -9,6 +9,7 @@ use crate::{
     logger::log,
     utils::{
         io::error,
+        net::is_offline,
         sys::{VARS, run_shell_command},
     },
 };
@@ -47,6 +48,14 @@ pub fn init_fs_layout() {
 pub fn init_git_fs() {
     log("utils/fs::init_git_fs(): Syncing offline files...", 0);
 
+    if is_offline() {
+        log(
+            "utils/fs::init_git_fs(): No internet skipping downloading offline files...",
+            1,
+        );
+        return;
+    }
+
     retrieve_git_file(&PATHS.license, "LICENSE");
     retrieve_git_file(&PATHS.changelog, "changes.md");
 
@@ -54,6 +63,14 @@ pub fn init_git_fs() {
 }
 
 pub fn retrieve_git_file(dest: &str, file_path: &str) {
+    if is_offline() {
+        log(
+            "utils/fs::retrieve_git_file(): No internet skipping downloading offline files...",
+            1,
+        );
+        return;
+    }
+
     run_shell_command(&format!(
         "curl -sSo {dest} https://raw.githubusercontent.com/owen-debiasio/cmdcreate/master/{file_path}"
     ));

@@ -1,4 +1,10 @@
-use crate::{logger::log, utils::net::http_client};
+use crate::{
+    logger::log,
+    utils::{
+        io::error,
+        net::{http_client, is_offline},
+    },
+};
 use serde_json::Value;
 use std::{cmp::Ordering, error::Error};
 
@@ -18,40 +24,49 @@ pub fn is_development_version() -> bool {
         )
     };
 
-    match parse_version(VERSION).cmp(&parse_version(&get_latest_release().unwrap())) {
+    match parse_version(VERSION).cmp(&parse_version(&get_latest_tag(
+        "owen-debiasio",
+        "cmdcreate",
+    ))) {
         Ordering::Less | Ordering::Equal => false,
         Ordering::Greater => true,
     }
 }
 
-pub fn get_latest_tag(owner: &str, repo: &str) -> Result<String, Box<dyn Error>> {
-    let json: Value = http_client()
-        .get(format!(
-            "https://api.github.com/repos/{owner}/{repo}/releases/latest"
-        ))
-        .send()?
-        .json()?;
+pub fn get_latest_tag(owner: &str, repo: &str) -> String {
+    if is_offline() {
+        log(
+            "version::get_latest_tag(): No internet... Unable to retrieve latest tag...",
+            1,
+        );
+        return "unknown".to_string();
+    }
 
-    let tag = json["tag_name"]
-        .as_str()
-        .ok_or("Missing tag_name in response")?
-        .to_owned();
+    let result: Result<String, Box<dyn Error>> = (|| {
+        let response = http_client()
+            .get(format!(
+                "https://api.github.com/repos/{owner}/{repo}/releases/latest"
+            ))
+            .header("User-Agent", "rust-app")
+            .send()?;
 
-    log(
-        &format!("version::get_latest_tag(): Latest tag: {tag}..."),
-        0,
-    );
+        let json: Value = response.json()?;
 
-    Ok(tag)
-}
+        let tag = json["tag_name"]
+            .as_str()
+            .ok_or("Missing tag_name")?
+            .to_owned();
 
-pub fn get_latest_release() -> Option<String> {
-    log(
-        "version::get_latest_release(): Retrieving latest release...",
-        0,
-    );
+        Ok(tag)
+    })();
 
-    get_latest_tag("owen-debiasio", "cmdcreate").ok()
+    match result {
+        Ok(tag) => {
+            log(&format!("version::get_latest_tag(): Latest tag: {tag}"), 0);
+            tag
+        }
+        Err(e) => error("Unable to retrieve latest tag:", &e.to_string()),
+    }
 }
 
 pub fn get_latest_commit(owner: &str, repo: &str, branch: &str) -> String {
