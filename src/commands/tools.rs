@@ -2,11 +2,15 @@ use std::{fs::read_dir, path::PathBuf};
 
 use crate::{
     logger::log,
-    utils::{colors::COLORS, fs::path_exists, io::error},
+    utils::{
+        colors::COLORS,
+        fs::{PATHS, path_exists},
+        io::error,
+    },
 };
 
 pub fn command_is_installed(cmd: &str) -> bool {
-    if path_exists(&format!("/usr/local/bin/{cmd}")) {
+    if path_exists(&format!("{}{cmd}", PATHS.install_dir)) {
         log(
             &format!(
                 "commands/tools::command_is_installed(): Command \"{cmd}\" is installed... Continuing..."
@@ -28,7 +32,7 @@ pub fn get_installed_commands() -> Vec<PathBuf> {
         0,
     );
 
-    let commands: Vec<PathBuf> = read_dir("/usr/local/bin/")
+    let commands: Vec<PathBuf> = read_dir(&PATHS.install_dir)
         .unwrap_or_else(|_| panic!("{red}Error: Failed to read install directory{reset}",))
         .flatten()
         .map(|entry| entry.path())
