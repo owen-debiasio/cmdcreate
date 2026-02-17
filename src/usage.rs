@@ -55,9 +55,12 @@ pub fn cmdcreate_usage() {
         format!("  {cyan}-c{reset},{cyan} --changelog {reset}                  Displays changelog"),
         format!("  {cyan}-l{reset},{cyan} --license {reset}                    Displays license"),
         format!(
+            "  {cyan}-o{reset},{cyan} --offline {reset}                    Runs cmdcreate in offline mode"
+        ),
+        format!(
             "  {cyan}-d{reset},{cyan} --debugging {reset}                  Displays flags used for debugging"
         ),
-        "\n  Offline:".into(),
+        "\n  Offline Files:".into(),
         format!(
             "    {cyan}-g{reset},{cyan} --get_offline_files{reset}         Downloads files for offline use"
         ),
