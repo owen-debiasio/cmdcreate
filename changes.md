@@ -566,3 +566,8 @@
 - Removed home directory information from verbose init
 - Added internet connection status to verbose init
 - Certain things are now restricted if you don't have an internet connection
+
+# v1.1.2
+
+- Fixed offline mode being detected incorrectly
+- Added a hidden offline flag for dev/install.sh
