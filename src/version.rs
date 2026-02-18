@@ -8,7 +8,7 @@ use crate::{
 use serde_json::Value;
 use std::{cmp::Ordering, error::Error};
 
-pub const VERSION: &str = "v1.1.1";
+pub const VERSION: &str = "v1.1.2";
 
 pub fn is_development_version() -> bool {
     let parse_version = |v: &str| -> (u32, u32, u32) {
@@ -52,12 +52,10 @@ pub fn get_latest_tag(owner: &str, repo: &str) -> String {
 
         let json: Value = response.json()?;
 
-        let tag = json["tag_name"]
+        Ok(json["tag_name"]
             .as_str()
             .ok_or("Missing tag_name")?
-            .to_owned();
-
-        Ok(tag)
+            .to_owned())
     })();
 
     match result {
