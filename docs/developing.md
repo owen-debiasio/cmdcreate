@@ -180,24 +180,24 @@ codebase clean:
 
 ### Standard Utilities
 
-- `dev/setup_env.sh`  
+- `dev/setup_env.sh`
   Sets up the development environment.
 
-- `dev/clean.sh`  
+- `dev/clean.sh`
   Cleans up the development environment.
 
-- `dev/format.sh`  
+- `dev/format.sh`
   Formats all Bash, Python, and Rust code.
 
-- `dev/install.sh`  
+- `dev/install.sh`
   Install a test (non-production) version of cmdcreate.
 
-- `dev/uninstall.sh`  
+- `dev/uninstall.sh`
   Remove the testing version.
 
 ### Testing Purposes
 
-- `testing/main.py`  
+- `testing/main.py`
   Run a script that exercises cmdcreate features.
 
 > [!NOTE]  
@@ -208,16 +208,16 @@ codebase clean:
 
 ### Packaging cmdcreate
 
-- `package/create_bin.sh`  
+- `package/create_bin.sh`
   Packages a standalone `x86_64` binary.
 
-- `package/create_deb.sh`  
+- `package/create_deb.sh`
   Packages a Debian `.deb`.
 
-- `package/create_rpm.sh`  
+- `package/create_rpm.sh`
   Packages an RPM.
 
-- `package/package.sh`  
+- `package/package.sh`
   Builds all supported package formats.
 
 > [!NOTE]  
