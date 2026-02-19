@@ -7,10 +7,9 @@ if [[ $# -ne 1 ]]; then
     exit 1
 fi
 
-VERSION="$1"
 ARCH="x86_64"
 
-BINARY_NAME="cmdcreate-v${VERSION}-linux-${ARCH}-bin"
+BINARY_NAME="cmdcreate-v$1-linux-${ARCH}-bin"
 BINARY_SRC="$HOME/Downloads/$BINARY_NAME"
 
 cargo update
