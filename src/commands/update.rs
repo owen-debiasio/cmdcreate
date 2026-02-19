@@ -6,11 +6,11 @@ use crate::{
         io::{ask_for_confirmation, error, input},
         net::is_offline,
         sys::{
-            ARCH, DistroBase, InstallMethod, VARS, arch_is_supported, args_forced, cpu_arch_check,
-            get_distro_base, installation_method, run_shell_command,
+            arch_is_supported, args_forced, cpu_arch_check, get_distro_base, installation_method,
+            run_shell_command, DistroBase, InstallMethod, ARCH, VARS,
         },
     },
-    version::{VERSION, get_latest_commit, get_latest_tag, is_development_version},
+    version::{get_latest_commit, get_latest_tag, is_development_version, VERSION},
 };
 
 use std::process::exit;
@@ -29,63 +29,54 @@ pub fn update() {
 
     match installation_method() {
         InstallMethod::Aur => {
+            // Arch-based logic remains the same
             if !args_forced()
                 && input(&format!(
-                "\n{blue}Arch Linux{reset}-based system detected. Updating on Arch-based distros using this method is not supported. \
-                Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{reset})"
-            ))
+                    "\n{blue}Arch Linux{reset}-based system detected. Updating via AUR is not directly supported here. \
+Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{reset})"
+                ))
                 .trim()
                 .eq_ignore_ascii_case("y")
-            {
-                interactive_upgrade();
-
-                return;
-            }
-
+                {
+                    interactive_upgrade();
+                    return;
+                }
             error("Aborted.", "")
         }
 
         InstallMethod::Dpkg => {
+            // FIX: Check if architecture is supported for .deb.
+            // If not, or if user says 'y' to interactive, go to interactive_upgrade.
             if arch_is_supported() {
-                log("commands/update::update(): Debian/Ubuntu detected...", 0);
-
-                if !args_forced()
-                && input(&format!(
-                "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
-            ))
-                .trim()
-                .eq_ignore_ascii_case("y")
-            {
-                interactive_upgrade();
-
-                return;
-            }
-
+                if !args_forced() && input(&format!(
+                    "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
+                )).trim().eq_ignore_ascii_case("y") {
+                    interactive_upgrade();
+                    return;
+                }
                 upgrade_via("deb");
+            } else {
+                // Raspberry Pi falls here: Arch not supported for .deb, so go interactive
+                log(
+                    "commands/update::update(): ARM/Unsupported arch detected, switching to interactive...",
+                    0,
+                );
+                interactive_upgrade();
             }
-
-            error("Aborted.", "")
         }
 
         InstallMethod::Rpm => {
             if arch_is_supported() {
-                if !args_forced()
-                && input(&format!(
-                "\n{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\
-                \n({green}Y{reset} or {red}N{reset})"
-            ))
-                .trim()
-                .eq_ignore_ascii_case("y")
-            {
-                interactive_upgrade();
-
-                return;
-            }
-
+                if !args_forced() && input(&format!(
+                    "\n{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
+                )).trim().eq_ignore_ascii_case("y") {
+                    interactive_upgrade();
+                    return;
+                }
                 upgrade_via("rpm");
+            } else {
+                interactive_upgrade();
             }
-
-            error("Aborted.", "")
         }
 
         InstallMethod::Other => interactive_upgrade(),
@@ -140,7 +131,7 @@ fn upgrade_via(method: &str) {
             run_shell_command(&format!(
                 "curl -Lf -o /tmp/{pkg} \
                 https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
-                sudo install -Dm755 /tmp/{pkg} /usr/bin/cmdcreate \
+                sudo install -Dm755 /tmp/{pkg} /usr/bin/cmdcreate && \
                 rm /tmp/{pkg}"
             ));
 
