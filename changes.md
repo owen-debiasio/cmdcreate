@@ -573,3 +573,4 @@
 - Added a hidden offline flag for dev/install.sh
 - Code optimizations
 - Fixed random crash when args are being parsed
+- Fixed error when updating via binary
