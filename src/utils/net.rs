@@ -22,7 +22,7 @@ pub fn is_offline() -> bool {
     match "1.1.1.1:53".to_socket_addrs() {
         Ok(mut addrs) => {
             if let Some(addr) = addrs.next() {
-                return TcpStream::connect_timeout(&addr, Duration::from_secs(0)).is_err();
+                return TcpStream::connect_timeout(&addr, Duration::from_secs(1)).is_err();
             }
             true
         }
