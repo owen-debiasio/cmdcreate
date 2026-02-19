@@ -6,11 +6,11 @@ use crate::{
         io::{ask_for_confirmation, error, input},
         net::is_offline,
         sys::{
-            arch_is_supported, args_forced, cpu_arch_check, get_distro_base, installation_method,
-            run_shell_command, DistroBase, InstallMethod, ARCH, VARS,
+            ARCH, DistroBase, InstallMethod, VARS, arch_is_supported, args_forced, cpu_arch_check,
+            get_distro_base, installation_method, run_shell_command,
         },
     },
-    version::{get_latest_commit, get_latest_tag, is_development_version, VERSION},
+    version::{VERSION, get_latest_commit, get_latest_tag, is_development_version},
 };
 
 use std::process::exit;
@@ -29,7 +29,6 @@ pub fn update() {
 
     match installation_method() {
         InstallMethod::Aur => {
-            // Arch-based logic remains the same
             if !args_forced()
                 && input(&format!(
                     "\n{blue}Arch Linux{reset}-based system detected. Updating via AUR is not directly supported here. \
@@ -45,8 +44,6 @@ Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{r
         }
 
         InstallMethod::Dpkg => {
-            // FIX: Check if architecture is supported for .deb.
-            // If not, or if user says 'y' to interactive, go to interactive_upgrade.
             if arch_is_supported() {
                 if !args_forced() && input(&format!(
                     "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
@@ -56,7 +53,6 @@ Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{r
                 }
                 upgrade_via("deb");
             } else {
-                // Raspberry Pi falls here: Arch not supported for .deb, so go interactive
                 log(
                     "commands/update::update(): ARM/Unsupported arch detected, switching to interactive...",
                     0,
@@ -184,14 +180,16 @@ fn interactive_upgrade() {
     let mut options = Vec::new();
     let distro = get_distro_base();
 
-    if distro == DistroBase::Debian {
+    if distro == DistroBase::Debian && arch_is_supported() {
         options.push(("deb", "Install via .deb file".to_string()));
     }
-    if distro == DistroBase::Fedora {
+    if distro == DistroBase::Fedora && arch_is_supported() {
         options.push(("rpm", "Install via .rpm file".to_string()));
     }
 
-    options.push(("bin", "Manually install binary".to_string()));
+    if arch_is_supported() {
+        options.push(("bin", "Manually install binary".to_string()));
+    }
 
     options.push(("src", format!(
         "Build from source {blue}(latest git {green}(commit: {}){blue}, \
