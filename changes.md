@@ -571,3 +571,4 @@
 
 - Fixed offline mode being detected incorrectly
 - Added a hidden offline flag for dev/install.sh
+- Code optimizations
