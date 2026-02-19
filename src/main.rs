@@ -57,5 +57,7 @@ fn cmdcreate(args: &[String]) {
         i += 1;
     }
 
-    parse(args.get(i).map(String::as_str).unwrap(), &args[i..]);
+    if let Some(cmd) = args.get(i).map(String::as_str) {
+        parse(cmd, &args[i..]);
+    }
 }
