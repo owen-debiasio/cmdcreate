@@ -20,9 +20,7 @@ pub fn ask_for_confirmation(q: &str) {
             .to_lowercase()
             .eq_ignore_ascii_case("y")
     {
-        println!("{red}\nAborted.{reset}");
-
-        exit(1)
+        error("Aborted.", "")
     }
 }
 
