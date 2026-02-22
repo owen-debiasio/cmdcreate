@@ -567,10 +567,14 @@
 - Added internet connection status to verbose init
 - Certain things are now restricted if you don't have an internet connection
 
-# v1.1.2
+## v1.1.2
 
 - Fixed offline mode being detected incorrectly
 - Added a hidden offline flag for dev/install.sh
 - Code optimizations
 - Fixed random crash when args are being parsed
 - Fixed error when updating via binary
+
+## v1.1.3
+
+- Many code optimizations
