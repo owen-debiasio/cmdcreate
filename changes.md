@@ -579,3 +579,4 @@
 
 - Many code optimizations
 - Building from source when updating should now build properly
+- Building from source now dynamically shows the warning for manual intervention
