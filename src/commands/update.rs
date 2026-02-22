@@ -193,14 +193,14 @@ fn interactive_upgrade() {
     options.push((
         "src",
         format!(
-            "Build from source {blue}(latest git {green}(commit: {:?}){blue}, \
+            "Build from source {blue}(latest git {green}(commit: {}){blue}, \
         universal device compatibility{}){reset}",
+            get_latest_commit("owen-debiasio", "cmdcreate", "main"),
             if get_distro_base() == DistroBase::Debian {
                 format!(", {red}MAY INVOLVE MANUAL INTERVENTION{blue}")
             } else {
                 String::new()
             },
-            get_latest_commit("owen-debiasio", "cmdcreate", "main")
         ),
     ));
 
