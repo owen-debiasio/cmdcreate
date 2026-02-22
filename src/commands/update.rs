@@ -6,11 +6,11 @@ use crate::{
         io::{ask_for_confirmation, error, input},
         net::is_offline,
         sys::{
-            arch_is_supported, args_forced, cpu_arch_check, get_distro_base, installation_method,
-            run_shell_command, DistroBase, InstallMethod, ARCH, VARS,
+            ARCH, DistroBase, InstallMethod, VARS, arch_is_supported, args_forced, cpu_arch_check,
+            get_distro_base, installation_method, run_shell_command,
         },
     },
-    version::{get_latest_commit, get_latest_tag, is_development_version, VERSION},
+    version::{VERSION, get_latest_commit, get_latest_tag, is_development_version},
 };
 
 use std::process::exit;
