@@ -40,7 +40,7 @@ pub fn init() {
         error("Please run cmdcreate as root.", "")
     }
 
-    init_fs_layout();
+    init_fs_layout().expect("Failed to initialize filesystem");
     init_configs();
 
     log(

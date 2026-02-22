@@ -39,7 +39,7 @@ pub fn create(command: &str, contents: &str, verbose: bool) {
         0,
     );
 
-    overwrite_file(script, contents);
+    overwrite_file(script, contents).expect("Failed to write to file");
 
     log("commands/create::create(): Activating command...", 0);
 

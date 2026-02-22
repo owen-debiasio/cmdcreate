@@ -30,7 +30,10 @@ pub fn remove(command: &str, forced: bool) {
         ));
     }
 
-    if read_file_to_string(&PATHS.favorites).contains(command) {
+    if read_file_to_string(&PATHS.favorites)
+        .expect("Failed to retrieve favorites")
+        .contains(command)
+    {
         favorite("remove", command);
     }
 
@@ -39,7 +42,7 @@ pub fn remove(command: &str, forced: bool) {
         0,
     );
 
-    delete_file(&format!("{}{command}", PATHS.install_dir));
+    delete_file(&format!("{}{command}", PATHS.install_dir)).expect("Failed to delete command");
 
     println!("\n{green}Removed command {blue}\"{command}\"{reset}");
 }

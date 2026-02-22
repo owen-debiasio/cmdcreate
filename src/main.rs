@@ -49,7 +49,7 @@ fn cmdcreate(args: &[String]) {
             cmd,
             "-l" | "--license" | "-c" | "--changelog" | "-g" | "--get_offline_files"
         ) {
-            init_git_fs();
+            init_git_fs().expect("Failed to initialize git files");
         }
 
         parse(cmd, args);

@@ -32,6 +32,7 @@ fn add(cmd: &str) {
     command_is_installed(cmd);
 
     if read_file_to_string(favorites_path)
+        .expect("Failed to retrieve favorites")
         .lines()
         .any(|c| c == cmd)
     {
@@ -40,7 +41,7 @@ fn add(cmd: &str) {
         return;
     }
 
-    write_to_file(favorites_path, &format!("{cmd}\n"), true);
+    write_to_file(favorites_path, &format!("{cmd}\n"), true).expect("Failed to write to file");
 
     println!("{green}Command {blue}\"{cmd}\"{green} added to favorites.{reset}");
 }
@@ -56,13 +57,14 @@ fn remove(cmd: &str) {
     let favorites_path = &PATHS.favorites;
 
     if !read_file_to_string(favorites_path)
+        .expect("Failed to retrieve favorites")
         .lines()
         .any(|c| c == cmd)
     {
         error("Command isn't in favorites:", cmd);
     }
 
-    remove_from_file(favorites_path, cmd);
+    remove_from_file(favorites_path, cmd).expect("Failed to remove contents from file");
 
     println!("{green}Command {blue}\"{cmd}\"{green} removed from favorites.{reset}");
 }

@@ -144,7 +144,7 @@ fn build_from_source() {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
     let cache_dir = format!("{}/.cache/cmdcreate", VARS.home);
-    delete_folder(&cache_dir);
+    delete_folder(&cache_dir).expect("Failed to delete folder");
 
     run_shell_command(match get_distro_base() {
         DistroBase::Arch => "sudo pacman -S --needed --noconfirm cargo git",

@@ -16,7 +16,7 @@ pub fn init_configs() {
         return;
     }
 
-    overwrite_file(&PATHS.configs, AUTO_GEN);
+    overwrite_file(&PATHS.configs, AUTO_GEN).expect("Failed to overwrite file");
 }
 
 static CONFIG: LazyLock<Value> = LazyLock::new(|| {

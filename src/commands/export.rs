@@ -19,7 +19,7 @@ pub fn export(path: &str) {
 
     log("commands/export::export(): Creating export file...", 0);
 
-    create_file(export_file);
+    create_file(export_file).expect("Failed to create file");
 
     for script in get_installed_commands() {
         if let Some(stem) = script.file_stem() {
@@ -30,10 +30,14 @@ pub fn export(path: &str) {
                 0,
             );
 
-            let cmd_contents =
-                read_file_to_string(&format!("{}{cmd}", PATHS.install_dir)).replace('|', "[|");
+            let cmd_contents = read_file_to_string(&format!("{}{cmd}", PATHS.install_dir))
+                .expect("Failed to retrieve command contents")
+                .replace('|', "[|");
 
-            let data = if read_file_to_string(&PATHS.favorites).contains(cmd.as_ref()) {
+            let data = if read_file_to_string(&PATHS.favorites)
+                .expect("Failed to retrieve favorites")
+                .contains(cmd.as_ref())
+            {
                 format!("{cmd} | {cmd_contents} | favorite\n")
             } else {
                 format!("{cmd} | {cmd_contents}\n")
@@ -44,7 +48,7 @@ pub fn export(path: &str) {
                 0,
             );
 
-            write_to_file(export_file, &data, true);
+            write_to_file(export_file, &data, true).expect("Failed to write to file");
         }
     }
 

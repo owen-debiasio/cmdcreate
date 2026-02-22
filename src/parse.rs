@@ -91,7 +91,7 @@ pub fn parse(cmd: &str, args: &[String]) {
 
             log("main::main(): Retrieval of offline files requested...", 0);
 
-            init_git_fs();
+            init_git_fs().expect("Failed to initialize git files");
 
             log("main::main(): Retrieved offline files...", 0);
 
@@ -103,20 +103,25 @@ pub fn parse(cmd: &str, args: &[String]) {
 
             println!("Removing files...");
 
-            delete_file(&PATHS.changelog);
-            delete_file(&PATHS.license);
+            delete_file(&PATHS.changelog).expect("Failed to delete changelog");
+            delete_file(&PATHS.license).expect("Failed to delete license");
 
             println!("{green}Files removed successfully.{reset}");
         }
 
         "--license" | "-l" => {
             log("main::main(): Displaying license...", 0);
-            println!("{}", read_file_to_string(&PATHS.license));
+            println!("{:?}", read_file_to_string(&PATHS.license));
         }
 
         "--changelog" | "-c" => {
             log("main::main(): Displaying changelog...", 0);
-            println!("{}", read_file_to_string(&PATHS.changelog).trim());
+            println!(
+                "{}",
+                read_file_to_string(&PATHS.changelog)
+                    .expect("Failed to read changelog")
+                    .trim()
+            );
         }
 
         "--debugging" | "-d" => debug_usage(),

@@ -34,11 +34,12 @@ pub fn log(text: &str, lvl: u8) {
         return;
     }
 
-    create_folder(log_dir);
+    create_folder(log_dir).expect("Failed to create folder");
 
     write_to_file(
         &format!("{log_dir}/{time}.log"),
         &format!("{time} {log_text}\n"),
         true,
-    );
+    )
+    .expect("Failed to write to file");
 }
