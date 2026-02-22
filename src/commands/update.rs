@@ -6,11 +6,11 @@ use crate::{
         io::{ask_for_confirmation, error, input},
         net::is_offline,
         sys::{
-            ARCH, DistroBase, InstallMethod, VARS, arch_is_supported, args_forced, cpu_arch_check,
-            get_distro_base, installation_method, run_shell_command,
+            arch_is_supported, args_forced, cpu_arch_check, get_distro_base, installation_method,
+            run_shell_command, DistroBase, InstallMethod, ARCH, VARS,
         },
     },
-    version::{VERSION, get_latest_commit, get_latest_tag, is_development_version},
+    version::{get_latest_commit, get_latest_tag, is_development_version, VERSION},
 };
 
 use std::process::exit;
@@ -159,12 +159,11 @@ fn build_from_source() {
     });
 
     run_shell_command(&format!(
-        "git clone https://github.com/owen-debiasio/cmdcreate {cache_dir}",
-    ));
-
-    run_shell_command(&format!(
         "set -e && \
         cd \"{cache_dir}\" && \
+        git clone https://github.com/owen-debiasio/cmdcreate.git && \
+        cd cmdcreate && \
+        rustup default stable && \
         cargo build --release && \
         sudo install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate",
     ));
