@@ -35,7 +35,7 @@ command -v markdownlint-cli2 > /dev/null || {
 }
 
 echo -e "\n> Formatting Rust source..."
-cargo fmt
+cargo fmt --all --
 
 if [[ -d "$ROOT_DIR/testing/" ]]; then
     echo -e "\n> Formatting Python testing scripts..."
