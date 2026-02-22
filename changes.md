@@ -578,3 +578,4 @@
 ## v1.1.3
 
 - Many code optimizations
+- Building from source when updating should now build properly
