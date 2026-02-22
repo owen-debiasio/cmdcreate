@@ -190,10 +190,19 @@ fn interactive_upgrade() {
         options.push(("bin", "Manually install binary".to_string()));
     }
 
-    options.push(("src", format!(
-        "Build from source {blue}(latest git {green}(commit: {}){blue}, \
-        universal device compatibility, {red}DEBIAN/UBUNTU MAY INVOLVE MANUAL INTERVENTION{blue}){reset}"
-    , get_latest_commit("owen-debiasio", "cmdcreate", "main"))));
+    options.push((
+        "src",
+        format!(
+            "Build from source {blue}(latest git {green}(commit: {:?}){blue}, \
+        universal device compatibility{}){reset}",
+            if get_distro_base() == DistroBase::Debian {
+                format!(", {red}MAY INVOLVE MANUAL INTERVENTION{blue}")
+            } else {
+                String::new()
+            },
+            get_latest_commit("owen-debiasio", "cmdcreate", "main")
+        ),
+    ));
 
     options.push(("exit", "Exit".to_string()));
 
