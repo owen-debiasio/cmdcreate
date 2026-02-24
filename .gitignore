@@ -1,5 +1,3 @@
-Cargo.lock
-target
-*.pyc 
-.venv
-aur_update.sh
+*__pycache__/
+*.pyc
+.venv/
