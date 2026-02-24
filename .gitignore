@@ -2,3 +2,4 @@ Cargo.lock
 target
 *.pyc 
 .venv
+aur_update.sh
