@@ -585,3 +585,7 @@ Licensed under the GNU General Public License v3.0 or later.
 - Many code optimizations
 - Building from source when updating should now build properly
 - Building from source now dynamically shows the warning for manual intervention
+
+## v1.1.4
+
+- Change license to GPLv3
