@@ -1,3 +1,8 @@
+<!--
+Copyright (C) 2026 Owen Debiasio
+Licensed under the GNU General Public License v3.0 or later.
+--->
+
 # Configuring cmdcreate
 
 You are able to configure cmdcreate in various ways. All are listed here. You

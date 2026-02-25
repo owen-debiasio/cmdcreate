@@ -1,3 +1,8 @@
+<!--
+Copyright (C) 2026 Owen Debiasio
+Licensed under the GNU General Public License v3.0 or later.
+--->
+
 ---
 name: Feature request
 about: Suggest an idea for cmdcreate

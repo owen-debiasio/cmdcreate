@@ -1,4 +1,10 @@
+<!--
+Copyright (C) 2026 Owen Debiasio
+Licensed under the GNU General Public License v3.0 or later.
+--->
+
 ---
+
 name: Bug report
 about: Create a report to help me improve cmdcreate
 title: "<BUG>"

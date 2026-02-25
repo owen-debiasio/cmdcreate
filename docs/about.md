@@ -1,3 +1,8 @@
+<!--
+Copyright (C) 2026 Owen Debiasio
+Licensed under the GNU General Public License v3.0 or later.
+--->
+
 # About cmdcreate
 
 ## How it came to be and a quick history
@@ -25,7 +30,7 @@ on my hands where I can put that time into managing this project.
 
 Managing this project has been super easy so far for the following reasons:
 
-- Little to know community
+- Little to no community
   - I'm pretty much the only person that cares about this project. I have no
     community to maintain and keep under control.
 - I do a little bit at a time

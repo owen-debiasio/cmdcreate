@@ -1,4 +1,8 @@
-# This file is located in ~/.config/cmdcreate/config.toml
+# Copyright (C) 2026 Owen Debiasio
+# Licensed under the GNU General Public License v3.0 or later.
+# Full notice available in the root README.md or COPYING file.
+
+# This file is located in /root/.config/cmdcreate/config.toml
 
 [sys]
 shell = "bash" # Your preferred shell

@@ -1,7 +1,14 @@
+<!--
+Copyright (C) 2026 Owen Debiasio
+Licensed under the GNU General Public License v3.0 or later.
+--->
+
 # cmdcreate
 
 Create your own custom commands for your convenience without needing to enter
 the same "complex" commands over and over.
+
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ---
 
@@ -190,4 +197,4 @@ sudo install -Dm755 target/release/cmdcreate /usr/local/bin/cmdcreate
 (C) 2026 Owen Debiasio
 
 Licensed under
-**[MIT](https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE.md)**
+**[GPL Version 3](https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE)**

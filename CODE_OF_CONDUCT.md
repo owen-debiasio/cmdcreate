@@ -1,3 +1,8 @@
+<!--
+Copyright (C) 2026 Owen Debiasio
+Licensed under the GNU General Public License v3.0 or later.
+--->
+
 # Contributor Covenant Code of Conduct
 
 ## My Pledge

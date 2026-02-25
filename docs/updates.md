@@ -1,3 +1,8 @@
+<!--
+Copyright (C) 2026 Owen Debiasio
+Licensed under the GNU General Public License v3.0 or later.
+--->
+
 # Information Regarding cmdcreate and Updates
 
 Here I provide information regarding update cycles and how you should update
