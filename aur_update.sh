@@ -25,8 +25,8 @@ if [ "$(git config --global user.email)" != "owen.debiasio@gmail.com" ]; then
     git config --global user.email "owen.debiasio@gmail.com"
 fi
 
-if [ "$(git config --global user.name)" != "Owen DeBiasio" ]; then
-    git config --global user.name "Owen DeBiasio"
+if [ "$(git config --global user.name)" != "Owen Debiasio" ]; then
+    git config --global user.name "Owen Debiasio"
 fi
 
 if [ ! -f "$HOME/.ssh/id_ed25519" ]; then
