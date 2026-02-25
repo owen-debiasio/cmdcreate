@@ -25,5 +25,5 @@
 
 ---
 
-> [!NOTE]
-> While you're here, check out the [documentation for developing cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/developing.md).
+> [!NOTE] While you're here, check out the
+> [documentation for developing cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/developing.md).

@@ -67,7 +67,8 @@ find . -name "*.sh" -exec shellcheck {} +
 echo -e "\n> Formatting shell scripts..."
 shfmt -w -i 4 -ci -sr "$ROOT_DIR"
 
-echo -e "\n> Linting markdown files..."
+echo -e "\n> Linting and formatting markdown files..."
 markdownlint-cli2 "**/*.md" --config .markdownlint.json
+prettier -w "**/*.md"
 
 echo -e "\n> Formatting complete."

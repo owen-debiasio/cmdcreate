@@ -5,19 +5,14 @@ Licensed under the GNU General Public License v3.0 or later.
 
 ---
 
-name: Bug report
-about: Create a report to help me improve cmdcreate
-title: "<BUG>"
-labels: bug
-assignees: owen-debiasio
+name: Bug report about: Create a report to help me improve cmdcreate title:
+"<BUG>" labels: bug assignees: owen-debiasio
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Describe the bug** A clear and concise description of what the bug is.
 
-**To Reproduce**
-Steps to reproduce the behavior:
+**To Reproduce** Steps to reproduce the behavior:
 
 1. Go to '...'
 2. Click on '....'
@@ -32,5 +27,4 @@ Steps to reproduce the behavior:
 
 - Examples: `x86_64`, `aarch64`, `risc-v`
 
-**Additional context**
-Add any other context about the problem here.
+**Additional context** Add any other context about the problem here.

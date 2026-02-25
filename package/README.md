@@ -3,7 +3,7 @@
 ## Files
 
 - **package/create_bin.sh**
-  - Builds cmdcreate as a standalone  
+  - Builds cmdcreate as a standalone
 - **package/create_deb.sh**
   - Builds cmdcreate as a `.deb` package
 - **package/create_rpm.sh**
@@ -35,8 +35,7 @@
 
 ## Additional notes
 
-> [!NOTE]
-> `create_bin.sh`, `create_deb.sh`, and `create_rpm.sh` are all ran in `package.sh`
+> [!NOTE] `create_bin.sh`, `create_deb.sh`, and `create_rpm.sh` are all ran in
+> `package.sh`
 
-> [!NOTE]
-> Built packages and binaries are built to `~/Downloads/`
+> [!NOTE] Built packages and binaries are built to `~/Downloads/`

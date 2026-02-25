@@ -46,7 +46,7 @@ sudo pacman -S --needed \
   rustup curl openssl git base-devel \
   shfmt shellcheck \
   python-black python-pylint \
-  nodejs npm markdownlint-cli2
+  nodejs npm markdownlint-cli2 prettier
 ```
 
 ##### Debian / Ubuntu
@@ -57,7 +57,9 @@ sudo apt install -y \
   curl libssl-dev build-essential pkg-config git \
   shfmt shellcheck \
   black pylint \
-  nodejs npm
+  nodejs npm \
+  rpm-tools dpkg
+
 ```
 
 ##### Fedora
@@ -67,7 +69,8 @@ sudo dnf install -y \
   curl openssl-devel git \
   shfmt ShellCheck \
   python3-black python3-pylint \
-  nodejs npm
+  nodejs npm \
+  rpm-build dpkg-dev
 ```
 
 ---
@@ -94,14 +97,14 @@ rustup default stable
 
 ---
 
-#### Install Markdownlint
+#### Install Markdownlint and Prettier
 
 > [!NOTE]  
-> Arch Linux users can skip this step if `markdownlint-cli2` was installed via
-> `pacman`.
+> Arch Linux users can skip this step if `markdownlint-cli2` and `prettier` was
+> installed via `pacman`.
 
 ```bash
-npm install -g markdownlint-cli2
+npm install -g prettier markdownlint-cli2
 ```
 
 ---
@@ -185,25 +188,19 @@ codebase clean:
 
 ### Standard Utilities
 
-- `dev/setup_env.sh`
-  Sets up the development environment.
+- `dev/setup_env.sh` Sets up the development environment.
 
-- `dev/clean.sh`
-  Cleans up the development environment.
+- `dev/clean.sh` Cleans up the development environment.
 
-- `dev/format.sh`
-  Formats all Bash, Python, and Rust code.
+- `dev/format.sh` Formats all Bash, Python, and Rust code.
 
-- `dev/install.sh`
-  Install a test (non-production) version of cmdcreate.
+- `dev/install.sh` Install a test (non-production) version of cmdcreate.
 
-- `dev/uninstall.sh`
-  Remove the testing version.
+- `dev/uninstall.sh` Remove the testing version.
 
 ### Testing Purposes
 
-- `testing/main.py`
-  Run a script that exercises cmdcreate features.
+- `testing/main.py` Run a script that exercises cmdcreate features.
 
 > [!NOTE]  
 > You can read more here:
@@ -213,17 +210,13 @@ codebase clean:
 
 ### Packaging cmdcreate
 
-- `package/create_bin.sh`
-  Packages a standalone `x86_64` binary.
+- `package/create_bin.sh` Packages a standalone `x86_64` binary.
 
-- `package/create_deb.sh`
-  Packages a Debian `.deb`.
+- `package/create_deb.sh` Packages a Debian `.deb`.
 
-- `package/create_rpm.sh`
-  Packages an RPM.
+- `package/create_rpm.sh` Packages an RPM.
 
-- `package/package.sh`
-  Builds all supported package formats.
+- `package/package.sh` Builds all supported package formats.
 
 > [!NOTE]  
 > You can read more here:
