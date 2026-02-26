@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use anyhow::{Context, Result, anyhow};
+use anyhow::{anyhow, Context, Result};
 use std::{
     fs::{self, File, OpenOptions},
     io::Write as _,
@@ -26,7 +26,7 @@ use crate::{
     logger::log,
     utils::{
         net::is_offline,
-        sys::{VARS, run_shell_command},
+        sys::{run_shell_command, VARS},
     },
 };
 

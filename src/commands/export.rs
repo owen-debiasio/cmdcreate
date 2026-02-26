@@ -19,7 +19,7 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{PATHS, create_file, read_file_to_string, write_to_file},
+        fs::{create_file, read_file_to_string, write_to_file, PATHS},
     },
 };
 

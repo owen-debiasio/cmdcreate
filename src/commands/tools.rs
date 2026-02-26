@@ -20,7 +20,7 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{PATHS, path_exists},
+        fs::{path_exists, PATHS},
         io::error,
     },
 };

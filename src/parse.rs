@@ -15,7 +15,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    VERSION,
     commands::{
         clean::clean,
         create::create,
@@ -34,10 +33,11 @@ use crate::{
     usage::debug_usage,
     utils::{
         colors::COLORS,
-        fs::{PATHS, delete_file, init_git_fs, read_file_to_string},
+        fs::{delete_file, init_git_fs, read_file_to_string, PATHS},
         io::error,
         sys::args_forced,
     },
+    VERSION,
 };
 
 pub fn parse(cmd: &str, args: &[String]) {

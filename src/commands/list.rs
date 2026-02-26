@@ -20,7 +20,7 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{PATHS, read_file_to_string},
+        fs::{read_file_to_string, PATHS},
     },
 };
 

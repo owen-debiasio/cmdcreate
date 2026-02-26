@@ -22,7 +22,7 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{PATHS, path_exists},
+        fs::{path_exists, PATHS},
         io::{error, input},
         sys::{args_forced, run_shell_command},
     },

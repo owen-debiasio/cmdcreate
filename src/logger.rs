@@ -20,7 +20,7 @@ use crate::{
     configs::load,
     utils::{
         colors::COLORS,
-        fs::{PATHS, create_folder, write_to_file},
+        fs::{create_folder, write_to_file, PATHS},
         sys::args_contains,
     },
 };

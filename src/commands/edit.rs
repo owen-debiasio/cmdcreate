@@ -20,7 +20,7 @@ use crate::{
     utils::{
         fs::PATHS,
         io::error,
-        sys::{VARS, run_shell_command},
+        sys::{run_shell_command, VARS},
     },
 };
 use std::process::Command;

@@ -27,7 +27,7 @@ use crate::{
     logger::log,
     utils::{
         fs::read_file_to_string,
-        io::{TestError, error},
+        io::{error, TestError},
     },
 };
 

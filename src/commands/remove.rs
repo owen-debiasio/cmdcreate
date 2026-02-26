@@ -19,7 +19,7 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{PATHS, delete_file, read_file_to_string},
+        fs::{delete_file, read_file_to_string, PATHS},
         io::ask_for_confirmation,
     },
 };

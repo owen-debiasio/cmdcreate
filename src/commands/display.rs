@@ -18,7 +18,7 @@ use crate::{
     commands::tools::command_is_installed,
     utils::{
         colors::COLORS,
-        fs::{PATHS, read_file_to_string},
+        fs::{read_file_to_string, PATHS},
     },
 };
 
