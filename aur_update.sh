@@ -22,21 +22,29 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-if [ "$(git config --global user.email)" != "owen.debiasio@gmail.com" ]; then
-    git config --global user.email "owen.debiasio@gmail.com"
+if [ -z "$(git config user.email)" ] || [ -z "$(git config user.name)" ]; then
+    echo "Error: Git identity not found."
+    echo ""
+    echo "Please run:"
+    echo "  git config --global user.email \"you@example.com\""
+    echo "  git config --global user.name \"Your Name\""
+    exit 1
 fi
 
-if [ "$(git config --global user.name)" != "Owen Debiasio" ]; then
-    git config --global user.name "Owen Debiasio"
+if [ ! -f "$HOME/.ssh/id_ed25519" ] && [ ! -f "$HOME/.ssh/id_rsa" ]; then
+    echo "Error: No SSH key found in ~/.ssh/"
+    echo "Please generate one using: ssh-keygen -t ed25519"
+    exit 1
 fi
 
-if [ ! -f "$HOME/.ssh/id_ed25519" ]; then
-    ssh-keygen -t ed25519 -C "owen.debiasio@gmail.com" -f "$HOME/.ssh/id_ed25519" -N ""
+echo "Checking connection to AUR..."
+if ! ssh -T aur@aur.archlinux.org -o BatchMode=yes 2>&1 | grep -q "Interactive shell is not allowed"; then
+    echo "Error: Could not authenticate with aur.archlinux.org"
+    exit 1
 fi
-
-ssh -T aur@aur.archlinux.org -o BatchMode=yes || true
 
 if [ -f "./dev/uninstall.sh" ]; then
+    echo "Running local uninstall script..."
     ./dev/uninstall.sh
 fi
 
@@ -45,11 +53,11 @@ OLD_VERSION=$(grep -P '^pkgver=' PKGBUILD | cut -d= -f2 || echo "0")
 WORK_DIR=$(mktemp -d /tmp/aur-update-XXXXXX)
 trap 'rm -rf "$WORK_DIR"' EXIT
 
+echo "Cloning to temporary directory: $WORK_DIR"
+git clone ssh://aur@aur.archlinux.org/cmdcreate.git "$WORK_DIR"
 cd "$WORK_DIR"
 
-git clone ssh://aur@aur.archlinux.org/cmdcreate.git .
-
-nano PKGBUILD
+${EDITOR:-nano} PKGBUILD
 
 NEW_VERSION=$(grep -P '^pkgver=' PKGBUILD | cut -d= -f2 || echo "0")
 
@@ -61,15 +69,13 @@ if [ "$OLD_VERSION" == "$NEW_VERSION" ]; then
 fi
 
 makepkg --printsrcinfo > .SRCINFO
-
 git add PKGBUILD .SRCINFO
 
 if git diff-index --quiet HEAD --; then
     echo "No changes to commit, skipping."
 else
-    git commit -m "$1"
     git pull --rebase origin master
     git push origin master
 fi
 
-echo -e "\ndone"
+echo -e "\nUpdate complete."
