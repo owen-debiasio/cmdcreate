@@ -15,16 +15,16 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
+    VERSION,
     configs::init_configs,
     logger::log,
     utils::{
         fs::init_fs_layout,
         io::error,
         net::is_offline,
-        sys::{get_distro_base, installation_method, is_root, ARCH, VARS},
+        sys::{ARCH, VARS, get_distro_base, installation_method, is_root},
     },
     version::is_development_version,
-    VERSION,
 };
 
 pub fn debug_intro() -> String {
