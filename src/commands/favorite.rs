@@ -19,7 +19,7 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{read_file_to_string, remove_from_file, write_to_file, PATHS},
+        fs::{PATHS, read_file_to_string, remove_from_file, write_to_file},
         io::error,
     },
 };
@@ -48,7 +48,6 @@ fn add(cmd: &str) {
     command_is_installed(cmd);
 
     if read_file_to_string(favorites_path)
-        .expect("Failed to retrieve favorites")
         .lines()
         .any(|c| c == cmd)
     {
@@ -73,7 +72,6 @@ fn remove(cmd: &str) {
     let favorites_path = &PATHS.favorites;
 
     if !read_file_to_string(favorites_path)
-        .expect("Failed to retrieve favorites")
         .lines()
         .any(|c| c == cmd)
     {

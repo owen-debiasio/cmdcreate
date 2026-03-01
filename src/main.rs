@@ -39,7 +39,12 @@ fn main() {
 
     let mut args = return_args();
 
-    args.retain(|a| !matches!(a.as_str(), "-V" | "--verbose" | "-o" | "--offline"));
+    args.retain(|a| {
+        !matches!(
+            a.as_str(),
+            "-V" | "--verbose" | "-o" | "--offline" | "-m" | "--monochrome"
+        )
+    });
 
     if args.is_empty() {
         cmdcreate_usage();

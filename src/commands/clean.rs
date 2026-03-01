@@ -16,9 +16,9 @@
 
 use crate::utils::{
     colors::COLORS,
-    fs::{delete_file, delete_folder, PATHS},
+    fs::{PATHS, delete_file, delete_folder},
     io::{ask_for_confirmation, input},
-    sys::{args_forced, VARS},
+    sys::{VARS, args_forced},
 };
 pub fn clean() {
     let (green, red, reset) = (COLORS.green, COLORS.red, COLORS.reset);

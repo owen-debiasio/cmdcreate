@@ -18,7 +18,7 @@ use crate::{
     commands::tools::command_is_installed,
     utils::{
         colors::COLORS,
-        fs::{read_file_to_string, PATHS},
+        fs::{PATHS, read_file_to_string},
     },
 };
 
@@ -29,8 +29,6 @@ pub fn display(cmd: &str) {
         "Contents of command: {}\"{cmd}\"{}\n--------\n{}",
         COLORS.blue,
         COLORS.reset,
-        read_file_to_string(&format!("{}{cmd}", PATHS.install_dir))
-            .expect("Failed to retrieve command contents")
-            .trim() // Remove extra whitespace just in case
+        read_file_to_string(&format!("{}{cmd}", PATHS.install_dir)).trim() // Remove extra whitespace just in case
     );
 }

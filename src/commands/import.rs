@@ -28,7 +28,7 @@ pub fn import(file: &str) {
         0,
     );
 
-    let contents = read_file_to_string(file).expect("Failed to get file contents");
+    let contents = read_file_to_string(file);
 
     if contents.trim().is_empty() {
         error("Import file is empty or unreadable.", "");

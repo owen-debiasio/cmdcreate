@@ -14,20 +14,20 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use anyhow::{anyhow, Context, Result};
-use std::{
-    fs::{self, File, OpenOptions},
-    io::Write as _,
-    path::Path,
-    sync::LazyLock,
-};
-
 use crate::{
     logger::log,
     utils::{
         net::is_offline,
-        sys::{run_shell_command, VARS},
+        sys::{VARS, run_shell_command},
     },
+};
+use anyhow::{Context, Result, anyhow};
+use std::{
+    fs::{self, File, OpenOptions, create_dir_all, read_to_string},
+    io::Write as _,
+    path::Path,
+    string::ToString,
+    sync::LazyLock,
 };
 
 pub static MAIN_PATH: LazyLock<String> =
@@ -44,7 +44,7 @@ pub struct Paths {
 
 pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     changelog: format!("{}/changes.md", *MAIN_PATH),
-    configs: format!("{}/.config/cmdcreate/config.toml", VARS.home),
+    configs: "/etc/cmdcreate.toml".to_string(),
     favorites: format!("{}/favorites", *MAIN_PATH),
     install_dir: "/usr/local/bin/".to_string(),
     license: format!("{}/LICENSE", *MAIN_PATH),
@@ -91,8 +91,8 @@ pub fn retrieve_git_file(dest: &str, file_path: &str) -> Result<()> {
     Ok(())
 }
 
-pub fn read_file_to_string(file_path: &str) -> Result<String> {
-    fs::read_to_string(file_path).with_context(|| format!("Failed to read file: \"{file_path}\""))
+pub fn read_file_to_string(file_path: &str) -> String {
+    read_to_string(file_path).unwrap()
 }
 
 pub fn overwrite_file(path: &str, contents: &str) -> Result<()> {
@@ -101,7 +101,7 @@ pub fn overwrite_file(path: &str, contents: &str) -> Result<()> {
 
 pub fn write_to_file(path: &str, contents: &str, append: bool) -> Result<()> {
     if let Some(parent) = Path::new(path).parent() {
-        fs::create_dir_all(parent)
+        create_dir_all(parent)
             .with_context(|| format!("Failed to create parent directory for: {path}"))?;
     }
 
@@ -125,13 +125,7 @@ pub fn write_to_file(path: &str, contents: &str, append: bool) -> Result<()> {
 }
 
 pub fn remove_from_file(path: &str, contents: &str) -> Result<()> {
-    let filtered = read_file_to_string(path)?
-        .lines()
-        .filter(|line| line.trim() != contents)
-        .collect::<Vec<_>>()
-        .join("\n");
-
-    overwrite_file(path, &format!("{filtered}\n"))
+    overwrite_file(path, &read_file_to_string(path).replace(contents, ""))
 }
 
 pub fn path_exists(path: &str) -> bool {
@@ -212,7 +206,7 @@ mod tests {
 
         write_to_file(&path_str, "hello", false)?;
 
-        assert_eq!(read_file_to_string(&path_str)?, "hello");
+        assert_eq!(read_file_to_string(&path_str), "hello");
         Ok(())
     }
 
@@ -224,7 +218,7 @@ mod tests {
         write_to_file(&path_str, "a\n", false)?;
         write_to_file(&path_str, "b\n", true)?;
 
-        let content = read_file_to_string(&path_str)?;
+        let content = read_file_to_string(&path_str);
 
         assert!(content.contains('a'));
         assert!(content.contains('b'));
@@ -239,7 +233,7 @@ mod tests {
         write_to_file(&path_str, "one\ntwo\nthree\n", false)?;
         remove_from_file(&path_str, "two")?;
 
-        let content = read_file_to_string(&path_str)?;
+        let content = read_file_to_string(&path_str);
         assert!(!content.contains("two"));
         assert!(content.contains("one"));
         Ok(())

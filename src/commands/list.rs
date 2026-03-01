@@ -20,7 +20,7 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{read_file_to_string, PATHS},
+        fs::{PATHS, read_file_to_string},
     },
 };
 
@@ -36,8 +36,7 @@ pub fn list() {
 
     for script in installed_scripts {
         let name = script.file_stem().unwrap_or_default().to_string_lossy();
-        let favorites =
-            read_file_to_string(&PATHS.favorites).expect("Failed to retrieve favorites");
+        let favorites = read_file_to_string(&PATHS.favorites);
 
         log(
             &format!(

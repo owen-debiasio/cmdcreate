@@ -19,7 +19,7 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{create_file, read_file_to_string, write_to_file, PATHS},
+        fs::{PATHS, create_file, read_file_to_string, write_to_file},
     },
 };
 
@@ -46,14 +46,10 @@ pub fn export(path: &str) {
                 0,
             );
 
-            let cmd_contents = read_file_to_string(&format!("{}{cmd}", PATHS.install_dir))
-                .expect("Failed to retrieve command contents")
-                .replace('|', "[|");
+            let cmd_contents =
+                read_file_to_string(&format!("{}{cmd}", PATHS.install_dir)).replace('|', "[|");
 
-            let data = if read_file_to_string(&PATHS.favorites)
-                .expect("Failed to retrieve favorites")
-                .contains(cmd.as_ref())
-            {
+            let data = if read_file_to_string(&PATHS.favorites).contains(cmd.as_ref()) {
                 format!("{cmd} | {cmd_contents} | favorite\n")
             } else {
                 format!("{cmd} | {cmd_contents}\n")

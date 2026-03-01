@@ -20,7 +20,7 @@ use crate::{
     configs::load,
     utils::{
         colors::COLORS,
-        fs::{create_folder, write_to_file, PATHS},
+        fs::{PATHS, create_folder, write_to_file},
         sys::args_contains,
     },
 };
@@ -41,7 +41,7 @@ pub fn log(text: &str, lvl: u8) {
 
     if args_contains("-V")
         || args_contains("--verbose")
-        || load("logs", "verbose", "").parse::<bool>().unwrap_or(false)
+        || load("logs", "verbose", "false").parse::<bool>().unwrap()
     {
         println!("{color}{time} {log_text}{}", COLORS.reset);
     }

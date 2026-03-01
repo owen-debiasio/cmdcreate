@@ -74,6 +74,9 @@ pub fn cmdcreate_usage() {
             "  {cyan}-o{reset},{cyan} --offline {reset}                    Runs cmdcreate in offline mode"
         ),
         format!(
+            "  {cyan}-m{reset},{cyan} --monochrome {reset}                 Disables colorized output"
+        ),
+        format!(
             "  {cyan}-d{reset},{cyan} --debugging {reset}                  Displays flags used for debugging"
         ),
         "\n  Offline Files:".into(),

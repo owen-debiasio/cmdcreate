@@ -19,7 +19,7 @@ use crate::{
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{delete_file, read_file_to_string, PATHS},
+        fs::{PATHS, delete_file, read_file_to_string},
         io::ask_for_confirmation,
     },
 };
@@ -46,10 +46,7 @@ pub fn remove(command: &str, forced: bool) {
         ));
     }
 
-    if read_file_to_string(&PATHS.favorites)
-        .expect("Failed to retrieve favorites")
-        .contains(command)
-    {
+    if read_file_to_string(&PATHS.favorites).contains(command) {
         favorite("remove", command);
     }
 

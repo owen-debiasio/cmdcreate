@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
+    VERSION,
     commands::{
         clean::clean,
         create::create,
@@ -33,11 +34,10 @@ use crate::{
     usage::debug_usage,
     utils::{
         colors::COLORS,
-        fs::{delete_file, init_git_fs, read_file_to_string, PATHS},
+        fs::{PATHS, delete_file, init_git_fs, read_file_to_string},
         io::error,
         sys::args_forced,
     },
-    VERSION,
 };
 
 pub fn parse(cmd: &str, args: &[String]) {
@@ -99,7 +99,7 @@ pub fn parse(cmd: &str, args: &[String]) {
         ),
 
         "--version" | "-v" => {
-            println!("cmdcreate {VERSION}\n(C) 2026 Owen Debiasio; Licensed under MIT");
+            println!("cmdcreate {VERSION}\n(C) 2026 Owen Debiasio; Licensed under GPL v3");
         }
 
         "--get_offline_files" | "-g" => {
@@ -132,12 +132,7 @@ pub fn parse(cmd: &str, args: &[String]) {
 
         "--changelog" | "-c" => {
             log("main::main(): Displaying changelog...", 0);
-            println!(
-                "{}",
-                read_file_to_string(&PATHS.changelog)
-                    .expect("Failed to read changelog")
-                    .trim()
-            );
+            println!("{}", read_file_to_string(&PATHS.changelog).trim());
         }
 
         "--debugging" | "-d" => debug_usage(),
