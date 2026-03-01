@@ -69,7 +69,7 @@ mod tests {
 
     #[test]
     fn colors_are_valid_ansi_codes_if_enabled() {
-        let codes = get_all_codes(&*COLORS);
+        let codes = get_all_codes(&COLORS);
 
         if colors_enabled() {
             for color in codes {
@@ -94,11 +94,10 @@ mod tests {
 
     #[test]
     fn reset_is_unique() {
-        let c = &*COLORS;
-        let codes = get_all_codes(&*COLORS);
+        let c = &COLORS;
 
         if colors_enabled() {
-            for color in codes {
+            for color in get_all_codes(c) {
                 if color != c.reset {
                     assert_ne!(color, c.reset, "reset color must be unique");
                 }
