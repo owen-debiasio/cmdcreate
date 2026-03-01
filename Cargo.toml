@@ -17,8 +17,8 @@
 [package]
 name = "cmdcreate"
 version = "1.1.4"
-authors = ["Owen Debiasio <your-email@example.com>"]
-edition = "2021"
+authors = ["Owen Debiasio <owen.debiasio@gmail.com>"]
+edition = "2024"
 license = "GPL-3.0-or-later"
 description = "Create your own custom commands for your convenience"
 repository = "https://github.com/owen-debiasio/cmdcreate"
