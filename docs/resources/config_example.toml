@@ -3,7 +3,7 @@
 # Licensed under the GNU General Public License v3.0 or later.
 # Full notice available in the root README.md or COPYING file.
 
-# This file is located in /root/.config/cmdcreate/config.toml
+# This file is located in /etc/cmdcreate.toml
 
 [sys]
 shell = "bash" # Your preferred shell
@@ -12,5 +12,6 @@ shell = "bash" # Your preferred shell
 time_format = "%Y-%m-%d %H:%M:%S" # Formatting of time
 verbose = "false" # If "true", logs will be printed to output
 
-[appearence]
+[appearance]
 favorite_indicator = "★" # A symbol or string of text to indicate a favorite command
+disable_color = "true" # If "true", colorized output will be disabled

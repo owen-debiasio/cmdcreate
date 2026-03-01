@@ -14,6 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::{configs::load, utils::sys::args_contains};
+use std::sync::LazyLock;
+
+pub fn colors_enabled() -> bool {
+    !args_contains("-m")
+        && !args_contains("--monochrome")
+        && !load("appearance", "disable_color", "false")
+            .parse::<bool>()
+            .unwrap()
+}
+
 pub struct Colors {
     pub reset: &'static str,
     pub red: &'static str,
@@ -24,85 +35,74 @@ pub struct Colors {
     pub cyan: &'static str,
 }
 
-pub const COLORS: Colors = Colors {
-    reset: "\x1b[0m",
-    red: "\x1b[31m",
-    green: "\x1b[32m",
-    yellow: "\x1b[33m",
-    blue: "\x1b[34m",
-    magenta: "\x1b[35m",
-    cyan: "\x1b[36m",
-};
+pub static COLORS: LazyLock<Colors> = LazyLock::new(|| {
+    if colors_enabled() {
+        Colors {
+            reset: "\x1b[0m",
+            red: "\x1b[31m",
+            green: "\x1b[32m",
+            yellow: "\x1b[33m",
+            blue: "\x1b[34m",
+            magenta: "\x1b[35m",
+            cyan: "\x1b[36m",
+        }
+    } else {
+        Colors {
+            reset: "",
+            red: "",
+            green: "",
+            yellow: "",
+            blue: "",
+            magenta: "",
+            cyan: "",
+        }
+    }
+});
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    const ALL_COLORS: [&str; 5] = [
-        COLORS.red,
-        COLORS.green,
-        COLORS.yellow,
-        COLORS.blue,
-        COLORS.reset,
-    ];
-
-    fn all_colors() -> impl Iterator<Item = &'static str> {
-        ALL_COLORS.into_iter()
+    fn get_all_codes(c: &Colors) -> Vec<&'static str> {
+        vec![c.red, c.green, c.yellow, c.blue, c.reset]
     }
 
     #[test]
-    fn all_colors_are_non_empty() {
-        for color in all_colors() {
-            assert!(!color.is_empty(), "color code should not be empty");
-        }
-    }
+    fn colors_are_valid_ansi_codes_if_enabled() {
+        let codes = get_all_codes(&*COLORS);
 
-    #[test]
-    fn colors_are_valid_ansi_codes() {
-        for color in all_colors() {
-            assert!(
-                color.starts_with("\x1b["),
-                "color does not start with ANSI escape: {color:?}"
-            );
-
-            assert!(
-                color.ends_with('m'),
-                "color does not end with 'm': {color:?}"
-            );
-        }
-    }
-
-    #[test]
-    fn reset_is_unique() {
-        for color in all_colors() {
-            if color != COLORS.reset {
-                assert_ne!(color, COLORS.reset, "reset color must be unique");
+        if colors_enabled() {
+            for color in codes {
+                assert!(
+                    color.starts_with("\x1b["),
+                    "color does not start with ANSI escape: {color:?}"
+                );
+                assert!(
+                    color.ends_with('m'),
+                    "color does not end with 'm': {color:?}"
+                );
+            }
+        } else {
+            for color in codes {
+                assert!(
+                    color.is_empty(),
+                    "color code should be empty in monochrome mode"
+                );
             }
         }
     }
 
     #[test]
-    fn colors_wrap_text_correctly() {
-        let text = "test";
+    fn reset_is_unique() {
+        let c = &*COLORS;
+        let codes = get_all_codes(&*COLORS);
 
-        for color in all_colors() {
-            let wrapped = format!("{color}{text}{}", COLORS.reset);
-
-            assert!(
-                wrapped.starts_with(color),
-                "wrapped text does not start with color"
-            );
-
-            assert!(
-                wrapped.ends_with(COLORS.reset),
-                "wrapped text does not end with reset"
-            );
-
-            assert_eq!(
-                wrapped,
-                format!("{color}{text}{}", COLORS.reset),
-                "wrapped output mismatch"
-            );
+        if colors_enabled() {
+            for color in codes {
+                if color != c.reset {
+                    assert_ne!(color, c.reset, "reset color must be unique");
+                }
+            }
         }
     }
 }

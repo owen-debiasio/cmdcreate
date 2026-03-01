@@ -6,9 +6,8 @@ Licensed under the GNU General Public License v3.0 or later.
 
 # Configuring cmdcreate
 
-You are able to configure cmdcreate in various ways. All are listed here. You
-can find an example `.toml` configuration
-[here](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/resources/config_example.toml).
+You are able to configure cmdcreate in various ways. All are listed here.
+[example configuration](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/resources/config_example.toml).
 
 ## Categories
 
@@ -19,8 +18,7 @@ can find an example `.toml` configuration
 - Your preferred shell for which cmdcreate runs shell commands in
 - Default: `sh`
 
-> [!NOTE]  
-> I recommend using `bash` just for compatibility’s sake.
+> [!NOTE] I recommend using `bash` just for compatibility’s sake.
 
 ## logs
 
@@ -40,3 +38,8 @@ can find an example `.toml` configuration
 
 - A symbol or string of text to indicate a favorite command
 - Default: `★`
+
+### disable_color
+
+- If "true", colorized output will be disabled
+- Default: `true`
