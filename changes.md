@@ -590,3 +590,13 @@ Licensed under the GNU General Public License v3.0 or later.
 ## v1.1.4
 
 - Change license to GPLv3
+- Moved configurations from .config/cmdcreate/config.toml to /etc/cmdcreate.conf
+- Fixed configs not being read
+- Code optimizations
+- `-m` and `--monochrome` flags: Disables colored output
+- New configuration
+  - `disable_color`
+    - Located in `appearence` category
+    - Enables or disables color
+    - Boolean
+    - Default: `false`
