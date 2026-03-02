@@ -190,7 +190,7 @@ git clone https://github.com/owen-debiasio/cmdcreate.git
 cd cmdcreate
 rustup default stable
 cargo build --release
-sudo install -Dm755 target/release/cmdcreate /usr/local/bin/cmdcreate
+sudo install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate
 ```
 
 ---
