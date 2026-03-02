@@ -18,7 +18,7 @@ use crate::{
     logger::log,
     utils::{
         net::is_offline,
-        sys::{VARS, run_shell_command},
+        sys::{DistroBase, VARS, get_distro_base, run_shell_command},
     },
 };
 use anyhow::{Context, Result, anyhow};
@@ -47,7 +47,14 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     configs: "/etc/cmdcreate.toml".to_string(),
     favorites: format!("{}/favorites", *MAIN_PATH),
     install_dir: "/usr/local/bin/".to_string(),
-    license: format!("{}/LICENSE", *MAIN_PATH),
+    license: format!(
+        "{:?}",
+        if get_distro_base() == DistroBase::Debian || get_distro_base() == DistroBase::Unknown {
+            "/usr/share/doc/cmdcreate/copyright"
+        } else {
+            "/usr/share/licenses/cmdcreate/LICENSE"
+        }
+    ),
     log_dir: format!("{}/logs", *MAIN_PATH),
 });
 
@@ -56,6 +63,7 @@ pub fn init_fs_layout() -> Result<()> {
     create_folder(&PATHS.log_dir)?;
     create_folder(&PATHS.install_dir)?;
     create_file(&PATHS.favorites)?;
+    create_file(&PATHS.configs)?;
 
     log("utils/fs::init_fs_layout(): Filesystem initialized", 0);
     Ok(())
@@ -71,8 +79,6 @@ pub fn init_git_fs() -> Result<()> {
         );
         return Ok(());
     }
-
-    retrieve_git_file(&PATHS.license, "LICENSE")?;
     retrieve_git_file(&PATHS.changelog, "changes.md")?;
 
     log("utils/fs::init_git_fs(): Offline files synced", 0);
@@ -133,12 +139,12 @@ pub fn path_exists(path: &str) -> bool {
 }
 
 pub fn create_folder(path: &str) -> Result<()> {
-    fs::create_dir_all(path).with_context(|| format!("Failed to create folder: {path}"))
+    create_dir_all(path).with_context(|| format!("Failed to create folder: {path}"))
 }
 
 pub fn create_file(path: &str) -> Result<()> {
     if let Some(parent) = Path::new(path).parent() {
-        fs::create_dir_all(parent)
+        create_dir_all(parent)
             .with_context(|| format!("Failed to create parent folder for {path}"))?;
     }
 

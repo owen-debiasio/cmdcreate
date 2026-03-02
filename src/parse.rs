@@ -15,7 +15,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    VERSION,
     commands::{
         clean::clean,
         create::create,
@@ -34,10 +33,11 @@ use crate::{
     usage::debug_usage,
     utils::{
         colors::COLORS,
-        fs::{PATHS, delete_file, init_git_fs, read_file_to_string},
+        fs::{PATHS, delete_file, init_git_fs, path_exists, read_file_to_string},
         io::error,
         sys::args_forced,
     },
+    version::print_info,
 };
 
 pub fn parse(cmd: &str, args: &[String]) {
@@ -98,9 +98,7 @@ pub fn parse(cmd: &str, args: &[String]) {
             export,
         ),
 
-        "--version" | "-v" => {
-            println!("cmdcreate {VERSION}\n(C) 2026 Owen Debiasio; Licensed under GPL v3");
-        }
+        "--version" | "-v" => print_info(),
 
         "--get_offline_files" | "-g" => {
             println!("Downloading offline files...");
@@ -120,14 +118,19 @@ pub fn parse(cmd: &str, args: &[String]) {
             println!("Removing files...");
 
             delete_file(&PATHS.changelog).expect("Failed to delete changelog");
-            delete_file(&PATHS.license).expect("Failed to delete license");
 
             println!("{green}Files removed successfully.{reset}");
         }
 
         "--license" | "-l" => {
-            log("main::main(): Displaying license...", 0);
-            println!("{:?}", read_file_to_string(&PATHS.license));
+            if path_exists(&PATHS.license) {
+                read_file_to_string(&PATHS.license);
+            } else {
+                error(
+                    "License has not been installed. Find it here:",
+                    "https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE",
+                )
+            }
         }
 
         "--changelog" | "-c" => {

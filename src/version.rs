@@ -14,8 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::meta::{AUTHOR_EMAIL, get_copyright};
 use crate::{
     logger::log,
+    meta::AUTHOR,
     utils::{
         io::error,
         net::{http_client, is_offline},
@@ -106,4 +108,19 @@ pub fn get_latest_commit(owner: &str, repo: &str, branch: &str) -> String {
     );
 
     commit
+}
+
+pub fn print_info() {
+    println!(
+        "
+cmdcreate {VERSION}
+Copyright (C) {}.
+License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Written by {AUTHOR} <{AUTHOR_EMAIL}>.
+        ",
+        get_copyright()
+    );
 }

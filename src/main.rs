@@ -18,6 +18,7 @@ mod commands;
 mod configs;
 mod init;
 mod logger;
+mod meta;
 mod parse;
 mod usage;
 mod utils;
