@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::utils::io::error;
 use crate::{
     logger::log,
     utils::{
@@ -98,7 +99,14 @@ pub fn retrieve_git_file(dest: &str, file_path: &str) -> Result<()> {
 }
 
 pub fn read_file_to_string(file_path: &str) -> String {
-    read_to_string(file_path).unwrap()
+    read_to_string(file_path)
+        .unwrap_or_else(|err| {
+            error(
+                &format!("Failed reading file: {file_path}"),
+                &err.to_string(),
+            );
+        })
+        .replace("\r\n", "\n")
 }
 
 pub fn overwrite_file(path: &str, contents: &str) -> Result<()> {
