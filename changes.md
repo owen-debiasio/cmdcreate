@@ -600,3 +600,5 @@ Licensed under the GNU General Public License v3.0 or later.
     - Enables or disables color
     - Boolean
     - Default: `false`
+- When installing through the AUR, .deb package, or .rpm package, they now
+  include the License file in their respective directories.
