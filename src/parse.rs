@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::utils::sys::run_shell_command;
 use crate::{
     commands::{
         clean::clean,
@@ -124,7 +125,11 @@ pub fn parse(cmd: &str, args: &[String]) {
 
         "--license" | "-l" => {
             if path_exists(&PATHS.license) {
-                read_file_to_string(&PATHS.license);
+                /*
+                read_file_to_string("cat /usr/share/licenses/cmdcreate/LICENSE")
+                doesn't work and idk why???
+                */
+                run_shell_command("cat /usr/share/licenses/cmdcreate/LICENSE");
             } else {
                 error(
                     "License has not been installed. Find it here:",

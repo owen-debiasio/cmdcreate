@@ -48,14 +48,11 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     configs: "/etc/cmdcreate.toml".to_string(),
     favorites: format!("{}/favorites", *MAIN_PATH),
     install_dir: "/usr/local/bin/".to_string(),
-    license: format!(
-        "{:?}",
-        if get_distro_base() == DistroBase::Debian {
-            "/usr/share/doc/cmdcreate/copyright"
-        } else {
-            "/usr/share/licenses/cmdcreate/LICENSE"
-        }
-    ),
+    license: if get_distro_base() == DistroBase::Debian {
+        "/usr/share/doc/cmdcreate/copyright".to_string()
+    } else {
+        "/usr/share/licenses/cmdcreate/LICENSE".to_string()
+    },
     log_dir: format!("{}/logs", *MAIN_PATH),
 });
 
