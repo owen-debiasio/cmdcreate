@@ -9,14 +9,12 @@ Licensed under the GNU General Public License v3.0 or later.
 Create your own custom commands for your convenience without needing to enter
 the same "complex" commands over and over.
 
-[Badge Commits]: https://img.shields.io/github/commit-activity/m/owen-debiasio/cmdcreate?label=Commits
+[Badge Commits]:
+  https://img.shields.io/github/commit-activity/m/owen-debiasio/cmdcreate?label=Commits
 [Badge License]: https://img.shields.io/badge/License-GPLv3-blue.svg
 [Badge Issues]: https://img.shields.io/github/issues/owen-debiasio/cmdcreate
 
-![Badge Commits]
-![Badge License]
-![Badge Issues]
-
+![Badge Commits] ![Badge License] ![Badge Issues]
 
 ---
 
