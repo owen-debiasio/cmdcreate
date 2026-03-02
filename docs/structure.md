@@ -111,6 +111,7 @@ change.
   - [parse.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/parse.rs)
   - [usage.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/usage.rs)
   - [version.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/version.rs)
+  - [meta.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/meta.rs)
 
 ## Testing cmdcreate
 
