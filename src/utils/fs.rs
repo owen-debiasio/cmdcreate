@@ -50,7 +50,7 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     install_dir: "/usr/local/bin/".to_string(),
     license: format!(
         "{:?}",
-        if get_distro_base() == DistroBase::Debian || get_distro_base() == DistroBase::Unknown {
+        if get_distro_base() == DistroBase::Debian {
             "/usr/share/doc/cmdcreate/copyright"
         } else {
             "/usr/share/licenses/cmdcreate/LICENSE"

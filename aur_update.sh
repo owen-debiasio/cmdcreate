@@ -22,6 +22,17 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
+echo "Enter the AUR package name to update:"
+echo "1) cmdcreate"
+echo "2) cmdcreate-git"
+read -r -p "Selection [1/2]: " choice
+
+case "$choice" in
+    1) PKG_NAME="cmdcreate" ;;
+    2) PKG_NAME="cmdcreate-git" ;;
+    *) echo "Invalid selection. Exiting."; exit 1 ;;
+esac
+
 if [ -z "$(git config user.email)" ] || [ -z "$(git config user.name)" ]; then
     echo "Error: Git identity not found."
     exit 1
@@ -32,7 +43,7 @@ if [ ! -f "$HOME/.ssh/id_ed25519" ] && [ ! -f "$HOME/.ssh/id_rsa" ]; then
     exit 1
 fi
 
-echo "Checking connection to AUR..."
+echo "Checking connection to AUR for $PKG_NAME..."
 SSH_TEST=$(ssh -o BatchMode=yes -o ConnectTimeout=5 -T aur@aur.archlinux.org 2>&1 || true)
 
 if echo "$SSH_TEST" | grep -qiE "Welcome|Interactive shell"; then
@@ -50,13 +61,14 @@ if [ -f "./dev/uninstall.sh" ]; then
     ./dev/uninstall.sh
 fi
 
-OLD_VERSION=$(grep -P '^pkgver=' PKGBUILD | cut -d= -f2 || echo "0")
-
 WORK_DIR=$(mktemp -d /tmp/aur-update-XXXXXX)
 trap 'rm -rf "$WORK_DIR"' EXIT
 
-git clone "ssh://aur@aur.archlinux.org/cmdcreate.git" "$WORK_DIR"
+echo "Cloning $PKG_NAME..."
+git clone "ssh://aur@aur.archlinux.org/$PKG_NAME.git" "$WORK_DIR"
 cd "$WORK_DIR"
+
+OLD_VERSION=$(grep -P '^pkgver=' PKGBUILD | cut -d= -f2 || echo "0")
 
 ${EDITOR:-nano} PKGBUILD
 
@@ -69,6 +81,7 @@ if [ "$OLD_VERSION" == "$NEW_VERSION" ]; then
     fi
 fi
 
+echo "Updating .SRCINFO..."
 makepkg --printsrcinfo > .SRCINFO
 git add PKGBUILD .SRCINFO
 
@@ -76,8 +89,9 @@ if git diff-index --quiet HEAD --; then
     echo "No changes detected."
 else
     git commit -m "$1"
+    echo "Pushing changes..."
     git pull --rebase origin master
     git push origin master
 fi
 
-echo -e "\nUpdate complete."
+echo -e "\nUpdate complete for $PKG_NAME."
