@@ -27,6 +27,7 @@ ARCH="x86_64"
 PKGDIR="cmdcreate-${VERSION}-linux-${ARCH}-deb"
 BINARY_NAME="cmdcreate-v${VERSION}-linux-${ARCH}-bin"
 BINARY_SRC="$HOME/Downloads/$BINARY_NAME"
+LICENSE_FILE="../LICENSE"
 
 cleanup() {
     rm -rf "$PKGDIR"
@@ -38,6 +39,11 @@ if [[ ! -x ./create_bin.sh ]]; then
     exit 1
 fi
 
+if [[ ! -f "$LICENSE_FILE" ]]; then
+    echo -e "\n> License file not found: $LICENSE_FILE"
+    exit 1
+fi
+
 ./create_bin.sh "$VERSION"
 
 if [[ ! -f "$BINARY_SRC" ]]; then
@@ -45,7 +51,7 @@ if [[ ! -f "$BINARY_SRC" ]]; then
     exit 1
 fi
 
-mkdir -p "$PKGDIR/DEBIAN" "$PKGDIR/usr/bin"
+mkdir -p "$PKGDIR/DEBIAN" "$PKGDIR/usr/bin" "$PKGDIR/usr/share/doc/cmdcreate"
 
 cat > "$PKGDIR/DEBIAN/control" << EOF
 Package: cmdcreate
@@ -59,6 +65,7 @@ Description: Allows you to create custom commands for your custom scripts
 EOF
 
 install -m755 "$BINARY_SRC" "$PKGDIR/usr/bin/cmdcreate"
+install -m644 "$LICENSE_FILE" "$PKGDIR/usr/share/doc/cmdcreate/copyright"
 
 dpkg-deb --build --root-owner-group "$PKGDIR"
 

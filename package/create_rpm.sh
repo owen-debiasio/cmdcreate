@@ -27,6 +27,7 @@ ARCH="x86_64"
 
 BINARY_NAME="cmdcreate-v${VERSION}-linux-${ARCH}-bin"
 BINARY_SRC="$HOME/Downloads/$BINARY_NAME"
+LICENSE_FILE="../LICENSE"
 
 RPMTOP="$HOME/rpmbuild"
 SPEC_FILE="$RPMTOP/SPECS/cmdcreate.spec"
@@ -37,9 +38,15 @@ if [[ ! -f "$BINARY_SRC" ]]; then
     exit 1
 fi
 
+if [[ ! -f "$LICENSE_FILE" ]]; then
+    echo -e "\n> License file not found: $LICENSE_FILE"
+    exit 1
+fi
+
 mkdir -p "$RPMTOP"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
 cp "$BINARY_SRC" "$RPMTOP/SOURCES/$SOURCE_FILE"
+cp "$LICENSE_FILE" "$RPMTOP/SOURCES/LICENSE"
 
 cat > "$SPEC_FILE" << EOF
 Name:           cmdcreate
@@ -47,9 +54,10 @@ Version:        $VERSION
 Release:        1%{?dist}
 Summary:        Allows you to create custom commands for your custom scripts
 
-License:        MIT
+License:        GPL-3.0-or-later
 URL:            https://github.com/owen-debiasio/cmdcreate
 Source0:        $SOURCE_FILE
+Source1:        LICENSE
 
 BuildArch:      x86_64
 Requires:       curl, nano, git, openssl-libs, openssl-devel
@@ -58,13 +66,15 @@ Requires:       curl, nano, git, openssl-libs, openssl-devel
 Allows you to create custom commands for your custom scripts.
 
 %prep
-# nothing to prep
+cp %{SOURCE0} .
+cp %{SOURCE1} .
 
 %install
 mkdir -p %{buildroot}%{_bindir}
 install -m 755 %{SOURCE0} %{buildroot}%{_bindir}/cmdcreate
 
 %files
+%license LICENSE
 %{_bindir}/cmdcreate
 
 %changelog
