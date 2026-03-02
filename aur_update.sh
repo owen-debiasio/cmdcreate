@@ -30,7 +30,10 @@ read -r -p "Selection [1/2]: " choice
 case "$choice" in
     1) PKG_NAME="cmdcreate" ;;
     2) PKG_NAME="cmdcreate-git" ;;
-    *) echo "Invalid selection. Exiting."; exit 1 ;;
+    *)
+        echo "Invalid selection. Exiting."
+        exit 1
+        ;;
 esac
 
 if [ -z "$(git config user.email)" ] || [ -z "$(git config user.name)" ]; then
