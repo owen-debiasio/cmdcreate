@@ -602,3 +602,9 @@ Licensed under the GNU General Public License v3.0 or later.
     - Default: `false`
 - When installing through the AUR, .deb package, or .rpm package, they now
   include the License file in their respective directories.
+
+## v1.1.5
+
+- Fixed license not being read on Debian systems
+- Fixed incorrect response parsing during the update process
+- Fixed other things along the update process
