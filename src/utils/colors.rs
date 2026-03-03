@@ -36,7 +36,7 @@ pub struct Colors {
 }
 
 impl Colors {
-    pub fn new(enabled: bool) -> Self {
+    pub const fn new(enabled: bool) -> Self {
         if enabled {
             Self {
                 reset: "\x1b[0m",
