@@ -61,7 +61,7 @@ Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{r
 
         InstallMethod::Dpkg => {
             if arch_is_supported() {
-                if !args_forced() && input(&format!(
+                if !args_forced() && !input(&format!(
                     "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
                 )).trim().eq_ignore_ascii_case("y") {
                     interactive_upgrade();
