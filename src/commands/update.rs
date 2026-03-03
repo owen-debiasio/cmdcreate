@@ -158,17 +158,19 @@ fn upgrade_via(method: &str) {
 
 fn build_from_source() {
     let (green, reset) = (COLORS.green, COLORS.reset);
-
     let cache_dir = format!("{}/.cache/cmdcreate", VARS.home);
-    delete_folder(&cache_dir).expect("Failed to delete folder");
 
-    run_shell_command(match get_distro_base() {
+    let _ = delete_folder(&cache_dir);
+
+    let install_cmd = match get_distro_base() {
         DistroBase::Arch => "sudo pacman -S --needed --noconfirm cargo git",
         DistroBase::Debian => {
-            "sudo apt install -y git build-essential pkg-config libssl-dev; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
+            "sudo apt update && sudo apt install -y git build-essential pkg-config libssl-dev curl && \
+            if ! command -v cargo >/dev/null; then curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; fi"
         }
         DistroBase::Fedora => {
-            "sudo dnf install -y git-core openssl-devel openssl-libs; curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
+            "sudo dnf install -y git-core openssl-devel pkgconf-pkg-config && \
+            if ! command -v cargo >/dev/null; then curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; fi"
         }
         DistroBase::Unknown => {
             error(
@@ -176,14 +178,18 @@ fn build_from_source() {
                 "",
             );
         }
-    });
+    };
+
+    run_shell_command(install_cmd);
 
     run_shell_command(&format!(
-        "set -e && \
-        git clone https://github.com/owen-debiasio/cmdcreate.git {cache_dir} && \
-        cd \"{cache_dir}\" && \
-        cargo build --release && \
-        sudo install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate",
+        "set -e
+        [ -f \"$HOME/.cargo/env\" ] && . \"$HOME/.cargo/env\"
+        rm -rf {cache_dir}
+        git clone https://github.com/owen-debiasio/cmdcreate.git \"{cache_dir}\"
+        cd \"{cache_dir}\"
+        cargo build --release
+        sudo install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate"
     ));
 
     println!("\n{green}Update complete!{reset}");
