@@ -31,6 +31,5 @@ Licensed under the GNU General Public License v3.0 or later.
 
 ---
 
-> [!NOTE]
-> While you're here, check out the
+> [!NOTE] While you're here, check out the
 > [documentation for developing cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/developing.md).
