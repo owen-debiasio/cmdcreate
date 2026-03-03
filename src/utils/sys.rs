@@ -80,26 +80,27 @@ pub fn run_shell_command_result(cmd: &str) -> Result<(), TestError> {
         return Ok(());
     }
 
-    let mut command = Command::new(load("sys", "shell", "sh"));
+    let shell_path = load("sys", "shell", "sh");
+    let mut command = Command::new(&shell_path);
     command.arg("-c").arg(cmd);
 
     if cfg!(test) {
         let output = command
             .stdin(Stdio::null())
             .output()
-            .map_err(|e| TestError(e.to_string()))?;
+            .map_err(|e| TestError(format!("Failed to execute {shell_path}: {e}")))?;
 
         if output.status.success() {
             Ok(())
         } else {
-            Err(TestError(format!("Command failed with: {}", output.status)))
+            let stderr = String::from_utf8_lossy(&output.stderr);
+            Err(TestError(format!("Command failed: {stderr}")))
         }
     } else {
         command
             .stdin(Stdio::inherit())
             .stdout(Stdio::inherit())
             .stderr(Stdio::inherit());
-
         match command.status() {
             Ok(status) if status.success() => Ok(()),
             Ok(status) => Err(TestError(format!("Command failed with: {status}"))),
