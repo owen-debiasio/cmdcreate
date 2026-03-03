@@ -84,21 +84,27 @@ pub fn run_shell_command_result(cmd: &str) -> Result<(), TestError> {
     command.arg("-c").arg(cmd);
 
     if cfg!(test) {
-        command
+        let output = command
             .stdin(Stdio::null())
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped());
+            .output()
+            .map_err(|e| TestError(e.to_string()))?;
+
+        if output.status.success() {
+            Ok(())
+        } else {
+            Err(TestError(format!("Command failed with: {}", output.status)))
+        }
     } else {
         command
             .stdin(Stdio::inherit())
             .stdout(Stdio::inherit())
             .stderr(Stdio::inherit());
-    }
 
-    match command.status() {
-        Ok(status) if status.success() => Ok(()),
-        Ok(status) => Err(TestError(format!("Command failed with: {status}"))),
-        Err(e) => Err(TestError(e.to_string())),
+        match command.status() {
+            Ok(status) if status.success() => Ok(()),
+            Ok(status) => Err(TestError(format!("Command failed with: {status}"))),
+            Err(e) => Err(TestError(e.to_string())),
+        }
     }
 }
 
