@@ -157,6 +157,10 @@ fn upgrade_via(method: &str) {
 }
 
 fn build_from_source() {
+    fn install_rustup() {
+        run_shell_command("curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh");
+    }
+
     let (green, reset) = (COLORS.green, COLORS.reset);
 
     let cache_dir = format!("{}/.cache/cmdcreate", VARS.home);
@@ -164,8 +168,8 @@ fn build_from_source() {
 
     run_shell_command(match get_distro_base() {
         DistroBase::Arch => "sudo pacman -S --needed --noconfirm cargo git",
-        DistroBase::Debian => "sudo apt install -y cargo git build-essential pkg-config libssl-dev",
-        DistroBase::Fedora => "sudo dnf install -y cargo git-core openssl-devel openssl-libs",
+        DistroBase::Debian => "sudo apt install -y git build-essential pkg-config libssl-dev; ",
+        DistroBase::Fedora => "sudo dnf install -y git-core openssl-devel openssl-libs",
         DistroBase::Unknown => {
             error(
                 "Your system currently isn't supported for building from source.",
@@ -173,6 +177,10 @@ fn build_from_source() {
             );
         }
     });
+
+    if get_distro_base() == "Debian" || get_distro_base() == "Fedora" {
+        install_rustup()
+    }
 
     run_shell_command(&format!(
         "set -e && \

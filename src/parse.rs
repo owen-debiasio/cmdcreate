@@ -126,10 +126,10 @@ pub fn parse(cmd: &str, args: &[String]) {
         "--license" | "-l" => {
             if path_exists(&PATHS.license) {
                 /*
-                read_file_to_string("cat /usr/share/licenses/cmdcreate/LICENSE")
+                read_file_to_string("/usr/share/licenses/cmdcreate/LICENSE")
                 doesn't work and idk why???
                 */
-                run_shell_command("cat /usr/share/licenses/cmdcreate/LICENSE");
+                run_shell_command(&format!("cat {}", PATHS.license));
             } else {
                 error(
                     "License has not been installed. Find it here:",
