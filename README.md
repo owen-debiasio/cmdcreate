@@ -196,6 +196,8 @@ cd cmdcreate
 rustup default stable
 cargo build --release
 sudo install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate
+cd "$HOME"
+rm -rf cmdcreate
 ```
 
 ---
