@@ -22,7 +22,7 @@ pub fn colors_enabled() -> bool {
         && !args_contains("--monochrome")
         && !load("appearance", "disable_color", "false")
             .parse::<bool>()
-            .unwrap()
+            .unwrap_or(false)
 }
 
 pub struct Colors {
@@ -35,73 +35,66 @@ pub struct Colors {
     pub cyan: &'static str,
 }
 
-pub static COLORS: LazyLock<Colors> = LazyLock::new(|| {
-    if colors_enabled() {
-        Colors {
-            reset: "\x1b[0m",
-            red: "\x1b[31m",
-            green: "\x1b[32m",
-            yellow: "\x1b[33m",
-            blue: "\x1b[34m",
-            magenta: "\x1b[35m",
-            cyan: "\x1b[36m",
-        }
-    } else {
-        Colors {
-            reset: "",
-            red: "",
-            green: "",
-            yellow: "",
-            blue: "",
-            magenta: "",
-            cyan: "",
+impl Colors {
+    pub fn new(enabled: bool) -> Self {
+        if enabled {
+            Self {
+                reset: "\x1b[0m",
+                red: "\x1b[31m",
+                green: "\x1b[32m",
+                yellow: "\x1b[33m",
+                blue: "\x1b[34m",
+                magenta: "\x1b[35m",
+                cyan: "\x1b[36m",
+            }
+        } else {
+            Self {
+                reset: "",
+                red: "",
+                green: "",
+                yellow: "",
+                blue: "",
+                magenta: "",
+                cyan: "",
+            }
         }
     }
-});
+}
+
+pub static COLORS: LazyLock<Colors> = LazyLock::new(|| Colors::new(colors_enabled()));
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    fn get_all_codes(c: &Colors) -> Vec<&'static str> {
-        vec![c.red, c.green, c.yellow, c.blue, c.reset]
-    }
-
     #[test]
-    fn colors_are_valid_ansi_codes_if_enabled() {
-        let codes = get_all_codes(&COLORS);
+    fn colors_are_valid_ansi_codes_when_enabled() {
+        let c = Colors::new(true);
+        let codes = vec![c.red, c.green, c.yellow, c.blue, c.magenta, c.cyan, c.reset];
 
-        if colors_enabled() {
-            for color in codes {
-                assert!(
-                    color.starts_with("\x1b["),
-                    "color does not start with ANSI escape: {color:?}"
-                );
-                assert!(
-                    color.ends_with('m'),
-                    "color does not end with 'm': {color:?}"
-                );
-            }
-        } else {
-            for color in codes {
-                assert!(
-                    color.is_empty(),
-                    "color code should be empty in monochrome mode"
-                );
-            }
+        for color in codes {
+            assert!(color.starts_with("\x1b["));
+            assert!(color.ends_with('m'));
         }
     }
 
     #[test]
-    fn reset_is_unique() {
-        let c = &COLORS;
+    fn colors_are_empty_when_disabled() {
+        let c = Colors::new(false);
+        let codes = vec![c.red, c.green, c.yellow, c.blue, c.magenta, c.cyan, c.reset];
 
-        if colors_enabled() {
-            for color in get_all_codes(c) {
-                if color != c.reset {
-                    assert_ne!(color, c.reset, "reset color must be unique");
-                }
-            }
+        for color in codes {
+            assert!(color.is_empty());
+        }
+    }
+
+    #[test]
+    fn reset_is_unique_when_enabled() {
+        let c = Colors::new(true);
+        let others = vec![c.red, c.green, c.yellow, c.blue, c.magenta, c.cyan];
+
+        for color in others {
+            assert_ne!(color, c.reset);
         }
     }
 }
