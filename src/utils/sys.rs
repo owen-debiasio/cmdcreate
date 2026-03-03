@@ -83,16 +83,16 @@ pub fn run_shell_command_result(cmd: &str) -> Result<(), TestError> {
     let mut command = Command::new(load("sys", "shell", "sh"));
     command.arg("-c").arg(cmd);
 
-    if !cfg!(test) {
-        command
-            .stdin(Stdio::inherit())
-            .stdout(Stdio::inherit())
-            .stderr(Stdio::inherit());
-    } else {
+    if cfg!(test) {
         command
             .stdin(Stdio::null())
             .stdout(Stdio::piped())
             .stderr(Stdio::piped());
+    } else {
+        command
+            .stdin(Stdio::inherit())
+            .stdout(Stdio::inherit())
+            .stderr(Stdio::inherit());
     }
 
     match command.status() {
