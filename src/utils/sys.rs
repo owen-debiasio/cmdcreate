@@ -25,10 +25,7 @@ use rustix::process::geteuid;
 use crate::{
     configs::load,
     logger::log,
-    utils::{
-        fs::read_file_to_string,
-        io::{TestError, error},
-    },
+    utils::{fs::read_file_to_string, io::error},
 };
 
 pub fn is_root() -> bool {
@@ -75,43 +72,29 @@ pub fn args_contains(arg: &str) -> bool {
     return_args().iter().any(|a| a == arg)
 }
 
-pub fn run_shell_command_result(cmd: &str) -> Result<(), TestError> {
-    if cmd.trim().is_empty() {
-        return Ok(());
-    }
-
-    let shell_path = load("sys", "shell", "sh");
-    let mut command = Command::new(&shell_path);
-    command.arg("-c").arg(cmd);
-
-    if cfg!(test) {
-        let output = command
-            .stdin(Stdio::null())
-            .output()
-            .map_err(|e| TestError(format!("Failed to execute {shell_path}: {e}")))?;
-
-        if output.status.success() {
-            Ok(())
-        } else {
-            let stderr = String::from_utf8_lossy(&output.stderr);
-            Err(TestError(format!("Command failed: {stderr}")))
-        }
-    } else {
-        command
-            .stdin(Stdio::inherit())
-            .stdout(Stdio::inherit())
-            .stderr(Stdio::inherit());
-        match command.status() {
-            Ok(status) if status.success() => Ok(()),
-            Ok(status) => Err(TestError(format!("Command failed with: {status}"))),
-            Err(e) => Err(TestError(e.to_string())),
-        }
-    }
-}
-
 pub fn run_shell_command(cmd: &str) {
-    if let Err(e) = run_shell_command_result(cmd) {
-        error("Failed to run shell command:", &e.to_string());
+    let shell: &str = if args_contains("--force_system_shell") | args_contains("-F") {
+        &VARS.shell
+    } else {
+        &load("sys", "shell", "sh")
+    };
+
+    if cmd.trim().is_empty() {
+        return;
+    }
+
+    match Command::new(shell)
+        .arg("-c")
+        .arg(cmd)
+        .stdin(Stdio::inherit())
+        .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit())
+        .status()
+    {
+        Ok(_) => {}
+        Err(e) => {
+            error("Failed to run shell command:", &e.to_string());
+        }
     }
 }
 
@@ -200,14 +183,6 @@ mod tests {
     #[test]
     fn error_message_matches() {
         assert_eq!(error_result::<()>("bad").unwrap_err().to_string(), "bad");
-    }
-
-    #[test]
-    fn run_shell_command_result_fails_on_invalid_command() {
-        assert!(
-            run_shell_command_result("definitely_not_a_real_cmd").is_err(),
-            "Expected error when running a non-existent command"
-        );
     }
 
     #[test]
