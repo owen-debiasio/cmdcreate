@@ -80,21 +80,24 @@ pub fn run_shell_command_result(cmd: &str) -> Result<(), TestError> {
         return Ok(());
     }
 
-    match Command::new(load("sys", "shell", "sh"))
-        .arg("-c")
-        .arg(cmd)
-        .stdin(Stdio::inherit())
-        .stdout(Stdio::inherit())
-        .stderr(Stdio::inherit())
-        .status()
-    {
-        Ok(status) => {
-            if status.success() {
-                Ok(())
-            } else {
-                Err(TestError(format!("Command exited with code {status}")))
-            }
-        }
+    let mut command = Command::new(load("sys", "shell", "sh"));
+    command.arg("-c").arg(cmd);
+
+    if !cfg!(test) {
+        command
+            .stdin(Stdio::inherit())
+            .stdout(Stdio::inherit())
+            .stderr(Stdio::inherit());
+    } else {
+        command
+            .stdin(Stdio::null())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped());
+    }
+
+    match command.status() {
+        Ok(status) if status.success() => Ok(()),
+        Ok(status) => Err(TestError(format!("Command failed with: {status}"))),
         Err(e) => Err(TestError(e.to_string())),
     }
 }
