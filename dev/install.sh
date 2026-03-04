@@ -48,10 +48,3 @@ sudo install -Dm755 "$TARGET" "$INSTALL_DIR/$BIN_NAME"
 sudo chmod +x $INSTALL_DIR/$BIN_NAME
 
 echo -e "\n> Done. $BIN_NAME installed to $INSTALL_DIR"
-#!/usr/bin/env bash
-
-set -euo pipefail
-
-BIN_NAME="cmdcreate"
-TARGET="target/release/$BIN_NAME"
-INSTALL_DIR="/usr/bin/"
