@@ -62,7 +62,8 @@ Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{r
         InstallMethod::Dpkg => {
             if arch_is_supported() {
                 if !args_forced() && !input(&format!(
-                    "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
+                    "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a \
+                    {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
                 )).trim().eq_ignore_ascii_case("y") {
                     interactive_upgrade();
                     return;
@@ -80,7 +81,8 @@ Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{r
         InstallMethod::Rpm => {
             if arch_is_supported() {
                 if !args_forced() && !input(&format!(
-                    "\n{blue}Fedora{reset}-based system detected. Would you like to install via a {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
+                    "\n{blue}Fedora{reset}-based system detected. Would you like to install via a \
+                    {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
                 )).trim().eq_ignore_ascii_case("y") {
                     interactive_upgrade();
                     return;
@@ -160,7 +162,7 @@ fn build_from_source() {
     let (green, reset) = (COLORS.green, COLORS.reset);
     let cache_dir = format!("{}/.cache/cmdcreate", VARS.home);
 
-    let _ = delete_folder(&cache_dir);
+    delete_folder(&cache_dir).expect("Failed to delete folder");
 
     let install_cmd = match get_distro_base() {
         DistroBase::Arch => "sudo pacman -S --needed --noconfirm cargo git",
