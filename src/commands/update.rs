@@ -190,6 +190,7 @@ fn build_from_source() {
         rm -rf {cache_dir}
         git clone https://github.com/owen-debiasio/cmdcreate.git \"{cache_dir}\"
         cd \"{cache_dir}\"
+        sudo rustup default stable
         cargo build --release
         sudo install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate"
     ));
