@@ -55,7 +55,7 @@ install_dependencies() {
                 python3-black python3-pylint \
                 nodejs npm rpm-build dpkg-dev
 
-            sudo npm install -g prettier markdownlint-cli2
+            sudo npm install -g prettier markdownlint-cli2@0.13.0
 
             if ! command -v rustup &> /dev/null; then
                 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
@@ -71,7 +71,7 @@ install_dependencies() {
                 black pylint \
                 nodejs npm rpm dpkg-dev
 
-            sudo npm install -g prettier markdownlint-cli2
+            sudo npm install -g prettier markdownlint-cli2@0.13.0
 
             if ! command -v rustup &> /dev/null; then
                 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
