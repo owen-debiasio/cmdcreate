@@ -43,7 +43,9 @@ Licensed under the GNU General Public License v3.0 or later.
 
 ## Additional notes
 
-> [!NOTE] `create_bin.sh`, `create_deb.sh`, and `create_rpm.sh` are all ran in
+> [!NOTE]  
+> `create_bin.sh`, `create_deb.sh`, and `create_rpm.sh` are all ran in
 > `package.sh`
 
-> [!NOTE] Built packages and binaries are built to `~/Downloads/`
+> [!NOTE]  
+> Built packages and binaries are built to `~/Downloads/`
