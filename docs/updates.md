@@ -103,8 +103,6 @@ cmdcreate update
   - **Should work on any CPU architecture**
   - **Should work on any distro**
 
-<!-- markdownlint-disable-file MD032 -->
-
 > [!WARNING]
 >
 > - Latest git builds have a possibility of being broken, unfinished, and
