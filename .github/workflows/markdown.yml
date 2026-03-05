@@ -28,8 +28,14 @@ jobs:
         with:
           node-version: 20
 
+      - name: Install Prettier
+        run: npm install -g prettier
+
+      - name: Run Prettier
+        run: prettier -c "**/*.md"
+
       - name: Install markdownlint-cli2
-        run: npm install -g markdownlint-cli2
+        run: npm install -g markdownlint-cli2@0.13.0
 
       - name: Run markdownlint
         run: markdownlint-cli2 "**/*.md" --config .markdownlint.json
