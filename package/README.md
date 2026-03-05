@@ -21,6 +21,7 @@ Licensed under the GNU General Public License v3.0 or later.
     - Main source code
     - Testing scripts
     - Shell scripts
+    - Markdown and other files
 
 ---
 
@@ -31,11 +32,12 @@ Licensed under the GNU General Public License v3.0 or later.
 - `rpm`
 - `dpkg`
 
-### Formatting
+### Formatting and Linting
 
-- `black` (Python files)
-- `shfmt` (Shell files)
-- `rustfmt` (Rust files)
+- `black` and `pylint` (Python files)
+- `shfmt` and `shellcheck` (Shell files)
+- `rustfmt` and `clippy` (Rust files)
+- `markdownlint-cli2` and `prettier` (Markdown files)
 
 ---
 
