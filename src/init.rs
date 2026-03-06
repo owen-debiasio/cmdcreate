@@ -18,6 +18,7 @@ use crate::{
     VERSION,
     configs::init_configs,
     logger::log,
+    meta::{AUTHOR, AUTHOR_EMAIL},
     utils::{
         fs::init_fs_layout,
         io::error,
@@ -29,15 +30,23 @@ use crate::{
 
 pub fn debug_intro() -> String {
     format!(
-        "                               ----------------
-        Welcome to cmdcreate!           Version: {VERSION} {}
-            Created by:                 CPU Architecture: {ARCH}
-           Owen Debiasio                Distro Base: {:?}
-       owen.debiasio@gmail.com          Preferred installation method: {:?}
-                                        Internet status: {}
-    Have an issue? Copy this text       Preferred text editor: {}
-          and open an issue             Shell in use: {}
-                                        ----------------",
+        "
+----------------
+Welcome to cmdcreate!                   
+Created by: {AUTHOR} <{AUTHOR_EMAIL}>
+----------------
+Have an issue? Copy the text below           
+and open an issue                       
+----------------
+Version: {VERSION} {}
+CPU architecture: {ARCH}
+Distro base: {:?}
+Installation Method: {:?}
+Internet status: {}
+Preferred text editor: {}
+Shell in use: {}
+----------------
+",
         if is_development_version() {
             "(devel)"
         } else {
