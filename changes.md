@@ -609,3 +609,4 @@ Licensed under the GNU General Public License v3.0 or later.
 - Fixed incorrect response parsing during the update process
 - Fixed other things along the update process
 - Code optimizations
+- Overhauled the debug verbose logging intro
