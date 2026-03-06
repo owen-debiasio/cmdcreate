@@ -33,7 +33,7 @@ pub fn log(text: &str, lvl: u8) {
     let (color, log_type) = match lvl {
         0 => (COLORS.cyan, "LOG"),
         1 => (COLORS.yellow, "WARN"),
-        2 => (COLORS.red, "ERROR"),
+        2 => (COLORS.red, "ERROR"), // Like this is ever used. It's used once in utils/io::error()
         _ => (COLORS.reset, "LOG"),
     };
 

@@ -68,5 +68,5 @@ pub fn edit(cmd: &str) {
         0,
     );
 
-    run_shell_command(&format!("sudo {editor} {}{cmd}", PATHS.install_dir));
+    run_shell_command(&format!("{editor} {}{cmd}", PATHS.install_dir));
 }

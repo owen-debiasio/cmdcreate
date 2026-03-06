@@ -22,6 +22,7 @@ use crate::{
     },
 };
 
+// This is the entire fucking command lol
 pub fn display(cmd: &str) {
     command_is_installed(cmd);
 

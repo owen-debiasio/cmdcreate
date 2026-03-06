@@ -35,6 +35,7 @@ pub fn favorite(mode: &str, command: &str) {
     }
 }
 
+// Almost identical to remove()
 fn add(cmd: &str) {
     let (blue, green, yellow, reset) = (COLORS.blue, COLORS.green, COLORS.yellow, COLORS.reset);
 
@@ -61,6 +62,7 @@ fn add(cmd: &str) {
     println!("{green}Command {blue}\"{cmd}\"{green} added to favorites.{reset}");
 }
 
+// Almost identical to add()
 fn remove(cmd: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 

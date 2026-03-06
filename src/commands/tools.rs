@@ -49,7 +49,7 @@ pub fn get_installed_commands() -> Vec<PathBuf> {
     );
 
     let commands: Vec<PathBuf> = read_dir(&PATHS.install_dir)
-        .unwrap_or_else(|_| panic!("{red}Error: Failed to read install directory{reset}",))
+        .unwrap_or_else(|_| panic!("{red}Error: Failed to read install directory{reset}"))
         .flatten()
         .map(|entry| entry.path())
         .filter(|path| path.is_file())

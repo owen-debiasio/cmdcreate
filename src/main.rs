@@ -40,6 +40,7 @@ fn main() {
 
     let mut args = return_args();
 
+    // These flags or args or whatever you call them are basically "ignored"
     args.retain(|a| {
         !matches!(
             a.as_str(),

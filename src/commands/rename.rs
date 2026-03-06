@@ -47,7 +47,8 @@ pub fn rename(old: &str, new: &str) {
 
     if path_exists(&format!("{}/{new}", PATHS.install_dir)) {
         println!(
-            "{red}The new name ({yellow}{new}{red}) is already installed! Do you want to delete it?\n({green}Y{red} or {yellow}N{red})",
+            "{red}The new name ({yellow}{new}{red}) is already installed! \
+            Do you want to delete it?\n({green}Y{red} or {yellow}N{red})",
         );
 
         if args_forced() || input("").trim().eq_ignore_ascii_case("y") {
@@ -62,6 +63,7 @@ pub fn rename(old: &str, new: &str) {
         0,
     );
 
+    // I should prob make a function to move files
     run_shell_command(&format!("mv {install_dir}{old} {install_dir}{new}"));
 
     println!("{green}Successfully renamed command {blue}\"{old}\" to {blue}\"{new}\"{reset}");

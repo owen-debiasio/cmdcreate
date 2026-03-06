@@ -69,7 +69,8 @@ pub fn args_forced() -> bool {
 }
 
 pub fn args_contains(arg: &str) -> bool {
-    return_args().iter().any(|a| a == arg)
+    // Var arg_ is the index, var arg is the actual supplied arg
+    return_args().iter().any(|arg_| arg_ == arg)
 }
 
 pub fn run_shell_command(cmd: &str) {

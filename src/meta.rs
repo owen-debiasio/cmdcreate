@@ -19,5 +19,6 @@ pub const AUTHOR: &str = "Owen Debiasio";
 pub const AUTHOR_EMAIL: &str = "owen.debiasio@gmail.com";
 
 pub fn get_copyright() -> String {
+    // So fucking annoyed that this can't be a static
     format!("Copyright {YEAR} {AUTHOR} <{AUTHOR_EMAIL}>")
 }

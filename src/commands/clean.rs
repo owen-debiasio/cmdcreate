@@ -33,7 +33,7 @@ pub fn clean() {
         .eq_ignore_ascii_case("y")
     {
         delete_folder(&format!("{}/.local/share/cmdcreate/logs/", VARS.home))
-            .expect("TODO: panic message");
+            .expect("Failed to delete folder");
 
         println!("{green}\nLog files cleared.{reset}");
     }
@@ -46,7 +46,6 @@ pub fn clean() {
         .eq_ignore_ascii_case("y")
     {
         delete_file(&PATHS.changelog).expect("Failed to delete changelog");
-        delete_file(&PATHS.license).expect("Failed to delete license");
 
         println!("{green}\nOffline files cleared.{reset}");
     }

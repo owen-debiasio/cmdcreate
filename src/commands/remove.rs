@@ -33,11 +33,6 @@ pub fn remove(command: &str, forced: bool) {
         COLORS.reset,
     );
 
-    if command.is_empty() {
-        log("commands/remove::remove(): Command is empty, exiting...", 0);
-        return;
-    }
-
     command_is_installed(command);
 
     if !forced {

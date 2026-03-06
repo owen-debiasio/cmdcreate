@@ -34,8 +34,9 @@ pub fn init_configs() {
     overwrite_file(&PATHS.configs, AUTO_GEN).expect("Failed to overwrite file");
 }
 
-static CONFIG: LazyLock<Value> =
-    LazyLock::new(|| toml::from_str(&read_file_to_string(&PATHS.configs)).expect("REASON"));
+static CONFIG: LazyLock<Value> = LazyLock::new(|| {
+    toml::from_str(&read_file_to_string(&PATHS.configs)).expect("Failed to read file")
+});
 
 pub fn load(cat: &str, var: &str, default: &str) -> String {
     CONFIG

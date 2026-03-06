@@ -46,6 +46,7 @@ pub fn export(path: &str) {
                 0,
             );
 
+            // The escape thing is "[|" cause backslashes don't fucking work for some fucking reason
             let cmd_contents =
                 read_file_to_string(&format!("{}{cmd}", PATHS.install_dir)).replace('|', "[|");
 

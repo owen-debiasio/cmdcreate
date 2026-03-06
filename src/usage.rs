@@ -31,6 +31,8 @@ pub fn cmdcreate_usage() {
         0,
     );
 
+    // HUGE FUCKING WALL OF TEXT
+
     for line in vec![
         format!("cmdcreate {VERSION}"),
         format!(
@@ -100,6 +102,8 @@ pub fn debug_usage() {
     let (magenta, reset) = (COLORS.magenta, COLORS.reset);
 
     log("usage::debug_usage(): Displaying debug info...", 0);
+
+    // LITTLE ITTY BITTY WALL OF FUCKING TEXT
 
     for line in [
         format!("Usage: cmdcreate {magenta}(flags){reset} [run]"),

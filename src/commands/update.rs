@@ -45,6 +45,7 @@ pub fn update() {
 
     match installation_method() {
         InstallMethod::Aur => {
+            // These blocks are repeated. smh
             if !args_forced()
                 && !input(&format!(
                     "\n{blue}Arch Linux{reset}-based system detected. Updating via AUR is not directly supported here. \
@@ -103,18 +104,23 @@ fn upgrade_via(method: &str) {
     let latest_release = get_latest_tag("owen-debiasio", "cmdcreate");
 
     match method {
+        /*
+        let package_file = format!("cmdcreate-{latest_release}-linux-...");
+        This is defined like 3 times and I'm not 100% sure how to fix that
+        */
         "deb" => {
             cpu_arch_check(
                 "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
             );
 
-            let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}.deb");
+            let package_file = format!("cmdcreate-{latest_release}-linux-{ARCH}.deb");
 
+            // These install "scripts" are also repeated 3 times.
             run_shell_command(&format!(
-                "curl -Lf -o /tmp/{pkg} \
-                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
-                sudo dpkg -i /tmp/{pkg} && \
-                rm /tmp/{pkg}"
+                "curl -Lf -o /tmp/{package_file} \
+                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{package_file} && \
+                sudo dpkg -i /tmp/{package_file} && \
+                rm /tmp/{package_file}"
             ));
 
             println!("\n{green}Update complete!{reset}");
@@ -124,13 +130,13 @@ fn upgrade_via(method: &str) {
                 "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
             );
 
-            let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}.rpm");
+            let package_file = format!("cmdcreate-{latest_release}-linux-{ARCH}.rpm");
 
             run_shell_command(&format!(
-                "curl -Lf -o /tmp/{pkg} \
-                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
-                sudo rpm -Uvh /tmp/{pkg} \
-                rm /tmp/{pkg}"
+                "curl -Lf -o /tmp/{package_file} \
+                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{package_file} && \
+                sudo rpm -Uvh /tmp/{package_file} \
+                rm /tmp/{package_file}"
             ));
 
             println!("\n{green}Update complete!{reset}");
@@ -140,13 +146,13 @@ fn upgrade_via(method: &str) {
                 "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
             );
 
-            let pkg = format!("cmdcreate-{latest_release}-linux-{ARCH}-bin");
+            let package_file = format!("cmdcreate-{latest_release}-linux-{ARCH}-bin");
 
             run_shell_command(&format!(
-                "curl -Lf -o /tmp/{pkg} \
-                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{pkg} && \
-                sudo install -Dm755 /tmp/{pkg} /usr/bin/cmdcreate && \
-                rm /tmp/{pkg}"
+                "curl -Lf -o /tmp/{package_file} \
+                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{package_file} && \
+                sudo install -Dm755 /tmp/{package_file} /usr/bin/cmdcreate && \
+                rm /tmp/{package_file}"
             ));
 
             println!("\n{green}Update complete!{reset}");
@@ -163,6 +169,8 @@ fn build_from_source() {
     let cache_dir = format!("{}/.cache/cmdcreate", VARS.home);
 
     delete_folder(&cache_dir).expect("Failed to delete folder");
+
+    // The return values for DistroBase::Debian and DistroBase::Fedora are like the same fucking thing
 
     let install_cmd = match get_distro_base() {
         DistroBase::Arch => "sudo pacman -S --needed --noconfirm cargo git",

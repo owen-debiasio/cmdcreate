@@ -102,6 +102,7 @@ pub fn get_latest_commit(owner: &str, repo: &str, branch: &str) -> String {
         .take(7)
         .collect::<String>();
 
+    // And THIS is why cmdcreate can take forever to load on weak systems.
     log(
         &format!("version::get_latest_commit(): Retrieved latest commit: \"{commit}\""),
         0,

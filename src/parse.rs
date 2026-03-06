@@ -48,6 +48,8 @@ pub fn parse(cmd: &str, args: &[String]) {
 
     log(&format!("parse::parse(): Parsing command: {cmd}"), 0);
 
+    // Like all of these lines are the fucking same
+
     match cmd {
         "create" => match (arg(1), arg(2)) {
             (Some(command), Some(contents)) => create(command, contents, true),
@@ -101,6 +103,7 @@ pub fn parse(cmd: &str, args: &[String]) {
 
         "--version" | "-v" => print_info(),
 
+        // Will probably be removed at some point... Not really any longer needed
         "--get_offline_files" | "-g" => {
             println!("Downloading offline files...");
 
@@ -113,6 +116,7 @@ pub fn parse(cmd: &str, args: &[String]) {
             println!("{green}Files downloaded successfully.{reset}");
         }
 
+        // Same here
         "--remove_offline_files" | "-r" => {
             log("main::main(): Removing offline files...", 0);
 
