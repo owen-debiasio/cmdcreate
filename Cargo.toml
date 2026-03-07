@@ -16,7 +16,7 @@
 
 [package]
 name = "cmdcreate"
-version = "1.1.5"
+version = "1.1.6"
 authors = ["Owen Debiasio <owen.debiasio@gmail.com>"]
 edition = "2024"
 license = "GPL-3.0-or-later"
@@ -26,7 +26,7 @@ repository = "https://github.com/owen-debiasio/cmdcreate"
 [dependencies]
 reqwest = { version = "0.12.28", features = ["blocking", "json"] }
 serde_json = "1.0"
-toml = "1.0.3"
+toml = "1.0.6"
 chrono = "0.4.43"
 rustix = { version = "1.1.4", features = ["process"] }
 anyhow = "1.0.102"
