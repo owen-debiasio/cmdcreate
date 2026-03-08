@@ -29,8 +29,6 @@ use crate::{
     version::{VERSION, get_latest_commit, get_latest_tag, is_development_version},
 };
 
-use std::process::exit;
-
 pub fn update() {
     let (green, blue, red, reset) = (COLORS.green, COLORS.blue, COLORS.red, COLORS.reset);
 
@@ -106,7 +104,7 @@ fn upgrade_via(method: &str) {
     match method {
         /*
         let package_file = format!("cmdcreate-{latest_release}-linux-...");
-        This is defined like 3 times and I'm not 100% sure how to fix that
+        This is defined like 3 times, and I'm not 100% sure how to fix that
         */
         "deb" => {
             cpu_arch_check(
@@ -282,7 +280,7 @@ pub fn check() {
             COLORS.blue
         );
 
-        exit(0)
+        return;
     }
 
     if VERSION != latest {
