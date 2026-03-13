@@ -22,7 +22,7 @@ Commands:
   search   <command>                 Searches for matched command
   reset                              Removes all installed commands
   display  <command>                 Display contents of a command
-  rename   <command>    <new name>   Renames a command
+  rename   <command>    <renamed>    Renames a command
   favorite <add/remove> <command>    Adds or removes a command from favorites
   clean                              Can clean up old and unused files
 
