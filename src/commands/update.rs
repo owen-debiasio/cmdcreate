@@ -45,7 +45,7 @@ pub fn update() {
         InstallMethod::Aur => {
             // These blocks are repeated. smh
             if !args_forced()
-                && !input(&format!(
+                && input(&format!(
                     "\n{blue}Arch Linux{reset}-based system detected. Updating via AUR is not directly supported here. \
 Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{reset})"
                 ))
@@ -60,7 +60,7 @@ Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{r
 
         InstallMethod::Dpkg => {
             if arch_is_supported() {
-                if !args_forced() && !input(&format!(
+                if !args_forced() && input(&format!(
                     "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a \
                     {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
                 )).trim().eq_ignore_ascii_case("y") {
@@ -79,7 +79,7 @@ Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{r
 
         InstallMethod::Rpm => {
             if arch_is_supported() {
-                if !args_forced() && !input(&format!(
+                if !args_forced() && input(&format!(
                     "\n{blue}Fedora{reset}-based system detected. Would you like to install via a \
                     {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
                 )).trim().eq_ignore_ascii_case("y") {
