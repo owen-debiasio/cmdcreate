@@ -610,3 +610,16 @@ Licensed under the GNU General Public License v3.0 or later.
 - Fixed other things along the update process
 - Code optimizations
 - Overhauled the debug verbose logging intro
+
+## v1.1.6
+
+- Removed the following flags/args (No need for them anymore):
+  - `-g`/`--get_offline_files`, `-r`/`--remove_offline_files`
+    - No need for offline files anymore
+  - `-d`/`--debug`
+    - No need for this menu
+- Removed debug flag menu, moved `-V`/`verbose` and `-f`/`--force` to normal
+  usage screen
+- Slight tweaks to the usage dialog
+- Code logic fixes
+- Code optimizations
