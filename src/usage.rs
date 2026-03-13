@@ -34,10 +34,13 @@ pub fn cmdcreate_usage() {
     // HUGE FUCKING WALL OF TEXT
 
     for line in vec![
+        // Version
         format!("cmdcreate {VERSION}"),
+        // Usage identifier
         format!(
             "Usage: cmdcreate {magenta}(flags){reset} [{blue}command{reset}, {cyan}argument{reset}] {yellow}<args> {magenta}(flags){reset}"
         ),
+        // Commands
         "\nCommands:".into(),
         format!("  {blue}create{yellow}   <command>    <contents>{reset}  Create a command"),
         format!("  {blue}remove {yellow}  <command>{reset}                Remove a command"),
@@ -51,7 +54,7 @@ pub fn cmdcreate_usage() {
         format!(
             "  {blue}display {yellow} <command>{reset}                Display contents of a command"
         ),
-        format!("  {blue}rename {yellow}  <command>    <new name>{reset}  Renames a command"),
+        format!("  {blue}rename {yellow}  <command>    <renamed>{reset}   Renames a command"),
         format!(
             "  {blue}favorite {yellow}<add/remove> <command>{reset}   Adds or removes a command from favorites"
         ),
@@ -68,7 +71,8 @@ pub fn cmdcreate_usage() {
         format!(
             "    {blue}import{reset} {yellow}<file input>{reset}             Imports your exported commands"
         ),
-        "\nArguments:".into(),
+        // Arguments and flags
+        "\nArguments and flags:".into(),
         format!("  {cyan}-v{reset},{cyan} --version {reset}                    Displays version"),
         format!("  {cyan}-c{reset},{cyan} --changelog {reset}                  Displays changelog"),
         format!("  {cyan}-l{reset},{cyan} --license {reset}                    Displays license"),
@@ -79,15 +83,12 @@ pub fn cmdcreate_usage() {
             "  {cyan}-m{reset},{cyan} --monochrome {reset}                 Disables colorized output"
         ),
         format!(
-            "  {cyan}-d{reset},{cyan} --debugging {reset}                  Displays flags used for debugging"
-        ),
-        "\n  Offline Files:".into(),
-        format!(
-            "    {cyan}-g{reset},{cyan} --get_offline_files{reset}         Downloads files for offline use"
+            "  {cyan}-V{reset},{cyan} --verbose {reset}                    Print logs to output"
         ),
         format!(
-            "    {cyan}-r{reset},{cyan} --remove_offline_files{reset}      Removes files for offline use"
+            "  {cyan}-f{reset},{cyan} --force {reset}                      Force commands to be ran"
         ),
+        // About section
         "\nAbout:".into(),
         "   Cmdcreate allows you to create custom commands for your Linux terminal".into(),
         "   without needing to enter the same \"complex\" commands over and over.".into(),
@@ -96,24 +97,4 @@ pub fn cmdcreate_usage() {
     }
 
     exit(1)
-}
-
-pub fn debug_usage() {
-    let (magenta, reset) = (COLORS.magenta, COLORS.reset);
-
-    log("usage::debug_usage(): Displaying debug info...", 0);
-
-    // LITTLE ITTY BITTY WALL OF FUCKING TEXT
-
-    for line in [
-        format!("Usage: cmdcreate {magenta}(flags){reset} [run]"),
-        format!(
-            "  {magenta}-f{reset}, {magenta}--force{reset}                       Force commands"
-        ),
-        format!("  {magenta}-V{reset}, {magenta}--verbose{reset}                     Print logs"),
-    ] {
-        println!("{line}");
-    }
-
-    exit(0)
 }

@@ -16,7 +16,7 @@
 
 use crate::utils::{
     colors::COLORS,
-    fs::{PATHS, delete_file, delete_folder},
+    fs::delete_folder,
     io::{ask_for_confirmation, input},
     sys::{VARS, args_forced},
 };
@@ -36,18 +36,6 @@ pub fn clean() {
             .expect("Failed to delete folder");
 
         println!("{green}\nLog files cleared.{reset}");
-    }
-
-    if !args_forced()
-        && input(&format!(
-            "\nDo you want to delete offline files?{reset}\n({green}Y{reset} or {red}N{reset})"
-        ))
-        .trim()
-        .eq_ignore_ascii_case("y")
-    {
-        delete_file(&PATHS.changelog).expect("Failed to delete changelog");
-
-        println!("{green}\nOffline files cleared.{reset}");
     }
 
     println!("{green}\nCleaned up cmdcreate.{reset}");

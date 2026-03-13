@@ -25,11 +25,7 @@ mod utils;
 mod version;
 
 use crate::{
-    init::init,
-    logger::log,
-    parse::parse,
-    usage::cmdcreate_usage,
-    utils::{fs::init_git_fs, sys::return_args},
+    init::init, logger::log, parse::parse, usage::cmdcreate_usage, utils::sys::return_args,
     version::VERSION,
 };
 
@@ -66,13 +62,6 @@ fn cmdcreate(args: &[String]) {
         if matches!(cmd, "-V" | "--verbose") {
             i += 1;
             continue;
-        }
-
-        if matches!(
-            cmd,
-            "-l" | "--license" | "-c" | "--changelog" | "-g" | "--get_offline_files"
-        ) {
-            init_git_fs().expect("Failed to initialize git files");
         }
 
         parse(cmd, args);
