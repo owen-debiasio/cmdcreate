@@ -31,8 +31,6 @@ pub fn cmdcreate_usage() {
         0,
     );
 
-    // HUGE FUCKING WALL OF TEXT
-
     for line in vec![
         // Version
         format!("cmdcreate {VERSION}"),
