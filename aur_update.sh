@@ -36,8 +36,19 @@ case "$choice" in
         ;;
 esac
 
+if ! command -v ssh-keyscan &> /dev/null; then
+    echo "Error: openssh is not installed."
+    exit 1
+fi
+
+if ! ssh-keygen -F aur.archlinux.org > /dev/null; then
+    echo "Adding aur.archlinux.org to known_hosts..."
+    mkdir -p ~/.ssh
+    ssh-keyscan aur.archlinux.org >> ~/.ssh/known_hosts 2> /dev/null
+fi
+
 if [ -z "$(git config user.email)" ] || [ -z "$(git config user.name)" ]; then
-    echo "Error: Git identity not found."
+    echo "Error: Git identity not found. Run 'git config --global user.email ...'"
     exit 1
 fi
 
@@ -47,12 +58,12 @@ if [ ! -f "$HOME/.ssh/id_ed25519" ] && [ ! -f "$HOME/.ssh/id_rsa" ]; then
 fi
 
 echo "Checking connection to AUR for $PKG_NAME..."
-SSH_TEST=$(ssh -o BatchMode=yes -o ConnectTimeout=5 -T aur@aur.archlinux.org 2>&1 || true)
+SSH_TEST=$(ssh -o ConnectTimeout=5 -T aur@aur.archlinux.org 2>&1 || true)
 
 if echo "$SSH_TEST" | grep -qiE "Welcome|Interactive shell"; then
     echo "Authentication successful."
 elif echo "$SSH_TEST" | grep -q "Permission denied"; then
-    echo "Error: Permission denied."
+    echo "Error: Permission denied. Is your public key uploaded to the AUR website?"
     exit 1
 else
     echo "Error: Could not connect to AUR."
@@ -60,6 +71,7 @@ else
     exit 1
 fi
 
+# --- Maintenance/Cleanup ---
 if [ -f "./dev/uninstall.sh" ]; then
     ./dev/uninstall.sh
 fi
@@ -93,7 +105,6 @@ if git diff-index --quiet HEAD --; then
 else
     git commit -m "$1"
     echo "Pushing changes..."
-    git pull --rebase origin master
     git push origin master
 fi
 
