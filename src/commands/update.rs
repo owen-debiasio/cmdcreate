@@ -284,9 +284,7 @@ pub fn check() {
     }
 
     if VERSION != latest {
-        ask_for_confirmation(&format!(
-            "{green}\nUpdate available: {VERSION} -> {latest}{reset}\nDo you want to upgrade cmdcreate?"
-        ));
+        println!("{green}\nUpdate available: {VERSION} -> {latest}{reset}\n");
 
         update();
 
