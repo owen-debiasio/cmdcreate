@@ -623,3 +623,8 @@ Licensed under the GNU General Public License v3.0 or later.
 - Slight tweaks to the usage dialog
 - Code logic fixes
 - Code optimizations
+
+## v1.1.7
+
+- Code optimizations
+- Generational amounts of refactoring
