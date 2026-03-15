@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::utils::net::is_offline;
 use crate::{
     commands::{
         clean::clean,
@@ -35,52 +34,56 @@ use crate::{
         colors::COLORS,
         fs::{PATHS, path_exists},
         io::error,
-        sys::{args_forced, run_shell_command},
+        net::is_offline,
+        sys::{arguments_force_actions, run_shell_command},
     },
     version::print_info,
 };
 
-pub fn parse(cmd: &str, args: &[String]) {
-    let (_green, blue, yellow, reset) = (COLORS.green, COLORS.blue, COLORS.yellow, COLORS.reset);
+pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
+    let (blue, yellow, reset) = (COLORS.blue, COLORS.yellow, COLORS.reset);
 
-    let arg = |i| args.get(i).map(String::as_str);
+    let argument_index = |i| supplied_arguments.get(i).map(String::as_str);
 
-    log(&format!("parse::parse(): Parsing command: {cmd}"), 0);
+    log(
+        &format!("parse::parse(): Parsing command: {supplied_command}"),
+        0,
+    );
 
     // Like all of these lines are the fucking same
 
-    match cmd {
-        "create" => match (arg(1), arg(2)) {
+    match supplied_command {
+        "create" => match (argument_index(1), argument_index(2)) {
             (Some(command), Some(contents)) => create(command, contents, true),
             _ => println!("Usage:\ncmdcreate {blue}create {yellow}<command> <contents>{reset}"),
         },
 
-        "remove" => arg(1).map_or_else(
+        "remove" => argument_index(1).map_or_else(
             || println!("Usage:\ncmdcreate {blue}remove {yellow}<command>{reset}"),
-            |cmd| remove(cmd, args_forced()),
+            |cmd| remove(cmd, arguments_force_actions()),
         ),
 
-        "edit" => arg(1).map_or_else(
+        "edit" => argument_index(1).map_or_else(
             || println!("Usage:\ncmdcreate {blue}edit {yellow}<command>{reset}"),
             edit,
         ),
 
-        "search" => arg(1).map_or_else(
+        "search" => argument_index(1).map_or_else(
             || println!("Usage:\ncmdcreate {blue}search {yellow}<command>{reset}"),
             search,
         ),
 
-        "display" => arg(1).map_or_else(
+        "display" => argument_index(1).map_or_else(
             || println!("Usage:\ncmdcreate {blue}display {yellow}<command>{reset}"),
             display,
         ),
 
-        "rename" => match (arg(1), arg(2)) {
+        "rename" => match (argument_index(1), argument_index(2)) {
             (Some(command), Some(new_name)) => rename(command, new_name),
             _ => println!("Usage:\ncmdcreate {blue}rename {yellow}<command> <new name>{reset}"),
         },
 
-        "favorite" => match (arg(1), arg(2)) {
+        "favorite" => match (argument_index(1), argument_index(2)) {
             (Some(mode @ ("add" | "remove")), Some(command)) => favorite(mode, command),
             _ => println!("Usage:\ncmdcreate {blue}favorite {yellow}<add/remove> <command>{reset}"),
         },
@@ -90,12 +93,12 @@ pub fn parse(cmd: &str, args: &[String]) {
         "update" => update(),
         "clean" => clean(),
 
-        "import" => arg(1).map_or_else(
+        "import" => argument_index(1).map_or_else(
             || println!("Usage:\ncmdcreate {blue}import {yellow}<input file>{reset}"),
             import,
         ),
 
-        "export" => arg(1).map_or_else(
+        "export" => argument_index(1).map_or_else(
             || println!("Usage:\ncmdcreate {blue}export {yellow}<output dir>{reset}"),
             export,
         ),
@@ -129,12 +132,12 @@ pub fn parse(cmd: &str, args: &[String]) {
             );
         }
 
-        _ if cmd.starts_with('-') => {
-            error("Invalid argument:", cmd);
+        _ if supplied_command.starts_with('-') => {
+            error("Invalid argument:", supplied_command);
         }
 
         _ => {
-            error("Invalid command:", cmd);
+            error("Invalid command:", supplied_command);
         }
     }
 }

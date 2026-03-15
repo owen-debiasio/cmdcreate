@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::tools::command_is_installed,
+    commands::tools::determine_command_is_installed,
     logger::log,
     utils::{
         fs::PATHS,
@@ -25,10 +25,10 @@ use crate::{
 };
 use std::process::Command;
 
-pub fn edit(cmd: &str) {
-    command_is_installed(cmd);
+pub fn edit(command_to_edit: &str) {
+    determine_command_is_installed(command_to_edit);
 
-    let editors: &[&str] = &[
+    let available_editors: &[&str] = &[
         &VARS.editor, // Used when user runs something like "EDITOR=vi cmdcreate edit abc"
         "nvim",
         "vi",
@@ -48,19 +48,19 @@ pub fn edit(cmd: &str) {
         "mousepad",
     ];
 
-    let editor = editors.iter().find(|&&ed| {
+    let chosen_editor = available_editors.iter().find(|&&editor_to_find| {
         Command::new("which")
-            .arg(ed)
+            .arg(editor_to_find)
             .output()
-            .map(|o| o.status.success())
+            .map(|output_status| output_status.status.success())
             .unwrap_or(false)
     });
 
-    let editor = editor.map_or_else(
+    let editor = chosen_editor.map_or_else(
         || {
             error("No known editor is installed on your device.", "");
         },
-        |ed| *ed,
+        |editor_that_is_chosen| *editor_that_is_chosen,
     );
 
     log(
@@ -68,5 +68,5 @@ pub fn edit(cmd: &str) {
         0,
     );
 
-    run_shell_command(&format!("{editor} {}{cmd}", PATHS.install_dir));
+    run_shell_command(&format!("{editor} {}{command_to_edit}", PATHS.install_dir));
 }

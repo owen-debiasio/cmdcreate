@@ -20,22 +20,23 @@ use std::{
     process::exit,
 };
 
-use crate::{logger::log, utils::colors::COLORS, utils::sys::args_forced};
+use crate::{logger::log, utils::colors::COLORS, utils::sys::arguments_force_actions};
 
-pub fn ask_for_confirmation(q: &str) {
+pub fn ask_for_confirmation(question: &str) {
     let (red, green, reset) = (COLORS.red, COLORS.green, COLORS.reset);
 
     log(
-        &format!("utils/io::ask_for_confirmation(): Asking: \"{q}\""),
+        &format!("utils/io::ask_for_confirmation(): Asking: \"{question}\""),
         0,
     );
 
-    if !args_forced()
-        && !input(&format!("{q}{reset}\n({green}Y{reset} or {red}N{reset})"))
-            .trim()
-            .to_lowercase()
-            .eq_ignore_ascii_case("y")
-    {
+    let question_that_is_asked = &format!("{question}{reset}\n({green}Y{reset} or {red}N{reset})");
+    let get_response_to_question = !input(question_that_is_asked)
+        .trim()
+        .to_lowercase()
+        .eq_ignore_ascii_case("y");
+
+    if !arguments_force_actions() && get_response_to_question {
         error("Aborted.", "")
     }
 }
@@ -47,26 +48,31 @@ pub fn input(text: &str) -> String {
 
     println!("{blue}{text}{reset}");
 
-    let mut input = String::new();
-    stdin().read_line(&mut input).unwrap();
+    let mut user_input = String::new();
+    stdin().read_line(&mut user_input).unwrap();
 
     log(
-        &format!("utils/io::input(): Response: \"{}\"", input.trim()),
+        &format!("utils/io::input(): Response: \"{}\"", user_input.trim()),
         0,
     );
 
-    input.trim().to_string()
+    user_input.trim().to_string()
 }
 
-pub fn error(msg: &str, err: &str) -> ! {
+/// Error details are optional.
+/// In that case, provide the string but leave it empty
+pub fn error(error_message: &str, error_details: &str) -> ! {
     let (red, reset) = (COLORS.red, COLORS.reset);
 
     log(
-        &format!("utils/io::error(): Error: \"{msg}\", Details: \"{err}\""),
+        &format!("utils/io::error(): Error: \"{error_message}\", Details: \"{error_details}\""),
         0,
     );
 
-    eprintln!("{red}Error: {} {err}{reset}", msg.trim());
+    eprintln!(
+        "{red}Error: {} {error_details}{reset}",
+        error_message.trim()
+    );
 
     exit(1)
 }
@@ -75,14 +81,14 @@ pub fn error(msg: &str, err: &str) -> ! {
 pub struct TestError(pub String);
 
 impl Display for TestError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> core::fmt::Result {
-        write!(f, "{}", self.0)
+    fn fmt(&self, formatter: &mut Formatter<'_>) -> core::fmt::Result {
+        write!(formatter, "{}", self.0)
     }
 }
 
 #[allow(dead_code)]
-pub fn error_result<T>(msg: &str) -> Result<T, TestError> {
-    Err(TestError(msg.to_owned()))
+pub fn error_result<T>(error_result_message: &str) -> Result<T, TestError> {
+    Err(TestError(error_result_message.to_owned()))
 }
 
 #[cfg(test)]
@@ -91,8 +97,8 @@ mod tests {
 
     #[test]
     fn error_returns_err() {
-        let result: Result<(), _> = error_result("nope");
-        assert!(result.is_err());
+        let error_result: Result<(), _> = error_result("nope");
+        assert!(error_result.is_err());
     }
 
     #[test]

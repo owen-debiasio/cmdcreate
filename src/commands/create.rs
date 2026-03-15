@@ -24,14 +24,18 @@ use crate::{
     },
 };
 
-pub fn create(command: &str, contents: &str, verbose: bool) {
+pub fn create(
+    command_to_create: &str,
+    contents_of_new_command: &str,
+    run_this_function_verbose: bool,
+) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
     log(
         &format!(
-            "commands/create::create(): Creating command \"{command}\": With contents \"{contents}\"{}",
-            if verbose {
-                ", and is verbose..."
+            "commands/create::create(): Creating command \"{command_to_create}\": With contents \"{contents_of_new_command}\"{}",
+            if run_this_function_verbose {
+                ", and being verbose..."
             } else {
                 "..."
             }
@@ -39,29 +43,29 @@ pub fn create(command: &str, contents: &str, verbose: bool) {
         0,
     );
 
-    let script = &format!("{}{command}", PATHS.install_dir);
+    let path_to_command = &format!("{}{command_to_create}", PATHS.install_dir);
 
     log(
-        &format!("commands/create::create(): Script path: \"{script}\""),
+        &format!("commands/create::create(): Command path: \"{path_to_command}\""),
         0,
     );
 
-    if contents.is_empty() {
+    if contents_of_new_command.is_empty() {
         error("The contents of your command can not be empty.", "");
     }
 
     log(
-        &format!("commands/create::create(): Writing contents to script: \"{script}\""),
+        &format!("commands/create::create(): Writing contents to script: \"{path_to_command}\""),
         0,
     );
 
-    overwrite_file(script, contents).expect("Failed to write to file");
+    overwrite_file(path_to_command, contents_of_new_command).expect("Failed to write to file");
 
     log("commands/create::create(): Activating command...", 0);
 
-    run_shell_command(&format!("chmod +x {script}"));
+    run_shell_command(&format!("chmod +x {path_to_command}"));
 
-    if verbose {
-        println!("\n{green}Success! Created command: {blue}\"{command}\"{reset}");
+    if run_this_function_verbose {
+        println!("\n{green}Success! Created command: {blue}\"{command_to_create}\"{reset}");
     }
 }

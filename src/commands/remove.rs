@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::{favorite::favorite, tools::command_is_installed},
+    commands::{favorite::favorite, tools::determine_command_is_installed},
     logger::log,
     utils::{
         colors::COLORS,
@@ -24,7 +24,7 @@ use crate::{
     },
 };
 
-pub fn remove(command: &str, forced: bool) {
+pub fn remove(command: &str, force_removal_of_command: bool) {
     let (blue, yellow, red, green, reset) = (
         COLORS.blue,
         COLORS.yellow,
@@ -33,12 +33,14 @@ pub fn remove(command: &str, forced: bool) {
         COLORS.reset,
     );
 
-    command_is_installed(command);
+    determine_command_is_installed(command);
 
-    if !forced {
-        ask_for_confirmation(&format!(
+    if !force_removal_of_command {
+        let question = &format!(
             "{red}Are you sure you want to delete command{yellow} \"{command}\"{red}?{reset}"
-        ));
+        );
+
+        ask_for_confirmation(question);
     }
 
     if read_file_to_string(&PATHS.favorites).contains(command) {
@@ -50,7 +52,9 @@ pub fn remove(command: &str, forced: bool) {
         0,
     );
 
-    delete_file(&format!("{}{command}", PATHS.install_dir)).expect("Failed to delete command");
+    let path_of_command_to_remove = &format!("{}{command}", PATHS.install_dir);
+
+    delete_file(path_of_command_to_remove).expect("Failed to delete command");
 
     println!("\n{green}Removed command {blue}\"{command}\"{reset}");
 }

@@ -25,8 +25,10 @@ use crate::{
     },
 };
 
-pub fn command_is_installed(cmd: &str) -> bool {
-    if path_exists(&format!("{}{cmd}", PATHS.install_dir)) {
+pub fn determine_command_is_installed(cmd: &str) -> bool {
+    let command_install_path = &format!("{}{cmd}", PATHS.install_dir);
+
+    if path_exists(command_install_path) {
         log(
             &format!(
                 "commands/tools::command_is_installed(): Command \"{cmd}\" is installed... Continuing..."
@@ -48,16 +50,16 @@ pub fn get_installed_commands() -> Vec<PathBuf> {
         0,
     );
 
-    let commands: Vec<PathBuf> = read_dir(&PATHS.install_dir)
+    let retrieved_commands: Vec<PathBuf> = read_dir(&PATHS.install_dir)
         .unwrap_or_else(|_| panic!("{red}Error: Failed to read install directory{reset}"))
         .flatten()
-        .map(|entry| entry.path())
-        .filter(|path| path.is_file())
+        .map(|entry_in_index| entry_in_index.path())
+        .filter(|path_to_command| path_to_command.is_file())
         .collect();
 
-    if commands.is_empty() {
+    if retrieved_commands.is_empty() {
         error("No commands are installed.", "");
     }
 
-    commands
+    retrieved_commands
 }

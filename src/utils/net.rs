@@ -23,21 +23,27 @@ use std::{
 use crate::utils::sys::args_contains;
 
 pub fn http_client() -> Client {
+    let user_agent = "cmdcreate-updater";
+
     Client::builder()
         .timeout(Duration::from_secs(15))
-        .user_agent("cmdcreate-upgrader")
+        .user_agent(user_agent)
         .build()
         .expect("Failed to build HTTP client")
 }
 
 pub fn is_offline() -> bool {
-    if args_contains("-o") || args_contains("--offline") {
+    let forced_offline_via_flags = args_contains("-o") || args_contains("--offline");
+    if forced_offline_via_flags {
         return true;
     }
 
-    match "1.1.1.1:53".to_socket_addrs() {
-        Ok(mut addrs) => {
-            if let Some(addr) = addrs.next() {
+    // The sample DNS is set to Cloudflare for reliability
+    let sample_dns = "1.1.1.1:53";
+
+    match sample_dns.to_socket_addrs() {
+        Ok(mut socket_address) => {
+            if let Some(addr) = socket_address.next() {
                 return TcpStream::connect_timeout(&addr, Duration::from_secs(1)).is_err();
             }
             true

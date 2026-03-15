@@ -20,49 +20,51 @@ use crate::{
     utils::{colors::COLORS, fs::read_file_to_string, io::error},
 };
 
-pub fn import(file: &str) {
+pub fn import(command_import_file: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
     log(
-        &format!("commands/import::import(): Importing commands from file: \"{file}\"..."),
+        &format!(
+            "commands/import::import(): Importing commands from file: \"{command_import_file}\"..."
+        ),
         0,
     );
 
-    let contents = read_file_to_string(file);
+    let command_import_file_contents = read_file_to_string(command_import_file);
 
-    if contents.trim().is_empty() {
+    if command_import_file_contents.trim().is_empty() {
         error("Import file is empty or unreadable.", "");
     }
 
-    for line in contents.replace("[|", "|").lines() {
-        let parts: Vec<&str> = line.split('|').map(str::trim).collect();
+    for entry in command_import_file_contents.replace("[|", "|").lines() {
+        let parts_of_exported_entry: Vec<&str> = entry.split('|').map(str::trim).collect();
 
-        if line.trim().is_empty() && !parts.is_empty() {
+        if entry.trim().is_empty() && !parts_of_exported_entry.is_empty() {
             continue;
         }
 
-        let name = parts.first().unwrap();
-        let mut data = String::new();
-        let mut favorite = false;
+        let retrieved_command_name = parts_of_exported_entry.first().unwrap();
+        let mut command_contents = String::new();
+        let mut command_favorite_status = false;
 
-        for part in parts.iter().skip(1) {
+        for part in parts_of_exported_entry.iter().skip(1) {
             if *part == "favorite" {
-                favorite = true;
+                command_favorite_status = true;
             } else {
-                if data.is_empty() {
-                    data.push('\n');
+                if command_contents.is_empty() {
+                    command_contents.push('\n');
                 }
 
-                data.push_str(part);
+                command_contents.push_str(part);
             }
         }
 
-        println!("{blue}Installing command: \"{green}{name}{reset}\"");
+        println!("{blue}Installing command: \"{green}{retrieved_command_name}{reset}\"");
 
-        create(name, &data, false);
+        create(retrieved_command_name, &command_contents, false);
 
-        if favorite {
-            add_favorite("add", name);
+        if command_favorite_status {
+            add_favorite("add", retrieved_command_name);
         }
     }
 

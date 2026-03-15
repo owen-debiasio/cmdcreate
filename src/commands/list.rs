@@ -27,39 +27,41 @@ use crate::{
 pub fn list() {
     let (blue, reset) = (COLORS.blue, COLORS.reset);
 
-    let installed_scripts = get_installed_commands();
+    let installed_commands = get_installed_commands();
 
     println!(
         "Installed commands: ({blue}{}{reset})\n--------",
-        installed_scripts.len()
+        installed_commands.len()
     );
 
-    for script in installed_scripts {
-        let name = script.file_stem().unwrap_or_default().to_string_lossy();
-        let favorites = read_file_to_string(&PATHS.favorites);
+    for command in installed_commands {
+        let command_name = command.file_stem().unwrap_or_default().to_string_lossy();
+        let favorites_file = read_file_to_string(&PATHS.favorites);
 
         log(
             &format!(
-                "commands/list::list(): Current command: \"{name}\" (favorited={})",
-                favorites.contains(name.to_string().as_str())
+                "commands/list::list(): Current command: \"{command_name}\" (favorited={})",
+                favorites_file.contains(command_name.to_string().as_str())
             ),
             0,
         );
 
-        if favorites.contains(name.to_string().as_str()) {
-            println!(
-                "{} {name}",
-                load("appearance", "favorite_indicator", "\u{2605}") // The default is a star
-            );
+        // The default is a star
+        let favorite_command_identifier = load("appearance", "favorite_indicator", "\u{2605}");
+        if favorites_file.contains(command_name.to_string().as_str()) {
+            println!("{favorite_command_identifier} {command_name}");
 
             continue;
         }
 
-        if favorites.is_empty() {
-            println!("{name}");
+        if favorites_file.is_empty() {
+            println!("{command_name}");
             continue;
         }
 
-        println!("  {name}");
+        let favorite_command_identifier_length = favorite_command_identifier.len();
+
+        let output_spacing = " ".repeat(favorite_command_identifier_length);
+        println!("{output_spacing} {command_name}");
     }
 }

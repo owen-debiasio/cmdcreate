@@ -22,8 +22,8 @@ use crate::{
         io::{ask_for_confirmation, error, input},
         net::is_offline,
         sys::{
-            ARCH, DistroBase, InstallMethod, VARS, arch_is_supported, args_forced, cpu_arch_check,
-            get_distro_base, installation_method, run_shell_command,
+            ARCH, DistroBase, InstallMethod, VARS, arch_is_supported, arguments_force_actions,
+            cpu_arch_check, get_distro_base, installation_method, run_shell_command,
         },
     },
     version::{VERSION, get_latest_commit, get_latest_tag, is_development_version},
@@ -43,30 +43,41 @@ pub fn update() {
 
     match installation_method() {
         InstallMethod::Aur => {
-            // These blocks are repeated. smh
-            if !args_forced()
-                && input(&format!(
-                    "\n{blue}Arch Linux{reset}-based system detected. Updating via AUR is not directly supported here. \
+            let aur_install_confirmation = &format!(
+                "\n{blue}Arch Linux{reset}-based system detected. Updating via AUR is not directly supported here. \
 Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{reset})"
-                ))
-                .trim()
-                .eq_ignore_ascii_case("y")
-                {
-                    interactive_upgrade();
-                    return;
-                }
+            );
+
+            // These blocks are repeated. smh
+            if !arguments_force_actions()
+                && input(aur_install_confirmation)
+                    .trim()
+                    .eq_ignore_ascii_case("y")
+            {
+                interactive_upgrade();
+
+                return;
+            }
             error("Aborted.", "")
         }
 
         InstallMethod::Dpkg => {
-            if arch_is_supported() {
-                if !args_forced() && input(&format!(
-                    "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a \
+            let deb_install_confirmation = &format!(
+                "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a \
                     {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
-                )).trim().eq_ignore_ascii_case("y") {
+            );
+
+            if arch_is_supported() {
+                if !arguments_force_actions()
+                    && input(deb_install_confirmation)
+                        .trim()
+                        .eq_ignore_ascii_case("y")
+                {
                     interactive_upgrade();
+
                     return;
                 }
+
                 upgrade_via("deb");
             } else {
                 log(
@@ -78,14 +89,22 @@ Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{r
         }
 
         InstallMethod::Rpm => {
-            if arch_is_supported() {
-                if !args_forced() && input(&format!(
-                    "\n{blue}Fedora{reset}-based system detected. Would you like to install via a \
+            let rpm_install_confirmation = &format!(
+                "\n{blue}Fedora{reset}-based system detected. Would you like to install via a \
                     {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
-                )).trim().eq_ignore_ascii_case("y") {
+            );
+
+            if arch_is_supported() {
+                if !arguments_force_actions()
+                    && input(rpm_install_confirmation)
+                        .trim()
+                        .eq_ignore_ascii_case("y")
+                {
                     interactive_upgrade();
+
                     return;
                 }
+
                 upgrade_via("rpm");
             } else {
                 interactive_upgrade();
@@ -99,26 +118,23 @@ Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{r
 fn upgrade_via(method: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    let latest_release = get_latest_tag("owen-debiasio", "cmdcreate");
+    let latest_stable_release = get_latest_tag("owen-debiasio", "cmdcreate");
 
     match method {
-        /*
-        let package_file = format!("cmdcreate-{latest_release}-linux-...");
-        This is defined like 3 times, and I'm not 100% sure how to fix that
-        */
         "deb" => {
             cpu_arch_check(
                 "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
             );
 
-            let package_file = format!("cmdcreate-{latest_release}-linux-{ARCH}.deb");
+            let deb_package_file_path =
+                format!("cmdcreate-{latest_stable_release}-linux-{ARCH}.deb");
 
             // These install "scripts" are also repeated 3 times.
             run_shell_command(&format!(
-                "curl -Lf -o /tmp/{package_file} \
-                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{package_file} && \
-                sudo dpkg -i /tmp/{package_file} && \
-                rm /tmp/{package_file}"
+                "curl -Lf -o /tmp/{deb_package_file_path} \
+                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{deb_package_file_path} && \
+                sudo dpkg -i /tmp/{deb_package_file_path} && \
+                rm /tmp/{deb_package_file_path}"
             ));
 
             println!("\n{green}Update complete!{reset}");
@@ -128,13 +144,13 @@ fn upgrade_via(method: &str) {
                 "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
             );
 
-            let package_file = format!("cmdcreate-{latest_release}-linux-{ARCH}.rpm");
+            let rpm_package_path = format!("cmdcreate-{latest_stable_release}-linux-{ARCH}.rpm");
 
             run_shell_command(&format!(
-                "curl -Lf -o /tmp/{package_file} \
-                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{package_file} && \
-                sudo rpm -Uvh /tmp/{package_file} \
-                rm /tmp/{package_file}"
+                "curl -Lf -o /tmp/{rpm_package_path} \
+                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{rpm_package_path} && \
+                sudo rpm -Uvh /tmp/{rpm_package_path} \
+                rm /tmp/{rpm_package_path}"
             ));
 
             println!("\n{green}Update complete!{reset}");
@@ -144,13 +160,13 @@ fn upgrade_via(method: &str) {
                 "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
             );
 
-            let package_file = format!("cmdcreate-{latest_release}-linux-{ARCH}-bin");
+            let binary_path = format!("cmdcreate-{latest_stable_release}-linux-{ARCH}-bin");
 
             run_shell_command(&format!(
-                "curl -Lf -o /tmp/{package_file} \
-                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{package_file} && \
-                sudo install -Dm755 /tmp/{package_file} /usr/bin/cmdcreate && \
-                rm /tmp/{package_file}"
+                "curl -Lf -o /tmp/{binary_path} \
+                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{binary_path} && \
+                sudo install -Dm755 /tmp/{binary_path} /usr/bin/cmdcreate && \
+                rm /tmp/{binary_path}"
             ));
 
             println!("\n{green}Update complete!{reset}");
@@ -164,8 +180,8 @@ fn upgrade_via(method: &str) {
 
 fn build_from_source() {
     let (green, reset) = (COLORS.green, COLORS.reset);
-    let cache_dir = format!("{}/.cache/cmdcreate", VARS.home);
 
+    let cache_dir = format!("{}/.cache/cmdcreate", VARS.home);
     delete_folder(&cache_dir).expect("Failed to delete folder");
 
     // The return values for DistroBase::Debian and DistroBase::Fedora are like the same fucking thing
@@ -188,10 +204,9 @@ fn build_from_source() {
         }
     };
 
-    run_shell_command(install_cmd);
-
     run_shell_command(&format!(
-        "set -e
+        "{install_cmd}
+        set -e
         [ -f \"$HOME/.cargo/env\" ] && . \"$HOME/.cargo/env\"
         rm -rf {cache_dir}
         git clone https://github.com/owen-debiasio/cmdcreate.git \"{cache_dir}\"
@@ -209,26 +224,26 @@ fn interactive_upgrade() {
 
     println!("\nSelect an available upgrade method:\n");
 
-    let mut options = Vec::new();
+    let mut available_update_methods = Vec::new();
     let distro = get_distro_base();
 
     if distro == DistroBase::Debian && arch_is_supported() {
-        options.push(("deb", "Install via .deb file".to_string()));
+        available_update_methods.push(("deb", "Install via .deb file".to_string()));
     }
     if distro == DistroBase::Fedora && arch_is_supported() {
-        options.push(("rpm", "Install via .rpm file".to_string()));
+        available_update_methods.push(("rpm", "Install via .rpm file".to_string()));
     }
 
     if arch_is_supported() {
-        options.push(("bin", "Manually install binary".to_string()));
+        available_update_methods.push(("bin", "Manually install binary".to_string()));
     }
 
-    options.push((
+    let latest_git_repo_commit = get_latest_commit("owen-debiasio", "cmdcreate", "main");
+    available_update_methods.push((
         "src",
         format!(
-            "Build from source {blue}(latest git {green}(commit: {}){blue}, \
+            "Build from source {blue}(latest git {green}(commit: {latest_git_repo_commit}){blue}, \
         universal device compatibility{}){reset}",
-            get_latest_commit("owen-debiasio", "cmdcreate", "main"),
             if get_distro_base() == DistroBase::Debian {
                 format!(", {red}MAY INVOLVE MANUAL INTERVENTION{blue}")
             } else {
@@ -237,19 +252,24 @@ fn interactive_upgrade() {
         ),
     ));
 
-    options.push(("exit", "Exit".to_string()));
+    available_update_methods.push(("exit", "Exit".to_string()));
 
-    for (i, (_, text)) in options.iter().enumerate() {
-        println!("{blue}{idx}]{reset} {text}", idx = i + 1);
+    for (available_option_index, (_, text_of_option_that_gets_printed)) in
+        available_update_methods.iter().enumerate()
+    {
+        println!(
+            "{blue}{index_of_available_option}]{reset} {text_of_option_that_gets_printed}",
+            index_of_available_option = available_option_index + 1
+        );
     }
 
     let selection = input("").trim().parse::<usize>().unwrap_or(0);
 
-    if selection == 0 || selection > options.capacity() {
+    if selection == 0 || selection > available_update_methods.capacity() {
         error("Invalid selection: ", &selection.to_string());
     }
 
-    match options[selection - 1].0 {
+    match available_update_methods[selection - 1].0 {
         "deb" => upgrade_via("deb"),
         "rpm" => upgrade_via("rpm"),
         "bin" => upgrade_via("bin"),
@@ -271,20 +291,23 @@ pub fn check() {
 
     println!("\nChecking for updates...");
 
-    let latest = get_latest_tag("owen-debiasio", "cmdcreate");
+    let latest_stable_version = get_latest_tag("owen-debiasio", "cmdcreate");
+    let current_version = VERSION;
 
     if is_development_version() {
         println!(
-            "\nYou are running a newer version {}({VERSION}){reset} \
-            than the latest release {green}({latest}){reset}.",
+            "\nYou are running a newer version {}({current_version}){reset} \
+            than the latest release {green}({latest_stable_version}){reset}.",
             COLORS.blue
         );
 
         return;
     }
 
-    if VERSION != latest {
-        println!("{green}\nUpdate available: {VERSION} -> {latest}{reset}\n");
+    if current_version != latest_stable_version {
+        println!(
+            "{green}\nUpdate available: {current_version} -> {latest_stable_version}{reset}\n"
+        );
 
         update();
 

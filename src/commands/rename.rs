@@ -17,14 +17,14 @@
 use crate::{
     commands::{
         remove::remove,
-        tools::{command_is_installed, get_installed_commands},
+        tools::{determine_command_is_installed, get_installed_commands},
     },
     logger::log,
     utils::{
         colors::COLORS,
         fs::{PATHS, path_exists},
         io::{error, input},
-        sys::{args_forced, run_shell_command},
+        sys::{arguments_force_actions, run_shell_command},
     },
 };
 
@@ -37,21 +37,26 @@ pub fn rename(old: &str, new: &str) {
         COLORS.reset,
     );
 
-    let (install_dir, installed_commands) = (&PATHS.install_dir, get_installed_commands());
+    let (command_install_location, installed_commands) =
+        (&PATHS.install_dir, get_installed_commands());
 
     if installed_commands.is_empty() {
         return;
     }
 
-    command_is_installed(old);
+    determine_command_is_installed(old);
 
-    if path_exists(&format!("{}/{new}", PATHS.install_dir)) {
+    let new_command_install_location = &format!("{command_install_location}/{new}");
+
+    if path_exists(new_command_install_location) {
         println!(
             "{red}The new name ({yellow}{new}{red}) is already installed! \
             Do you want to delete it?\n({green}Y{red} or {yellow}N{red})",
         );
 
-        if args_forced() || input("").trim().eq_ignore_ascii_case("y") {
+        let response_to_retrieve = input("").trim().eq_ignore_ascii_case("y");
+
+        if arguments_force_actions() || response_to_retrieve {
             remove(new, true);
         } else {
             error("You need to remove the old command before proceeding!", "");
@@ -63,8 +68,10 @@ pub fn rename(old: &str, new: &str) {
         0,
     );
 
-    // I should prob make a function to move files
-    run_shell_command(&format!("mv {install_dir}{old} {install_dir}{new}"));
+    // I should probably make a function to move files
+    run_shell_command(&format!(
+        "mv {command_install_location}{old} {command_install_location}{new}"
+    ));
 
     println!("{green}Successfully renamed command {blue}\"{old}\" to {blue}\"{new}\"{reset}");
 }

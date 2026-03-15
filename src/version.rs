@@ -70,10 +70,12 @@ pub fn get_latest_tag(owner: &str, repo: &str) -> String {
 
         let json: Value = response.json()?;
 
-        Ok(json["tag_name"]
+        let tag = json["tag_name"]
             .as_str()
             .ok_or("Missing tag_name")?
-            .to_owned())
+            .to_owned();
+
+        Ok(tag)
     })();
 
     match result {
@@ -86,16 +88,16 @@ pub fn get_latest_tag(owner: &str, repo: &str) -> String {
 }
 
 pub fn get_latest_commit(owner: &str, repo: &str, branch: &str) -> String {
-    let commit: Value = http_client()
-        .get(format!(
-            "https://api.github.com/repos/{owner}/{repo}/commits/{branch}"
-        ))
+    let commit_hash = format!("https://api.github.com/repos/{owner}/{repo}/commits/{branch}");
+
+    let extracted_commit: Value = http_client()
+        .get(commit_hash)
         .send()
         .expect("request failed")
         .json()
         .expect("invalid json");
 
-    let commit = commit["sha"]
+    let commit = extracted_commit["sha"]
         .as_str()
         .expect("missing sha")
         .chars()

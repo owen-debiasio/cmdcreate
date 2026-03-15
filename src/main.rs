@@ -34,42 +34,42 @@ fn main() {
 
     log("main::main(): Retrieving args...", 0);
 
-    let mut args = return_args();
+    let mut arguments_retrieved = return_args();
 
     // These flags or args or whatever you call them are basically "ignored"
-    args.retain(|a| {
+    arguments_retrieved.retain(|argument| {
         !matches!(
-            a.as_str(),
+            argument.as_str(),
             "-V" | "--verbose" | "-o" | "--offline" | "-m" | "--monochrome"
         )
     });
 
-    if args.is_empty() {
+    if arguments_retrieved.is_empty() {
         cmdcreate_usage();
     }
 
-    cmdcreate(&args);
+    cmdcreate(&arguments_retrieved);
 }
 
-fn cmdcreate(args: &[String]) {
-    let mut i = 0;
+fn cmdcreate(arguments_provided: &[String]) {
+    let mut argument_index = 0;
 
-    while let Some(cmd) = args.get(i).map(String::as_str) {
-        if !cmd.starts_with('-') {
+    while let Some(command) = arguments_provided.get(argument_index).map(String::as_str) {
+        if !command.starts_with('-') {
             break;
         }
 
-        if matches!(cmd, "-V" | "--verbose") {
-            i += 1;
+        if matches!(command, "-V" | "--verbose") {
+            argument_index += 1;
             continue;
         }
 
-        parse(cmd, args);
+        parse(command, arguments_provided);
 
-        i += 1;
+        argument_index += 1;
     }
 
-    if let Some(cmd) = args.get(i).map(String::as_str) {
-        parse(cmd, &args[i..]);
+    if let Some(cmd) = arguments_provided.get(argument_index).map(String::as_str) {
+        parse(cmd, &arguments_provided[argument_index..]);
     }
 }

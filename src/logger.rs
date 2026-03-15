@@ -20,38 +20,77 @@ use crate::{
     configs::load,
     utils::{
         colors::COLORS,
-        fs::{PATHS, create_folder, write_to_file},
+        fs::{PATHS, write_to_file},
         sys::args_contains,
     },
 };
 
 pub fn log(text: &str, lvl: u8) {
-    let time = Local::now()
-        .format(&load("logs", "time_format", "%Y-%m-%d %H:%M:%S"))
-        .to_string();
+    let (blue, cyan, yellow, red, reset) = (
+        COLORS.blue,
+        COLORS.cyan,
+        COLORS.yellow,
+        COLORS.red,
+        COLORS.reset,
+    );
+    let time_format = &load("logs", "time_format", "%Y-%m-%d %H:%M:%S");
 
-    let (color, log_type) = match lvl {
-        0 => (COLORS.cyan, "LOG"),
-        1 => (COLORS.yellow, "WARN"),
-        2 => (COLORS.red, "ERROR"), // Like this is ever used. It's used once in utils/io::error()
-        _ => (COLORS.reset, "LOG"),
+    let time = Local::now().format(time_format).to_string();
+
+    let log_type = match lvl {
+        1 => &format!("{yellow}WARN{reset}"),
+
+        // Like this is ever used. It's used once in utils/io::error()
+        2 => &format!("{red}ERROR{reset}"),
+
+        // If nothing else matches, this will be used.
+        // However, level "0" is used to identify this level
+        _ => &format!("{cyan}LOG{reset}"),
     };
 
-    let (log_text, log_dir) = (format!("[{log_type}] {text}"), &PATHS.log_dir);
+    // Should be located in /root/.local/share/cmdcreate/logs/
+    let log_dir = &PATHS.log_directory;
 
-    if args_contains("-V")
-        || args_contains("--verbose")
-        || load("logs", "verbose", "false").parse::<bool>().unwrap()
-    {
-        println!("{color}{time} {log_text}{}", COLORS.reset);
+    let log_file_name = &format!("{log_dir}/{time}.log");
+
+    // Example:
+    // [<time>] [ERROR] Uh oh this happened
+    let log_file_text = &format!("[{blue}{time}{reset}] [{log_type}] {text}\n");
+
+    output_verbose_message(log_file_text);
+
+    // Remove things like "\x1b[35m" from being written to the log file.
+    let finalized_output_text = remove_spare_color_codes(log_file_text);
+
+    write_to_file(log_file_name, &finalized_output_text, true).expect("Failed to write logs");
+}
+
+fn output_verbose_message(text_to_print: &str) {
+    let verbose_flags_are_passed = args_contains("-V") || args_contains("--verbose");
+
+    let verbose_enabled_in_config = load("logs", "verbose", "false")
+        .parse::<bool>()
+        .unwrap_or(false);
+
+    if verbose_flags_are_passed || verbose_enabled_in_config {
+        println!("{text_to_print}{}", COLORS.reset);
     }
+}
 
-    create_folder(log_dir).expect("Failed to create folder");
+fn remove_spare_color_codes(input_string: &str) -> String {
+    let (blue, cyan, yellow, red, reset) = (
+        COLORS.blue,
+        COLORS.cyan,
+        COLORS.yellow,
+        COLORS.red,
+        COLORS.reset,
+    );
 
-    write_to_file(
-        &format!("{log_dir}/{time}.log"),
-        &format!("{time} {log_text}\n"),
-        true,
-    )
-    .expect("Failed to write to file");
+    let available_colors: &[&str; 5] = &(blue, cyan, yellow, red, reset).into();
+
+    available_colors
+        .iter()
+        .fold(input_string.to_string(), |original_text, &color| {
+            original_text.replace(color, "")
+        })
 }

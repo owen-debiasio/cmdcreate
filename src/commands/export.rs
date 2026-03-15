@@ -26,34 +26,42 @@ use crate::{
 pub fn export(path: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
-    let export_file = &format!("{path}/export.cmdcreate");
+    let path_of_file_to_export_to = &format!("{path}/export.cmdcreate");
 
     log(
-        &format!("commands/export::export(): Exporting commands to: \"{export_file}\"..."),
+        &format!(
+            "commands/export::export(): Exporting commands to: \"{path_of_file_to_export_to}\"..."
+        ),
         0,
     );
 
     log("commands/export::export(): Creating export file...", 0);
 
-    create_file(export_file).expect("Failed to create file");
+    create_file(path_of_file_to_export_to).expect("Failed to create file");
 
-    for script in get_installed_commands() {
-        if let Some(stem) = script.file_stem() {
-            let cmd = stem.to_string_lossy();
+    let installed_commands = get_installed_commands();
+
+    for command in installed_commands {
+        if let Some(command_stem) = command.file_stem() {
+            let retrieved_command = command_stem.to_string_lossy();
 
             log(
-                &format!("commands/export::export(): Exporting command: \"{cmd}\"..."),
+                &format!(
+                    "commands/export::export(): Exporting command: \"{retrieved_command}\"..."
+                ),
                 0,
             );
 
-            // The escape thing is "[|" cause backslashes don't fucking work for some fucking reason
-            let cmd_contents =
-                read_file_to_string(&format!("{}{cmd}", PATHS.install_dir)).replace('|', "[|");
+            let path_of_command = &format!("{}{retrieved_command}", PATHS.install_dir);
 
-            let data = if read_file_to_string(&PATHS.favorites).contains(cmd.as_ref()) {
-                format!("{cmd} | {cmd_contents} | favorite\n")
+            // The escape thing is "[|" cause backslashes don't fucking work for some fucking reason
+            let contents_of_command = read_file_to_string(path_of_command).replace('|', "[|");
+
+            let data = if read_file_to_string(&PATHS.favorites).contains(retrieved_command.as_ref())
+            {
+                format!("{retrieved_command} | {contents_of_command} | favorite\n")
             } else {
-                format!("{cmd} | {cmd_contents}\n")
+                format!("{retrieved_command} | {contents_of_command}\n")
             };
 
             log(
@@ -61,9 +69,11 @@ pub fn export(path: &str) {
                 0,
             );
 
-            write_to_file(export_file, &data, true).expect("Failed to write to file");
+            write_to_file(path_of_file_to_export_to, &data, true).expect("Failed to write to file");
         }
     }
 
-    println!("{green}Successfully exported commands to:{blue} \"{export_file}\"{green}.{reset}",);
+    println!(
+        "{green}Successfully exported commands to: {blue}\"{path_of_file_to_export_to}\"{green}.{reset}",
+    );
 }

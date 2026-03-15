@@ -16,24 +16,21 @@
 
 use crate::utils::{
     colors::COLORS,
-    fs::delete_folder,
+    fs::{PATHS, delete_folder},
     io::{ask_for_confirmation, input},
-    sys::{VARS, args_forced},
+    sys::arguments_force_actions,
 };
+
 pub fn clean() {
     let (green, red, reset) = (COLORS.green, COLORS.red, COLORS.reset);
 
     ask_for_confirmation("Do you want to clean cmdcreate?");
 
-    if !args_forced()
-        && input(&format!(
-            "\nDo you want to delete old log files?{reset}\n({green}Y{reset} or {red}N{reset})"
-        ))
-        .trim()
-        .eq_ignore_ascii_case("y")
-    {
-        delete_folder(&format!("{}/.local/share/cmdcreate/logs/", VARS.home))
-            .expect("Failed to delete folder");
+    let question = input(&format!(
+        "\nDo you want to delete old log files?{reset}\n({green}Y{reset} or {red}N{reset})"
+    ));
+    if !arguments_force_actions() && question.trim().eq_ignore_ascii_case("y") {
+        delete_folder(&PATHS.log_directory).expect("Failed to delete log directory");
 
         println!("{green}\nLog files cleared.{reset}");
     }

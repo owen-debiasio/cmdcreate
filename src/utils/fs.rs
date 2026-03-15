@@ -23,7 +23,7 @@ use crate::{
 };
 use anyhow::{Context, Result};
 use std::{
-    fs::{self, File, OpenOptions, create_dir_all, read_to_string},
+    fs::{File, OpenOptions, create_dir_all, read_to_string, remove_dir_all, remove_file},
     io::Write as _,
     path::Path,
     string::ToString,
@@ -38,7 +38,7 @@ pub struct Paths {
     pub favorites: String,
     pub install_dir: String,
     pub license: String,
-    pub log_dir: String,
+    pub log_directory: String,
 }
 
 pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
@@ -51,12 +51,12 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     } else {
         "/usr/share/licenses/cmdcreate/LICENSE".to_string()
     },
-    log_dir: format!("{}/logs", *MAIN_PATH),
+    log_directory: format!("{}/logs", *MAIN_PATH),
 });
 
 pub fn init_fs_layout() -> Result<()> {
     create_folder(&MAIN_PATH)?;
-    create_folder(&PATHS.log_dir)?;
+    create_folder(&PATHS.log_directory)?;
     create_folder(&PATHS.install_dir)?;
     create_file(&PATHS.favorites)?;
     create_file(&PATHS.configs)?;
@@ -65,80 +65,100 @@ pub fn init_fs_layout() -> Result<()> {
     Ok(())
 }
 
-pub fn read_file_to_string(file_path: &str) -> String {
-    read_to_string(file_path)
+pub fn read_file_to_string(path_to_file_to_read: &str) -> String {
+    read_to_string(path_to_file_to_read)
         .unwrap_or_else(|err| {
             error(
-                &format!("Failed reading file: {file_path}"),
+                &format!("Failed reading file: {path_to_file_to_read}"),
                 &err.to_string(),
             );
         })
-        .replace("\r\n", "\n")
+        .replace("\r\n", "\n") // Avoid CRLF encoding (because it screws shit up)
 }
 
-pub fn overwrite_file(path: &str, contents: &str) -> Result<()> {
-    write_to_file(path, contents, false)
+pub fn overwrite_file(
+    path_to_file_to_overwrite: &str,
+    contents_of_file_to_overwrite: &str,
+) -> Result<()> {
+    write_to_file(
+        path_to_file_to_overwrite,
+        contents_of_file_to_overwrite,
+        false,
+    )
 }
 
-pub fn write_to_file(path: &str, contents: &str, append: bool) -> Result<()> {
-    if let Some(parent) = Path::new(path).parent() {
-        create_dir_all(parent)
-            .with_context(|| format!("Failed to create parent directory for: {path}"))?;
+pub fn write_to_file(
+    path_to_file_to_be_written_to: &str,
+    contents_to_write_to_file: &str,
+    append_changes: bool,
+) -> Result<()> {
+    if let Some(parent_directory) = Path::new(path_to_file_to_be_written_to).parent() {
+        create_dir_all(parent_directory).with_context(|| {
+            format!("Failed to create parent directory for: {path_to_file_to_be_written_to}")
+        })?;
     }
 
-    let mut opts = OpenOptions::new();
-    opts.create(true).write(true);
+    let mut file_options = OpenOptions::new();
+    file_options.create(true).write(true);
 
-    if append {
-        opts.append(true);
+    if append_changes {
+        file_options.append(true);
     } else {
-        opts.truncate(true);
+        file_options.truncate(true);
     }
 
-    let mut file = opts
-        .open(path)
-        .with_context(|| format!("Failed to open file: {path}"))?;
+    let mut file_that_should_be_written_to = file_options
+        .open(path_to_file_to_be_written_to)
+        .with_context(|| format!("Failed to open file: {path_to_file_to_be_written_to}"))?;
 
-    file.write_all(contents.as_bytes())
-        .with_context(|| format!("Failed writing to file: {path}"))?;
+    file_that_should_be_written_to
+        .write_all(contents_to_write_to_file.as_bytes())
+        .with_context(|| format!("Failed writing to file: {path_to_file_to_be_written_to}"))?;
 
     Ok(())
 }
 
-pub fn remove_from_file(path: &str, contents: &str) -> Result<()> {
-    overwrite_file(path, &read_file_to_string(path).replace(contents, ""))
+pub fn remove_from_file(path_to_file: &str, contents_to_remove: &str) -> Result<()> {
+    overwrite_file(
+        path_to_file,
+        &read_file_to_string(path_to_file).replace(contents_to_remove, ""),
+    )
 }
 
-pub fn path_exists(path: &str) -> bool {
-    Path::new(path).exists()
+pub fn path_exists(apparent_path: &str) -> bool {
+    Path::new(apparent_path).exists()
 }
 
-pub fn create_folder(path: &str) -> Result<()> {
-    create_dir_all(path).with_context(|| format!("Failed to create folder: {path}"))
+pub fn create_folder(path_of_folder_to_create: &str) -> Result<()> {
+    create_dir_all(path_of_folder_to_create)
+        .with_context(|| format!("Failed to create folder: {path_of_folder_to_create}"))
 }
 
-pub fn create_file(path: &str) -> Result<()> {
-    if let Some(parent) = Path::new(path).parent() {
-        create_dir_all(parent)
-            .with_context(|| format!("Failed to create parent folder for {path}"))?;
+pub fn create_file(file_to_be_created: &str) -> Result<()> {
+    if let Some(parent_folder) = Path::new(file_to_be_created).parent() {
+        create_dir_all(parent_folder)
+            .with_context(|| format!("Failed to create parent folder for {file_to_be_created}"))?;
     }
 
-    if !path_exists(path) {
-        File::create(path).with_context(|| format!("Failed to create file: {path}"))?;
-    }
-    Ok(())
-}
-
-pub fn delete_file(path: &str) -> Result<()> {
-    if path_exists(path) {
-        fs::remove_file(path).with_context(|| format!("Failed to delete file: {path}"))?;
+    if !path_exists(file_to_be_created) {
+        File::create(file_to_be_created)
+            .with_context(|| format!("Failed to create file: {file_to_be_created}"))?;
     }
     Ok(())
 }
 
-pub fn delete_folder(path: &str) -> Result<()> {
-    if path_exists(path) {
-        fs::remove_dir_all(path).with_context(|| format!("Failed to delete folder: {path}"))?;
+pub fn delete_file(path_of_file_to_delete: &str) -> Result<()> {
+    if path_exists(path_of_file_to_delete) {
+        remove_file(path_of_file_to_delete)
+            .with_context(|| format!("Failed to delete file: {path_of_file_to_delete}"))?;
+    }
+    Ok(())
+}
+
+pub fn delete_folder(path_of_folder_to_delete: &str) -> Result<()> {
+    if path_exists(path_of_folder_to_delete) {
+        remove_dir_all(path_of_folder_to_delete)
+            .with_context(|| format!("Failed to delete folder: {path_of_folder_to_delete}"))?;
     }
     Ok(())
 }
@@ -154,105 +174,109 @@ mod tests {
     };
 
     fn test_dir(name: &str) -> PathBuf {
-        let dir = temp_dir().join(name);
-        let _ = remove_dir_all(&dir);
-        create_dir_all(&dir).expect("Failed to create test directory");
-        dir
+        let temp_directory = temp_dir().join(name);
+        let _ = remove_dir_all(&temp_directory);
+        create_dir_all(&temp_directory).expect("Failed to create test directory");
+        temp_directory
     }
 
     #[test]
     fn create_folder_creates_directory() -> Result<()> {
-        let dir = test_dir("cmdcreate_create_folder").join("subdir");
-        let path_str = dir.to_string_lossy();
+        let temp_directory = test_dir("cmdcreate_create_folder").join("subdir");
+        let path_of_temp_directory = temp_directory.to_string_lossy();
 
-        create_folder(&path_str)?;
-        assert!(dir.exists());
+        create_folder(&path_of_temp_directory)?;
+        assert!(temp_directory.exists());
         Ok(())
     }
 
     #[test]
     fn create_file_creates_file() -> Result<()> {
-        let file = test_dir("cmdcreate_create_file").join("file.txt");
-        let path_str = file.to_string_lossy();
+        let file_to_be_created = test_dir("cmdcreate_create_file").join("file.txt");
+        let path_of_file = file_to_be_created.to_string_lossy();
 
-        create_file(&path_str)?;
-        assert!(file.exists());
+        create_file(&path_of_file)?;
+        assert!(file_to_be_created.exists());
         Ok(())
     }
 
     #[test]
     fn write_to_file_overwrites() -> Result<()> {
-        let file = test_dir("cmdcreate_write_file").join("file.txt");
-        let path_str = file.to_string_lossy();
+        let file_to_overwrite = test_dir("cmdcreate_write_file").join("file.txt");
+        let path_of_file = file_to_overwrite.to_string_lossy();
 
-        write_to_file(&path_str, "hello", false)?;
+        let sample_text = "this is a test";
 
-        assert_eq!(read_file_to_string(&path_str), "hello");
+        write_to_file(&path_of_file, sample_text, false)?;
+
+        assert_eq!(read_file_to_string(&path_of_file), sample_text);
         Ok(())
     }
 
     #[test]
     fn write_to_file_appends() -> Result<()> {
-        let file = test_dir("cmdcreate_append_file").join("file.txt");
-        let path_str = file.to_string_lossy();
+        let file_to_append = test_dir("cmdcreate_append_file").join("file.txt");
+        let path_of_appended_file = file_to_append.to_string_lossy();
 
-        write_to_file(&path_str, "a\n", false)?;
-        write_to_file(&path_str, "b\n", true)?;
+        write_to_file(&path_of_appended_file, "a\n", false)?;
+        write_to_file(&path_of_appended_file, "b\n", true)?;
 
-        let content = read_file_to_string(&path_str);
+        let appended_file_contents = read_file_to_string(&path_of_appended_file);
 
-        assert!(content.contains('a'));
-        assert!(content.contains('b'));
+        assert!(appended_file_contents.contains('a'));
+        assert!(appended_file_contents.contains('b'));
         Ok(())
     }
 
     #[test]
     fn remove_from_file_removes_line() -> Result<()> {
-        let file = test_dir("cmdcreate_remove_from_file").join("file.txt");
-        let path_str = file.to_string_lossy();
+        let file_to_remove_contents = test_dir("cmdcreate_remove_from_file").join("file.txt");
+        let path_of_that_file = file_to_remove_contents.to_string_lossy();
 
-        write_to_file(&path_str, "one\ntwo\nthree\n", false)?;
-        remove_from_file(&path_str, "two")?;
+        write_to_file(&path_of_that_file, "one\ntwo\nthree\n", false)?;
+        remove_from_file(&path_of_that_file, "two")?;
 
-        let content = read_file_to_string(&path_str);
-        assert!(!content.contains("two"));
-        assert!(content.contains("one"));
+        let contents_of_that_file = read_file_to_string(&path_of_that_file);
+        assert!(!contents_of_that_file.contains("two"));
+        assert!(contents_of_that_file.contains("one"));
         Ok(())
     }
 
     #[test]
     fn delete_file_removes_file() -> Result<()> {
-        let file = test_dir("cmdcreate_delete_file").join("file.txt");
-        let path_str = file.to_string_lossy();
+        let file_to_delete = test_dir("cmdcreate_delete_file").join("file.txt");
+        let path_to_deleted_file = file_to_delete.to_string_lossy();
 
-        create_file(&path_str)?;
-        delete_file(&path_str)?;
+        create_file(&path_to_deleted_file)?;
+        delete_file(&path_to_deleted_file)?;
 
-        assert!(!file.exists());
+        assert!(!file_to_delete.exists());
         Ok(())
     }
 
     #[test]
     fn delete_folder_removes_directory() -> Result<()> {
-        let dir = test_dir("cmdcreate_delete_folder").join("dir");
-        let path_str = dir.to_string_lossy();
+        let directory_to_delete = test_dir("cmdcreate_delete_folder").join("dir");
+        let path_to_deleted_directory = directory_to_delete.to_string_lossy();
 
-        create_dir_all(&dir)?;
-        delete_folder(&path_str)?;
+        create_dir_all(&directory_to_delete)?;
+        delete_folder(&path_to_deleted_directory)?;
 
-        assert!(!dir.exists());
+        assert!(!directory_to_delete.exists());
         Ok(())
     }
 
     #[test]
     fn path_exists_reports_correctly() -> Result<()> {
-        let file = test_dir("cmdcreate_exists").join("exists.txt");
-        let path_str = file.to_string_lossy();
+        let path_to_verify = test_dir("cmdcreate_exists").join("exists.txt");
+        let path_of_the_path_that_needs_to_be_verified = path_to_verify.to_string_lossy();
 
-        assert!(!path_exists(&path_str));
-        write(&file, "hi")?;
+        let sample_text = "this is a test";
 
-        assert!(path_exists(&path_str));
+        assert!(!path_exists(&path_of_the_path_that_needs_to_be_verified));
+        write(&path_to_verify, sample_text)?;
+
+        assert!(path_exists(&path_of_the_path_that_needs_to_be_verified));
         Ok(())
     }
 }

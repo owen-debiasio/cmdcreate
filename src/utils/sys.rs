@@ -29,6 +29,7 @@ use crate::{
 };
 
 pub fn is_root() -> bool {
+    // 0 is root, if it returns anything else, cmdcreate won't run
     geteuid().as_raw() == 0
 }
 
@@ -47,46 +48,48 @@ pub static VARS: LazyLock<Vars> = LazyLock::new(|| Vars {
 pub static ARCH: &str = ARCHITECTURE;
 
 pub fn return_args() -> Vec<String> {
-    let mut supplied_args = Vec::new();
+    let mut supplied_argument_vector = Vec::new();
 
-    for arg in args().skip(1) {
-        if arg.starts_with('-') && !arg.starts_with("--") && arg.len() > 2 {
-            for ch in arg.chars().skip(1) {
-                supplied_args.push(format!("-{ch}"));
+    for supplied_argument in args().skip(1) {
+        if supplied_argument.starts_with('-')
+            && !supplied_argument.starts_with("--")
+            && supplied_argument.len() > 2
+        {
+            for character in supplied_argument.chars().skip(1) {
+                supplied_argument_vector.push(format!("-{character}"));
             }
 
             continue;
         }
 
-        supplied_args.push(arg);
+        supplied_argument_vector.push(supplied_argument);
     }
 
-    supplied_args
+    supplied_argument_vector
 }
 
-pub fn args_forced() -> bool {
+pub fn arguments_force_actions() -> bool {
+    // If either are applied, returns true
     args_contains("--force") || args_contains("-f")
 }
 
-pub fn args_contains(arg: &str) -> bool {
-    // Var arg_ is the index, var arg is the actual supplied arg
-    return_args().iter().any(|arg_| arg_ == arg)
+pub fn args_contains(argument: &str) -> bool {
+    // "argument_to_match" is the index, var arg is the actual supplied arg
+    return_args()
+        .iter()
+        .any(|argument_to_match| argument_to_match == argument)
 }
 
-pub fn run_shell_command(cmd: &str) {
-    let shell: &str = if args_contains("--force_system_shell") | args_contains("-F") {
-        &VARS.shell
-    } else {
-        &load("sys", "shell", "sh")
-    };
+pub fn run_shell_command(command: &str) {
+    let shell: &str = &load("sys", "shell", &VARS.shell);
 
-    if cmd.trim().is_empty() {
+    if command.trim().is_empty() {
         return;
     }
 
     match Command::new(shell)
         .arg("-c")
-        .arg(cmd)
+        .arg(command)
         .stdin(Stdio::inherit())
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
@@ -103,14 +106,14 @@ pub fn arch_is_supported() -> bool {
     ARCH == "x86_64"
 }
 
-pub fn cpu_arch_check(err_reason: &str) {
+pub fn cpu_arch_check(error_reason: &str) {
     log(
         "utils/sys::cpu_arch_check(): Double checking if CPU arch. is supported...",
         0,
     );
 
     if !arch_is_supported() {
-        error(err_reason, "")
+        error(error_reason, "")
     }
 
     log(
@@ -135,26 +138,33 @@ pub enum DistroBase {
     Unknown,
 }
 
+/// This function is kind of fucked so bear with me here
 pub fn get_distro_base() -> DistroBase {
-    let (mut id, mut id_like) = ("", "");
+    let (mut distro_id, mut distro_id_alt) = ("", "");
 
     let os_release = read_file_to_string("/etc/os-release").to_lowercase();
 
     for line in os_release.lines() {
-        if let Some(v) = line.strip_prefix("id=") {
-            id = v.trim_matches('"');
-        } else if let Some(v) = line.strip_prefix("id_like=") {
-            id_like = v.trim_matches('"');
+        if let Some(distro_release_version) = line.strip_prefix("id=") {
+            distro_id = distro_release_version.trim_matches('"');
+        } else if let Some(distro_release_version_alt) = line.strip_prefix("id_like=") {
+            distro_id_alt = distro_release_version_alt.trim_matches('"');
         }
     }
 
-    let base = format!("{id} {id_like}");
+    let distro_base = format!("{distro_id} {distro_id_alt}");
 
-    if base.contains("arch") || base.contains("manjaro") {
+    if distro_base.contains("arch") || distro_base.contains("manjaro") {
         DistroBase::Arch
-    } else if base.contains("fedora") || base.contains("rhel") || base.contains("centos") {
+    } else if distro_base.contains("fedora")
+        || distro_base.contains("rhel")
+        || distro_base.contains("centos")
+    {
         DistroBase::Fedora
-    } else if base.contains("debian") || base.contains("ubuntu") || base.contains("linuxmint") {
+    } else if distro_base.contains("debian")
+        || distro_base.contains("ubuntu")
+        || distro_base.contains("linuxmint")
+    {
         DistroBase::Debian
     } else {
         DistroBase::Unknown
@@ -173,27 +183,15 @@ pub fn installation_method() -> InstallMethod {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::utils::io::error_result;
-
-    #[test]
-    fn error_returns_err() {
-        let result: Result<(), _> = error_result("nope");
-        assert!(result.is_err());
-    }
-
-    #[test]
-    fn error_message_matches() {
-        assert_eq!(error_result::<()>("bad").unwrap_err().to_string(), "bad");
-    }
 
     #[test]
     fn distro_detection_returns_known_or_unknown() {
-        let base = get_distro_base();
+        let distro_base = get_distro_base();
         assert!(
-            base == DistroBase::Arch
-                || base == DistroBase::Fedora
-                || base == DistroBase::Debian
-                || base == DistroBase::Unknown
+            distro_base == DistroBase::Arch
+                || distro_base == DistroBase::Fedora
+                || distro_base == DistroBase::Debian
+                || distro_base == DistroBase::Unknown
         );
     }
 

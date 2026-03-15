@@ -19,37 +19,39 @@ use crate::{
     utils::{colors::COLORS, io::error},
 };
 
-pub fn search(cmd: &str) {
+pub fn search(command_to_search_for: &str) {
     let (yellow, blue, reset) = (COLORS.yellow, COLORS.blue, COLORS.reset);
 
-    let mut count = 0;
-    for script in get_installed_commands() {
-        let file_stem = script.file_stem().unwrap_or_default().to_string_lossy();
+    let mut command_search_index = 0;
+    for command in get_installed_commands() {
+        let command_stem = command.file_stem().unwrap_or_default().to_string_lossy();
 
-        if file_stem.contains(cmd) {
-            if count == 0 {
+        if command_stem.contains(command_to_search_for) {
+            if command_search_index == 0 {
                 println!("--------");
             }
 
-            println!("{file_stem}");
+            println!("{command_stem}");
 
-            count += 1;
+            command_search_index += 1;
         }
     }
 
-    if count == 0 {
+    if command_search_index == 0 {
         error(
             "No installed commands contain:",
-            &format!("{yellow}\"{cmd}\"{reset}"),
+            &format!("{yellow}\"{command_to_search_for}\"{reset}"),
         );
     }
 
     println!("--------");
 
-    if count == 1 {
-        println!("Found one match for {blue}\"{cmd}\"{reset}");
+    if command_search_index == 1 {
+        println!("Found one match for {blue}\"{command_to_search_for}\"{reset}");
         return;
     }
 
-    println!("Found {blue}{count}{reset} matches for {blue}\"{cmd}\"{reset}.");
+    println!(
+        "Found {blue}{command_search_index}{reset} matches for {blue}\"{command_to_search_for}\"{reset}."
+    );
 }
