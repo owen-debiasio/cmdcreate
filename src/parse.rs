@@ -30,14 +30,9 @@ use crate::{
         update::{check, update},
     },
     logger::log,
-    utils::{
-        colors::COLORS,
-        fs::{PATHS, path_exists},
-        io::error,
-        net::is_offline,
-        sys::{arguments_force_actions, run_shell_command},
-    },
-    version::print_version_info,
+    meta::display_full_license,
+    utils::{colors::COLORS, io::error, sys::arguments_force_actions},
+    version::{print_version_changelog, print_version_info},
 };
 
 pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
@@ -105,32 +100,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
 
         "--version" | "-v" => print_version_info(),
 
-        "--license" | "-l" => {
-            if path_exists(&PATHS.license) {
-                /*
-                read_file_to_string("/usr/share/licenses/cmdcreate/LICENSE")
-                doesn't work and idk why???
-                */
-                run_shell_command(&format!("cat {}", PATHS.license));
-            } else {
-                error(
-                    "License has not been installed. Find it here:",
-                    "https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE",
-                )
-            }
-        }
-
-        "--changelog" | "-c" => {
-            if is_offline() {
-                error("You need internet to retrieve the changelog.", "")
-            }
-
-            log("main::main(): Displaying changelog...", 0);
-
-            run_shell_command(
-                "curl -L https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/changes.md",
-            );
-        }
+        "--license" | "-l" => display_full_license(),
+        "--changelog" | "-c" => print_version_changelog(),
 
         _ if supplied_command.starts_with('-') => {
             error("Invalid argument:", supplied_command);

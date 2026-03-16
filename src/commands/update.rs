@@ -20,7 +20,7 @@ use crate::{
         colors::COLORS,
         fs::delete_folder,
         io::{ask_for_confirmation, error, input},
-        net::is_offline,
+        net::not_connected_to_internet,
         sys::{
             ARCH, DistroBase, InstallMethod, VARS, arch_is_supported, arguments_force_actions,
             cpu_arch_check, get_distro_base, installation_method, run_shell_command,
@@ -35,7 +35,7 @@ use crate::{
 pub fn update() {
     let (green, blue, red, reset) = (COLORS.green, COLORS.blue, COLORS.red, COLORS.reset);
 
-    if is_offline() {
+    if not_connected_to_internet() {
         error(
             "You must have internet to continue with this operation!",
             "",
@@ -285,7 +285,7 @@ fn interactive_upgrade() {
 pub fn check() {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    if is_offline() {
+    if not_connected_to_internet() {
         error(
             "You must have internet to continue with this operation!",
             "",

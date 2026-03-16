@@ -19,7 +19,8 @@ use crate::{
     meta::{AUTHOR, AUTHOR_EMAIL, AUTHOR_USERNAME, PROJECT_REPO, get_project_copyright_info},
     utils::{
         io::error,
-        net::{http_client, is_offline},
+        net::{http_client, not_connected_to_internet},
+        sys::run_shell_command,
     },
 };
 use serde_json::Value;
@@ -54,7 +55,7 @@ pub fn version_is_development_build() -> bool {
 }
 
 pub fn get_latest_tag_from_repo(owner: &str, repo: &str) -> String {
-    if is_offline() {
+    if not_connected_to_internet() {
         log(
             "version::get_latest_tag(): No internet... Unable to retrieve latest tag...",
             1,
@@ -134,5 +135,17 @@ There is NO WARRANTY, to the extent permitted by law.
 Written by {AUTHOR} <{AUTHOR_EMAIL}>.
         ",
         get_project_copyright_info()
+    );
+}
+
+pub fn print_version_changelog() {
+    if not_connected_to_internet() {
+        error("You need internet to retrieve the changelog.", "")
+    }
+
+    log("main::main(): Displaying changelog...", 0);
+
+    run_shell_command(
+        "curl -L https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/changes.md",
     );
 }

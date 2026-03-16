@@ -14,6 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::utils::{
+    fs::{PATHS, path_exists, read_file_to_string},
+    io::error,
+};
+
 pub const YEAR: &str = "2026";
 
 pub const AUTHOR: &str = "Owen Debiasio";
@@ -25,4 +30,19 @@ pub const PROJECT_REPO: &str = "cmdcreate";
 pub fn get_project_copyright_info() -> String {
     // So fucking annoyed that this can't be a static
     format!("Copyright {YEAR} {AUTHOR} <{AUTHOR_EMAIL}>")
+}
+
+pub fn display_full_license() {
+    let path_to_license_file = &PATHS.license;
+
+    if path_exists(path_to_license_file) {
+        let license_file_contents = read_file_to_string(path_to_license_file);
+
+        println!("{license_file_contents}");
+    } else {
+        error(
+            "License has not been installed. Find it here:",
+            "https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE",
+        )
+    }
 }

@@ -22,7 +22,7 @@ use crate::{
     utils::{
         fs::init_fs_layout,
         io::error,
-        net::is_offline,
+        net::not_connected_to_internet,
         sys::{ARCH, VARS, get_distro_base, installation_method, is_root},
     },
     version::version_is_development_build,
@@ -54,7 +54,11 @@ Shell in use: {}
         },
         get_distro_base(),
         installation_method(),
-        if is_offline() { "offline" } else { "connected" },
+        if not_connected_to_internet() {
+            "offline"
+        } else {
+            "connected"
+        },
         VARS.editor,
         VARS.shell,
     )

@@ -32,7 +32,7 @@ pub fn http_client() -> Client {
         .expect("Failed to build HTTP client")
 }
 
-pub fn is_offline() -> bool {
+pub fn not_connected_to_internet() -> bool {
     let forced_offline_via_flags = args_contains("-o") || args_contains("--offline");
     if forced_offline_via_flags {
         return true;
