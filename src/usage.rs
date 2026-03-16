@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::{logger::log, utils::colors::COLORS, version::VERSION};
+use crate::{logger::log, utils::colors::COLORS, version::CURRENT_PROJECT_VERSION};
 use std::process::exit;
 
 pub fn cmdcreate_usage() {
@@ -33,7 +33,7 @@ pub fn cmdcreate_usage() {
 
     for line in vec![
         // Version
-        format!("cmdcreate {VERSION}"),
+        format!("cmdcreate {CURRENT_PROJECT_VERSION}"),
         // Usage identifier
         format!(
             "Usage: cmdcreate {magenta}(flags){reset} [{blue}command{reset}, {cyan}argument{reset}] {yellow}<args> {magenta}(flags){reset}"

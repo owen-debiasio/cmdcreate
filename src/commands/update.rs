@@ -26,7 +26,10 @@ use crate::{
             cpu_arch_check, get_distro_base, installation_method, run_shell_command,
         },
     },
-    version::{VERSION, get_latest_commit, get_latest_tag, is_development_version},
+    version::{
+        CURRENT_PROJECT_VERSION, get_latest_commit_from_repo, get_latest_tag_from_repo,
+        version_is_development_build,
+    },
 };
 
 pub fn update() {
@@ -118,7 +121,7 @@ Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{r
 fn upgrade_via(method: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    let latest_stable_release = get_latest_tag("owen-debiasio", "cmdcreate");
+    let latest_stable_release = get_latest_tag_from_repo("owen-debiasio", "cmdcreate");
 
     match method {
         "deb" => {
@@ -238,7 +241,7 @@ fn interactive_upgrade() {
         available_update_methods.push(("bin", "Manually install binary".to_string()));
     }
 
-    let latest_git_repo_commit = get_latest_commit("owen-debiasio", "cmdcreate", "main");
+    let latest_git_repo_commit = get_latest_commit_from_repo("owen-debiasio", "cmdcreate", "main");
     available_update_methods.push((
         "src",
         format!(
@@ -291,10 +294,10 @@ pub fn check() {
 
     println!("\nChecking for updates...");
 
-    let latest_stable_version = get_latest_tag("owen-debiasio", "cmdcreate");
-    let current_version = VERSION;
+    let latest_stable_version = get_latest_tag_from_repo("owen-debiasio", "cmdcreate");
+    let current_version = CURRENT_PROJECT_VERSION;
 
-    if is_development_version() {
+    if version_is_development_build() {
         println!(
             "\nYou are running a newer version {}({current_version}){reset} \
             than the latest release {green}({latest_stable_version}){reset}.",

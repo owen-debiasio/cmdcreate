@@ -14,10 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::meta::{AUTHOR_EMAIL, get_copyright};
 use crate::{
     logger::log,
-    meta::AUTHOR,
+    meta::{AUTHOR, AUTHOR_EMAIL, AUTHOR_USERNAME, PROJECT_REPO, get_project_copyright_info},
     utils::{
         io::error,
         net::{http_client, is_offline},
@@ -26,32 +25,35 @@ use crate::{
 use serde_json::Value;
 use std::{cmp::Ordering, error::Error};
 
-pub const VERSION: &str = "v1.1.7";
+pub const CURRENT_PROJECT_VERSION: &str = "v1.1.7";
 
-pub fn is_development_version() -> bool {
-    let parse_version = |v: &str| -> (u32, u32, u32) {
-        let nums: Vec<u32> = v
+pub fn version_is_development_build() -> bool {
+    let parse_version = |parsed_version_digits: &str| -> (u32, u32, u32) {
+        // 'v' always comes before the version
+        // '.' separates the version values
+
+        let version_digits: Vec<u32> = parsed_version_digits
             .trim_start_matches('v')
             .split('.')
-            .map(|s| s.parse().unwrap_or(0))
+            .map(|version_digit_splitter| version_digit_splitter.parse().unwrap_or(0))
             .collect();
         (
-            *nums.first().unwrap_or(&0),
-            *nums.get(1).unwrap_or(&0),
-            *nums.get(2).unwrap_or(&0),
+            *version_digits.first().unwrap_or(&0),
+            *version_digits.get(1).unwrap_or(&0),
+            *version_digits.get(2).unwrap_or(&0),
         )
     };
 
-    match parse_version(VERSION).cmp(&parse_version(&get_latest_tag(
-        "owen-debiasio",
-        "cmdcreate",
+    match parse_version(CURRENT_PROJECT_VERSION).cmp(&parse_version(&get_latest_tag_from_repo(
+        AUTHOR_USERNAME,
+        PROJECT_REPO,
     ))) {
         Ordering::Less | Ordering::Equal => false,
         Ordering::Greater => true,
     }
 }
 
-pub fn get_latest_tag(owner: &str, repo: &str) -> String {
+pub fn get_latest_tag_from_repo(owner: &str, repo: &str) -> String {
     if is_offline() {
         log(
             "version::get_latest_tag(): No internet... Unable to retrieve latest tag...",
@@ -61,43 +63,50 @@ pub fn get_latest_tag(owner: &str, repo: &str) -> String {
     }
 
     let result: Result<String, Box<dyn Error>> = (|| {
-        let response = http_client()
-            .get(format!(
-                "https://api.github.com/repos/{owner}/{repo}/releases/latest"
-            ))
+        let tag_api_retrieval_url =
+            format!("https://api.github.com/repos/{owner}/{repo}/releases/latest");
+
+        let api_response = http_client()
+            .get(tag_api_retrieval_url)
             .header("User-Agent", "rust-app")
             .send()?;
 
-        let json: Value = response.json()?;
+        let api_response_as_json: Value = api_response.json()?;
 
-        let tag = json["tag_name"]
+        let tag_retrieved_via_api = api_response_as_json["tag_name"]
             .as_str()
             .ok_or("Missing tag_name")?
             .to_owned();
 
-        Ok(tag)
+        Ok(tag_retrieved_via_api)
     })();
 
     match result {
-        Ok(tag) => {
-            log(&format!("version::get_latest_tag(): Latest tag: {tag}"), 0);
-            tag
+        Ok(latest_tag) => {
+            log(
+                &format!("version::get_latest_tag(): Latest tag: {latest_tag}"),
+                0,
+            );
+            latest_tag
         }
-        Err(e) => error("Unable to retrieve latest tag:", &e.to_string()),
+        Err(tag_retrieve_error) => error(
+            "Unable to retrieve latest tag:",
+            &tag_retrieve_error.to_string(),
+        ),
     }
 }
 
-pub fn get_latest_commit(owner: &str, repo: &str, branch: &str) -> String {
-    let commit_hash = format!("https://api.github.com/repos/{owner}/{repo}/commits/{branch}");
+pub fn get_latest_commit_from_repo(owner: &str, repo: &str, branch: &str) -> String {
+    let commit_hash_url = format!("https://api.github.com/repos/{owner}/{repo}/commits/{branch}");
 
-    let extracted_commit: Value = http_client()
-        .get(commit_hash)
+    let extracted_commit_from_hash: Value = http_client()
+        .get(commit_hash_url)
         .send()
         .expect("request failed")
         .json()
         .expect("invalid json");
 
-    let commit = extracted_commit["sha"]
+    let commit = extracted_commit_from_hash["sha"]
         .as_str()
         .expect("missing sha")
         .chars()
@@ -113,10 +122,10 @@ pub fn get_latest_commit(owner: &str, repo: &str, branch: &str) -> String {
     commit
 }
 
-pub fn print_info() {
+pub fn print_version_info() {
     println!(
         "
-cmdcreate {VERSION}
+cmdcreate {CURRENT_PROJECT_VERSION}
 Copyright (C) {}.
 License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
@@ -124,6 +133,6 @@ There is NO WARRANTY, to the extent permitted by law.
 
 Written by {AUTHOR} <{AUTHOR_EMAIL}>.
         ",
-        get_copyright()
+        get_project_copyright_info()
     );
 }

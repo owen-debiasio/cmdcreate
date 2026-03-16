@@ -26,7 +26,7 @@ mod version;
 
 use crate::{
     init::init, logger::log, parse::parse, usage::cmdcreate_usage, utils::sys::return_args,
-    version::VERSION,
+    version::CURRENT_PROJECT_VERSION,
 };
 
 fn main() {

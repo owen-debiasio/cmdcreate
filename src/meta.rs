@@ -15,10 +15,14 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 pub const YEAR: &str = "2026";
+
 pub const AUTHOR: &str = "Owen Debiasio";
+pub const AUTHOR_USERNAME: &str = "owen-debiasio";
 pub const AUTHOR_EMAIL: &str = "owen.debiasio@gmail.com";
 
-pub fn get_copyright() -> String {
+pub const PROJECT_REPO: &str = "cmdcreate";
+
+pub fn get_project_copyright_info() -> String {
     // So fucking annoyed that this can't be a static
     format!("Copyright {YEAR} {AUTHOR} <{AUTHOR_EMAIL}>")
 }

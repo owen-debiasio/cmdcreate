@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    VERSION,
+    CURRENT_PROJECT_VERSION,
     configs::init_configs,
     logger::log,
     meta::{AUTHOR, AUTHOR_EMAIL},
@@ -25,7 +25,7 @@ use crate::{
         net::is_offline,
         sys::{ARCH, VARS, get_distro_base, installation_method, is_root},
     },
-    version::is_development_version,
+    version::version_is_development_build,
 };
 
 pub fn debug_intro() -> String {
@@ -38,7 +38,7 @@ Created by: {AUTHOR} <{AUTHOR_EMAIL}>
 Have an issue? Copy the text below           
 and open an issue                       
 ----------------
-Version: {VERSION} {}
+Version: {CURRENT_PROJECT_VERSION} {}
 CPU architecture: {ARCH}
 Distro base: {:?}
 Installation Method: {:?}
@@ -47,7 +47,7 @@ Preferred text editor: {}
 Shell in use: {}
 ----------------
 ",
-        if is_development_version() {
+        if version_is_development_build() {
             "(devel)"
         } else {
             "(stable)"

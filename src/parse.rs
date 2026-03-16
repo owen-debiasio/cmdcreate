@@ -37,7 +37,7 @@ use crate::{
         net::is_offline,
         sys::{arguments_force_actions, run_shell_command},
     },
-    version::print_info,
+    version::print_version_info,
 };
 
 pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
@@ -103,7 +103,7 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
             export,
         ),
 
-        "--version" | "-v" => print_info(),
+        "--version" | "-v" => print_version_info(),
 
         "--license" | "-l" => {
             if path_exists(&PATHS.license) {
