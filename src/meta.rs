@@ -14,9 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use std::process::exit;
+
 use crate::utils::{
-    fs::{PATHS, path_exists, read_file_to_string},
-    io::error,
+    colors::COLORS,
+    fs::{PATHS, create_folder, path_exists, read_file_to_string},
+    io::ask_for_confirmation,
+    net::not_connected_to_internet,
+    sys::run_shell_command,
 };
 
 pub const YEAR: &str = "2026";
@@ -33,6 +38,8 @@ pub fn get_project_copyright_info() -> String {
 }
 
 pub fn display_full_license() {
+    let (red, reset) = (COLORS.red, COLORS.reset);
+
     let path_to_license_file = &PATHS.license;
 
     if path_exists(path_to_license_file) {
@@ -40,9 +47,38 @@ pub fn display_full_license() {
 
         println!("{license_file_contents}");
     } else {
-        error(
-            "License has not been installed. Find it here:",
-            "https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE",
-        )
+        let question = &format!(
+            "{red}License file not found!{reset}{}",
+            if not_connected_to_internet() {
+                ""
+            } else {
+                " Do you want to download and install the license?"
+            }
+        );
+
+        ask_for_confirmation(question, true);
+
+        download_and_install_license();
     }
+}
+
+fn download_and_install_license() {
+    let (green, reset) = (COLORS.green, COLORS.reset);
+
+    let license_path = &PATHS.license;
+    let license_install_directory = license_path.replace("LICENSE", "");
+
+    create_folder(&license_install_directory).expect("Failed to create folder");
+
+    let command_to_download_and_install_license: &str = &format!(
+        "curl -sSLo \
+        {license_path} \
+        https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/LICENSE"
+    );
+
+    run_shell_command(command_to_download_and_install_license);
+
+    println!("{green}Successfully downloaded license!{reset}");
+
+    exit(0)
 }

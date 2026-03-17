@@ -46,7 +46,7 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     command_installation_directory: "/usr/local/bin/".to_string(),
     license: if get_distro_base() == DistroBase::Debian {
         // Because different distros just HAVE to have different paths for some bullshit reason
-        "/usr/share/doc/cmdcreate/copyright".to_string()
+        "/usr/share/doc/cmdcreate/copyright/LICENSE".to_string()
     } else {
         "/usr/share/licenses/cmdcreate/LICENSE".to_string()
     },

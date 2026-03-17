@@ -85,17 +85,23 @@ pub fn run_shell_command(command: &str) {
         return;
     }
 
+    // "set -e" is included to make all commands exit on fail
+    let command_to_run: &str = &format!(
+        "set -e && \
+        {command}"
+    );
+
     match Command::new(shell)
         .arg("-c")
-        .arg(command)
+        .arg(command_to_run)
         .stdin(Stdio::inherit())
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
         .status()
     {
         Ok(_) => {}
-        Err(e) => {
-            error("Failed to run shell command:", &e.to_string());
+        Err(error_message) => {
+            error("Failed to run shell command:", &error_message.to_string());
         }
     }
 }

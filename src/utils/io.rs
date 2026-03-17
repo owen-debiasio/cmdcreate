@@ -40,7 +40,7 @@ pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool
     if get_response_to_question.eq_ignore_ascii_case("y") {
         true
     } else if exit_if_user_declines {
-        error("Aborted.", "")
+        error("\nAborted.", "")
     } else {
         false
     }
