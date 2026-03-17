@@ -69,7 +69,7 @@ fn cmdcreate(arguments_provided: &[String]) {
         argument_index += 1;
     }
 
-    if let Some(cmd) = arguments_provided.get(argument_index).map(String::as_str) {
-        parse(cmd, &arguments_provided[argument_index..]);
+    if let Some(command) = arguments_provided.get(argument_index).map(String::as_str) {
+        parse(command, &arguments_provided[argument_index..]);
     }
 }
