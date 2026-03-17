@@ -630,3 +630,5 @@ Licensed under the GNU General Public License v3.0 or later.
 - Generational amounts of refactoring
 - Commands created by cmdcreate are now identified by a header inserted into the
   file
+- Small quality of life changes
+- cmdcreate now auto-downloads the license if not installed (`curl` is required)
