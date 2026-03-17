@@ -71,7 +71,6 @@ else
     exit 1
 fi
 
-# --- Maintenance/Cleanup ---
 if [ -f "./dev/uninstall.sh" ]; then
     ./dev/uninstall.sh
 fi
