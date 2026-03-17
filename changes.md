@@ -626,5 +626,7 @@ Licensed under the GNU General Public License v3.0 or later.
 
 ## v1.1.7
 
-- Code optimizations
+- Many code optimizations
 - Generational amounts of refactoring
+- Commands created by cmdcreate are now identified by a header inserted into the
+  file
