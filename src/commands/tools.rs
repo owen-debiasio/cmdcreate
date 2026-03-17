@@ -17,21 +17,23 @@
 use std::{fs::read_dir, path::PathBuf};
 
 use crate::{
+    commands::create::NEW_COMMAND_HEADER,
     logger::log,
     utils::{
         colors::COLORS,
-        fs::{PATHS, path_exists},
+        fs::{PATHS, path_exists, read_file_to_string},
         io::error,
     },
 };
 
-pub fn determine_command_is_installed(cmd: &str) -> bool {
-    let command_install_path = &format!("{}{cmd}", PATHS.install_dir);
+pub fn determine_command_is_installed(command_to_find: &str) -> bool {
+    let command_install_path =
+        &format!("{}{command_to_find}", PATHS.command_installation_directory);
 
     if path_exists(command_install_path) {
         log(
             &format!(
-                "commands/tools::command_is_installed(): Command \"{cmd}\" is installed... Continuing..."
+                "commands/tools::command_is_installed(): Command \"{command_to_find}\" is installed... Continuing..."
             ),
             0,
         );
@@ -39,7 +41,10 @@ pub fn determine_command_is_installed(cmd: &str) -> bool {
         return true;
     }
 
-    error(&format!("Command \"{cmd}\" is not installed"), "");
+    error(
+        &format!("Command \"{command_to_find}\" is not installed"),
+        "",
+    );
 }
 
 pub fn get_installed_commands() -> Vec<PathBuf> {
@@ -50,12 +55,24 @@ pub fn get_installed_commands() -> Vec<PathBuf> {
         0,
     );
 
-    let retrieved_commands: Vec<PathBuf> = read_dir(&PATHS.install_dir)
+    let command_install_directory = &PATHS.command_installation_directory;
+
+    let mut retrieved_commands: Vec<PathBuf> = read_dir(command_install_directory)
         .unwrap_or_else(|_| panic!("{red}Error: Failed to read install directory{reset}"))
         .flatten()
         .map(|entry_in_index| entry_in_index.path())
         .filter(|path_to_command| path_to_command.is_file())
         .collect();
+
+    // Remove commands not created by cmdcreate
+    // (commands that don't contain the command header)
+    // (See src/commands/create.rs)
+    retrieved_commands.retain(|command_path| {
+        let path_of_command_found = &command_path.to_string_lossy();
+        let file_contents = read_file_to_string(path_of_command_found);
+
+        file_contents.contains(NEW_COMMAND_HEADER)
+    });
 
     if retrieved_commands.is_empty() {
         error("No commands are installed.", "");

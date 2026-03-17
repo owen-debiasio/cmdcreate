@@ -24,16 +24,20 @@ use crate::{
     },
 };
 
+// Uniquely identify commands created by cmdcreate from
+// commands that may also show up in /usr/local/bin/
+pub static NEW_COMMAND_HEADER: &str = "# Created by cmdcreate\n";
+
 pub fn create(
     command_to_create: &str,
-    contents_of_new_command: &str,
+    contents_of_new_command_by_user: &str,
     run_this_function_verbose: bool,
 ) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
     log(
         &format!(
-            "commands/create::create(): Creating command \"{command_to_create}\": With contents \"{contents_of_new_command}\"{}",
+            "commands/create::create(): Creating command \"{command_to_create}\": With contents \"{contents_of_new_command_by_user}\"{}",
             if run_this_function_verbose {
                 ", and being verbose..."
             } else {
@@ -43,14 +47,20 @@ pub fn create(
         0,
     );
 
-    let path_to_command = &format!("{}{command_to_create}", PATHS.install_dir);
+    let full_contents_of_new_command =
+        &format!("{NEW_COMMAND_HEADER}{contents_of_new_command_by_user}");
+
+    let path_to_command = &format!(
+        "{}{command_to_create}",
+        PATHS.command_installation_directory
+    );
 
     log(
         &format!("commands/create::create(): Command path: \"{path_to_command}\""),
         0,
     );
 
-    if contents_of_new_command.is_empty() {
+    if contents_of_new_command_by_user.is_empty() {
         error("The contents of your command can not be empty.", "");
     }
 
@@ -59,7 +69,7 @@ pub fn create(
         0,
     );
 
-    overwrite_file(path_to_command, contents_of_new_command).expect("Failed to write to file");
+    overwrite_file(path_to_command, full_contents_of_new_command).expect("Failed to write to file");
 
     log("commands/create::create(): Activating command...", 0);
 

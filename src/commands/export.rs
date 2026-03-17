@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::tools::get_installed_commands,
+    commands::{create::NEW_COMMAND_HEADER, tools::get_installed_commands},
     logger::log,
     utils::{
         colors::COLORS,
@@ -52,16 +52,27 @@ pub fn export(path: &str) {
                 0,
             );
 
-            let path_of_command = &format!("{}{retrieved_command}", PATHS.command_installation_directory);
+            let path_of_command = &format!(
+                "{}{retrieved_command}",
+                PATHS.command_installation_directory
+            );
 
-            // The escape thing is "[|" cause backslashes don't fucking work for some fucking reason
-            let contents_of_command = read_file_to_string(path_of_command).replace('|', "[|");
+            let original_contents_of_command = read_file_to_string(path_of_command);
+
+            // The escape thing is "[|" cause backslashes don't work for some reason
+            let contents_of_command_un_escaped = original_contents_of_command.replace('|', "[|");
+
+            // Remove the header because
+            // A. It will make the exported file look ugly and cause issues
+            // B. It will be created again anyway
+            let final_contents_of_command =
+                contents_of_command_un_escaped.replace(NEW_COMMAND_HEADER, "");
 
             let data = if read_file_to_string(&PATHS.favorites).contains(retrieved_command.as_ref())
             {
-                format!("{retrieved_command} | {contents_of_command} | favorite\n")
+                format!("{retrieved_command} | {final_contents_of_command} | favorite\n")
             } else {
-                format!("{retrieved_command} | {contents_of_command}\n")
+                format!("{retrieved_command} | {final_contents_of_command}\n")
             };
 
             log(
