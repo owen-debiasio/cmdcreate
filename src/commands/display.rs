@@ -27,7 +27,7 @@ pub fn display(command_to_display: &str) {
 
     determine_command_is_installed(command_to_display);
 
-    let path_to_command = format!("{}{command_to_display}", PATHS.install_dir);
+    let path_to_command = format!("{}{command_to_display}", PATHS.command_installation_directory);
 
     let contents_of_command = read_file_to_string(&path_to_command);
     let trimmed_contents_of_command = contents_of_command.trim();

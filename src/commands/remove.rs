@@ -52,7 +52,7 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
         0,
     );
 
-    let path_of_command_to_remove = &format!("{}{command}", PATHS.install_dir);
+    let path_of_command_to_remove = &format!("{}{command}", PATHS.command_installation_directory);
 
     delete_file(path_of_command_to_remove).expect("Failed to delete command");
 

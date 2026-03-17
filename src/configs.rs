@@ -27,7 +27,7 @@ const AUTO_GEN: &str = "
 ";
 
 pub fn init_configs() {
-    let config_file_path = &PATHS.configs;
+    let config_file_path = &PATHS.configuration_file_directory;
 
     if path_exists(config_file_path) {
         return;
@@ -38,7 +38,7 @@ pub fn init_configs() {
 }
 
 static CONFIG: LazyLock<Value> =
-    LazyLock::new(|| from_str(&read_file_to_string(&PATHS.configs)).expect("Failed to read file"));
+    LazyLock::new(|| from_str(&read_file_to_string(&PATHS.configuration_file_directory)).expect("Failed to read file"));
 
 pub fn load(cat: &str, var: &str, default: &str) -> String {
     let (config_category, config_value, default_value) = (cat, var, default);
