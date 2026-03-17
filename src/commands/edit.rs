@@ -68,5 +68,8 @@ pub fn edit(command_to_edit: &str) {
         0,
     );
 
-    run_shell_command(&format!("{editor} {}{command_to_edit}", PATHS.command_installation_directory));
+    run_shell_command(&format!(
+        "{editor} {}{command_to_edit}",
+        PATHS.command_installation_directory
+    ));
 }

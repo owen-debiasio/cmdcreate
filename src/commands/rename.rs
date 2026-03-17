@@ -37,8 +37,10 @@ pub fn rename(old_command_name: &str, new_renamed_command_name: &str) {
         COLORS.reset,
     );
 
-    let (command_install_location, installed_commands) =
-        (&PATHS.command_installation_directory, get_installed_commands());
+    let (command_install_location, installed_commands) = (
+        &PATHS.command_installation_directory,
+        get_installed_commands(),
+    );
 
     if installed_commands.is_empty() {
         return;

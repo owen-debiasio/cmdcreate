@@ -37,8 +37,10 @@ pub fn init_configs() {
     overwrite_file(config_file_path, AUTO_GEN).expect("Failed to overwrite file");
 }
 
-static CONFIG: LazyLock<Value> =
-    LazyLock::new(|| from_str(&read_file_to_string(&PATHS.configuration_file_directory)).expect("Failed to read file"));
+static CONFIG: LazyLock<Value> = LazyLock::new(|| {
+    from_str(&read_file_to_string(&PATHS.configuration_file_directory))
+        .expect("Failed to read file")
+});
 
 pub fn load(cat: &str, var: &str, default: &str) -> String {
     let (config_category, config_value, default_value) = (cat, var, default);
