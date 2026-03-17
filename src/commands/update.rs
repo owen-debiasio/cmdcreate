@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use std::process::exit;
+
 use crate::{
     logger::log,
     utils::{
@@ -22,8 +24,8 @@ use crate::{
         io::{ask_for_confirmation, error, input},
         net::not_connected_to_internet,
         sys::{
-            ARCH, DistroBase, InstallMethod, VARS, arch_is_supported, arguments_force_actions,
-            cpu_arch_check, get_distro_base, installation_method, run_shell_command,
+            ARCH, DistroBase, InstallMethod, arch_is_supported, cpu_arch_check, get_distro_base,
+            installation_method, run_shell_command,
         },
     },
     version::{
@@ -42,53 +44,42 @@ pub fn update() {
         )
     }
 
-    ask_for_confirmation("\nDo you want to upgrade cmdcreate?");
+    ask_for_confirmation("\nDo you want to upgrade cmdcreate?", true);
+
+    if !arch_is_supported() {
+        log(
+            "commands/update::update(): ARM/Unsupported arch detected, switching to interactive...",
+            0,
+        );
+
+        interactive_upgrade();
+    }
 
     match installation_method() {
         InstallMethod::Aur => {
             let aur_install_confirmation = &format!(
                 "\n{blue}Arch Linux{reset}-based system detected. Updating via AUR is not directly supported here. \
-Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{reset})"
+                Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{reset})"
             );
 
-            // These blocks are repeated. smh
-            if !arguments_force_actions()
-                && input(aur_install_confirmation)
-                    .trim()
-                    .eq_ignore_ascii_case("y")
-            {
+            if ask_for_confirmation(aur_install_confirmation, false) {
                 interactive_upgrade();
-
-                return;
             }
+
             error("Aborted.", "")
         }
 
         InstallMethod::Dpkg => {
             let deb_install_confirmation = &format!(
                 "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a \
-                    {blue}.deb{reset} file?\n({green}Y{reset} or {red}N{reset})"
+                    {blue}.deb{reset} file?"
             );
 
-            if arch_is_supported() {
-                if !arguments_force_actions()
-                    && input(deb_install_confirmation)
-                        .trim()
-                        .eq_ignore_ascii_case("y")
-                {
-                    interactive_upgrade();
-
-                    return;
-                }
-
-                upgrade_via("deb");
-            } else {
-                log(
-                    "commands/update::update(): ARM/Unsupported arch detected, switching to interactive...",
-                    0,
-                );
-                interactive_upgrade();
+            if ask_for_confirmation(deb_install_confirmation, false) {
+                update_using_method("deb");
             }
+
+            interactive_upgrade();
         }
 
         InstallMethod::Rpm => {
@@ -97,28 +88,18 @@ Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{r
                     {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
             );
 
-            if arch_is_supported() {
-                if !arguments_force_actions()
-                    && input(rpm_install_confirmation)
-                        .trim()
-                        .eq_ignore_ascii_case("y")
-                {
-                    interactive_upgrade();
-
-                    return;
-                }
-
-                upgrade_via("rpm");
-            } else {
-                interactive_upgrade();
+            if ask_for_confirmation(rpm_install_confirmation, false) {
+                update_using_method("rpm");
             }
+
+            interactive_upgrade();
         }
 
         InstallMethod::Other => interactive_upgrade(),
     }
 }
 
-fn upgrade_via(method: &str) {
+fn update_using_method(method: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
     let latest_stable_release = get_latest_tag_from_repo("owen-debiasio", "cmdcreate");
@@ -179,13 +160,15 @@ fn upgrade_via(method: &str) {
             method,
         ),
     }
+
+    exit(0)
 }
 
 fn build_from_source() {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    let cache_dir = format!("{}/.cache/cmdcreate", VARS.home);
-    delete_folder(&cache_dir).expect("Failed to delete folder");
+    let cache_dir: &str = "/root/.cache/cmdcreate";
+    delete_folder(cache_dir).expect("Failed to delete folder");
 
     // The return values for DistroBase::Debian and DistroBase::Fedora are like the same fucking thing
 
@@ -273,9 +256,9 @@ fn interactive_upgrade() {
     }
 
     match available_update_methods[selection - 1].0 {
-        "deb" => upgrade_via("deb"),
-        "rpm" => upgrade_via("rpm"),
-        "bin" => upgrade_via("bin"),
+        "deb" => update_using_method("deb"),
+        "rpm" => update_using_method("rpm"),
+        "bin" => update_using_method("bin"),
         "src" => build_from_source(),
         "exit" => error("Aborted.", ""),
         _ => error("Invalid selection.", ""),

@@ -18,7 +18,7 @@ use crate::{
     logger::log,
     utils::{
         io::error,
-        sys::{DistroBase, VARS, get_distro_base},
+        sys::{DistroBase, get_distro_base},
     },
 };
 use anyhow::{Context, Result};
@@ -30,8 +30,7 @@ use std::{
     sync::LazyLock,
 };
 
-pub static MAIN_PATH: LazyLock<String> =
-    LazyLock::new(|| format!("{}/.local/share/cmdcreate", VARS.home));
+pub static MAIN_PATH: &str = "/root/.local/share/cmdcreate";
 
 pub struct Paths {
     pub configs: String,
@@ -43,7 +42,7 @@ pub struct Paths {
 
 pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     configs: "/etc/cmdcreate.toml".to_string(),
-    favorites: format!("{}/favorites", *MAIN_PATH),
+    favorites: format!("{MAIN_PATH}/favorites"),
     install_dir: "/usr/local/bin/".to_string(),
     license: if get_distro_base() == DistroBase::Debian {
         // Because different distros just HAVE to have different paths for some bullshit reason
@@ -51,11 +50,11 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     } else {
         "/usr/share/licenses/cmdcreate/LICENSE".to_string()
     },
-    log_directory: format!("{}/logs", *MAIN_PATH),
+    log_directory: format!("{MAIN_PATH}/logs"),
 });
 
 pub fn init_fs_layout() -> Result<()> {
-    create_folder(&MAIN_PATH)?;
+    create_folder(MAIN_PATH)?;
     create_folder(&PATHS.log_directory)?;
     create_folder(&PATHS.install_dir)?;
     create_file(&PATHS.favorites)?;

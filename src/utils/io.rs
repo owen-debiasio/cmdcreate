@@ -22,7 +22,7 @@ use std::{
 
 use crate::{logger::log, utils::colors::COLORS, utils::sys::arguments_force_actions};
 
-pub fn ask_for_confirmation(question: &str) {
+pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool {
     let (red, green, reset) = (COLORS.red, COLORS.green, COLORS.reset);
 
     log(
@@ -30,14 +30,19 @@ pub fn ask_for_confirmation(question: &str) {
         0,
     );
 
-    let question_that_is_asked = &format!("{question}{reset}\n({green}Y{reset} or {red}N{reset})");
-    let get_response_to_question = !input(question_that_is_asked)
-        .trim()
-        .to_lowercase()
-        .eq_ignore_ascii_case("y");
+    if arguments_force_actions() {
+        return true;
+    }
 
-    if !arguments_force_actions() && get_response_to_question {
+    let question_that_is_asked = &format!("{question}{reset}\n({green}Y{reset} or {red}N{reset})");
+    let get_response_to_question = input(question_that_is_asked);
+
+    if get_response_to_question.eq_ignore_ascii_case("y") {
+        true
+    } else if exit_if_user_declines {
         error("Aborted.", "")
+    } else {
+        false
     }
 }
 

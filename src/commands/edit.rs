@@ -20,7 +20,7 @@ use crate::{
     utils::{
         fs::PATHS,
         io::error,
-        sys::{VARS, run_shell_command},
+        sys::{ENVIRONMENT_VARIABLES, run_shell_command},
     },
 };
 use std::process::Command;
@@ -29,7 +29,7 @@ pub fn edit(command_to_edit: &str) {
     determine_command_is_installed(command_to_edit);
 
     let available_editors: &[&str] = &[
-        &VARS.editor, // Used when user runs something like "EDITOR=vi cmdcreate edit abc"
+        &ENVIRONMENT_VARIABLES.text_editor, // Used when user runs something like "EDITOR=vi cmdcreate edit abc"
         "nvim",
         "vi",
         "vim",

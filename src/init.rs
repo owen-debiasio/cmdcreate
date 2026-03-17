@@ -23,7 +23,7 @@ use crate::{
         fs::init_fs_layout,
         io::error,
         net::not_connected_to_internet,
-        sys::{ARCH, VARS, get_distro_base, installation_method, is_root},
+        sys::{ARCH, ENVIRONMENT_VARIABLES, get_distro_base, installation_method, is_root},
     },
     version::version_is_development_build,
 };
@@ -59,8 +59,8 @@ Shell in use: {}
         } else {
             "connected"
         },
-        VARS.editor,
-        VARS.shell,
+        ENVIRONMENT_VARIABLES.text_editor,
+        ENVIRONMENT_VARIABLES.shell,
     )
 }
 

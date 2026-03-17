@@ -59,7 +59,7 @@ pub fn log(text: &str, lvl: u8) {
 
     output_verbose_message(log_file_text);
 
-    // Remove things like "\x1b[35m" from being written to the log file.
+    // Remove things like "\x1b[35m" from being written to the log file. It looks stupid
     let finalized_output_text = remove_spare_color_codes(log_file_text);
 
     write_to_file(log_file_name, &finalized_output_text, true).expect("Failed to write logs");

@@ -40,7 +40,7 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
             "{red}Are you sure you want to delete command{yellow} \"{command}\"{red}?{reset}"
         );
 
-        ask_for_confirmation(question);
+        ask_for_confirmation(question, true);
     }
 
     if read_file_to_string(&PATHS.favorites).contains(command) {

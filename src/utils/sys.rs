@@ -35,14 +35,12 @@ pub fn is_root() -> bool {
 
 pub struct Vars {
     pub shell: String,
-    pub home: String,
-    pub editor: String,
+    pub text_editor: String,
 }
 
-pub static VARS: LazyLock<Vars> = LazyLock::new(|| Vars {
+pub static ENVIRONMENT_VARIABLES: LazyLock<Vars> = LazyLock::new(|| Vars {
     shell: var("SHELL").unwrap_or_else(|_| "unknown".to_owned()),
-    home: var("HOME").unwrap_or_else(|_| "unknown".to_owned()),
-    editor: var("EDITOR").unwrap_or_else(|_| "auto".to_owned()),
+    text_editor: var("EDITOR").unwrap_or_else(|_| "auto".to_owned()),
 });
 
 pub static ARCH: &str = ARCHITECTURE;
@@ -81,7 +79,7 @@ pub fn args_contains(argument: &str) -> bool {
 }
 
 pub fn run_shell_command(command: &str) {
-    let shell: &str = &load("sys", "shell", &VARS.shell);
+    let shell: &str = &load("sys", "shell", &ENVIRONMENT_VARIABLES.shell);
 
     if command.trim().is_empty() {
         return;
@@ -197,8 +195,7 @@ mod tests {
 
     #[test]
     fn vars_are_initialized() {
-        assert!(!VARS.home.is_empty());
-        assert!(!VARS.shell.is_empty());
-        assert!(!VARS.editor.is_empty());
+        assert!(!ENVIRONMENT_VARIABLES.shell.is_empty());
+        assert!(!ENVIRONMENT_VARIABLES.text_editor.is_empty());
     }
 }

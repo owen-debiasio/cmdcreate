@@ -23,12 +23,12 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{PATHS, path_exists},
-        io::{error, input},
-        sys::{arguments_force_actions, run_shell_command},
+        io::{ask_for_confirmation, error},
+        sys::run_shell_command,
     },
 };
 
-pub fn rename(old: &str, new: &str) {
+pub fn rename(old_command_name: &str, new_renamed_command_name: &str) {
     let (blue, red, yellow, green, reset) = (
         COLORS.blue,
         COLORS.red,
@@ -44,34 +44,37 @@ pub fn rename(old: &str, new: &str) {
         return;
     }
 
-    determine_command_is_installed(old);
+    determine_command_is_installed(old_command_name);
 
-    let new_command_install_location = &format!("{command_install_location}/{new}");
+    let new_command_install_location =
+        &format!("{command_install_location}/{new_renamed_command_name}");
 
     if path_exists(new_command_install_location) {
-        println!(
-            "{red}The new name ({yellow}{new}{red}) is already installed! \
-            Do you want to delete it?\n({green}Y{red} or {yellow}N{red})",
+        let question = &format!(
+            "{red}The new name ({yellow}{new_renamed_command_name}{red}) is already installed! \
+            Do you want to delete it?"
         );
 
-        let response_to_retrieve = input("").trim().eq_ignore_ascii_case("y");
-
-        if arguments_force_actions() || response_to_retrieve {
-            remove(new, true);
+        if ask_for_confirmation(question, false) {
+            remove(new_renamed_command_name, true);
         } else {
             error("You need to remove the old command before proceeding!", "");
         }
     }
 
     log(
-        &format!("commands/rename::rename(): Renaming command \"{old}\" to \"{new}\"..."),
+        &format!(
+            "commands/rename::rename(): Renaming command \"{old_command_name}\" to \"{new_renamed_command_name}\"..."
+        ),
         0,
     );
 
     // I should probably make a function to move files
     run_shell_command(&format!(
-        "mv {command_install_location}{old} {command_install_location}{new}"
+        "mv {command_install_location}{old_command_name} {command_install_location}{new_renamed_command_name}"
     ));
 
-    println!("{green}Successfully renamed command {blue}\"{old}\" to {blue}\"{new}\"{reset}");
+    println!(
+        "{green}Successfully renamed command {blue}\"{old_command_name}\" to {blue}\"{new_renamed_command_name}\"{reset}"
+    );
 }
