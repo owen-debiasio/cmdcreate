@@ -9,9 +9,9 @@ Licensed under the GNU General Public License v3.0 or later.
 Here I provide the organization of the cmdcreate GitHub repository. Subject to
 change.
 
-> [!NOTE]  
-> File structure may be inaccurate, please let me know or update it
-> yourself somehow.
+> [!NOTE]
+> File structure may be inaccurate
+> Please let me know if it needs to be updated
 
 ## GitHub templates, actions, workflows
 
