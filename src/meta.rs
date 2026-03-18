@@ -19,7 +19,7 @@ use std::process::exit;
 use crate::utils::{
     colors::COLORS,
     fs::{PATHS, create_folder, path_exists, read_file_to_string},
-    io::ask_for_confirmation,
+    io::{ask_for_confirmation, error},
     net::not_connected_to_internet,
     sys::run_shell_command,
 };
@@ -47,10 +47,14 @@ pub fn display_full_license() {
 
         println!("{license_file_contents}");
     } else {
+        let error_message: &str = "License file not found!";
+
         let question = &format!(
-            "{red}License file not found!{reset}{}",
+            "{red}{error_message}{reset}{}",
             if not_connected_to_internet() {
-                ""
+                // Exit here now because there is no need to download and install the license
+                // if user has no internet
+                error(error_message, "")
             } else {
                 " Do you want to download and install the license?"
             }
@@ -78,7 +82,7 @@ fn download_and_install_license() {
 
     run_shell_command(command_to_download_and_install_license);
 
-    println!("{green}Successfully downloaded license!{reset}");
+    println!("\n{green}Successfully downloaded license!{reset}");
 
     exit(0)
 }
