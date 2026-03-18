@@ -32,7 +32,7 @@ of contents and information here:
 > If you are looking for information on updates and how to update, check out
 > **[Information Regarding cmdcreate and Updates](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/updates.md)**.
 > While you are at it, also check out the
-> **[Version Support Information](https://github.com/owen-debiasio/cmdcreate/blob/main/SECURITY.md)**
+> **[Version Support Information](https://github.com/owen-debiasio/cmdcreate/tree/main?tab=security-ov-file#)**
 > for more information about updates.
 
 > [!WARNING]  
