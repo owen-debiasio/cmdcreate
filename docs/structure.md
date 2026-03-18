@@ -104,7 +104,6 @@ change.
     - [colors.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/colors.rs)
     - [fs.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/fs.rs)
     - [io.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/io.rs)
-    - [meta.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/meta.rs)
     - [mod.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/mod.rs)
     - [net.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/net.rs)
     - [sys.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/sys.rs)
