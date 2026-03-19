@@ -632,3 +632,9 @@ Licensed under the GNU General Public License v3.0 or later.
   file
 - Small quality of life changes
 - cmdcreate now auto-downloads the license if not installed (`curl` is required)
+
+## v1.1.8
+
+- Added flags `-b`/`--bypass-root`
+  - Allows you to bypass root requirements
+  - **ONLY USE IF YOU KNOW WHAT YOU ARE DOING**
