@@ -21,9 +21,12 @@ use crate::{
     meta::{AUTHOR, AUTHOR_EMAIL},
     utils::{
         fs::init_fs_layout,
-        io::error,
+        io::{ask_for_confirmation, error},
         net::not_connected_to_internet,
-        sys::{ARCH, ENVIRONMENT_VARIABLES, get_distro_base, installation_method, is_root},
+        sys::{
+            ARCH, ENVIRONMENT_VARIABLES, get_distro_base, installation_method,
+            root_requirement_is_bypassed, running_as_root,
+        },
     },
     version::version_is_development_build,
 };
@@ -64,10 +67,23 @@ Shell in use: {}
     )
 }
 
-pub fn init() {
-    if !is_root() {
+fn root_check() {
+    let user_bypasses_root: bool = root_requirement_is_bypassed();
+
+    if !running_as_root() && !user_bypasses_root {
         error("Please run cmdcreate as root.", "")
     }
+
+    if user_bypasses_root {
+        ask_for_confirmation(
+            "Root requirement is bypassed, which means instability and incompataility will occur. Proceed?",
+            true,
+        );
+    }
+}
+
+pub fn init() {
+    root_check();
 
     init_fs_layout().expect("Failed to initialize filesystem");
     init_configs();

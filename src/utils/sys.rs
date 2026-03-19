@@ -28,9 +28,14 @@ use crate::{
     utils::{fs::read_file_to_string, io::error},
 };
 
-pub fn is_root() -> bool {
+pub fn running_as_root() -> bool {
     // 0 is root, if it returns anything else, cmdcreate won't run
     geteuid().as_raw() == 0
+}
+
+pub fn root_requirement_is_bypassed() -> bool {
+    // Either of these flags allow root bypass
+    args_contains("-b") || args_contains("--bypass-root")
 }
 
 pub struct Vars {

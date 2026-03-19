@@ -14,7 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::{logger::log, utils::colors::COLORS, version::CURRENT_PROJECT_VERSION};
+use crate::{
+    logger::log, meta::PROJECT_NAME, utils::colors::COLORS, version::CURRENT_PROJECT_VERSION,
+};
 use std::process::exit;
 
 pub fn cmdcreate_usage() {
@@ -36,7 +38,7 @@ pub fn cmdcreate_usage() {
         format!("cmdcreate {CURRENT_PROJECT_VERSION}"),
         // Usage identifier
         format!(
-            "Usage: cmdcreate {magenta}(flags){reset} [{blue}command{reset}, {cyan}argument{reset}] {yellow}<args> {magenta}(flags){reset}"
+            "Usage: {PROJECT_NAME} {magenta}(flags){reset} [{blue}command{reset}, {cyan}argument{reset}] {yellow}<args> {magenta}(flags){reset}"
         ),
         // Commands
         "\nCommands:".into(),
@@ -85,6 +87,9 @@ pub fn cmdcreate_usage() {
         ),
         format!(
             "  {cyan}-f{reset},{cyan} --force {reset}                      Force commands to be ran"
+        ),
+        format!(
+            "  {cyan}-b{reset},{cyan} --bypass-root {reset}                Bypass root requirement {yellow}(USE WITH CAUTION){reset}"
         ),
         // About section
         "\nAbout:".into(),
