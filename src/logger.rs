@@ -25,7 +25,7 @@ use crate::{
     },
 };
 
-pub fn log(text: &str, lvl: u8) {
+pub fn log(text_to_log: &str, importance_level: u8) {
     let (blue, cyan, yellow, red, reset) = (
         COLORS.blue,
         COLORS.cyan,
@@ -33,11 +33,11 @@ pub fn log(text: &str, lvl: u8) {
         COLORS.red,
         COLORS.reset,
     );
-    let time_format = &load("logs", "time_format", "%Y-%m-%d %H:%M:%S");
 
+    let time_format = &load("logs", "time_format", "%Y-%m-%d %H:%M:%S");
     let time = Local::now().format(time_format).to_string();
 
-    let log_type = match lvl {
+    let log_type = match importance_level {
         1 => &format!("{yellow}WARN{reset}"),
 
         // Like this is ever used. It's used once in utils/io::error()
@@ -50,19 +50,20 @@ pub fn log(text: &str, lvl: u8) {
 
     // Should be located in /root/.local/share/cmdcreate/logs/
     let log_dir = &PATHS.log_directory;
-
     let log_file_name = &format!("{log_dir}/{time}.log");
 
     // Example:
     // [<time>] [ERROR] Uh oh this happened
-    let log_file_text = &format!("[{blue}{time}{reset}] [{log_type}] {text}\n");
+    let log_file_text = &format!("[{blue}{time}{reset}] [{log_type}] {text_to_log}\n");
 
     output_verbose_message(log_file_text);
 
     // Remove things like "\x1b[35m" from being written to the log file. It looks stupid
     let finalized_output_text = remove_spare_color_codes(log_file_text);
 
-    write_to_file(log_file_name, &finalized_output_text, true).expect("Failed to write logs");
+    let potential_error_message =
+        &format!("Failed to write logs for message: {finalized_output_text}");
+    write_to_file(log_file_name, &finalized_output_text, true).expect(potential_error_message);
 }
 
 fn output_verbose_message(text_to_print: &str) {

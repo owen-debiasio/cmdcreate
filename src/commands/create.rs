@@ -37,7 +37,8 @@ pub fn create(
 
     log(
         &format!(
-            "commands/create::create(): Creating command \"{command_to_create}\": With contents \"{contents_of_new_command_by_user}\"{}",
+            "commands/create::create(): Creating command \"{command_to_create}\": \
+            With contents \"{contents_of_new_command_by_user}\"{}",
             if run_this_function_verbose {
                 ", and being verbose..."
             } else {

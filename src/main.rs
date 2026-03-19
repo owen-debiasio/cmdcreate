@@ -40,7 +40,13 @@ fn main() {
     arguments_retrieved.retain(|argument| {
         !matches!(
             argument.as_str(),
-            "-V" | "--verbose" | "-o" | "--offline" | "-m" | "--monochrome"
+            "-V" | "--verbose"
+                | "-o"
+                | "--offline"
+                | "-m"
+                | "--monochrome"
+                | "-b"
+                | "--bypass-root"
         )
     });
 

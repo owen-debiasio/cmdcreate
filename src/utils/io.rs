@@ -25,11 +25,6 @@ use crate::{logger::log, utils::colors::COLORS, utils::sys::arguments_force_acti
 pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool {
     let (red, green, reset) = (COLORS.red, COLORS.green, COLORS.reset);
 
-    log(
-        &format!("utils/io::ask_for_confirmation(): Asking: \"{question}\""),
-        0,
-    );
-
     if arguments_force_actions() {
         return true;
     }
@@ -56,11 +51,6 @@ pub fn input(text: &str) -> String {
     let mut user_input = String::new();
     stdin().read_line(&mut user_input).unwrap();
 
-    log(
-        &format!("utils/io::input(): Response: \"{}\"", user_input.trim()),
-        0,
-    );
-
     user_input.trim().to_string()
 }
 
@@ -68,11 +58,6 @@ pub fn input(text: &str) -> String {
 /// In that case, provide the string but leave it empty
 pub fn error(error_message: &str, error_details: &str) -> ! {
     let (red, reset) = (COLORS.red, COLORS.reset);
-
-    log(
-        &format!("utils/io::error(): Error: \"{error_message}\", Details: \"{error_details}\""),
-        0,
-    );
 
     eprintln!(
         "{red}Error: {} {error_details}{reset}",

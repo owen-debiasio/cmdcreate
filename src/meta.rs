@@ -30,7 +30,7 @@ pub const AUTHOR: &str = "Owen Debiasio";
 pub const AUTHOR_USERNAME: &str = "owen-debiasio";
 pub const AUTHOR_EMAIL: &str = "owen.debiasio@gmail.com";
 
-pub const PROJECT_REPO: &str = "cmdcreate";
+pub const PROJECT_NAME: &str = "cmdcreate";
 
 pub fn get_project_copyright_info() -> String {
     // So fucking annoyed that this can't be a static
