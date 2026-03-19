@@ -16,7 +16,7 @@
 
 use crate::{
     logger::log,
-    meta::{AUTHOR, AUTHOR_EMAIL, AUTHOR_USERNAME, PROJECT_REPO, get_project_copyright_info},
+    meta::{AUTHOR, AUTHOR_EMAIL, AUTHOR_USERNAME, PROJECT_NAME, get_project_copyright_info},
     utils::{
         io::error,
         net::{http_client, not_connected_to_internet},
@@ -26,7 +26,7 @@ use crate::{
 use serde_json::Value;
 use std::{cmp::Ordering, error::Error};
 
-pub const CURRENT_PROJECT_VERSION: &str = "v1.1.7";
+pub const CURRENT_PROJECT_VERSION: &str = "v1.1.8";
 
 pub fn version_is_development_build() -> bool {
     let parse_version = |parsed_version_digits: &str| -> (u32, u32, u32) {
@@ -47,7 +47,7 @@ pub fn version_is_development_build() -> bool {
 
     match parse_version(CURRENT_PROJECT_VERSION).cmp(&parse_version(&get_latest_tag_from_repo(
         AUTHOR_USERNAME,
-        PROJECT_REPO,
+        PROJECT_NAME,
     ))) {
         Ordering::Less | Ordering::Equal => false,
         Ordering::Greater => true,
