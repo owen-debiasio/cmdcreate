@@ -35,80 +35,124 @@ use crate::{
     version::{print_version_changelog, print_version_info},
 };
 
+macro_rules! validate_args {
+    ($command:expr, $amount_of_arguments_that_have_been_given:expr, $amount_of_arguments_needed:expr, $command_usage:expr) => {
+        if $amount_of_arguments_that_have_been_given.len() <= $amount_of_arguments_needed {
+            let (blue, yellow, red) = (COLORS.blue, COLORS.yellow, COLORS.reset);
+
+            println!(
+                "Usage:\ncmdcreate {blue}{} {yellow}{}{red}",
+                $command, $command_usage
+            );
+
+            return;
+        }
+    };
+}
+
 pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
-    let (blue, yellow, reset) = (COLORS.blue, COLORS.yellow, COLORS.reset);
+    log(&format!("parse(): Parsing command: {supplied_command}"), 0);
 
-    let argument_index = |i| supplied_arguments.get(i).map(String::as_str);
-
-    log(
-        &format!("parse::parse(): Parsing command: {supplied_command}"),
-        0,
-    );
-
-    // Like all of these lines are the fucking same
+    let argument_index = |index_of_supplied_arguments| {
+        supplied_arguments
+            .get(index_of_supplied_arguments)
+            .map(String::as_str)
+    };
 
     match supplied_command {
-        "create" => match (argument_index(1), argument_index(2)) {
-            (Some(command), Some(contents)) => create(command, contents, true),
-            _ => println!("Usage:\ncmdcreate {blue}create {yellow}<command> <contents>{reset}"),
-        },
+        "create" => {
+            validate_args!(
+                supplied_command,
+                supplied_arguments,
+                2,
+                "<command> <contents>"
+            );
 
-        "remove" => argument_index(1).map_or_else(
-            || println!("Usage:\ncmdcreate {blue}remove {yellow}<command>{reset}"),
-            |cmd| remove(cmd, arguments_force_actions()),
-        ),
+            let name_of_command = argument_index(1).unwrap();
+            let contents_of_command = argument_index(2).unwrap();
 
-        "edit" => argument_index(1).map_or_else(
-            || println!("Usage:\ncmdcreate {blue}edit {yellow}<command>{reset}"),
-            edit,
-        ),
+            create(name_of_command, contents_of_command, true);
+        }
+        "rename" => {
+            validate_args!(
+                supplied_command,
+                supplied_arguments,
+                2,
+                "<command> <new name>"
+            );
 
-        "search" => argument_index(1).map_or_else(
-            || println!("Usage:\ncmdcreate {blue}search {yellow}<command>{reset}"),
-            search,
-        ),
+            let old_command_name = argument_index(1).unwrap();
+            let renamed_command_name = argument_index(2).unwrap();
 
-        "display" => argument_index(1).map_or_else(
-            || println!("Usage:\ncmdcreate {blue}display {yellow}<command>{reset}"),
-            display,
-        ),
+            rename(old_command_name, renamed_command_name);
+        }
+        "favorite" => {
+            validate_args!(
+                supplied_command,
+                supplied_arguments,
+                2,
+                "<add/remove> <command>"
+            );
 
-        "rename" => match (argument_index(1), argument_index(2)) {
-            (Some(command), Some(new_name)) => rename(command, new_name),
-            _ => println!("Usage:\ncmdcreate {blue}rename {yellow}<command> <new name>{reset}"),
-        },
+            let command_operation = argument_index(1).unwrap(); // Either "add" or "remove"
+            let name_of_command = argument_index(2).unwrap();
 
-        "favorite" => match (argument_index(1), argument_index(2)) {
-            (Some(mode @ ("add" | "remove")), Some(command)) => favorite(mode, command),
-            _ => println!("Usage:\ncmdcreate {blue}favorite {yellow}<add/remove> <command>{reset}"),
-        },
+            favorite(command_operation, name_of_command);
+        }
+
+        "remove" => {
+            validate_args!(supplied_command, supplied_arguments, 1, "<command>");
+
+            let command_to_remove = argument_index(1).unwrap();
+
+            remove(command_to_remove, arguments_force_actions());
+        }
+        "edit" => {
+            validate_args!(supplied_command, supplied_arguments, 1, "<command>");
+
+            let command_to_edit = argument_index(1).unwrap();
+
+            edit(command_to_edit);
+        }
+        "search" => {
+            validate_args!(supplied_command, supplied_arguments, 1, "<command>");
+
+            let command_to_search_for = argument_index(1).unwrap();
+
+            search(command_to_search_for);
+        }
+        "display" => {
+            validate_args!(supplied_command, supplied_arguments, 1, "<command>");
+
+            let command_to_display_contents_of = argument_index(1).unwrap();
+
+            display(command_to_display_contents_of);
+        }
+        "import" => {
+            validate_args!(supplied_command, supplied_arguments, 1, "<input file>");
+
+            let file_to_import_commands_from = argument_index(1).unwrap();
+
+            import(file_to_import_commands_from);
+        }
+        "export" => {
+            validate_args!(supplied_command, supplied_arguments, 1, "<output dir>");
+
+            let destination_of_exported_commands = argument_index(1).unwrap();
+
+            export(destination_of_exported_commands);
+        }
 
         "list" => list(),
         "check" => check(),
         "update" => update(),
         "clean" => clean(),
 
-        "import" => argument_index(1).map_or_else(
-            || println!("Usage:\ncmdcreate {blue}import {yellow}<input file>{reset}"),
-            import,
-        ),
-
-        "export" => argument_index(1).map_or_else(
-            || println!("Usage:\ncmdcreate {blue}export {yellow}<output dir>{reset}"),
-            export,
-        ),
-
         "--version" | "-v" => print_version_info(),
-
         "--license" | "-l" => display_full_license(),
         "--changelog" | "-c" => print_version_changelog(),
 
-        _ if supplied_command.starts_with('-') => {
-            error("Invalid argument:", supplied_command);
-        }
-
-        _ => {
-            error("Invalid command:", supplied_command);
-        }
+        _ if supplied_command.starts_with('-') => error("Invalid argument:", supplied_command),
+        _ => error("Invalid command:", supplied_command),
     }
 }

@@ -58,24 +58,14 @@ fn main() {
 }
 
 fn cmdcreate(arguments_provided: &[String]) {
-    let mut argument_index = 0;
+    let arguments_to_parse = arguments_provided.iter().enumerate();
 
-    while let Some(command) = arguments_provided.get(argument_index).map(String::as_str) {
+    for (index_of_provided_arguments, command) in arguments_to_parse {
         if !command.starts_with('-') {
-            break;
-        }
-
-        if matches!(command, "-V" | "--verbose") {
-            argument_index += 1;
-            continue;
+            parse(command, &arguments_provided[index_of_provided_arguments..]);
+            return;
         }
 
         parse(command, arguments_provided);
-
-        argument_index += 1;
-    }
-
-    if let Some(command) = arguments_provided.get(argument_index).map(String::as_str) {
-        parse(command, &arguments_provided[argument_index..]);
     }
 }
