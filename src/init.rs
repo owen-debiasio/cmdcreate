@@ -69,12 +69,13 @@ Shell in use: {}
 
 fn root_check() {
     let user_bypasses_root: bool = root_requirement_is_bypassed();
+    let user_is_running_as_root: bool = running_as_root();
 
-    if !running_as_root() && !user_bypasses_root {
+    if !user_is_running_as_root && !user_bypasses_root {
         error("Please run cmdcreate as root.", "")
     }
 
-    if user_bypasses_root {
+    if user_bypasses_root && !user_is_running_as_root {
         ask_for_confirmation(
             "Root requirement is bypassed, which means instability and incompataility will occur. Proceed?",
             true,
@@ -85,6 +86,8 @@ fn root_check() {
 pub fn init() {
     root_check();
 
+    // These will NOT work if user is not running as root.
+    // Root access is required for the directories
     init_fs_layout().expect("Failed to initialize filesystem");
     init_configs();
 
