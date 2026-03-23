@@ -29,7 +29,6 @@ use std::{cmp::Ordering, error::Error};
 pub const CURRENT_PROJECT_VERSION: &str = "v1.1.8";
 
 pub fn version_is_development_build() -> bool {
-
     // TODO: Make this a standalone function
     let parse_version = |parsed_version_digits: &str| -> (u32, u32, u32) {
         // 'v' always comes before the version
