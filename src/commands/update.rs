@@ -18,9 +18,10 @@ use std::process::exit;
 
 use crate::{
     logger::log,
+    meta::{AUTHOR_USERNAME, PROJECT_NAME},
     utils::{
         colors::COLORS,
-        fs::delete_folder,
+        fs::{delete_file, delete_folder, download_file_to_location_via_curl},
         io::{ask_for_confirmation, error, input},
         net::not_connected_to_internet,
         sys::{
@@ -35,7 +36,7 @@ use crate::{
 };
 
 pub fn update() {
-    let (green, blue, red, reset) = (COLORS.green, COLORS.blue, COLORS.red, COLORS.reset);
+    let (blue, red, reset) = (COLORS.blue, COLORS.red, COLORS.reset);
 
     if not_connected_to_internet() {
         error(
@@ -59,7 +60,7 @@ pub fn update() {
         InstallMethod::Aur => {
             let aur_install_confirmation = &format!(
                 "\n{blue}Arch Linux{reset}-based system detected. Updating via AUR is not directly supported here. \
-                Do you want to use the interactive update instead?\n({green}Y{reset} or {red}N{reset})"
+                Do you want to use the interactive update instead?"
             );
 
             if ask_for_confirmation(aur_install_confirmation, false) {
@@ -71,12 +72,12 @@ pub fn update() {
 
         InstallMethod::Dpkg => {
             let deb_install_confirmation = &format!(
-                "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. Would you like to install via a \
-                    {blue}.deb{reset} file?"
+                "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. \
+                Would you like to install via a {blue}.deb{reset} file?"
             );
 
             if ask_for_confirmation(deb_install_confirmation, false) {
-                update_using_method("deb");
+                update_using_method(".deb");
             }
 
             interactive_upgrade();
@@ -84,12 +85,12 @@ pub fn update() {
 
         InstallMethod::Rpm => {
             let rpm_install_confirmation = &format!(
-                "\n{blue}Fedora{reset}-based system detected. Would you like to install via a \
-                    {blue}.rpm{reset} file?\n({green}Y{reset} or {red}N{reset})"
+                "\n{blue}Fedora{reset}-based system detected. \
+                Would you like to install via a {blue}.rpm{reset} file?"
             );
 
             if ask_for_confirmation(rpm_install_confirmation, false) {
-                update_using_method("rpm");
+                update_using_method(".rpm");
             }
 
             interactive_upgrade();
@@ -102,68 +103,42 @@ pub fn update() {
 fn update_using_method(method: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    let latest_stable_release = get_latest_tag_from_repo("owen-debiasio", "cmdcreate");
+    let latest_stable_release = get_latest_tag_from_repo(AUTHOR_USERNAME, PROJECT_NAME);
+
+    cpu_arch_check(
+        "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
+    );
+
+    let package_file_name = &format!("cmdcreate-{latest_stable_release}-linux-{ARCH}{method}");
+    let temp_package_file_path = &format!("/tmp/{package_file_name}");
+    let package_file_download_path = &format!(
+        "https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{package_file_name}"
+    );
+
+    download_file_to_location_via_curl(temp_package_file_path, package_file_download_path);
 
     match method {
-        "deb" => {
-            cpu_arch_check(
-                "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
-            );
+        ".deb" => run_shell_command(&format!("dpkg -i {temp_package_file_path}")),
+        ".rpm" => run_shell_command(&format!("rpm -Uvh {temp_package_file_path}")),
+        "-bin" => run_shell_command(&format!(
+            "install -Dm755 {temp_package_file_path} /usr/bin/cmdcreate"
+        )),
 
-            let deb_package_file_path =
-                format!("cmdcreate-{latest_stable_release}-linux-{ARCH}.deb");
-
-            // These install "scripts" are also repeated 3 times.
-            run_shell_command(&format!(
-                "curl -Lf -o /tmp/{deb_package_file_path} \
-                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{deb_package_file_path} && \
-                sudo dpkg -i /tmp/{deb_package_file_path} && \
-                rm /tmp/{deb_package_file_path}"
-            ));
-
-            println!("\n{green}Update complete!{reset}");
-        }
-        "rpm" => {
-            cpu_arch_check(
-                "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
-            );
-
-            let rpm_package_path = format!("cmdcreate-{latest_stable_release}-linux-{ARCH}.rpm");
-
-            run_shell_command(&format!(
-                "curl -Lf -o /tmp/{rpm_package_path} \
-                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{rpm_package_path} && \
-                sudo rpm -Uvh /tmp/{rpm_package_path} \
-                rm /tmp/{rpm_package_path}"
-            ));
-
-            println!("\n{green}Update complete!{reset}");
-        }
-        "bin" => {
-            cpu_arch_check(
-                "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
-            );
-
-            let binary_path = format!("cmdcreate-{latest_stable_release}-linux-{ARCH}-bin");
-
-            run_shell_command(&format!(
-                "curl -Lf -o /tmp/{binary_path} \
-                https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{binary_path} && \
-                sudo install -Dm755 /tmp/{binary_path} /usr/bin/cmdcreate && \
-                rm /tmp/{binary_path}"
-            ));
-
-            println!("\n{green}Update complete!{reset}");
-        }
         _ => error(
             "Developer error: INVALID METHOD: (YOU SHOULDN'T BE ABLE TO SEE THIS)",
             method,
         ),
     }
 
+    delete_file(temp_package_file_path).expect("Failed to delete temp package file");
+
+    println!("\n{green}Update complete!{reset}");
+
     exit(0)
 }
 
+/// This function is so messy and shitty so bear with me
+/// TODO: Refactor this pile of garbage
 fn build_from_source() {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
@@ -224,12 +199,12 @@ fn interactive_upgrade() {
         available_update_methods.push(("bin", "Manually install binary".to_string()));
     }
 
-    let latest_git_repo_commit = get_latest_commit_from_repo("owen-debiasio", "cmdcreate", "main");
+    let latest_git_repo_commit = get_latest_commit_from_repo(AUTHOR_USERNAME, PROJECT_NAME, "main");
     available_update_methods.push((
         "src",
         format!(
             "Build from source {blue}(latest git {green}(commit: {latest_git_repo_commit}){blue}, \
-        universal device compatibility{}){reset}",
+            universal device compatibility{}){reset}",
             if get_distro_base() == DistroBase::Debian {
                 format!(", {red}MAY INVOLVE MANUAL INTERVENTION{blue}")
             } else {
@@ -256,9 +231,9 @@ fn interactive_upgrade() {
     }
 
     match available_update_methods[selection - 1].0 {
-        "deb" => update_using_method("deb"),
-        "rpm" => update_using_method("rpm"),
-        "bin" => update_using_method("bin"),
+        "deb" => update_using_method(".deb"),
+        "rpm" => update_using_method(".rpm"),
+        "bin" => update_using_method("-bin"),
         "src" => build_from_source(),
         "exit" => error("Aborted.", ""),
         _ => error("Invalid selection.", ""),
@@ -277,7 +252,7 @@ pub fn check() {
 
     println!("\nChecking for updates...");
 
-    let latest_stable_version = get_latest_tag_from_repo("owen-debiasio", "cmdcreate");
+    let latest_stable_version = get_latest_tag_from_repo(AUTHOR_USERNAME, PROJECT_NAME);
     let current_version = CURRENT_PROJECT_VERSION;
 
     if version_is_development_build() {

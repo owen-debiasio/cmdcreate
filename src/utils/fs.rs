@@ -22,7 +22,8 @@ use crate::{
     logger::log,
     utils::{
         io::error,
-        sys::{DistroBase, get_distro_base},
+        net::not_connected_to_internet,
+        sys::{DistroBase, get_distro_base, run_shell_command},
     },
 };
 use anyhow::{Context, Result};
@@ -56,6 +57,23 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     },
     log_directory: format!("{MAIN_PATH}/logs"),
 });
+
+pub fn download_file_to_location_via_curl(
+    file_destination: &str,
+    path_of_file_to_be_downloaded: &str,
+) {
+    if not_connected_to_internet() {
+        error("Unable to retrieve file! You need internet first!", "")
+    }
+
+    run_shell_command(&format!(
+        "curl -Lfo {file_destination} {path_of_file_to_be_downloaded}"
+    ));
+
+    if !path_exists(file_destination) {
+        error("Downloaded file not found! Failed to download file!", "")
+    }
+}
 
 pub fn init_fs_layout() -> Result<()> {
     create_folder(MAIN_PATH)?;
