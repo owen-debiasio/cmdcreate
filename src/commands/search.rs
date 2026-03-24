@@ -23,8 +23,11 @@ pub fn search(command_to_search_for: &str) {
     let (yellow, blue, reset) = (COLORS.yellow, COLORS.blue, COLORS.reset);
 
     let mut command_search_index = 0;
-    for command in get_installed_commands() {
-        let command_stem = command.file_stem().unwrap_or_default().to_string_lossy();
+    for installed_command in get_installed_commands() {
+        let command_stem = installed_command
+            .file_stem()
+            .unwrap_or_default()
+            .to_string_lossy();
 
         if command_stem.contains(command_to_search_for) {
             if command_search_index == 0 {

@@ -59,7 +59,8 @@ pub fn update() {
     match installation_method() {
         InstallMethod::Aur => {
             let aur_install_confirmation = &format!(
-                "\n{blue}Arch Linux{reset}-based system detected. Updating via AUR is not directly supported here. \
+                "\n{blue}Arch Linux{reset}-based system detected. \
+                Updating via AUR is not directly supported here. \
                 Do you want to use the interactive update instead?"
             );
 

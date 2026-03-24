@@ -41,8 +41,8 @@ pub fn export(path: &str) {
 
     let installed_commands = get_installed_commands();
 
-    for command in installed_commands {
-        if let Some(command_stem) = command.file_stem() {
+    for installed_command in installed_commands {
+        if let Some(command_stem) = installed_command.file_stem() {
             let retrieved_command = command_stem.to_string_lossy();
 
             log(
