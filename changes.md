@@ -639,4 +639,5 @@ Licensed under the GNU General Public License v3.0 or later.
   - Allows you to bypass root requirements
   - **ONLY USE IF YOU KNOW WHAT YOU ARE DOING**
 - Code optimizations
-  - Notably optimized how parsing works
+  - Optimized how parsing works
+  - Optimized parts of the updating process
