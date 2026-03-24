@@ -100,7 +100,7 @@ pub fn update() {
     }
 }
 
-fn update_using_method(method: &str) {
+fn update_using_method(method_for_installation: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
     let latest_stable_release = get_latest_tag_from_repo(AUTHOR_USERNAME, PROJECT_NAME);
@@ -109,7 +109,8 @@ fn update_using_method(method: &str) {
         "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
     );
 
-    let package_file_name = &format!("cmdcreate-{latest_stable_release}-linux-{ARCH}{method}");
+    let package_file_name =
+        &format!("cmdcreate-{latest_stable_release}-linux-{ARCH}{method_for_installation}");
     let temp_package_file_path = &format!("/tmp/{package_file_name}");
     let package_file_download_path = &format!(
         "https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{package_file_name}"
@@ -117,7 +118,7 @@ fn update_using_method(method: &str) {
 
     download_file_to_location_via_curl(temp_package_file_path, package_file_download_path);
 
-    match method {
+    match method_for_installation {
         ".deb" => run_shell_command(&format!("dpkg -i {temp_package_file_path}")),
         ".rpm" => run_shell_command(&format!("rpm -Uvh {temp_package_file_path}")),
         "-bin" => run_shell_command(&format!(
@@ -126,7 +127,7 @@ fn update_using_method(method: &str) {
 
         _ => error(
             "Developer error: INVALID METHOD: (YOU SHOULDN'T BE ABLE TO SEE THIS)",
-            method,
+            method_for_installation,
         ),
     }
 
@@ -137,106 +138,106 @@ fn update_using_method(method: &str) {
     exit(0)
 }
 
-/// This function is so messy and shitty so bear with me
-/// TODO: Refactor this pile of garbage
 fn build_from_source() {
     let (green, reset) = (COLORS.green, COLORS.reset);
+    let cloned_repository_destination = "/root/.cache/cmdcreate";
 
-    let cache_dir: &str = "/root/.cache/cmdcreate";
-    delete_folder(cache_dir).expect("Failed to delete folder");
+    delete_folder(cloned_repository_destination).expect("Failed to clear cache");
 
-    // The return values for DistroBase::Debian and DistroBase::Fedora are like the same fucking thing
+    let rustup_install_command = "
+        if ! command -v cargo >/dev/null; then \
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; \
+        fi";
 
-    let install_cmd = match get_distro_base() {
-        DistroBase::Arch => "sudo pacman -S --needed --noconfirm cargo git",
+    let dependency_install_command = match get_distro_base() {
+        DistroBase::Arch => {
+            "pacman -Sy && pacman -S --needed --noconfirm \
+            cargo git openssl curl base-devel"
+        }
         DistroBase::Debian => {
-            "sudo apt update && sudo apt install -y git build-essential pkg-config libssl-dev curl && \
-            if ! command -v cargo >/dev/null; then curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; fi"
+            "apt update && apt install -y \
+            git build-essential pkg-config libssl-dev curl"
         }
         DistroBase::Fedora => {
-            "sudo dnf install -y git-core openssl-devel pkgconf-pkg-config && \
-            if ! command -v cargo >/dev/null; then curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; fi"
+            "dnf update && dnf install -y \
+            git-core openssl-devel pkgconf-pkg-config"
         }
-        DistroBase::Unknown => {
-            error(
-                "Your system currently isn't supported for building from source.",
-                "",
-            );
-        }
+        DistroBase::Unknown => error("Your distro is unsupported! Unable to proceed.", ""),
     };
 
-    run_shell_command(&format!(
-        "{install_cmd}
+    let script_to_build_cmdcreate = format!(
+        "{dependency_install_command} && {rustup_install_command}
         set -e
         [ -f \"$HOME/.cargo/env\" ] && . \"$HOME/.cargo/env\"
-        rm -rf {cache_dir}
-        git clone https://github.com/owen-debiasio/cmdcreate.git \"{cache_dir}\"
-        cd \"{cache_dir}\"
-        sudo rustup default stable
+        git clone https://github.com/owen-debiasio/cmdcreate.git \"{cloned_repository_destination}\"
+        cd \"{cloned_repository_destination}\"
+        rustup default stable
         cargo build --release
-        sudo install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate"
-    ));
+        install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate",
+    );
+
+    run_shell_command(&script_to_build_cmdcreate);
 
     println!("\n{green}Update complete!{reset}");
+
+    exit(0)
 }
 
 fn interactive_upgrade() {
     let (blue, green, red, reset) = (COLORS.blue, COLORS.green, COLORS.red, COLORS.reset);
 
+    let installed_distro = get_distro_base();
+    let cpu_arch_is_supported = arch_is_supported();
+
+    let latest_commit = get_latest_commit_from_repo(AUTHOR_USERNAME, PROJECT_NAME, "main");
+
     println!("\nSelect an available upgrade method:\n");
 
-    let mut available_update_methods = Vec::new();
-    let distro = get_distro_base();
+    let mut chosen_update_method = Vec::new();
 
-    if distro == DistroBase::Debian && arch_is_supported() {
-        available_update_methods.push(("deb", "Install via .deb file".to_string()));
+    if installed_distro == DistroBase::Debian && cpu_arch_is_supported {
+        chosen_update_method.push(("deb", "Install via .deb file".to_string()));
     }
-    if distro == DistroBase::Fedora && arch_is_supported() {
-        available_update_methods.push(("rpm", "Install via .rpm file".to_string()));
+    if installed_distro == DistroBase::Fedora && cpu_arch_is_supported {
+        chosen_update_method.push(("rpm", "Install via .rpm file".to_string()));
     }
-
-    if arch_is_supported() {
-        available_update_methods.push(("bin", "Manually install binary".to_string()));
+    if cpu_arch_is_supported {
+        chosen_update_method.push(("bin", "Manually install binary".to_string()));
     }
 
-    let latest_git_repo_commit = get_latest_commit_from_repo(AUTHOR_USERNAME, PROJECT_NAME, "main");
-    available_update_methods.push((
+    let debian_build_warning = if installed_distro == DistroBase::Debian {
+        format!(", {red}MAY INVOLVE MANUAL INTERVENTION{blue}")
+    } else {
+        String::new()
+    };
+
+    chosen_update_method.push((
         "src",
         format!(
-            "Build from source {blue}(latest git {green}(commit: {latest_git_repo_commit}){blue}, \
-            universal device compatibility{}){reset}",
-            if get_distro_base() == DistroBase::Debian {
-                format!(", {red}MAY INVOLVE MANUAL INTERVENTION{blue}")
-            } else {
-                String::new()
-            },
+            "Build from source {blue}(latest git {green}(commit: {latest_commit}){blue}, \
+        universal compatibility{debian_build_warning}){reset}"
         ),
     ));
 
-    available_update_methods.push(("exit", "Exit".to_string()));
+    chosen_update_method.push(("exit", "Exit".to_string()));
 
-    for (available_option_index, (_, text_of_option_that_gets_printed)) in
-        available_update_methods.iter().enumerate()
-    {
-        println!(
-            "{blue}{index_of_available_option}]{reset} {text_of_option_that_gets_printed}",
-            index_of_available_option = available_option_index + 1
-        );
+    for (update_option_index, (_, update_option)) in chosen_update_method.iter().enumerate() {
+        println!("{blue}{}]{reset} {update_option}", update_option_index + 1);
     }
 
-    let selection = input("").trim().parse::<usize>().unwrap_or(0);
+    let entered_update_method = input("").trim().parse::<usize>().unwrap_or(0);
 
-    if selection == 0 || selection > available_update_methods.capacity() {
-        error("Invalid selection: ", &selection.to_string());
+    if entered_update_method == 0 || entered_update_method > chosen_update_method.len() {
+        error("Invalid selection: ", &entered_update_method.to_string());
     }
 
-    match available_update_methods[selection - 1].0 {
+    match chosen_update_method[entered_update_method - 1].0 {
         "deb" => update_using_method(".deb"),
         "rpm" => update_using_method(".rpm"),
         "bin" => update_using_method("-bin"),
         "src" => build_from_source(),
-        "exit" => error("Aborted.", ""),
-        _ => error("Invalid selection.", ""),
+        "exit" => println!("Aborted."),
+        _ => error("Unexpected error. Please try again.", ""),
     }
 }
 
