@@ -16,7 +16,7 @@
 
 use crate::{
     logger::log,
-    meta::{AUTHOR, AUTHOR_EMAIL, AUTHOR_USERNAME, PROJECT_NAME, get_project_copyright_info},
+    meta::{author_information::AUTHOR, get_project_copyright_info, project_information::PROJECT},
     utils::{
         io::error,
         net::{http_client, not_connected_to_internet},
@@ -29,7 +29,9 @@ use std::{cmp::Ordering, error::Error};
 pub const CURRENT_PROJECT_VERSION: &str = "v1.1.9";
 
 pub fn version_is_development_build() -> bool {
-    // TODO: Make this a standalone function
+    let author_username = AUTHOR.username;
+    let project_name = PROJECT.name;
+
     let parse_version = |parsed_version_digits: &str| -> (u32, u32, u32) {
         // 'v' always comes before the version
         // '.' separates the version values
@@ -46,10 +48,10 @@ pub fn version_is_development_build() -> bool {
         )
     };
 
-    match parse_version(CURRENT_PROJECT_VERSION).cmp(&parse_version(&get_latest_tag_from_repo(
-        AUTHOR_USERNAME,
-        PROJECT_NAME,
-    ))) {
+    let latest_retrieved_tag = &get_latest_tag_from_repo(author_username, project_name);
+    let version_to_parse = &parse_version(latest_retrieved_tag);
+
+    match parse_version(CURRENT_PROJECT_VERSION).cmp(version_to_parse) {
         Ordering::Less | Ordering::Equal => false,
         Ordering::Greater => true,
     }
@@ -125,28 +127,34 @@ pub fn get_latest_commit_from_repo(owner: &str, repo: &str, branch: &str) -> Str
 }
 
 pub fn print_version_info() {
+    let project_author = AUTHOR.name;
+    let project_author_email = AUTHOR.email;
+
+    let project_copyright_info = get_project_copyright_info();
+
     println!(
         "
 cmdcreate {CURRENT_PROJECT_VERSION}
-Copyright (C) {}.
+Copyright (C) {project_copyright_info}.
 License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
 There is NO WARRANTY, to the extent permitted by law.
 
-Written by {AUTHOR} <{AUTHOR_EMAIL}>.
+Written by {project_author} <{project_author_email}>.
         ",
-        get_project_copyright_info()
     );
 }
 
 pub fn print_version_changelog() {
+    let repo_path = PROJECT.repository_raw;
+
     if not_connected_to_internet() {
         error("You need internet to retrieve the changelog.", "")
     }
 
     log("main::main(): Displaying changelog...", 0);
 
-    run_shell_command(
-        "curl -L https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/changes.md",
-    );
+    let command_to_get_changelog = &format!("curl -L {repo_path}/changes.md");
+
+    run_shell_command(command_to_get_changelog);
 }

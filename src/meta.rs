@@ -16,25 +16,52 @@
 
 use std::process::exit;
 
-use crate::utils::{
-    colors::COLORS,
-    fs::{PATHS, create_folder, path_exists, read_file_to_string},
-    io::{ask_for_confirmation, error},
-    net::not_connected_to_internet,
-    sys::run_shell_command,
+use crate::{
+    meta::{author_information::AUTHOR, project_information::PROJECT},
+    utils::{
+        colors::COLORS,
+        fs::{PATHS, create_folder, path_exists, read_file_to_string},
+        io::{ask_for_confirmation, error},
+        net::not_connected_to_internet,
+        sys::run_shell_command,
+    },
 };
 
 pub const YEAR: &str = "2026";
 
-pub const AUTHOR: &str = "Owen Debiasio";
-pub const AUTHOR_USERNAME: &str = "owen-debiasio";
-pub const AUTHOR_EMAIL: &str = "owen.debiasio@gmail.com";
+pub mod author_information {
+    pub struct Author {
+        pub name: &'static str,
+        pub username: &'static str,
+        pub email: &'static str,
+    }
 
-pub const PROJECT_NAME: &str = "cmdcreate";
+    pub const AUTHOR: Author = Author {
+        name: "Owen Debiasio",
+        username: "owen-debiasio",
+        email: "owen.debiasio@gmail.com",
+    };
+}
+
+pub mod project_information {
+    pub struct Project {
+        pub name: &'static str,
+        pub repository: &'static str,
+        pub repository_raw: &'static str,
+    }
+
+    pub const PROJECT: Project = Project {
+        name: "cmdcreate",
+        repository: "https://github.com/owen-debiasio/cmdcreate",
+        repository_raw: "https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/",
+    };
+}
 
 pub fn get_project_copyright_info() -> String {
-    // So fucking annoyed that this can't be a static
-    format!("Copyright {YEAR} {AUTHOR} <{AUTHOR_EMAIL}>")
+    let project_author = AUTHOR.name;
+    let author_email = AUTHOR.email;
+
+    format!("Copyright {YEAR} {project_author} <{author_email}>")
 }
 
 pub fn display_full_license() {
@@ -69,6 +96,8 @@ pub fn display_full_license() {
 fn download_and_install_license() {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
+    let raw_repo_path = PROJECT.repository_raw;
+
     let license_path = &PATHS.license;
     let license_install_directory = license_path.replace("LICENSE", "");
 
@@ -77,7 +106,7 @@ fn download_and_install_license() {
     let command_to_download_and_install_license: &str = &format!(
         "curl -sSLo \
         {license_path} \
-        https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/LICENSE"
+        {raw_repo_path}/LICENSE"
     );
 
     run_shell_command(command_to_download_and_install_license);

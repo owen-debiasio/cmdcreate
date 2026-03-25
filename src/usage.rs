@@ -15,7 +15,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    logger::log, meta::PROJECT_NAME, utils::colors::COLORS, version::CURRENT_PROJECT_VERSION,
+    logger::log, meta::project_information::PROJECT, utils::colors::COLORS,
+    version::CURRENT_PROJECT_VERSION,
 };
 use std::process::exit;
 
@@ -28,6 +29,8 @@ pub fn cmdcreate_usage() {
         COLORS.reset,
     );
 
+    let project_name = PROJECT.name;
+
     log(
         "usage::cmdcreate_usage(): Displaying usage information...",
         0,
@@ -35,10 +38,10 @@ pub fn cmdcreate_usage() {
 
     for line in vec![
         // Version
-        format!("cmdcreate {CURRENT_PROJECT_VERSION}"),
+        format!("{project_name} {CURRENT_PROJECT_VERSION}"),
         // Usage identifier
         format!(
-            "Usage: {PROJECT_NAME} {magenta}(flags){reset} [{blue}command{reset}, {cyan}argument{reset}] {yellow}<args> {magenta}(flags){reset}"
+            "Usage: {project_name} {magenta}(flags){reset} [{blue}command{reset}, {cyan}argument{reset}] {yellow}<args> {magenta}(flags){reset}"
         ),
         // Commands
         "\nCommands:".into(),
@@ -93,7 +96,7 @@ pub fn cmdcreate_usage() {
         ),
         // About section
         "\nAbout:".into(),
-        "   Cmdcreate allows you to create custom commands for your Linux terminal".into(),
+        format!("   {project_name} allows you to create custom commands for your Linux terminal"),
         "   without needing to enter the same \"complex\" commands over and over.".into(),
     ] {
         println!("{line}");

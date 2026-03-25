@@ -18,7 +18,7 @@ use std::process::exit;
 
 use crate::{
     logger::log,
-    meta::{AUTHOR_USERNAME, PROJECT_NAME},
+    meta::{author_information::AUTHOR, project_information::PROJECT},
     utils::{
         colors::COLORS,
         fs::{delete_file, delete_folder, download_file_to_location_via_curl},
@@ -38,6 +38,8 @@ use crate::{
 pub fn update() {
     let (blue, red, reset) = (COLORS.blue, COLORS.red, COLORS.reset);
 
+    let project_name = PROJECT.name;
+
     if not_connected_to_internet() {
         error(
             "You must have internet to continue with this operation!",
@@ -45,7 +47,8 @@ pub fn update() {
         )
     }
 
-    ask_for_confirmation("\nDo you want to upgrade cmdcreate?", true);
+    let question_to_ask = &format!("\nDo you want to upgrade {project_name}?");
+    ask_for_confirmation(question_to_ask, true);
 
     if !arch_is_supported() {
         log(
@@ -104,7 +107,10 @@ pub fn update() {
 fn update_using_method(method_for_installation: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    let latest_stable_release = get_latest_tag_from_repo(AUTHOR_USERNAME, PROJECT_NAME);
+    let author_username = AUTHOR.username;
+    let project_name = PROJECT.name;
+
+    let latest_stable_release = get_latest_tag_from_repo(author_username, project_name);
 
     cpu_arch_check(
         "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
@@ -141,6 +147,7 @@ fn update_using_method(method_for_installation: &str) {
 
 fn build_from_source() {
     let (green, reset) = (COLORS.green, COLORS.reset);
+
     let cloned_repository_destination = "/root/.cache/cmdcreate";
 
     delete_folder(cloned_repository_destination).expect("Failed to clear cache");
@@ -166,11 +173,13 @@ fn build_from_source() {
         DistroBase::Unknown => error("Your distro is unsupported! Unable to proceed.", ""),
     };
 
+    let project_repo = PROJECT.repository;
+
     let script_to_build_cmdcreate = format!(
         "{dependency_install_command} && {rustup_install_command}
         set -e
         [ -f \"$HOME/.cargo/env\" ] && . \"$HOME/.cargo/env\"
-        git clone https://github.com/owen-debiasio/cmdcreate.git \"{cloned_repository_destination}\"
+        git clone {project_repo}.git \"{cloned_repository_destination}\"
         cd \"{cloned_repository_destination}\"
         rustup default stable
         cargo build --release
@@ -187,10 +196,13 @@ fn build_from_source() {
 fn interactive_upgrade() {
     let (blue, green, red, reset) = (COLORS.blue, COLORS.green, COLORS.red, COLORS.reset);
 
+    let author_username = AUTHOR.username;
+    let project_name = PROJECT.name;
+
+    let latest_commit = get_latest_commit_from_repo(author_username, project_name, "main");
+
     let installed_distro = get_distro_base();
     let cpu_arch_is_supported = arch_is_supported();
-
-    let latest_commit = get_latest_commit_from_repo(AUTHOR_USERNAME, PROJECT_NAME, "main");
 
     println!("\nSelect an available upgrade method:\n");
 
@@ -254,7 +266,10 @@ pub fn check() {
 
     println!("\nChecking for updates...");
 
-    let latest_stable_version = get_latest_tag_from_repo(AUTHOR_USERNAME, PROJECT_NAME);
+    let author_username = AUTHOR.username;
+    let project_name = PROJECT.name;
+
+    let latest_stable_version = get_latest_tag_from_repo(author_username, project_name);
     let current_version = CURRENT_PROJECT_VERSION;
 
     if version_is_development_build() {

@@ -18,7 +18,7 @@ use crate::{
     CURRENT_PROJECT_VERSION,
     configs::init_configs,
     logger::log,
-    meta::{AUTHOR, AUTHOR_EMAIL},
+    meta::author_information::AUTHOR,
     utils::{
         fs::init_fs_layout,
         io::{ask_for_confirmation, error},
@@ -36,7 +36,7 @@ pub fn debug_intro() -> String {
         "
 ----------------
 Welcome to cmdcreate!                   
-Created by: {AUTHOR} <{AUTHOR_EMAIL}>
+Created by: {} <{}>
 ----------------
 Have an issue? Copy the text below           
 and open an issue                       
@@ -50,6 +50,8 @@ Preferred text editor: {}
 Shell in use: {}
 ----------------
 ",
+        AUTHOR.name,
+        AUTHOR.email,
         if version_is_development_build() {
             "(devel)"
         } else {
