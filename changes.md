@@ -641,7 +641,7 @@ Licensed under the GNU General Public License v3.0 or later.
 - Code optimizations
   - Optimized how parsing works
   - Optimized parts of the updating process
-  
+
 ## v1.1.9
 
 - Optimized how internal project metadata is handled
