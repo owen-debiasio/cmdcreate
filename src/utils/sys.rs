@@ -23,7 +23,7 @@ use std::{
 use rustix::process::geteuid;
 
 use crate::{
-    configs::load,
+    configs::load_configuration,
     logger::{Severity, log},
     utils::{fs::read_file_to_string, io::error},
 };
@@ -84,7 +84,7 @@ pub fn args_contains(argument: &str) -> bool {
 }
 
 pub fn run_shell_command(command: &str) {
-    let shell: &str = &load("sys", "shell", &ENVIRONMENT_VARIABLES.shell);
+    let shell: &str = &load_configuration("sys", "shell", &ENVIRONMENT_VARIABLES.shell);
 
     if command.trim().is_empty() {
         return;
@@ -118,7 +118,7 @@ pub fn arch_is_supported() -> bool {
 pub fn cpu_arch_check(error_reason: &str) {
     log(
         "utils/sys::cpu_arch_check(): Double checking if CPU arch. is supported...",
-        Severity::NORMAL,
+        Severity::Normal,
     );
 
     if !arch_is_supported() {
@@ -127,7 +127,7 @@ pub fn cpu_arch_check(error_reason: &str) {
 
     log(
         "utils/sys::cpu_arch_check(): CPU arch. is supported... Continuing action...",
-        Severity::NORMAL,
+        Severity::Normal,
     );
 }
 

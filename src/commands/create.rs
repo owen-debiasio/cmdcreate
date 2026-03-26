@@ -46,7 +46,7 @@ pub fn create(
         With contents \"{contents_of_new_command_by_user}\"{verbose_creation_message}",
     );
 
-    log(log_message, Severity::NORMAL);
+    log(log_message, Severity::Normal);
 
     let full_contents_of_new_command =
         &format!("{NEW_COMMAND_HEADER}{contents_of_new_command_by_user}");
@@ -58,7 +58,7 @@ pub fn create(
 
     log(
         &format!("commands/create::create(): Command path: \"{path_to_command}\""),
-        0,
+        Severity::Normal,
     );
 
     if contents_of_new_command_by_user.is_empty() {
@@ -67,12 +67,15 @@ pub fn create(
 
     log(
         &format!("commands/create::create(): Writing contents to script: \"{path_to_command}\""),
-        0,
+        Severity::Normal,
     );
 
     overwrite_file(path_to_command, full_contents_of_new_command).expect("Failed to write to file");
 
-    log("commands/create::create(): Activating command...", 0);
+    log(
+        "commands/create::create(): Activating command...",
+        Severity::Normal,
+    );
 
     run_shell_command(&format!("chmod +x {path_to_command}"));
 

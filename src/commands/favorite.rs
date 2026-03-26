@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::logger::Severity;
 use crate::{
     commands::tools::determine_command_is_installed,
     logger::log,
@@ -41,7 +42,7 @@ fn add(command: &str) {
 
     log(
         &format!("commands/favorite::add(): Adding command \"{command}\" to favorites..."),
-        0,
+        Severity::Normal,
     );
 
     let favorites_path = &PATHS.favorites;
@@ -71,7 +72,7 @@ fn remove(command: &str) {
 
     log(
         &format!("commands/favorite::remove(): Removing command \"{command}\" from favorites..."),
-        0,
+        Severity::Normal,
     );
 
     let favorites_path = &PATHS.favorites;

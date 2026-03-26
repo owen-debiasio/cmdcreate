@@ -50,7 +50,7 @@ pub fn input(text: &str) -> String {
 
     log(
         &format!("utils/io::input(): Input text: \"{text}\""),
-        Severity::NORMAL,
+        Severity::Normal,
     );
 
     println!("{blue}{text}{reset}");

@@ -16,6 +16,7 @@
 
 use std::{fs::read_dir, path::PathBuf};
 
+use crate::logger::Severity;
 use crate::{
     commands::create::NEW_COMMAND_HEADER,
     logger::log,
@@ -35,7 +36,7 @@ pub fn determine_command_is_installed(command_to_find: &str) -> bool {
             &format!(
                 "commands/tools::command_is_installed(): Command \"{command_to_find}\" is installed... Continuing..."
             ),
-            0,
+            Severity::Normal,
         );
 
         return true;
@@ -52,7 +53,7 @@ pub fn get_installed_commands() -> Vec<PathBuf> {
 
     log(
         "commands/tools::get_installed_commands(): Getting installed commands...",
-        0,
+        Severity::Normal,
     );
 
     let command_install_directory = &PATHS.command_installation_directory;

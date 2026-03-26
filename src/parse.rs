@@ -53,7 +53,7 @@ macro_rules! validate_args {
 pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
     log(
         &format!("parse(): Parsing command: {supplied_command}"),
-        Severity::NORMAL,
+        Severity::Normal,
     );
 
     let argument_index = |index_of_supplied_arguments| {

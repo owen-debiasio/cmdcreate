@@ -16,6 +16,7 @@
 
 use std::process::exit;
 
+use crate::logger::Severity;
 use crate::{
     logger::log,
     meta::{author_information::AUTHOR, project_information::PROJECT},
@@ -53,7 +54,7 @@ pub fn update() {
     if !arch_is_supported() {
         log(
             "commands/update::update(): ARM/Unsupported arch detected, switching to interactive...",
-            0,
+            Severity::Normal,
         );
 
         interactive_upgrade();

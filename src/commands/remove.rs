@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::logger::Severity;
 use crate::{
     commands::{favorite::favorite, tools::determine_command_is_installed},
     logger::log,
@@ -49,7 +50,7 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
 
     log(
         &format!("commands/remove::remove(): Removing command \"{command}\"..."),
-        0,
+        Severity::Normal,
     );
 
     let path_of_command_to_remove = &format!("{}{command}", PATHS.command_installation_directory);

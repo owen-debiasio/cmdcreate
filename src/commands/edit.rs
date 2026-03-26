@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::logger::Severity;
 use crate::{
     commands::tools::determine_command_is_installed,
     logger::log,
@@ -65,7 +66,7 @@ pub fn edit(command_to_edit: &str) {
 
     log(
         &format!("commands/edit::edit(): Using editor \"{editor}\"..."),
-        0,
+        Severity::Normal,
     );
 
     run_shell_command(&format!(

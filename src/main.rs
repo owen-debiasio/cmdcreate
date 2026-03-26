@@ -24,6 +24,7 @@ mod usage;
 mod utils;
 mod version;
 
+use crate::logger::Severity;
 use crate::{
     init::init, logger::log, parse::parse, usage::cmdcreate_usage, utils::sys::return_args,
     version::CURRENT_PROJECT_VERSION,
@@ -32,7 +33,7 @@ use crate::{
 fn main() {
     init();
 
-    log("main::main(): Retrieving args...", 0);
+    log("main::main(): Retrieving args...", Severity::Normal);
 
     let mut arguments_retrieved = return_args();
 

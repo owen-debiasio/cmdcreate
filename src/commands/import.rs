@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::logger::Severity;
 use crate::{
     commands::{create::create, favorite::favorite as add_favorite},
     logger::log,
@@ -27,7 +28,7 @@ pub fn import(command_import_file: &str) {
         &format!(
             "commands/import::import(): Importing commands from file: \"{command_import_file}\"..."
         ),
-        0,
+        Severity::Normal,
     );
 
     let command_import_file_contents = read_file_to_string(command_import_file);

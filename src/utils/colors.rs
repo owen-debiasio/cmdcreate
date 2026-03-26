@@ -14,15 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::{configs::load, utils::sys::args_contains};
+use crate::{configs::load_configuration, utils::sys::args_contains};
 use std::sync::LazyLock;
 
 pub fn colors_enabled() -> bool {
     let colors_are_enabled_via_flags = !args_contains("-m") && !args_contains("--monochrome");
 
-    let colors_are_enabled_via_set_configs = !load("appearance", "disable_color", "false")
-        .parse::<bool>()
-        .unwrap_or(false);
+    let colors_are_enabled_via_set_configs =
+        !load_configuration("appearance", "disable_color", "false")
+            .parse::<bool>()
+            .unwrap_or(false);
 
     colors_are_enabled_via_flags && colors_are_enabled_via_set_configs
 }

@@ -38,7 +38,7 @@ use std::{
 pub static MAIN_PATH: &str = "/root/.local/share/cmdcreate";
 
 pub struct Paths {
-    pub configuration_file_directory: String,
+    pub configuration_file: String,
     pub favorites: String,
     pub command_installation_directory: String,
     pub license: String,
@@ -46,7 +46,7 @@ pub struct Paths {
 }
 
 pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
-    configuration_file_directory: "/etc/cmdcreate.toml".to_string(),
+    configuration_file: "/etc/cmdcreate.toml".to_string(),
     favorites: format!("{MAIN_PATH}/favorites"),
     command_installation_directory: "/usr/local/bin/".to_string(),
     license: if get_distro_base() == DistroBase::Debian {
@@ -80,11 +80,11 @@ pub fn init_fs_layout() -> Result<()> {
     create_folder(&PATHS.log_directory)?;
     create_folder(&PATHS.command_installation_directory)?;
     create_file(&PATHS.favorites)?;
-    create_file(&PATHS.configuration_file_directory)?;
+    create_file(&PATHS.configuration_file)?;
 
     log(
         "utils/fs::init_fs_layout(): Filesystem initialized",
-        Severity::NORMAL,
+        Severity::Normal,
     );
     Ok(())
 }

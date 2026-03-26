@@ -17,7 +17,7 @@
 use chrono::Local;
 
 use crate::{
-    configs::load,
+    configs::load_configuration,
     utils::{
         colors::COLORS,
         fs::{PATHS, write_to_file},
@@ -25,18 +25,14 @@ use crate::{
     },
 };
 
-pub struct Severity {
-    // Idk why it works when this is empty
-    // But it does so it's ok
+#[derive(Copy, Clone)]
+pub enum Severity {
+    Normal = 0,
+    Warn = 1,
+    _Error = 2,
 }
 
-impl Severity {
-    pub const NORMAL: u8 = 0;
-    pub const WARN: u8 = 1;
-    pub const _ERROR: u8 = 2;
-}
-
-pub fn log(text_to_log: &str, importance_level: u8) {
+pub fn log(text_to_log: &str, importance_level: Severity) {
     let (blue, cyan, yellow, red, reset) = (
         COLORS.blue,
         COLORS.cyan,
@@ -45,18 +41,16 @@ pub fn log(text_to_log: &str, importance_level: u8) {
         COLORS.reset,
     );
 
-    let time_format = &load("logs", "time_format", "%Y-%m-%d %H:%M:%S");
+    let time_format = &load_configuration("logs", "time_format", "%Y-%m-%d %H:%M:%S");
     let time = Local::now().format(time_format).to_string();
 
     let log_type = match importance_level {
-        1 => &format!("{yellow}WARN{reset}"),
+        Severity::Warn => &format!("{yellow}WARN{reset}"),
 
-        // Like this is ever used. It's used once in utils/io::error()
-        2 => &format!("{red}ERROR{reset}"),
+        // Like this is ever used. Here just in case
+        Severity::_Error => &format!("{red}ERROR{reset}"),
 
-        // If nothing else matches, this will be used.
-        // However, level "0" is used to identify this level
-        _ => &format!("{cyan}LOG{reset}"),
+        Severity::Normal => &format!("{cyan}LOG{reset}"),
     };
 
     // Should be located in /root/.local/share/cmdcreate/logs/
@@ -80,7 +74,7 @@ pub fn log(text_to_log: &str, importance_level: u8) {
 fn output_verbose_message(text_to_print: &str) {
     let verbose_flags_are_passed = args_contains("-V") || args_contains("--verbose");
 
-    let verbose_enabled_in_config = load("logs", "verbose", "false")
+    let verbose_enabled_in_config = load_configuration("logs", "verbose", "false")
         .parse::<bool>()
         .unwrap_or(false);
 

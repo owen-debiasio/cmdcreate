@@ -103,6 +103,6 @@ pub fn init() {
             "init::init(): Starting cmdcreate...\n         {}",
             debug_intro()
         ),
-        Severity::NORMAL,
+        Severity::Normal,
     );
 }

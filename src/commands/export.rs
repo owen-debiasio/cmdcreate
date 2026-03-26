@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::logger::Severity;
 use crate::{
     commands::{create::NEW_COMMAND_HEADER, tools::get_installed_commands},
     logger::log,
@@ -32,10 +33,13 @@ pub fn export(path: &str) {
         &format!(
             "commands/export::export(): Exporting commands to: \"{path_of_file_to_export_to}\"..."
         ),
-        0,
+        Severity::Normal,
     );
 
-    log("commands/export::export(): Creating export file...", 0);
+    log(
+        "commands/export::export(): Creating export file...",
+        Severity::Normal,
+    );
 
     create_file(path_of_file_to_export_to).expect("Failed to create file");
 
@@ -49,7 +53,7 @@ pub fn export(path: &str) {
                 &format!(
                     "commands/export::export(): Exporting command: \"{retrieved_command}\"..."
                 ),
-                0,
+                Severity::Normal,
             );
 
             let path_of_command = &format!(
@@ -77,7 +81,7 @@ pub fn export(path: &str) {
 
             log(
                 &format!("commands/export::export(): Writing data to file: \"{data}\"..."),
-                0,
+                Severity::Normal,
             );
 
             write_to_file(path_of_file_to_export_to, &data, true).expect("Failed to write to file");

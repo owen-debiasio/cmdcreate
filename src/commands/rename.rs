@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::logger::Severity;
 use crate::{
     commands::{
         remove::remove,
@@ -68,7 +69,7 @@ pub fn rename(old_command_name: &str, new_renamed_command_name: &str) {
         &format!(
             "commands/rename::rename(): Renaming command \"{old_command_name}\" to \"{new_renamed_command_name}\"..."
         ),
-        0,
+        Severity::Normal,
     );
 
     // I should probably make a function to move files

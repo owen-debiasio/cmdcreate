@@ -14,9 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::logger::Severity;
 use crate::{
     commands::tools::get_installed_commands,
-    configs::load,
+    configs::load_configuration,
     logger::log,
     utils::{
         colors::COLORS,
@@ -43,11 +44,12 @@ pub fn list() {
                 "commands/list::list(): Current command: \"{command_name}\" (favorited={})",
                 favorites_file.contains(command_name.to_string().as_str())
             ),
-            0,
+            Severity::Normal,
         );
 
         // The default is a star
-        let favorite_command_identifier = load("appearance", "favorite_indicator", "\u{2605}");
+        let favorite_command_identifier =
+            load_configuration("appearance", "favorite_indicator", "\u{2605}");
         if favorites_file.contains(command_name.to_string().as_str()) {
             println!("{favorite_command_identifier} {command_name}");
 

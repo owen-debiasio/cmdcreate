@@ -35,7 +35,7 @@ pub fn cmdcreate_usage() {
 
     log(
         "usage::cmdcreate_usage(): Displaying usage information...",
-        Severity::NORMAL,
+        Severity::Normal,
     );
 
     for line in vec![
