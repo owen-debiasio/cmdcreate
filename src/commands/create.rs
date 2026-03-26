@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    logger::log,
+    logger::{Severity, log},
     utils::{
         colors::COLORS,
         fs::{PATHS, overwrite_file},
@@ -35,18 +35,18 @@ pub fn create(
 ) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
-    log(
-        &format!(
-            "commands/create::create(): Creating command \"{command_to_create}\": \
-            With contents \"{contents_of_new_command_by_user}\"{}",
-            if run_this_function_verbose {
-                ", and being verbose..."
-            } else {
-                "..."
-            }
-        ),
-        0,
+    let verbose_creation_message = if run_this_function_verbose {
+        ", and being verbose..."
+    } else {
+        "..."
+    };
+
+    let log_message = &format!(
+        "commands/create::create(): Creating command \"{command_to_create}\": \
+        With contents \"{contents_of_new_command_by_user}\"{verbose_creation_message}",
     );
+
+    log(log_message, Severity::NORMAL);
 
     let full_contents_of_new_command =
         &format!("{NEW_COMMAND_HEADER}{contents_of_new_command_by_user}");

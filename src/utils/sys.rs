@@ -24,7 +24,7 @@ use rustix::process::geteuid;
 
 use crate::{
     configs::load,
-    logger::log,
+    logger::{Severity, log},
     utils::{fs::read_file_to_string, io::error},
 };
 
@@ -118,7 +118,7 @@ pub fn arch_is_supported() -> bool {
 pub fn cpu_arch_check(error_reason: &str) {
     log(
         "utils/sys::cpu_arch_check(): Double checking if CPU arch. is supported...",
-        0,
+        Severity::NORMAL,
     );
 
     if !arch_is_supported() {
@@ -127,7 +127,7 @@ pub fn cpu_arch_check(error_reason: &str) {
 
     log(
         "utils/sys::cpu_arch_check(): CPU arch. is supported... Continuing action...",
-        0,
+        Severity::NORMAL,
     );
 }
 

@@ -20,7 +20,11 @@ use std::{
     process::exit,
 };
 
-use crate::{logger::log, utils::colors::COLORS, utils::sys::arguments_force_actions};
+use crate::{
+    logger::{Severity, log},
+    utils::colors::COLORS,
+    utils::sys::arguments_force_actions,
+};
 
 pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool {
     let (red, green, reset) = (COLORS.red, COLORS.green, COLORS.reset);
@@ -44,7 +48,10 @@ pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool
 pub fn input(text: &str) -> String {
     let (blue, reset) = (COLORS.blue, COLORS.reset);
 
-    log(&format!("utils/io::input(): Input text: \"{text}\""), 0);
+    log(
+        &format!("utils/io::input(): Input text: \"{text}\""),
+        Severity::NORMAL,
+    );
 
     println!("{blue}{text}{reset}");
 

@@ -17,7 +17,7 @@
 use crate::{
     CURRENT_PROJECT_VERSION,
     configs::init_configs,
-    logger::log,
+    logger::{Severity, log},
     meta::author_information::AUTHOR,
     utils::{
         fs::init_fs_layout,
@@ -32,40 +32,45 @@ use crate::{
 };
 
 pub fn debug_intro() -> String {
+    let author_name = AUTHOR.name;
+    let author_email = AUTHOR.email;
+
+    let build_status = if version_is_development_build() {
+        "(devel)"
+    } else {
+        "(stable)"
+    };
+
+    let distro_base = get_distro_base();
+    let installation_method = installation_method();
+
+    let internet_status = if not_connected_to_internet() {
+        "offline"
+    } else {
+        "connected"
+    };
+
+    let chosen_text_editor = &ENVIRONMENT_VARIABLES.text_editor;
+    let shell_in_use = &ENVIRONMENT_VARIABLES.shell;
+
     format!(
         "
 ----------------
 Welcome to cmdcreate!                   
-Created by: {} <{}>
+Created by: {author_name} <{author_email}>
 ----------------
 Have an issue? Copy the text below           
 and open an issue                       
 ----------------
-Version: {CURRENT_PROJECT_VERSION} {}
+Version: {CURRENT_PROJECT_VERSION} {build_status}
 CPU architecture: {ARCH}
-Distro base: {:?}
-Installation Method: {:?}
-Internet status: {}
-Preferred text editor: {}
-Shell in use: {}
+Distro base: {distro_base:?}
+Installation Method: {installation_method:?}
+Internet status: {internet_status}
+Preferred text editor: {chosen_text_editor}
+Shell in use: {shell_in_use}
 ----------------
-",
-        AUTHOR.name,
-        AUTHOR.email,
-        if version_is_development_build() {
-            "(devel)"
-        } else {
-            "(stable)"
-        },
-        get_distro_base(),
-        installation_method(),
-        if not_connected_to_internet() {
-            "offline"
-        } else {
-            "connected"
-        },
-        ENVIRONMENT_VARIABLES.text_editor,
-        ENVIRONMENT_VARIABLES.shell,
+"
     )
 }
 
@@ -98,6 +103,6 @@ pub fn init() {
             "init::init(): Starting cmdcreate...\n         {}",
             debug_intro()
         ),
-        0,
+        Severity::NORMAL,
     );
 }

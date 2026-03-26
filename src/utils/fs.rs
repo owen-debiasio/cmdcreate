@@ -19,7 +19,7 @@
 //! If using filesystem actions, please refer to here.
 
 use crate::{
-    logger::log,
+    logger::{Severity, log},
     utils::{
         io::error,
         net::not_connected_to_internet,
@@ -82,7 +82,10 @@ pub fn init_fs_layout() -> Result<()> {
     create_file(&PATHS.favorites)?;
     create_file(&PATHS.configuration_file_directory)?;
 
-    log("utils/fs::init_fs_layout(): Filesystem initialized", 0);
+    log(
+        "utils/fs::init_fs_layout(): Filesystem initialized",
+        Severity::NORMAL,
+    );
     Ok(())
 }
 

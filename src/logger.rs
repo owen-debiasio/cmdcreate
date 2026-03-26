@@ -25,6 +25,17 @@ use crate::{
     },
 };
 
+pub struct Severity {
+    // Idk why it works when this is empty
+    // But it does so it's ok
+}
+
+impl Severity {
+    pub const NORMAL: u8 = 0;
+    pub const WARN: u8 = 1;
+    pub const _ERROR: u8 = 2;
+}
+
 pub fn log(text_to_log: &str, importance_level: u8) {
     let (blue, cyan, yellow, red, reset) = (
         COLORS.blue,

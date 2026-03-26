@@ -15,7 +15,9 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    logger::log, meta::project_information::PROJECT, utils::colors::COLORS,
+    logger::{Severity, log},
+    meta::project_information::PROJECT,
+    utils::colors::COLORS,
     version::CURRENT_PROJECT_VERSION,
 };
 use std::process::exit;
@@ -33,7 +35,7 @@ pub fn cmdcreate_usage() {
 
     log(
         "usage::cmdcreate_usage(): Displaying usage information...",
-        0,
+        Severity::NORMAL,
     );
 
     for line in vec![

@@ -29,7 +29,7 @@ use crate::{
         search::search,
         update::{check, update},
     },
-    logger::log,
+    logger::{Severity, log},
     meta::display_full_license,
     utils::{colors::COLORS, io::error, sys::arguments_force_actions},
     version::{print_version_changelog, print_version_info},
@@ -51,7 +51,10 @@ macro_rules! validate_args {
 }
 
 pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
-    log(&format!("parse(): Parsing command: {supplied_command}"), 0);
+    log(
+        &format!("parse(): Parsing command: {supplied_command}"),
+        Severity::NORMAL,
+    );
 
     let argument_index = |index_of_supplied_arguments| {
         supplied_arguments
