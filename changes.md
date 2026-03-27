@@ -645,4 +645,6 @@ Licensed under the GNU General Public License v3.0 or later.
 ## v1.1.9
 
 - Optimized how internal project metadata is handled
-- Code optimizations
+- Optimized how logging is categorized
+- Other code optimizations
+- Fixed typo
