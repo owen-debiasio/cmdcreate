@@ -25,8 +25,10 @@ use crate::utils::sys::args_contains;
 pub fn http_client() -> Client {
     let user_agent = "cmdcreate-updater";
 
+    let client_builder_timeout = Duration::from_secs(15);
+
     Client::builder()
-        .timeout(Duration::from_secs(15))
+        .timeout(client_builder_timeout)
         .user_agent(user_agent)
         .build()
         .expect("Failed to build HTTP client")
@@ -44,13 +46,13 @@ pub fn not_connected_to_internet() -> bool {
     // The sample DNS is set to Cloudflare for reliability
     let sample_dns = "1.1.1.1:53";
 
-    match sample_dns.to_socket_addrs() {
-        Ok(mut socket_address) => {
-            if let Some(addr) = socket_address.next() {
-                return TcpStream::connect_timeout(&addr, Duration::from_secs(1)).is_err();
-            }
-            true
-        }
-        Err(_) => true,
-    }
+    sample_dns
+        .to_socket_addrs()
+        .map_or(true, |mut socket_address| {
+            let timeout_duration = Duration::from_secs(1);
+
+            let socket_address = socket_address.next().unwrap();
+
+            TcpStream::connect_timeout(&socket_address, timeout_duration).is_err()
+        })
 }
