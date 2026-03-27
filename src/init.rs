@@ -84,7 +84,7 @@ fn root_check() {
 
     if user_bypasses_root && !user_is_running_as_root {
         ask_for_confirmation(
-            "Root requirement is bypassed, which means instability and incompataility will occur. Proceed?",
+            "Root requirement is bypassed, which means instability and incompatibility will occur. Proceed?",
             true,
         );
     }
