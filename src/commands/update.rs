@@ -16,9 +16,8 @@
 
 use std::process::exit;
 
-use crate::logger::Severity;
 use crate::{
-    logger::log,
+    logger::{Severity, log},
     meta::{author_information::AUTHOR, project_information::PROJECT},
     utils::{
         colors::COLORS,

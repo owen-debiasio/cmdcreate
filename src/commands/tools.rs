@@ -16,10 +16,9 @@
 
 use std::{fs::read_dir, path::PathBuf};
 
-use crate::logger::Severity;
 use crate::{
     commands::create::NEW_COMMAND_HEADER,
-    logger::log,
+    logger::{Severity, log},
     utils::{
         colors::COLORS,
         fs::{PATHS, path_exists, read_file_to_string},

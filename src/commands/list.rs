@@ -14,11 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::logger::Severity;
 use crate::{
     commands::tools::get_installed_commands,
     configs::load_configuration,
-    logger::log,
+    logger::{Severity, log},
     utils::{
         colors::COLORS,
         fs::{PATHS, read_file_to_string},

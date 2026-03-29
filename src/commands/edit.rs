@@ -14,10 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::logger::Severity;
 use crate::{
     commands::tools::determine_command_is_installed,
-    logger::log,
+    logger::{Severity, log},
     utils::{
         fs::PATHS,
         io::error,

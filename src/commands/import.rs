@@ -14,10 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::logger::Severity;
 use crate::{
     commands::{create::create, favorite::favorite as add_favorite},
-    logger::log,
+    logger::{Severity, log},
     utils::{colors::COLORS, fs::read_file_to_string, io::error},
 };
 
