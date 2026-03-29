@@ -25,7 +25,11 @@ mod utils;
 mod version;
 
 use crate::{
-    init::init, logger::{Severity, log}, parse::parse, usage::cmdcreate_usage, utils::sys::return_args,
+    init::init,
+    logger::{Severity, log},
+    parse::parse,
+    usage::cmdcreate_usage,
+    utils::sys::return_args,
     version::CURRENT_PROJECT_VERSION,
 };
 
