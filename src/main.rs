@@ -24,9 +24,8 @@ mod usage;
 mod utils;
 mod version;
 
-use crate::logger::Severity;
 use crate::{
-    init::init, logger::log, parse::parse, usage::cmdcreate_usage, utils::sys::return_args,
+    init::init, logger::{Severity, log}, parse::parse, usage::cmdcreate_usage, utils::sys::return_args,
     version::CURRENT_PROJECT_VERSION,
 };
 
