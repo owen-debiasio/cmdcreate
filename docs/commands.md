@@ -24,7 +24,6 @@ Commands:
   display  <command>                 Display contents of a command
   rename   <command>    <renamed>    Renames a command
   favorite <add/remove> <command>    Adds or removes a command from favorites
-  clean                              Can clean up old and unused files
 
  Backup:
     export <output directory>        Checks for updates
@@ -378,50 +377,4 @@ $ cmdcreate import ~/Downloads/export.cmdcreate
 Installing command: "xyz"
 Installing command: "cba"
 Command "cba" added to favorites. # (Shows if command was exported as favorite)
-```
-
-## Clean
-
-### Clean up old and unused files
-
-#### Usage
-
-`cmdcreate clean`
-
-#### Example output
-
-##### Normal usage
-
-```bash
-$ cmdcreate clean
-Do you want to clean cmdcreate?
-(Y or N)
-y
-
-Do you want to delete old log files?
-(Y or N)
-y
-
-Log files cleared.
-
-Do you want to repair broken commands?
-(Y or N)
-y
-No commands needed repairs.
-
-Do you want to delete offline files?
-(Y or N)
-y
-
-Offline files cleared.
-
-Cleaned up cmdcreate.
-```
-
-##### Forced
-
-```bash
-$ cmdcreate clean -f
-
-Cleaned up cmdcreate.
 ```

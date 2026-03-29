@@ -63,9 +63,6 @@ pub fn cmdcreate_usage() {
         format!(
             "  {blue}favorite {yellow}<add/remove> <command>{reset}   Adds or removes a command from favorites"
         ),
-        format!(
-            "  {blue}clean{reset}                             Can clean up old and unused files"
-        ),
         "\n  Update:".into(),
         format!("    {blue}check{reset}                           Checks for updates"),
         format!("    {blue}update{reset}                          Updates cmdcreate"),

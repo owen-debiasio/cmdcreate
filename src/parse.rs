@@ -16,7 +16,6 @@
 
 use crate::{
     commands::{
-        clean::clean,
         create::create,
         display::display,
         edit::edit,
@@ -149,7 +148,6 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
         "list" => list(),
         "check" => check(),
         "update" => update(),
-        "clean" => clean(),
 
         "--version" | "-v" => print_version_info(),
         "--license" | "-l" => display_full_license(),
