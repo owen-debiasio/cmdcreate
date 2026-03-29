@@ -648,3 +648,4 @@ Licensed under the GNU General Public License v3.0 or later.
 - Optimized how logging is categorized
 - Other code optimizations
 - Fixed typo
+- Removed command "clean": Fundamentally useless
