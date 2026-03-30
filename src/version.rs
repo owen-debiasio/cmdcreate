@@ -26,7 +26,7 @@ use crate::{
 use serde_json::Value;
 use std::{cmp::Ordering, error::Error};
 
-pub const CURRENT_PROJECT_VERSION: &str = "v1.1.9";
+pub const CURRENT_PROJECT_VERSION: &str = "v1.2.0";
 
 pub fn version_is_development_build() -> bool {
     let author_username = AUTHOR.username;
