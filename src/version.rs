@@ -60,7 +60,7 @@ pub fn version_is_development_build() -> bool {
 pub fn get_latest_tag_from_repo(owner: &str, repo: &str) -> String {
     if not_connected_to_internet() {
         log(
-            "version::get_latest_tag(): No internet... Unable to retrieve latest tag...",
+            "version::get_latest_tag_from_repo(): No internet... Unable to retrieve latest tag...",
             Severity::Warn,
         );
         return "unknown".to_string();
@@ -88,7 +88,7 @@ pub fn get_latest_tag_from_repo(owner: &str, repo: &str) -> String {
     match result {
         Ok(latest_tag) => {
             log(
-                &format!("version::get_latest_tag(): Latest tag: {latest_tag}"),
+                &format!("version::get_latest_tag_from_repo(): Latest tag: {latest_tag}"),
                 Severity::Normal,
             );
             latest_tag
@@ -119,7 +119,7 @@ pub fn get_latest_commit_from_repo(owner: &str, repo: &str, branch: &str) -> Str
 
     // And THIS is why cmdcreate can take forever to load on weak systems.
     log(
-        &format!("version::get_latest_commit(): Retrieved latest commit: \"{commit}\""),
+        &format!("version::get_latest_commit_from_repo(): Retrieved latest commit: \"{commit}\""),
         Severity::Normal,
     );
 
@@ -152,7 +152,10 @@ pub fn print_version_changelog() {
         error("You need internet to retrieve the changelog.", "")
     }
 
-    log("main::main(): Displaying changelog...", Severity::Normal);
+    log(
+        "version::print_version_changelog(): Displaying changelog...",
+        Severity::Normal,
+    );
 
     let command_to_get_changelog = &format!("curl -L {repo_path}/changes.md");
 

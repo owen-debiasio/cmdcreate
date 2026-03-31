@@ -51,7 +51,7 @@ macro_rules! validate_args {
 
 pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
     log(
-        &format!("parse(): Parsing command: {supplied_command}"),
+        &format!("parse::parse(): Parsing command: {supplied_command}"),
         Severity::Normal,
     );
 
