@@ -191,6 +191,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ### Download and install
 
 ```bash
+cd "$HOME"
 git clone https://github.com/owen-debiasio/cmdcreate.git
 cd cmdcreate
 rustup default stable
