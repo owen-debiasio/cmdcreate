@@ -45,12 +45,13 @@ fn add(command: &str) {
     );
 
     let favorites_path = &PATHS.favorites;
+    let favorite_file_contents = read_file_to_string(favorites_path);
 
     determine_command_is_installed(command);
 
-    if read_file_to_string(favorites_path)
+    if favorite_file_contents
         .lines()
-        .any(|command_| command_ == command)
+        .any(|command_index| command_index == command)
     {
         println!("{yellow}Command {blue}\"{command}\"{yellow} is already in favorites.{reset}");
 
