@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 //! This library just provides wrappers to already existing functions!
-//! They are technically useless but they make more sense to me.
+//! They are technically useless, but they make more sense to me.
 //! If using filesystem actions, please refer to here.
 
 use crate::{
