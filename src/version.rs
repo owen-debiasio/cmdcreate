@@ -29,9 +29,6 @@ use std::{cmp::Ordering, error::Error};
 pub const CURRENT_PROJECT_VERSION: &str = "v1.2.0";
 
 pub fn version_is_development_build() -> bool {
-    let author_username = AUTHOR.username;
-    let project_name = PROJECT.name;
-
     let parse_version = |parsed_version_digits: &str| -> (u32, u32, u32) {
         // 'v' always comes before the version
         // '.' separates the version values
@@ -47,6 +44,9 @@ pub fn version_is_development_build() -> bool {
             *version_digits.get(2).unwrap_or(&0),
         )
     };
+
+    let author_username = AUTHOR.username;
+    let project_name = PROJECT.name;
 
     let latest_retrieved_tag = &get_latest_tag_from_repo(author_username, project_name);
     let version_to_parse = &parse_version(latest_retrieved_tag);
