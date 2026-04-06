@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::tools::determine_command_is_installed,
+    commands::tools::determine_cmdcreate_command_is_installed,
     logger::{Severity, log},
     utils::{
         colors::COLORS,
@@ -47,7 +47,7 @@ fn add(command: &str) {
     let favorites_path = &PATHS.favorites;
     let favorite_file_contents = read_file_to_string(favorites_path);
 
-    determine_command_is_installed(command);
+    determine_cmdcreate_command_is_installed(command);
 
     if favorite_file_contents
         .lines()

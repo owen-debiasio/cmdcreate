@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::tools::determine_command_is_installed,
+    commands::tools::determine_cmdcreate_command_is_installed,
     utils::{
         colors::COLORS,
         fs::{PATHS, read_file_to_string},
@@ -25,7 +25,7 @@ use crate::{
 pub fn display(command_to_display: &str) {
     let (blue, reset) = (COLORS.blue, COLORS.reset);
 
-    determine_command_is_installed(command_to_display);
+    determine_cmdcreate_command_is_installed(command_to_display);
 
     let path_to_command = format!(
         "{}{command_to_display}",

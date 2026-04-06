@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::{favorite::favorite, tools::determine_command_is_installed},
+    commands::{favorite::favorite, tools::determine_cmdcreate_command_is_installed},
     logger::{Severity, log},
     utils::{
         colors::COLORS,
@@ -33,7 +33,7 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
         COLORS.reset,
     );
 
-    determine_command_is_installed(command);
+    determine_cmdcreate_command_is_installed(command);
 
     if !force_removal_of_command {
         let question = &format!(
