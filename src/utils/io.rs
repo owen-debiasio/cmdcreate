@@ -32,14 +32,13 @@ pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool
         return true;
     }
 
-    let question_that_is_asked =
-        &format!("{question}{reset}\n({green}Y{reset} or {red}N{reset})\n");
+    let question_that_is_asked = &format!("{question}{reset}\n({green}Y{reset} or {red}N{reset})");
     let get_response_to_question = input(question_that_is_asked);
 
     if get_response_to_question.eq_ignore_ascii_case("y") {
         true
     } else if exit_if_user_declines {
-        error("\nAborted.", "")
+        error("\n\nAborted.", "")
     } else {
         false
     }
