@@ -23,7 +23,7 @@ use crate::{
 use std::process::exit;
 
 pub fn cmdcreate_usage() {
-    let (blue, cyan, yellow, magenta, reset) = (
+    let (blue, cyan, yellow, magenta, red) = (
         COLORS.blue,
         COLORS.cyan,
         COLORS.yellow,
@@ -31,75 +31,51 @@ pub fn cmdcreate_usage() {
         COLORS.reset,
     );
 
-    let project_name = PROJECT.name;
-
     log(
         "usage::cmdcreate_usage(): Displaying usage information...",
         Severity::Normal,
     );
 
-    for line in vec![
-        // Version
-        format!("{project_name} {CURRENT_PROJECT_VERSION}"),
-        // Usage identifier
-        format!(
-            "Usage: {project_name} {magenta}(flags){reset} [{blue}command{reset}, {cyan}argument{reset}] {yellow}<args> {magenta}(flags){reset}"
-        ),
-        // Commands
-        "\nCommands:".into(),
-        format!("  {blue}create{yellow}   <command>    <contents>{reset}  Create a command"),
-        format!("  {blue}remove {yellow}  <command>{reset}                Remove a command"),
-        format!(
-            "  {blue}edit   {yellow}  <command>{reset}                Modify contents of a command"
-        ),
-        format!("  {blue}list{reset}                              Display installed commands"),
-        format!(
-            "  {blue}search {yellow}  <command>{reset}                Searches for matched command"
-        ),
-        format!(
-            "  {blue}display {yellow} <command>{reset}                Display contents of a command"
-        ),
-        format!("  {blue}rename {yellow}  <command>    <renamed>{reset}   Renames a command"),
-        format!(
-            "  {blue}favorite {yellow}<add/remove> <command>{reset}   Adds or removes a command from favorites"
-        ),
-        "\n  Update:".into(),
-        format!("    {blue}check{reset}                           Checks for updates"),
-        format!("    {blue}update{reset}                          Updates cmdcreate"),
-        "\n  Backup:".into(),
-        format!(
-            "    {blue}export{reset} {yellow}<output directory>{reset}       Exports your installed commands"
-        ),
-        format!(
-            "    {blue}import{reset} {yellow}<file input>{reset}             Imports your exported commands"
-        ),
-        // Arguments and flags
-        "\nArguments and flags:".into(),
-        format!("  {cyan}-v{reset},{cyan} --version {reset}                    Displays version"),
-        format!("  {cyan}-c{reset},{cyan} --changelog {reset}                  Displays changelog"),
-        format!("  {cyan}-l{reset},{cyan} --license {reset}                    Displays license"),
-        format!(
-            "  {cyan}-o{reset},{cyan} --offline {reset}                    Runs cmdcreate in offline mode"
-        ),
-        format!(
-            "  {cyan}-m{reset},{cyan} --monochrome {reset}                 Disables colorized output"
-        ),
-        format!(
-            "  {cyan}-V{reset},{cyan} --verbose {reset}                    Print logs to output"
-        ),
-        format!(
-            "  {cyan}-f{reset},{cyan} --force {reset}                      Force commands to be ran"
-        ),
-        format!(
-            "  {cyan}-b{reset},{cyan} --bypass-root {reset}                Bypass root requirement {yellow}(USE WITH CAUTION){reset}"
-        ),
-        // About section
-        "\nAbout:".into(),
-        format!("   {project_name} allows you to create custom commands for your Linux terminal"),
-        "   without needing to enter the same \"complex\" commands over and over.".into(),
-    ] {
-        println!("{line}");
-    }
+    let project_name = PROJECT.name;
+    let version = CURRENT_PROJECT_VERSION;
+
+    println!(
+        "
+{project_name} {version}
+Usage: {project_name} {magenta}(flags){red} [{blue}command{red}, {cyan}argument{red}] {yellow}<args> {magenta}(flags){red}
+
+Commands:
+  {blue}create{yellow}   <command>    <contents>{red}  Create a command
+  {blue}remove{yellow}   <command>{red}                Remove a command
+  {blue}edit{yellow}     <command>{red}                Modify contents of a command
+  {blue}list{red}                              Display installed commands
+  {blue}search{yellow}   <command>{red}                Searches for matched command
+  {blue}display{yellow}  <command>{red}                Display contents of a command
+  {blue}rename{yellow}   <command>    <renamed>{red}   Renames a command
+  {blue}favorite{yellow} <add/remove> <command>{red}   Adds or removes a command from favorites
+
+  Update:
+    {blue}check{red}                           Checks for updates
+    {blue}update{red}                          Updates cmdcreate
+
+  Backup:
+    {blue}export{red} {yellow}<output directory>{red}       Exports your installed commands
+    {blue}import{red} {yellow}<file input>{red}             Imports your exported commands
+
+Arguments and flags:
+  {cyan}-v{red}, {cyan}--version{red}                     Displays version
+  {cyan}-c{red}, {cyan}--changelog{red}                   Displays changelog
+  {cyan}-l{red}, {cyan}--license{red}                     Displays license
+  {cyan}-o{red}, {cyan}--offline{red}                     Runs cmdcreate in offline mode
+  {cyan}-m{red}, {cyan}--monochrome{red}                  Disables colorized output
+  {cyan}-V{red}, {cyan}--verbose{red}                     Print logs to output
+  {cyan}-f{red}, {cyan}--force{red}                       Force commands to be ran
+  {cyan}-b{red}, {cyan}--bypass-root{red}                 Bypass root requirement {yellow}(USE WITH CAUTION){red}
+
+About:
+   {project_name} allows you to create custom commands for your Linux terminal
+   without needing to enter the same \"complex\" commands over and over.",
+    );
 
     exit(1)
 }
