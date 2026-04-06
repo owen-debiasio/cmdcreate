@@ -653,3 +653,6 @@ Licensed under the GNU General Public License v3.0 or later.
 ## v1.2.0
 
 - Code optimizations
+- New flags for command `create`:
+  - `--in_editor`/`-i`
+    - Allow to write the contents of the new command from a text editor
