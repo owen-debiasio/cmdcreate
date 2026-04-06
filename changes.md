@@ -656,3 +656,6 @@ Licensed under the GNU General Public License v3.0 or later.
 - New flags for command `create`:
   - `--in_editor`/`-i`
     - Allow to write the contents of the new command from a text editor
+- You can now delete multiple commands at once
+  - Example:
+    - `cmdcreate remove command1 command2`
