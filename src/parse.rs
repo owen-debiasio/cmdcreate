@@ -125,9 +125,11 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
         "remove" => {
             validate_args!(supplied_command, supplied_arguments, 1, "<command>", "");
 
-            let command_to_remove = argument_index(1).unwrap();
-
-            remove(command_to_remove, arguments_force_actions());
+            for index in 1..=supplied_arguments.len() {
+                if let Some(command_to_remove) = argument_index(index) {
+                    remove(command_to_remove, arguments_force_actions());
+                }
+            }
         }
         "edit" => {
             validate_args!(supplied_command, supplied_arguments, 1, "<command>", "");
