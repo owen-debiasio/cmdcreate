@@ -83,6 +83,14 @@ pub fn args_contains(argument: &str) -> bool {
         .any(|argument_to_match| argument_to_match == argument)
 }
 
+pub fn system_command_is_installed(command_to_check: &str) -> bool {
+    Command::new("which")
+        .arg(command_to_check)
+        .output()
+        .map(|output_status| output_status.status.success())
+        .unwrap_or(false)
+}
+
 pub fn run_shell_command(command: &str) {
     let shell: &str = &load_configuration("sys", "shell", &ENVIRONMENT_VARIABLES.shell);
 

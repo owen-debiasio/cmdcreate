@@ -15,19 +15,16 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::tools::determine_command_is_installed,
+    commands::tools::determine_cmdcreate_command_is_installed,
     logger::{Severity, log},
     utils::{
         fs::PATHS,
         io::error,
-        sys::{ENVIRONMENT_VARIABLES, run_shell_command},
+        sys::{ENVIRONMENT_VARIABLES, run_shell_command, system_command_is_installed},
     },
 };
-use std::process::Command;
 
-pub fn edit(command_to_edit: &str) {
-    determine_command_is_installed(command_to_edit);
-
+pub fn get_available_editor() -> String {
     let available_editors: &[&str] = &[
         &ENVIRONMENT_VARIABLES.text_editor, // Used when user runs something like "EDITOR=vi cmdcreate edit abc"
         "nvim",
@@ -48,28 +45,34 @@ pub fn edit(command_to_edit: &str) {
         "mousepad",
     ];
 
-    let chosen_editor = available_editors.iter().find(|&&editor_to_find| {
-        Command::new("which")
-            .arg(editor_to_find)
-            .output()
-            .map(|output_status| output_status.status.success())
-            .unwrap_or(false)
-    });
+    let chosen_editor = available_editors
+        .iter()
+        .find(|&&editor_to_find| system_command_is_installed(editor_to_find));
 
-    let editor = chosen_editor.map_or_else(
-        || {
-            error("No known editor is installed on your device.", "");
-        },
-        |editor_that_is_chosen| *editor_that_is_chosen,
-    );
+    chosen_editor
+        .map_or_else(
+            || {
+                error("No known editor is installed on your device.", "");
+            },
+            |editor_that_is_chosen| *editor_that_is_chosen,
+        )
+        .to_string()
+}
+
+pub fn edit(command_to_edit: &str) {
+    determine_cmdcreate_command_is_installed(command_to_edit);
+
+    let editor_to_use = get_available_editor();
 
     log(
-        &format!("commands/edit::edit(): Using editor \"{editor}\"..."),
+        &format!("commands/edit::edit(): Using editor \"{editor_to_use}\"..."),
         Severity::Normal,
     );
 
-    run_shell_command(&format!(
-        "{editor} {}{command_to_edit}",
+    let command_to_edit_command = &format!(
+        "{editor_to_use} {}{command_to_edit}",
         PATHS.command_installation_directory
-    ));
+    );
+
+    run_shell_command(command_to_edit_command);
 }
