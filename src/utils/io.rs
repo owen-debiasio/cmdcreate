@@ -22,8 +22,7 @@ use std::{
 
 use crate::{
     logger::{Severity, log},
-    utils::colors::COLORS,
-    utils::sys::arguments_force_actions,
+    utils::{colors::COLORS, sys::arguments_force_actions},
 };
 
 pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool {
@@ -33,7 +32,8 @@ pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool
         return true;
     }
 
-    let question_that_is_asked = &format!("{question}{reset}\n({green}Y{reset} or {red}N{reset})");
+    let question_that_is_asked =
+        &format!("{question}{reset}\n({green}Y{reset} or {red}N{reset})\n");
     let get_response_to_question = input(question_that_is_asked);
 
     if get_response_to_question.eq_ignore_ascii_case("y") {
