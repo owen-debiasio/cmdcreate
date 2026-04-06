@@ -30,18 +30,28 @@ use crate::{
     },
     logger::{Severity, log},
     meta::display_full_license,
-    utils::{colors::COLORS, io::error, sys::arguments_force_actions},
+    utils::{
+        colors::COLORS,
+        io::{ask_for_confirmation, error},
+        sys::arguments_force_actions,
+    },
     version::{print_version_changelog, print_version_info},
 };
 
 macro_rules! validate_args {
-    ($command:expr, $amount_of_arguments_that_have_been_given:expr, $amount_of_arguments_needed:expr, $command_usage:expr) => {
-        if $amount_of_arguments_that_have_been_given.len() <= $amount_of_arguments_needed {
-            let (blue, yellow, red) = (COLORS.blue, COLORS.yellow, COLORS.reset);
+    ($command:expr, $amount_of_arguments_given:expr, $amount_of_arguments_needed:expr, $command_usage:expr, $additional_args:expr) => {
+        if $amount_of_arguments_given.len() <= $amount_of_arguments_needed {
+            let (blue, yellow, red, green, reset) = (
+                COLORS.blue,
+                COLORS.yellow,
+                COLORS.red,
+                COLORS.green,
+                COLORS.reset,
+            );
 
             println!(
-                "Usage:\ncmdcreate {blue}{} {yellow}{}{red}",
-                $command, $command_usage
+                "Usage:\ncmdcreate {blue}{} {reset}[{green}{}{reset}] {yellow}{}{red}{reset}",
+                $command, $additional_args, $command_usage
             );
 
             return;
@@ -67,10 +77,18 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 supplied_command,
                 supplied_arguments,
                 2,
-                "<command> <contents>"
+                "<command> <contents>",
+                "-i/--in_editor"
             );
 
-            let name_of_command = argument_index(1).unwrap();
+            let name_of_command: &str = argument_index(2).unwrap();
+            if name_of_command.starts_with('-') {
+                ask_for_confirmation(
+                    "It looks like you are trying to pass a flag or argument, continue anyway?",
+                    true,
+                );
+            }
+
             let contents_of_command = argument_index(2).unwrap();
 
             create(name_of_command, contents_of_command, true);
@@ -80,7 +98,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 supplied_command,
                 supplied_arguments,
                 2,
-                "<command> <new name>"
+                "<command> <new name>",
+                ""
             );
 
             let old_command_name = argument_index(1).unwrap();
@@ -93,7 +112,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 supplied_command,
                 supplied_arguments,
                 2,
-                "<add/remove> <command>"
+                "<add/remove> <command>",
+                ""
             );
 
             let command_operation = argument_index(1).unwrap(); // Either "add" or "remove"
@@ -103,42 +123,42 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
         }
 
         "remove" => {
-            validate_args!(supplied_command, supplied_arguments, 1, "<command>");
+            validate_args!(supplied_command, supplied_arguments, 1, "<command>", "");
 
             let command_to_remove = argument_index(1).unwrap();
 
             remove(command_to_remove, arguments_force_actions());
         }
         "edit" => {
-            validate_args!(supplied_command, supplied_arguments, 1, "<command>");
+            validate_args!(supplied_command, supplied_arguments, 1, "<command>", "");
 
             let command_to_edit = argument_index(1).unwrap();
 
             edit(command_to_edit);
         }
         "search" => {
-            validate_args!(supplied_command, supplied_arguments, 1, "<command>");
+            validate_args!(supplied_command, supplied_arguments, 1, "<command>", "");
 
             let command_to_search_for = argument_index(1).unwrap();
 
             search(command_to_search_for);
         }
         "display" => {
-            validate_args!(supplied_command, supplied_arguments, 1, "<command>");
+            validate_args!(supplied_command, supplied_arguments, 1, "<command>", "");
 
             let command_to_display_contents_of = argument_index(1).unwrap();
 
             display(command_to_display_contents_of);
         }
         "import" => {
-            validate_args!(supplied_command, supplied_arguments, 1, "<input file>");
+            validate_args!(supplied_command, supplied_arguments, 1, "<input file>", "");
 
             let file_to_import_commands_from = argument_index(1).unwrap();
 
             import(file_to_import_commands_from);
         }
         "export" => {
-            validate_args!(supplied_command, supplied_arguments, 1, "<output dir>");
+            validate_args!(supplied_command, supplied_arguments, 1, "<output dir>", "");
 
             let destination_of_exported_commands = argument_index(1).unwrap();
 

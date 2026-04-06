@@ -15,12 +15,13 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
+    commands::edit::edit as edit_command,
     logger::{Severity, log},
     utils::{
         colors::COLORS,
-        fs::{PATHS, overwrite_file},
+        fs::{PATHS, create_file, overwrite_file},
         io::error,
-        sys::run_shell_command,
+        sys::{args_contains, run_shell_command},
     },
 };
 
@@ -65,12 +66,23 @@ pub fn create(
         error("The contents of your command can not be empty.", "");
     }
 
-    log(
-        &format!("commands/create::create(): Writing contents to script: \"{path_to_command}\""),
-        Severity::Normal,
-    );
+    create_file(path_to_command).expect("Failed to create initial command file");
 
-    overwrite_file(path_to_command, full_contents_of_new_command).expect("Failed to write to file");
+    if args_contains("--in_editor") || args_contains("-i") {
+        overwrite_file(path_to_command, NEW_COMMAND_HEADER).expect("Failed to write to file");
+
+        edit_command(command_to_create);
+    } else {
+        log(
+            &format!(
+                "commands/create::create(): Writing contents to script: \"{path_to_command}\""
+            ),
+            Severity::Normal,
+        );
+
+        overwrite_file(path_to_command, full_contents_of_new_command)
+            .expect("Failed to write to file");
+    }
 
     log(
         "commands/create::create(): Activating command...",
