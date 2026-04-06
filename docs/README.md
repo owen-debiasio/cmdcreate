@@ -36,3 +36,6 @@ files are subject to change.
 > [!NOTE]  
 > This documentation is fairly new, and I'm doing the best I can. Info is bound
 > to be incorrect, so please let me know.
+>
+> **If any information seen here is outdated or incorrect, please open an issue
+> or contact me elsewhere!**
