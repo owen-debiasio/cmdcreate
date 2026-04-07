@@ -81,7 +81,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 "-i/--in_editor"
             );
 
-            let name_of_command: &str = argument_index(2).unwrap();
+            let name_of_command: &str = argument_index(1).expect("Missing command name");
+
             if name_of_command.starts_with('-') {
                 ask_for_confirmation(
                     "It looks like you are trying to pass a flag or argument, continue anyway?",
@@ -89,7 +90,7 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 );
             }
 
-            let contents_of_command = argument_index(2).unwrap();
+            let contents_of_command = argument_index(2).expect("Missing command contents");
 
             create(name_of_command, contents_of_command, true);
         }
