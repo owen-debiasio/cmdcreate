@@ -68,7 +68,9 @@ pub fn create(
 
     create_file(path_to_command).expect("Failed to create initial command file");
 
-    if args_contains("--in_editor") || args_contains("-i") {
+    let user_edits_contents_in_editor = args_contains("--in_editor") || args_contains("-i");
+
+    if user_edits_contents_in_editor {
         overwrite_file(path_to_command, NEW_COMMAND_HEADER).expect("Failed to write to file");
 
         edit_command(command_to_create);
