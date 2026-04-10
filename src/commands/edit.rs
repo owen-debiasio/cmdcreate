@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::tools::determine_cmdcreate_command_is_installed,
+    commands::tools::cmdcreate_command_is_installed,
     logger::{Severity, log},
     utils::{
         fs::PATHS,
@@ -60,7 +60,7 @@ pub fn get_available_editor() -> String {
 }
 
 pub fn edit(command_to_edit: &str) {
-    determine_cmdcreate_command_is_installed(command_to_edit);
+    cmdcreate_command_is_installed(command_to_edit);
 
     let editor_to_use = get_available_editor();
 

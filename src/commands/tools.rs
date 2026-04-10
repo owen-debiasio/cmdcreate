@@ -26,7 +26,7 @@ use crate::{
     },
 };
 
-pub fn determine_cmdcreate_command_is_installed(command_to_find: &str) -> bool {
+pub fn cmdcreate_command_is_installed(command_to_find: &str) -> bool {
     let command_install_path =
         &format!("{}{command_to_find}", PATHS.command_installation_directory);
 

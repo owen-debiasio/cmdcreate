@@ -17,7 +17,7 @@
 use crate::{
     commands::{
         remove::remove,
-        tools::{determine_cmdcreate_command_is_installed, get_installed_commands},
+        tools::{cmdcreate_command_is_installed, get_installed_commands},
     },
     logger::{Severity, log},
     utils::{
@@ -46,7 +46,7 @@ pub fn rename(old_command_name: &str, new_renamed_command_name: &str) {
         return;
     }
 
-    determine_cmdcreate_command_is_installed(old_command_name);
+    cmdcreate_command_is_installed(old_command_name);
 
     let new_command_install_location =
         &format!("{command_install_location}/{new_renamed_command_name}");
