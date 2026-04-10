@@ -30,11 +30,7 @@ use crate::{
     },
     logger::{Severity, log},
     meta::display_full_license,
-    utils::{
-        colors::COLORS,
-        io::{ask_for_confirmation, error},
-        sys::arguments_force_actions,
-    },
+    utils::{colors::COLORS, io::error, sys::arguments_force_actions},
     version::{print_version_changelog, print_version_info},
 };
 
@@ -65,11 +61,13 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
         Severity::Normal,
     );
 
-    let argument_index = |index_of_supplied_arguments| {
-        supplied_arguments
-            .get(index_of_supplied_arguments)
-            .map(String::as_str)
-    };
+    let positional_args: Vec<&str> = supplied_arguments
+        .iter()
+        .filter(|supplied_argument| !supplied_argument.starts_with('-'))
+        .map(String::as_str)
+        .collect();
+
+    let argument_index = |index| positional_args.get(index).copied();
 
     match supplied_command {
         "create" => {
@@ -81,18 +79,10 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 "-i/--in_editor"
             );
 
-            let name_of_command: &str = argument_index(1).expect("Missing command name");
+            let command_name = argument_index(1).expect("Missing command name");
+            let command_contents = argument_index(2).unwrap_or("");
 
-            if name_of_command.starts_with('-') {
-                ask_for_confirmation(
-                    "It looks like you are trying to pass a flag or argument, continue anyway?",
-                    true,
-                );
-            }
-
-            let contents_of_command = argument_index(2).expect("Missing command contents");
-
-            create(name_of_command, contents_of_command, true);
+            create(command_name, command_contents, true);
         }
         "rename" => {
             validate_args!(
