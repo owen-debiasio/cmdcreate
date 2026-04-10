@@ -76,7 +76,38 @@ pub fn rename(old_command_name: &str, new_renamed_command_name: &str) {
         "mv {command_install_location}{old_command_name} {command_install_location}{new_renamed_command_name}"
     ));
 
+    command_rename_success(
+        old_command_name,
+        new_renamed_command_name,
+        command_install_location,
+    );
+
     println!(
         "{green}Successfully renamed command {blue}\"{old_command_name}\" to {blue}\"{new_renamed_command_name}\"{reset}"
+    );
+}
+
+fn command_rename_success(_old_name: &str, new_name: &str, path_of_old_command: &str) {
+    log(
+        "commands/rename::command_rename_success(): \
+        Determining command creation status...",
+        Severity::Normal,
+    );
+
+    // Avoid 'cmdcreate_command_is_installed(path_of_old_command)'
+    // because it assumes command was already deleted.
+    // It is checked manually instead.
+    if !path_exists(path_of_old_command) {
+        error("Failed to rename command!", "Old command is still present.");
+    }
+
+    if !cmdcreate_command_is_installed(new_name) {
+        error("Failed to rename command!", "New command does not exist.");
+    }
+
+    log(
+        "commands/rename::command_rename_success(): \
+        Command has been removed correctly...",
+        Severity::Normal,
     );
 }
