@@ -653,9 +653,14 @@ Licensed under the GNU General Public License v3.0 or later.
 ## v1.2.0
 
 - Code optimizations
+  - Optimized command and argument parsing
 - New flags for command `create`:
   - `--in_editor`/`-i`
     - Allow to write the contents of the new command from a text editor
 - You can now delete multiple commands at once
   - Example:
     - `cmdcreate remove command1 command2`
+- Added success checks for the following commands:
+  - `create`
+  - `remove`
+  - `rename`
