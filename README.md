@@ -145,8 +145,8 @@ sudo install -Dm755 /tmp/cmdcreate-{version}-linux-x86_64-bin /usr/bin/cmdcreate
 > You can find more about developing cmdcreate here:
 > [Development Documentation](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/developing.md)
 
-- Rustup
-- Openssl
+- rustup
+- openssl
 - git
 - curl
 
