@@ -14,18 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use std::{
-    env::{args, consts::ARCH as ARCHITECTURE, var},
-    process::{Command, Stdio},
-    sync::LazyLock,
-};
-
-use rustix::process::geteuid;
-
 use crate::{
     configs::load_configuration,
     logger::{Severity, log},
     utils::{fs::read_file_to_string, io::error},
+};
+use rustix::process::geteuid;
+use std::{
+    env::{args, consts::ARCH as ARCHITECTURE, var},
+    process::{Command, Stdio},
+    sync::{LazyLock, OnceLock},
 };
 
 pub fn running_as_root() -> bool {
@@ -50,22 +48,30 @@ pub static ENVIRONMENT_VARIABLES: LazyLock<Vars> = LazyLock::new(|| Vars {
 
 pub static ARCH: &str = ARCHITECTURE;
 
+pub fn args_contains(argument: &str) -> bool {
+    static ARGS: OnceLock<Vec<String>> = OnceLock::new();
+
+    let processed_args = ARGS.get_or_init(return_args);
+
+    processed_args.iter().any(|arg| arg == argument)
+}
+
 pub fn return_args() -> Vec<String> {
     let mut supplied_argument_vector = Vec::new();
 
+    let mut supplied_argument_is_actually_an_argument;
+
     for supplied_argument in args().skip(1) {
-        if supplied_argument.starts_with('-')
-            && !supplied_argument.starts_with("--")
-            && supplied_argument.len() > 2
-        {
+        supplied_argument_is_actually_an_argument =
+            supplied_argument.starts_with('-') && !supplied_argument.starts_with("--");
+
+        if supplied_argument_is_actually_an_argument && supplied_argument.len() > 2 {
             for character in supplied_argument.chars().skip(1) {
                 supplied_argument_vector.push(format!("-{character}"));
             }
-
-            continue;
+        } else {
+            supplied_argument_vector.push(supplied_argument);
         }
-
-        supplied_argument_vector.push(supplied_argument);
     }
 
     supplied_argument_vector
@@ -74,13 +80,6 @@ pub fn return_args() -> Vec<String> {
 pub fn arguments_force_actions() -> bool {
     // If either are applied, returns true
     args_contains("--force") || args_contains("-f")
-}
-
-pub fn args_contains(argument: &str) -> bool {
-    // "argument_to_match" is the index, var arg is the actual supplied arg
-    return_args()
-        .iter()
-        .any(|argument_to_match| argument_to_match == argument)
 }
 
 pub fn system_command_is_installed(command_to_check: &str) -> bool {
