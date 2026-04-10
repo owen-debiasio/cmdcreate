@@ -14,15 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::utils::fs::path_exists;
-use crate::utils::io::error;
 use crate::{
     commands::{favorite::favorite, tools::cmdcreate_command_is_installed},
     logger::{Severity, log},
     utils::{
         colors::COLORS,
-        fs::{PATHS, delete_file, read_file_to_string},
-        io::ask_for_confirmation,
+        fs::{PATHS, delete_file, path_exists, read_file_to_string},
+        io::{ask_for_confirmation, error},
     },
 };
 
