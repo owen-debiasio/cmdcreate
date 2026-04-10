@@ -64,7 +64,7 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
 fn command_removal_success(path_of_command: &str) {
     log(
         "commands/remove::command_removal_success(): \
-        Determining command creation status...",
+        Determining command removal status...",
         Severity::Normal,
     );
 
@@ -72,7 +72,7 @@ fn command_removal_success(path_of_command: &str) {
     // because it assumes command was already deleted.
     // It is checked manually instead.
     if path_exists(path_of_command) {
-        error("Failed to create command!", "Failed to delete script.");
+        error("Failed to remove command!", "Failed to delete script.");
     }
 
     log(
