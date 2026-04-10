@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::utils::fs::path_exists;
+use crate::utils::io::error;
 use crate::{
     commands::{favorite::favorite, tools::cmdcreate_command_is_installed},
     logger::{Severity, log},
@@ -56,5 +58,28 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
 
     delete_file(path_of_command_to_remove).expect("Failed to delete command");
 
+    command_removal_success(path_of_command_to_remove);
+
     println!("\n{green}Removed command {blue}\"{command}\"{reset}");
+}
+
+fn command_removal_success(path_of_command: &str) {
+    log(
+        "commands/remove::command_removal_success(): \
+        Determining command creation status...",
+        Severity::Normal,
+    );
+
+    // Avoid 'cmdcreate_command_is_installed(command_to_check)'
+    // because it assumes command was already deleted.
+    // It is checked manually instead.
+    if path_exists(path_of_command) {
+        error("Failed to create command!", "Failed to delete script.");
+    }
+
+    log(
+        "commands/remove::command_creation_success(): \
+        Command has been removed correctly...",
+        Severity::Normal,
+    );
 }
