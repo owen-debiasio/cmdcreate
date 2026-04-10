@@ -14,12 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::commands::tools::cmdcreate_command_is_installed;
 use crate::{
     commands::edit::edit as edit_command,
     logger::{Severity, log},
     utils::{
         colors::COLORS,
-        fs::{PATHS, create_file, overwrite_file},
+        fs::{PATHS, create_file, overwrite_file, read_file_to_string},
         io::error,
         sys::{args_contains, run_shell_command},
     },
@@ -31,7 +32,7 @@ pub static NEW_COMMAND_HEADER: &str = "# Created by cmdcreate\n";
 
 pub fn create(
     command_to_create: &str,
-    contents_of_new_command_by_user: &str,
+    contents_of_new_command: &str,
     run_this_function_verbose: bool,
 ) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
@@ -44,13 +45,12 @@ pub fn create(
 
     let log_message = &format!(
         "commands/create::create(): Creating command \"{command_to_create}\": \
-        With contents \"{contents_of_new_command_by_user}\"{verbose_creation_message}",
+        With contents \"{contents_of_new_command}\"{verbose_creation_message}",
     );
 
     log(log_message, Severity::Normal);
 
-    let full_contents_of_new_command =
-        &format!("{NEW_COMMAND_HEADER}{contents_of_new_command_by_user}");
+    let full_contents_of_new_command = &format!("{NEW_COMMAND_HEADER}{contents_of_new_command}");
 
     let path_to_command = &format!(
         "{}{command_to_create}",
@@ -62,28 +62,18 @@ pub fn create(
         Severity::Normal,
     );
 
-    if contents_of_new_command_by_user.is_empty() {
+    if contents_of_new_command.is_empty() {
         error("The contents of your command can not be empty.", "");
     }
 
     create_file(path_to_command).expect("Failed to create initial command file");
 
+    overwrite_file(path_to_command, full_contents_of_new_command).expect("Failed to write");
+
     let user_edits_contents_in_editor = args_contains("--in_editor") || args_contains("-i");
 
     if user_edits_contents_in_editor {
-        overwrite_file(path_to_command, NEW_COMMAND_HEADER).expect("Failed to write to file");
-
         edit_command(command_to_create);
-    } else {
-        log(
-            &format!(
-                "commands/create::create(): Writing contents to script: \"{path_to_command}\""
-            ),
-            Severity::Normal,
-        );
-
-        overwrite_file(path_to_command, full_contents_of_new_command)
-            .expect("Failed to write to file");
     }
 
     log(
@@ -93,7 +83,43 @@ pub fn create(
 
     run_shell_command(&format!("chmod +x {path_to_command}"));
 
+    command_creation_success(command_to_create, contents_of_new_command, path_to_command);
+
     if run_this_function_verbose {
-        println!("\n{green}Success! Created command: {blue}\"{command_to_create}\"{reset}");
+        println!(
+            "\n{green}Success! Created command: \
+        {blue}\"{command_to_create}\"{reset}"
+        );
     }
+}
+
+fn command_creation_success(
+    command_to_check: &str,
+    user_chosen_contents: &str,
+    installed_command_path: &str,
+) {
+    log(
+        "commands/create::command_creation_success(): \
+        Determining command creation status...",
+        Severity::Normal,
+    );
+
+    if !cmdcreate_command_is_installed(command_to_check) {
+        error("Failed to create command!", "Failed to create script.");
+    }
+
+    let installed_command_contents = read_file_to_string(installed_command_path);
+
+    if !installed_command_contents.contains(user_chosen_contents) {
+        error(
+            "Failed to create command!",
+            "Failed to write command contents.",
+        )
+    }
+
+    log(
+        "commands/create::command_creation_success(): \
+        Command has been created correctly...",
+        Severity::Normal,
+    );
 }
