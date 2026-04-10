@@ -62,8 +62,7 @@ pub fn return_args() -> Vec<String> {
     let mut supplied_argument_is_actually_an_argument;
 
     for supplied_argument in args().skip(1) {
-        supplied_argument_is_actually_an_argument =
-            supplied_argument.starts_with('-') && !supplied_argument.starts_with("--");
+        supplied_argument_is_actually_an_argument = supplied_argument.starts_with('-');
 
         if supplied_argument_is_actually_an_argument && supplied_argument.len() > 2 {
             for character in supplied_argument.chars().skip(1) {
