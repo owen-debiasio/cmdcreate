@@ -46,7 +46,7 @@ pub fn not_connected_to_internet() -> bool {
     // The sample DNS is set to Cloudflare for reliability
     let sample_dns = "1.1.1.1:53";
 
-    sample_dns
+    !sample_dns
         .to_socket_addrs()
         .map_or(true, |mut socket_address| {
             let timeout_duration = Duration::from_secs(1);
