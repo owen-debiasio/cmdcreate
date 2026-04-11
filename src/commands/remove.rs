@@ -58,7 +58,7 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
 
     command_removal_success(path_of_command_to_remove);
 
-    println!("\n{green}Removed command {blue}\"{command}\"{reset}");
+    println!("{green}Removed command {blue}\"{command}\"{reset}");
 }
 
 fn command_removal_success(path_of_command: &str) {
