@@ -29,26 +29,16 @@ use crate::{
 pub enum Severity {
     Normal = 0,
     Warn = 1,
-    _Error = 2,
 }
 
 pub fn log(text_to_log: &str, importance_level: Severity) {
-    let (blue, cyan, yellow, red, reset) = (
-        COLORS.blue,
-        COLORS.cyan,
-        COLORS.yellow,
-        COLORS.red,
-        COLORS.reset,
-    );
+    let (blue, cyan, yellow, reset) = (COLORS.blue, COLORS.cyan, COLORS.yellow, COLORS.reset);
 
     let time_format = &load_configuration("logs", "time_format", "%Y-%m-%d %H:%M:%S");
     let time = Local::now().format(time_format).to_string();
 
     let log_type = match importance_level {
         Severity::Warn => &format!("{yellow}WARN{reset}"),
-
-        // Like this is ever used. Here just in case
-        Severity::_Error => &format!("{red}ERROR{reset}"),
 
         Severity::Normal => &format!("{cyan}LOG{reset}"),
     };
