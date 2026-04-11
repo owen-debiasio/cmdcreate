@@ -666,3 +666,5 @@ Licensed under the GNU General Public License v3.0 or later.
   - `rename`
   - `favorite`
 - Command `rename` now handles favorite command status properly
+- Fixed issues with internet detecting
+- Other small tweaks
