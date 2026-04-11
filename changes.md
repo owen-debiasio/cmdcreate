@@ -664,3 +664,5 @@ Licensed under the GNU General Public License v3.0 or later.
   - `create`
   - `remove`
   - `rename`
+  - `favorite`
+- Command `rename` now handles favorite command status properly
