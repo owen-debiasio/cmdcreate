@@ -53,6 +53,6 @@ pub fn not_connected_to_internet() -> bool {
 
             let socket_address = socket_address.next().unwrap();
 
-            TcpStream::connect_timeout(&socket_address, timeout_duration).is_err()
+            TcpStream::connect_timeout(&socket_address, timeout_duration).is_ok()
         })
 }
