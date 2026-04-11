@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::tools::cmdcreate_command_is_installed,
+    commands::{create::NEW_COMMAND_HEADER, tools::cmdcreate_command_is_installed},
     utils::{
         colors::COLORS,
         fs::{PATHS, read_file_to_string},
@@ -32,10 +32,15 @@ pub fn display(command_to_display: &str) {
         PATHS.command_installation_directory
     );
 
-    let contents_of_command = read_file_to_string(&path_to_command);
-    let trimmed_contents_of_command = contents_of_command.trim();
+    // Remove command header because you
+    // already know cmdcreate made the command
+    let contents_of_command = read_file_to_string(&path_to_command).replace(NEW_COMMAND_HEADER, "");
+    let trimmed_contents_of_command = contents_of_command;
 
     println!(
-        "Contents of command: {blue}\"{command_to_display}\"{reset}\n--------\n{trimmed_contents_of_command}",
+        "Contents of command: \
+        {blue}\"{command_to_display}\"{reset}\n\
+        --------\n\
+        {trimmed_contents_of_command}",
     );
 }

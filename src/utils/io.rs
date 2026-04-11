@@ -14,15 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::{
+    logger::{Severity, log},
+    utils::{colors::COLORS, sys::arguments_force_actions},
+};
+use std::fmt::Debug;
 use std::{
     fmt::{Display, Formatter},
     io::stdin,
     process::exit,
-};
-
-use crate::{
-    logger::{Severity, log},
-    utils::{colors::COLORS, sys::arguments_force_actions},
 };
 
 pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool {
@@ -76,8 +76,9 @@ pub fn error(error_message: &str, error_details: &str) -> ! {
 #[derive(Debug)]
 pub struct TestError(pub String);
 
+use core::fmt;
 impl Display for TestError {
-    fn fmt(&self, formatter: &mut Formatter<'_>) -> core::fmt::Result {
+    fn fmt(&self, formatter: &mut Formatter<'_>) -> fmt::Result {
         write!(formatter, "{}", self.0)
     }
 }

@@ -55,6 +55,7 @@ pub fn search(command_to_search_for: &str) {
     }
 
     println!(
-        "Found {blue}{command_search_index}{reset} matches for {blue}\"{command_to_search_for}\"{reset}."
+        "Found {blue}{command_search_index}{reset} matches for \
+        {blue}\"{command_to_search_for}\"{reset}."
     );
 }

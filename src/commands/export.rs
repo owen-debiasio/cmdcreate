@@ -88,6 +88,7 @@ pub fn export(path: &str) {
     }
 
     println!(
-        "{green}Successfully exported commands to: {blue}\"{path_of_file_to_export_to}\"{green}.{reset}",
+        "{green}Successfully exported commands to: \
+        {blue}\"{path_of_file_to_export_to}\"{green}.{reset}",
     );
 }

@@ -148,7 +148,7 @@ fn update_using_method(method_for_installation: &str) {
 fn build_from_source() {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    let cloned_repository_destination = "/root/.cache/cmdcreate";
+    let cloned_repository_destination = "/tmp/cmdcreate";
 
     delete_folder(cloned_repository_destination).expect("Failed to clear cache");
 
@@ -178,7 +178,7 @@ fn build_from_source() {
     let script_to_build_cmdcreate = format!(
         "{dependency_install_command} && {rustup_install_command}
         set -e
-        [ -f \"$HOME/.cargo/env\" ] && . \"$HOME/.cargo/env\"
+        [ -f \"/root/.cargo/env\" ] && . \"/root/.cargo/env\"
         git clone {project_repo}.git \"{cloned_repository_destination}\"
         cd \"{cloned_repository_destination}\"
         rustup default stable

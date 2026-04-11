@@ -63,6 +63,7 @@ pub fn get_latest_tag_from_repo(owner: &str, repo: &str) -> String {
             "version::get_latest_tag_from_repo(): No internet... Unable to retrieve latest tag...",
             Severity::Warn,
         );
+
         return "unknown".to_string();
     }
 

@@ -33,7 +33,8 @@ pub fn cmdcreate_command_is_installed(command_to_find: &str) -> bool {
     if path_exists(command_install_path) {
         log(
             &format!(
-                "commands/tools::command_is_installed(): Command \"{command_to_find}\" is installed... Continuing..."
+                "commands/tools::command_is_installed(): \
+                Command \"{command_to_find}\" is installed... Continuing..."
             ),
             Severity::Normal,
         );
