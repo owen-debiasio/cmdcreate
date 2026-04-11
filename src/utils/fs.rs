@@ -168,6 +168,7 @@ pub fn create_file(file_to_be_created: &str) -> Result<()> {
         File::create(file_to_be_created)
             .with_context(|| format!("Failed to create file: {file_to_be_created}"))?;
     }
+
     Ok(())
 }
 
@@ -176,6 +177,7 @@ pub fn delete_file(path_of_file_to_delete: &str) -> Result<()> {
         remove_file(path_of_file_to_delete)
             .with_context(|| format!("Failed to delete file: {path_of_file_to_delete}"))?;
     }
+
     Ok(())
 }
 
@@ -184,6 +186,7 @@ pub fn delete_folder(path_of_folder_to_delete: &str) -> Result<()> {
         remove_dir_all(path_of_folder_to_delete)
             .with_context(|| format!("Failed to delete folder: {path_of_folder_to_delete}"))?;
     }
+
     Ok(())
 }
 
@@ -200,7 +203,9 @@ mod tests {
     fn test_dir(name: &str) -> PathBuf {
         let temp_directory = temp_dir().join(name);
         let _ = remove_dir_all(&temp_directory);
+
         create_dir_all(&temp_directory).expect("Failed to create test directory");
+
         temp_directory
     }
 
@@ -210,7 +215,9 @@ mod tests {
         let path_of_temp_directory = temp_directory.to_string_lossy();
 
         create_folder(&path_of_temp_directory)?;
+
         assert!(temp_directory.exists());
+
         Ok(())
     }
 
@@ -220,7 +227,9 @@ mod tests {
         let path_of_file = file_to_be_created.to_string_lossy();
 
         create_file(&path_of_file)?;
+
         assert!(file_to_be_created.exists());
+
         Ok(())
     }
 
@@ -234,6 +243,7 @@ mod tests {
         write_to_file(&path_of_file, sample_text, false)?;
 
         assert_eq!(read_file_to_string(&path_of_file), sample_text);
+
         Ok(())
     }
 
@@ -249,6 +259,7 @@ mod tests {
 
         assert!(appended_file_contents.contains('a'));
         assert!(appended_file_contents.contains('b'));
+
         Ok(())
     }
 
@@ -261,8 +272,10 @@ mod tests {
         remove_from_file(&path_of_that_file, "two")?;
 
         let contents_of_that_file = read_file_to_string(&path_of_that_file);
+
         assert!(!contents_of_that_file.contains("two"));
         assert!(contents_of_that_file.contains("one"));
+
         Ok(())
     }
 
@@ -275,6 +288,7 @@ mod tests {
         delete_file(&path_to_deleted_file)?;
 
         assert!(!file_to_delete.exists());
+
         Ok(())
     }
 
@@ -287,6 +301,7 @@ mod tests {
         delete_folder(&path_to_deleted_directory)?;
 
         assert!(!directory_to_delete.exists());
+
         Ok(())
     }
 
@@ -301,6 +316,7 @@ mod tests {
         write(&path_to_verify, sample_text)?;
 
         assert!(path_exists(&path_of_the_path_that_needs_to_be_verified));
+
         Ok(())
     }
 }
