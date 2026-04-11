@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::tools::get_installed_commands,
+    commands::{favorite::command_is_in_favorites, tools::get_installed_commands},
     configs::load_configuration,
     logger::{Severity, log},
     utils::{
@@ -36,12 +36,11 @@ pub fn list() {
 
     for command in installed_commands {
         let command_name = command.file_stem().unwrap_or_default().to_string_lossy();
-        let favorites_file = read_file_to_string(&PATHS.favorites);
 
         log(
             &format!(
                 "commands/list::list(): Current command: \"{command_name}\" (favorited={})",
-                favorites_file.contains(command_name.to_string().as_str())
+                command_is_in_favorites(&command_name)
             ),
             Severity::Normal,
         );
@@ -49,13 +48,16 @@ pub fn list() {
         // The default is a star
         let favorite_command_identifier =
             load_configuration("appearance", "favorite_indicator", "\u{2605}");
-        if favorites_file.contains(command_name.to_string().as_str()) {
+        if command_is_in_favorites(&command_name) {
             println!("{favorite_command_identifier} {command_name}");
 
             continue;
         }
 
-        if favorites_file.is_empty() {
+        let favorites_path = &PATHS.favorites;
+        let favorites_file_contents = read_file_to_string(favorites_path);
+
+        if favorites_file_contents.is_empty() {
             println!("{command_name}");
             continue;
         }
