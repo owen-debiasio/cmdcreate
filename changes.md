@@ -668,3 +668,7 @@ Licensed under the GNU General Public License v3.0 or later.
 - Command `rename` now handles favorite command status properly
 - Fixed issues with internet detecting
 - Other small tweaks
+
+## v1.2.1
+
+- Hotfix: ACTUALLY fix issues with internet detecting
