@@ -669,6 +669,6 @@ Licensed under the GNU General Public License v3.0 or later.
 - Fixed issues with internet detecting
 - Other small tweaks
 
-## v1.2.1
+## v1.2.0-2 (HOTFIX)
 
-- Hotfix: ACTUALLY fix issues with internet detecting
+- ACTUALLY fix issues with internet detecting
