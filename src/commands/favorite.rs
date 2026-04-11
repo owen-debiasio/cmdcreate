@@ -24,14 +24,19 @@ use crate::{
     },
 };
 
-pub fn favorite(action: &str, command: &str) {
-    let (blue, yellow, reset) = (COLORS.blue, COLORS.yellow, COLORS.reset);
+pub fn command_is_in_favorites(command: &str) -> bool {
+    let favorites_path = &PATHS.favorites;
+    let favorites_file_contents = read_file_to_string(favorites_path);
 
+    favorites_file_contents.contains(command)
+}
+
+pub fn favorite(action: &str, command: &str) {
     match action {
         "add" => add(command),
         "remove" => remove(command),
 
-        _ => println!("Usage:\ncmdcreate {blue}favorite {yellow}<add/remove> <command>{reset}"),
+        _ => error("Invalid option:", action),
     }
 }
 
@@ -45,14 +50,12 @@ fn add(command: &str) {
     );
 
     let favorites_path = &PATHS.favorites;
-    let favorite_file_contents = read_file_to_string(favorites_path);
 
-    cmdcreate_command_is_installed(command);
+    if !cmdcreate_command_is_installed(command) {
+        error(&format!("Command \"{command}\" does not exist!"), "")
+    }
 
-    if favorite_file_contents
-        .lines()
-        .any(|command_index| command_index == command)
-    {
+    if command_is_in_favorites(command) {
         println!("{yellow}Command {blue}\"{command}\"{yellow} is already in favorites.{reset}");
 
         return;
@@ -63,7 +66,30 @@ fn add(command: &str) {
 
     write_to_file(favorites_path, command_to_write, true).expect("Failed to write to file");
 
+    command_favorite_addition_check(command_to_write);
+
     println!("{green}Command {blue}\"{command}\"{green} added to favorites.{reset}");
+}
+
+fn command_favorite_addition_check(command: &str) {
+    log(
+        "commands/favorite::command_favorite_addition_check(): \
+        Determining command favorite addition status...",
+        Severity::Normal,
+    );
+
+    if !command_is_in_favorites(command) {
+        error(
+            "Failed to remove command from favorites!",
+            "Command is still located in configuration.",
+        );
+    }
+
+    log(
+        "commands/favorite::command_favorite_addition_check(): \
+        Command has been added to favorites correctly...",
+        Severity::Normal,
+    );
 }
 
 // Almost identical to add()
@@ -75,16 +101,36 @@ fn remove(command: &str) {
         Severity::Normal,
     );
 
-    let favorites_path = &PATHS.favorites;
-
-    if !read_file_to_string(favorites_path)
-        .lines()
-        .any(|command_| command_ == command)
-    {
+    if !command_is_in_favorites(command) {
         error("Command isn't in favorites:", command);
     }
 
+    let favorites_path = &PATHS.favorites;
+
     remove_from_file(favorites_path, command).expect("Failed to remove contents from file");
 
+    command_favorite_removed_check(command);
+
     println!("{green}Command {blue}\"{command}\"{green} removed from favorites.{reset}");
+}
+
+fn command_favorite_removed_check(command: &str) {
+    log(
+        "commands/favorite::command_favorite_removed_check(): \
+        Determining command favorite removal status...",
+        Severity::Normal,
+    );
+
+    if command_is_in_favorites(command) {
+        error(
+            "Failed to remove command from favorites!",
+            "Command is still located in configuration.",
+        );
+    }
+
+    log(
+        "commands/favorite::command_favorite_removed_check(): \
+        Command has been removed from favorites correctly...",
+        Severity::Normal,
+    );
 }
