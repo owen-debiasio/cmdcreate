@@ -14,9 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::commands::tools::cmdcreate_command_is_installed;
 use crate::{
-    commands::edit::edit as edit_command,
+    commands::{edit::edit as edit_command, remove::remove, tools::cmdcreate_command_is_installed},
     logger::{Severity, log},
     utils::{
         colors::COLORS,
@@ -104,13 +103,17 @@ fn command_creation_success(
         Severity::Normal,
     );
 
+    let installed_command_contents = read_file_to_string(installed_command_path);
+
     if !cmdcreate_command_is_installed(command_to_check) {
+        clean_from_failure(installed_command_path);
+
         error("Failed to create command!", "Failed to create script.");
     }
 
-    let installed_command_contents = read_file_to_string(installed_command_path);
-
     if !installed_command_contents.contains(user_chosen_contents) {
+        clean_from_failure(installed_command_path);
+
         error(
             "Failed to create command!",
             "Failed to write command contents.",
@@ -120,6 +123,22 @@ fn command_creation_success(
     log(
         "commands/create::command_creation_success(): \
         Command has been created correctly...",
+        Severity::Normal,
+    );
+}
+
+fn clean_from_failure(command_name: &str) {
+    log(
+        "commands/create::clean_from_failure(): \
+        Starting on-fail cleanup...",
+        Severity::Normal,
+    );
+
+    remove(command_name, true);
+
+    log(
+        "commands/create::clean_from_failure(): \
+        Cleaned up...",
         Severity::Normal,
     );
 }
