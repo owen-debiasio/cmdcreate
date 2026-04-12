@@ -96,15 +96,9 @@ pub fn run_shell_command(command: &str) {
         return;
     }
 
-    // "set -e" is included to make all commands exit on fail
-    let command_to_run: &str = &format!(
-        "set -e && \
-        {command}"
-    );
-
     match Command::new(shell)
         .arg("-c")
-        .arg(command_to_run)
+        .arg(command)
         .stdin(Stdio::inherit())
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
