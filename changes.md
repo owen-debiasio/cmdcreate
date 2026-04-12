@@ -672,3 +672,7 @@ Licensed under the GNU General Public License v3.0 or later.
 ## v1.2.0-2 (HOTFIX)
 
 - ACTUALLY fix issues with internet detecting
+
+## v1.2.1
+
+- Code optimizations
