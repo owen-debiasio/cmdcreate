@@ -22,7 +22,7 @@ use crate::{
     utils::{
         fs::init_fs_layout,
         io::{ask_for_confirmation, error},
-        net::not_connected_to_internet,
+        net::{internet_is_forced_disabled, not_connected_to_internet},
         sys::{
             ARCH, ENVIRONMENT_VARIABLES, get_distro_base, installation_method,
             root_requirement_is_bypassed, running_as_root,
@@ -36,7 +36,11 @@ pub fn debug_intro() -> String {
     let author_email = AUTHOR.email;
 
     let build_status = if version_is_development_build() {
-        "(devel)"
+        if not_connected_to_internet() {
+            "(build status unknown)"
+        } else {
+            "(development)"
+        }
     } else {
         "(stable)"
     };
@@ -45,7 +49,11 @@ pub fn debug_intro() -> String {
     let installation_method = installation_method();
 
     let internet_status = if not_connected_to_internet() {
-        "offline"
+        if internet_is_forced_disabled() {
+            "offline (forced)"
+        } else {
+            "offline"
+        }
     } else {
         "connected"
     };
@@ -56,11 +64,11 @@ pub fn debug_intro() -> String {
     format!(
         "
 ----------------
-Welcome to cmdcreate!                   
+Welcome to cmdcreate!
 Created by: {author_name} <{author_email}>
 ----------------
-Have an issue? Copy the text below           
-and open an issue                       
+Have an issue? Copy the text below
+and open an issue
 ----------------
 Version: {CURRENT_PROJECT_VERSION} {build_status}
 CPU architecture: {ARCH}

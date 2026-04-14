@@ -34,7 +34,7 @@ pub fn http_client() -> Client {
         .expect("Failed to build HTTP client")
 }
 
-fn internet_is_forced_disabled() -> bool {
+pub fn internet_is_forced_disabled() -> bool {
     args_contains("-o") || args_contains("--offline")
 }
 
