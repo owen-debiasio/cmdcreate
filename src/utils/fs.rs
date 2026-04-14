@@ -38,22 +38,22 @@ use std::{
 pub static MAIN_PATH: &str = "/root/.local/share/cmdcreate";
 
 pub struct Paths {
-    pub configuration_file: String,
+    pub configuration_file: &'static str,
     pub favorites: String,
-    pub command_installation_directory: String,
-    pub license: String,
+    pub command_installation_directory: &'static str,
+    pub license: &'static str,
     pub log_directory: String,
 }
 
 pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
-    configuration_file: "/etc/cmdcreate.toml".to_string(),
+    configuration_file: "/etc/cmdcreate.toml",
     favorites: format!("{MAIN_PATH}/favorites"),
-    command_installation_directory: "/usr/local/bin/".to_string(),
+    command_installation_directory: "/usr/local/bin/",
     license: if get_distro_base() == DistroBase::Debian {
         // Because different distros just HAVE to have different paths for some bullshit reason
-        "/usr/share/doc/cmdcreate/copyright/LICENSE".to_string()
+        "/usr/share/doc/cmdcreate/copyright/LICENSE"
     } else {
-        "/usr/share/licenses/cmdcreate/LICENSE".to_string()
+        "/usr/share/licenses/cmdcreate/LICENSE"
     },
     log_directory: format!("{MAIN_PATH}/logs"),
 });
@@ -78,9 +78,9 @@ pub fn download_file_to_location_via_curl(
 pub fn init_fs_layout() -> Result<()> {
     create_folder(MAIN_PATH)?;
     create_folder(&PATHS.log_directory)?;
-    create_folder(&PATHS.command_installation_directory)?;
+    create_folder(PATHS.command_installation_directory)?;
     create_file(&PATHS.favorites)?;
-    create_file(&PATHS.configuration_file)?;
+    create_file(PATHS.configuration_file)?;
 
     log(
         "utils/fs::init_fs_layout(): Filesystem initialized",
