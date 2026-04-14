@@ -676,3 +676,4 @@ Licensed under the GNU General Public License v3.0 or later.
 ## v1.2.1
 
 - Code optimizations
+- Fixed incorrect error message when renaming command
