@@ -143,7 +143,7 @@ fn command_rename_success(
 
     log(
         "commands/rename::command_rename_success(): \
-        Command has been removed correctly...",
+        Command has been renamed correctly...",
         Severity::Normal,
     );
 }
