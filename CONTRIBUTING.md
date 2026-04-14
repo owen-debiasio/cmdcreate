@@ -36,7 +36,8 @@ be human-verified where the code does what it's supposed to.
 
 ## Don't know what to contribute?
 
-Look for TODOs throughout the code, there are plenty of them as I'm writing this.
+Look for TODOs throughout the code, there are plenty of them as I'm writing
+this.
 
 ## Resources
 
