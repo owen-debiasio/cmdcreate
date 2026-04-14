@@ -71,8 +71,9 @@ pub fn export(path: &str) {
             let final_contents_of_command =
                 contents_of_command_un_escaped.replace(NEW_COMMAND_HEADER, "");
 
-            let data = if read_file_to_string(&PATHS.favorites).contains(retrieved_command.as_ref())
-            {
+            let favorites_file_contents = read_file_to_string(&PATHS.favorites);
+
+            let data = if favorites_file_contents.contains(retrieved_command.as_ref()) {
                 format!("{retrieved_command} | {final_contents_of_command} | favorite\n")
             } else {
                 format!("{retrieved_command} | {final_contents_of_command}\n")
