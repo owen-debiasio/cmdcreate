@@ -14,11 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::{
-    logger::{Severity, log},
-    utils::{colors::COLORS, sys::arguments_force_actions},
-};
-use std::fmt::Debug;
+use crate::utils::{colors::COLORS, sys::arguments_force_actions};
 use std::{
     fmt::{Display, Formatter},
     io::stdin,
@@ -46,11 +42,6 @@ pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool
 
 pub fn input(text: &str) -> String {
     let (blue, reset) = (COLORS.blue, COLORS.reset);
-
-    log(
-        &format!("utils/io::input(): Input text: \"{text}\""),
-        Severity::Normal,
-    );
 
     println!("{blue}{text}{reset}");
 
