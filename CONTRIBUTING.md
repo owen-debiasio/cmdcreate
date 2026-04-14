@@ -34,6 +34,10 @@ environment. You can find information
 I will tolerate the usage of AI, but in order to submit AI-written code, it must
 be human-verified where the code does what it's supposed to.
 
+## Don't know what to contribute?
+
+Look for TODOs throughout the code, there are plenty of them as I'm writing this.
+
 ## Resources
 
 - [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/)
