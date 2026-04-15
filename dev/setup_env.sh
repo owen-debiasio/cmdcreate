@@ -87,7 +87,11 @@ install_dependencies() {
 
 ask_yn "> Do you want to set up cmdcreate's dev environment?"
 
+echo "> Installing dependencies..."
+
 install_dependencies
+
+echo "> Configuring Rust..."
 
 if [ -f "$HOME/.cargo/env" ]; then
     source "$HOME/.cargo/env"
@@ -95,11 +99,17 @@ fi
 
 rustup default stable
 
-read -r -p "Enter directory for cmdcreate dev environment: " dev_dir
+read -r -p "> Enter directory for cmdcreate dev environment: " dev_dir
+
 dev_dir="${dev_dir/#\~/$HOME}"
+
+echo "> Setting up enviornment at: $dev_dir..."
+
 git clone https://github.com/owen-debiasio/cmdcreate.git "$dev_dir"
 cd "$dev_dir"
 
+echo "> Activating shell scripts..."
+
 find . -maxdepth 1 -name "*.sh" -exec chmod +x {} +
 
-echo -e "\nDone."
+echo -e "\nSetup complete!"
