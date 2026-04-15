@@ -44,48 +44,42 @@ pub fn export(path: &str) {
 
     let installed_commands = get_installed_commands();
 
-    for installed_command in installed_commands {
-        if let Some(command_stem) = installed_command.file_stem() {
-            let retrieved_command = command_stem.to_string_lossy();
+    for retrieved_command in installed_commands {
+        log(
+            &format!("commands/export::export(): Exporting command: \"{retrieved_command}\"..."),
+            Severity::Normal,
+        );
 
-            log(
-                &format!(
-                    "commands/export::export(): Exporting command: \"{retrieved_command}\"..."
-                ),
-                Severity::Normal,
-            );
+        let path_of_command = &format!(
+            "{}{retrieved_command}",
+            PATHS.command_installation_directory
+        );
 
-            let path_of_command = &format!(
-                "{}{retrieved_command}",
-                PATHS.command_installation_directory
-            );
+        let original_contents_of_command = read_file_to_string(path_of_command);
 
-            let original_contents_of_command = read_file_to_string(path_of_command);
+        // The escape thing is "[|" cause backslashes don't work for some reason
+        let contents_of_command_un_escaped = original_contents_of_command.replace('|', "[|");
 
-            // The escape thing is "[|" cause backslashes don't work for some reason
-            let contents_of_command_un_escaped = original_contents_of_command.replace('|', "[|");
+        // Remove the header because
+        // A. It will make the exported file look ugly and cause issues
+        // B. It will be created again anyway
+        let final_contents_of_command =
+            contents_of_command_un_escaped.replace(NEW_COMMAND_HEADER, "");
 
-            // Remove the header because
-            // A. It will make the exported file look ugly and cause issues
-            // B. It will be created again anyway
-            let final_contents_of_command =
-                contents_of_command_un_escaped.replace(NEW_COMMAND_HEADER, "");
+        let favorites_file_contents = read_file_to_string(&PATHS.favorites);
 
-            let favorites_file_contents = read_file_to_string(&PATHS.favorites);
+        let data = if favorites_file_contents.contains(&retrieved_command) {
+            format!("{retrieved_command} | {final_contents_of_command} | favorite\n")
+        } else {
+            format!("{retrieved_command} | {final_contents_of_command}\n")
+        };
 
-            let data = if favorites_file_contents.contains(retrieved_command.as_ref()) {
-                format!("{retrieved_command} | {final_contents_of_command} | favorite\n")
-            } else {
-                format!("{retrieved_command} | {final_contents_of_command}\n")
-            };
+        log(
+            &format!("commands/export::export(): Writing data to file: \"{data}\"..."),
+            Severity::Normal,
+        );
 
-            log(
-                &format!("commands/export::export(): Writing data to file: \"{data}\"..."),
-                Severity::Normal,
-            );
-
-            write_to_file(path_of_file_to_export_to, &data, true).expect("Failed to write to file");
-        }
+        write_to_file(path_of_file_to_export_to, &data, true).expect("Failed to write to file");
     }
 
     println!(

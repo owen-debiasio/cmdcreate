@@ -30,7 +30,11 @@ pub fn cmdcreate_command_is_installed(command_to_find: &str) -> bool {
     let command_install_path =
         &format!("{}{command_to_find}", PATHS.command_installation_directory);
 
-    if path_exists(command_install_path) {
+    // Using both path_exists() and get_installed_commands().contains()
+    // Will help the accuracy if one method doesn't work for some reason.
+    if path_exists(command_install_path)
+        || get_installed_commands().contains(&command_to_find.to_string())
+    {
         log(
             &format!(
                 "commands/tools::command_is_installed(): \
@@ -48,7 +52,7 @@ pub fn cmdcreate_command_is_installed(command_to_find: &str) -> bool {
     );
 }
 
-pub fn get_installed_commands() -> Vec<PathBuf> {
+pub fn get_installed_commands() -> Vec<String> {
     let (red, reset) = (COLORS.red, COLORS.reset);
 
     log(
@@ -58,7 +62,7 @@ pub fn get_installed_commands() -> Vec<PathBuf> {
 
     let command_install_directory = &PATHS.command_installation_directory;
 
-    let mut retrieved_commands: Vec<PathBuf> = read_dir(command_install_directory)
+    let mut retrieved_commands_pathbuf: Vec<PathBuf> = read_dir(command_install_directory)
         .unwrap_or_else(|_| panic!("{red}Error: Failed to read install directory{reset}"))
         .flatten()
         .map(|entry_in_index| entry_in_index.path())
@@ -68,12 +72,28 @@ pub fn get_installed_commands() -> Vec<PathBuf> {
     // Remove commands not created by cmdcreate
     // (commands that don't contain the command header)
     // (See src/commands/create.rs)
-    retrieved_commands.retain(|command_path| {
+    retrieved_commands_pathbuf.retain(|command_path| {
         let path_of_command_found = &command_path.to_string_lossy();
         let file_contents = read_file_to_string(path_of_command_found);
 
         file_contents.contains(NEW_COMMAND_HEADER)
     });
+
+    // Manually convert the original Vec<Pathbuf> to
+    // Vec<String> because for me it makes it easier
+    // to deal with retrieving the installed commands.
+    let mut retrieved_commands: Vec<String> = vec![];
+    for command in retrieved_commands_pathbuf {
+        let command_vec_addition_full = command.to_str().unwrap().to_string();
+
+        // Remove "/usr/local/bin/" to just provide
+        // the names of the commands. They are all
+        // installed in the same directory anyway.
+        let command_to_add =
+            command_vec_addition_full.replace(PATHS.command_installation_directory, "");
+
+        retrieved_commands.push(command_to_add);
+    }
 
     if retrieved_commands.is_empty() {
         error("No commands are installed.", "");

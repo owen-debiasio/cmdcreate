@@ -24,17 +24,12 @@ pub fn search(command_to_search_for: &str) {
 
     let mut command_search_index = 0;
     for installed_command in get_installed_commands() {
-        let command_stem = installed_command
-            .file_stem()
-            .unwrap_or_default()
-            .to_string_lossy();
-
-        if command_stem.contains(command_to_search_for) {
+        if installed_command.contains(command_to_search_for) {
             if command_search_index == 0 {
                 println!("--------");
             }
 
-            println!("{command_stem}");
+            println!("{installed_command}");
 
             command_search_index += 1;
         }

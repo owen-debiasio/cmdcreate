@@ -34,9 +34,7 @@ pub fn list() {
         installed_commands.len()
     );
 
-    for command in installed_commands {
-        let command_name = command.file_stem().unwrap_or_default().to_string_lossy();
-
+    for command_name in installed_commands {
         log(
             &format!(
                 "commands/list::list(): Current command: \"{command_name}\" (favorited={})",
