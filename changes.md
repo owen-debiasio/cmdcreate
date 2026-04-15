@@ -682,3 +682,5 @@ Licensed under the GNU General Public License v3.0 or later.
 ## v1.2.2
 
 - Added better dynamic info for the verbose logging intro
+- Code optimizations
+  - Optimized how commands are initially retrieved
