@@ -684,6 +684,7 @@ Licensed under the GNU General Public License v3.0 or later.
 - Added better dynamic info for the verbose logging intro
 - Code optimizations
   - Optimized how commands are initially retrieved
+  - Heavily organized file structure among system functions
 - Made verbose output nicer in the development environment setup script
   (dev/setup_env.sh)
 - Success of installing license is now determined
