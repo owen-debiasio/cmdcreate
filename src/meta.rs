@@ -17,6 +17,7 @@
 use std::process::exit;
 
 use crate::{
+    logger::{Severity, log},
     meta::{author_information::AUTHOR, project_information::PROJECT},
     utils::{
         colors::COLORS,
@@ -111,7 +112,27 @@ fn download_and_install_license() {
 
     run_shell_command(command_to_download_and_install_license);
 
+    license_install_success_check(license_path);
+
     println!("\n{green}Successfully downloaded license!{reset}");
 
     exit(0)
+}
+
+fn license_install_success_check(license_path: &str) {
+    log(
+        "meta::license_install_success_check(): \
+        Determining License installation status...",
+        Severity::Normal,
+    );
+
+    if !path_exists(license_path) {
+        error("Failed to install license!", "License file not found!")
+    }
+
+    log(
+        "meta::license_install_success_check(): \
+        License installed correctly, continuing...",
+        Severity::Normal,
+    );
 }
