@@ -40,7 +40,6 @@ pub fn favorite(action: &str, command: &str) {
     }
 }
 
-// Almost identical to remove()
 fn add(command: &str) {
     let (blue, green, yellow, reset) = (COLORS.blue, COLORS.green, COLORS.yellow, COLORS.reset);
 
@@ -92,7 +91,6 @@ fn command_favorite_addition_check(command: &str) {
     );
 }
 
-// Almost identical to add()
 fn remove(command: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
