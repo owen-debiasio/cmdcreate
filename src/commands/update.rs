@@ -25,8 +25,9 @@ use crate::{
         io::{ask_for_confirmation, error, input},
         net::not_connected_to_internet,
         sys::{
-            ARCH, DistroBase, InstallMethod, arch_is_supported, cpu_arch_check, get_distro_base,
-            installation_method, run_shell_command,
+            command::run_shell_command,
+            cpu::{ARCH, arch_is_supported, cpu_arch_check},
+            distro::{DistroBase, InstallMethod, get_distro_base, installation_method},
         },
     },
     version::{

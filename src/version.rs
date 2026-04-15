@@ -20,7 +20,7 @@ use crate::{
     utils::{
         io::error,
         net::{http_client, not_connected_to_internet},
-        sys::run_shell_command,
+        sys::command::run_shell_command,
     },
 };
 use serde_json::Value;

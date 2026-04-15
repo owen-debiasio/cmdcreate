@@ -20,7 +20,10 @@ use crate::{
     utils::{
         fs::PATHS,
         io::error,
-        sys::{ENVIRONMENT_VARIABLES, run_shell_command, system_command_is_installed},
+        sys::{
+            command::{run_shell_command, system_command_is_installed},
+            env::ENVIRONMENT_VARIABLES,
+        },
     },
 };
 

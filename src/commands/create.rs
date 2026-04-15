@@ -21,7 +21,7 @@ use crate::{
         colors::COLORS,
         fs::{PATHS, create_file, overwrite_file, read_file_to_string},
         io::error,
-        sys::{args_contains, run_shell_command},
+        sys::{arguments::args_contains, command::run_shell_command},
     },
 };
 

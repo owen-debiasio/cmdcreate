@@ -14,12 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::utils::{colors::COLORS, sys::arguments_force_actions};
 use std::{
     fmt::{Display, Formatter},
     io::stdin,
     process::exit,
 };
+
+use crate::utils::{colors::COLORS, sys::arguments::arguments_force_actions};
 
 pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool {
     let (red, green, reset) = (COLORS.red, COLORS.green, COLORS.reset);
@@ -68,6 +69,7 @@ pub fn error(error_message: &str, error_details: &str) -> ! {
 pub struct TestError(pub String);
 
 use core::fmt;
+
 impl Display for TestError {
     fn fmt(&self, formatter: &mut Formatter<'_>) -> fmt::Result {
         write!(formatter, "{}", self.0)

@@ -20,7 +20,7 @@ use std::{
     time::Duration,
 };
 
-use crate::utils::sys::args_contains;
+use crate::utils::sys::arguments::args_contains;
 
 pub fn http_client() -> Client {
     let user_agent = "cmdcreate-updater";

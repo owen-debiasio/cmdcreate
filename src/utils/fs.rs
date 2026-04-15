@@ -23,7 +23,10 @@ use crate::{
     utils::{
         io::error,
         net::not_connected_to_internet,
-        sys::{DistroBase, get_distro_base, run_shell_command},
+        sys::{
+            command::run_shell_command,
+            distro::{DistroBase, get_distro_base},
+        },
     },
 };
 use anyhow::{Context, Result};

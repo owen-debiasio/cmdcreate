@@ -24,7 +24,7 @@ use crate::{
         fs::{PATHS, create_folder, path_exists, read_file_to_string},
         io::{ask_for_confirmation, error},
         net::not_connected_to_internet,
-        sys::run_shell_command,
+        sys::command::run_shell_command,
     },
 };
 

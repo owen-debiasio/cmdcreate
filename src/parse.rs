@@ -30,7 +30,7 @@ use crate::{
     },
     logger::{Severity, log},
     meta::display_full_license,
-    utils::{colors::COLORS, io::error, sys::arguments_force_actions},
+    utils::{colors::COLORS, io::error, sys::arguments::arguments_force_actions},
     version::{print_version_changelog, print_version_info},
 };
 

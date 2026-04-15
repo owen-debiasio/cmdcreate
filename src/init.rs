@@ -24,8 +24,9 @@ use crate::{
         io::{ask_for_confirmation, error},
         net::{internet_is_forced_disabled, not_connected_to_internet},
         sys::{
-            ARCH, ENVIRONMENT_VARIABLES, get_distro_base, installation_method,
-            root_requirement_is_bypassed, running_as_root,
+            cpu::ARCH,
+            distro::{get_distro_base, installation_method},
+            env::{ENVIRONMENT_VARIABLES, root_requirement_is_bypassed, running_as_root},
         },
     },
     version::version_is_development_build,

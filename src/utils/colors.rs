@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::{configs::load_configuration, utils::sys::args_contains};
+use crate::{configs::load_configuration, utils::sys::arguments::args_contains};
 use std::sync::LazyLock;
 
 pub fn colors_enabled() -> bool {

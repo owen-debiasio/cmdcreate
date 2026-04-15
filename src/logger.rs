@@ -21,7 +21,7 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{PATHS, write_to_file},
-        sys::args_contains,
+        sys::arguments::args_contains,
     },
 };
 
