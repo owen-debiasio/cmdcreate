@@ -45,6 +45,5 @@ pub fn return_args() -> Vec<String> {
 }
 
 pub fn arguments_force_actions() -> bool {
-    // If either are applied, returns true
     args_contains("--force") || args_contains("-f")
 }
