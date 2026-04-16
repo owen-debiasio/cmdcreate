@@ -19,7 +19,7 @@ use chrono::Local;
 use crate::{
     configs::load_configuration,
     utils::{
-        colors::COLORS,
+        colors::{COLORS, remove_spare_color_codes},
         fs::{PATHS, write_to_file},
         sys::arguments::args_contains,
     },
@@ -49,9 +49,9 @@ pub fn log(text_to_log: &str, importance_level: Severity) {
 
     // Example:
     // [<time>] [ERROR] Uh oh this happened
-    let log_file_text = &format!("[{blue}{time}{reset}] [{log_type}] {text_to_log}\n");
+    let log_file_text = format!("[{blue}{time}{reset}] [{log_type}] {text_to_log}\n");
 
-    output_verbose_message(log_file_text);
+    output_verbose_message(&log_file_text);
 
     // Remove things like "\x1b[35m" from being written to the log file. It looks stupid
     let finalized_output_text = remove_spare_color_codes(log_file_text);
@@ -71,22 +71,4 @@ fn output_verbose_message(text_to_print: &str) {
     if verbose_flags_are_passed || verbose_enabled_in_config {
         println!("{text_to_print}{}", COLORS.reset);
     }
-}
-
-fn remove_spare_color_codes(input_string: &str) -> String {
-    let (blue, cyan, yellow, red, reset) = (
-        COLORS.blue,
-        COLORS.cyan,
-        COLORS.yellow,
-        COLORS.red,
-        COLORS.reset,
-    );
-
-    let available_colors: &[&str; 5] = &(blue, cyan, yellow, red, reset).into();
-
-    available_colors
-        .iter()
-        .fold(input_string.to_string(), |original_text, &color| {
-            original_text.replace(color, "")
-        })
 }

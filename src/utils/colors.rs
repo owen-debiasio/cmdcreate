@@ -64,6 +64,24 @@ impl Colors {
     }
 }
 
+pub fn remove_spare_color_codes(input_string: String) -> String {
+    let (blue, cyan, yellow, red, reset) = (
+        COLORS.blue,
+        COLORS.cyan,
+        COLORS.yellow,
+        COLORS.red,
+        COLORS.reset,
+    );
+
+    let available_colors: &[&str; 5] = &(blue, cyan, yellow, red, reset).into();
+
+    available_colors
+        .iter()
+        .fold(input_string, |original_text, &color| {
+            original_text.replace(color, "")
+        })
+}
+
 pub static COLORS: LazyLock<Colors> = LazyLock::new(|| Colors::new(colors_enabled()));
 
 #[cfg(test)]
