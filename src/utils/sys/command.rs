@@ -25,8 +25,7 @@ pub fn system_command_is_installed(command_to_check: &str) -> bool {
     Command::new("which")
         .arg(command_to_check)
         .output()
-        .map(|output_status| output_status.status.success())
-        .unwrap_or(false)
+        .is_ok_and(|output_status| output_status.status.success())
 }
 
 pub fn run_shell_command(command: &str) {
