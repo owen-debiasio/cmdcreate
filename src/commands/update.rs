@@ -132,11 +132,13 @@ fn update_using_method(method_for_installation: &str) {
     download_file_to_location_via_curl(temp_package_file_path, package_file_download_path);
 
     match method_for_installation {
-        ".deb" => run_shell_command(&format!("dpkg -i {temp_package_file_path}")),
-        ".rpm" => run_shell_command(&format!("rpm -Uvh {temp_package_file_path}")),
-        "-bin" => run_shell_command(&format!(
-            "install -Dm755 {temp_package_file_path} /usr/bin/cmdcreate"
+        ".deb" => run_shell_command(&format!(
+            "dpkg -i {temp_package_file_path} > /dev/null 2>&1"
         )),
+        ".rpm" => run_shell_command(&format!(
+            "rpm -Uvh {temp_package_file_path} > /dev/null 2>&1"
+        )),
+        "-bin" => install_binary("-Dm755", temp_package_file_path, "/usr/bin/cmdcreate"),
 
         _ => error(
             "Developer error: INVALID METHOD: (YOU SHOULDN'T BE ABLE TO SEE THIS)",
@@ -160,7 +162,10 @@ fn build_from_source() {
 
     let rustup_install_command = "
         if ! command -v cargo >/dev/null; then \
-            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; \
+            curl --proto '=https' --tlsv1.2 -sSf \
+            https://sh.rustup.rs \
+            | sh -s -- -y \
+            > /dev/null 2>&1; \
         fi";
 
     let dependency_install_command = match get_distro_base() {
@@ -169,15 +174,21 @@ fn build_from_source() {
             cargo git openssl curl base-devel > /dev/null 2>&1"
         }
         DistroBase::Debian => {
-            "apt update -qq && apt install -y -qq \
-            git build-essential pkg-config libssl-dev curl"
+            "apt update -qq /dev/null 2>&1 && \
+            apt install -y -qq \
+            git build-essential pkg-config libssl-dev curl \
+            > /dev/null 2>&1"
         }
         DistroBase::Fedora => {
-            "dnf update -q && dnf install -yq \
-            git-core openssl-devel pkgconf-pkg-config"
+            "dnf update -q /dev/null 2>&1 && \
+            dnf install -yq \
+            git-core openssl-devel pkgconf-pkg-config \
+            > /dev/null 2>&1"
         }
-        DistroBase::Unknown => error("Your distro is unsupported! Unable to proceed.", ""),
+        DistroBase::Unknown => error("Your distro is unsupported!", "Unable to proceed."),
     };
+
+    println!("\n{blue}Updating cmdcreate...{reset}");
 
     clone_repository(cloned_repository_destination);
 
@@ -236,7 +247,7 @@ fn interactive_upgrade() {
         chosen_update_method.push(("rpm", "Install via .rpm file".to_string()));
     }
     if cpu_arch_is_supported {
-        chosen_update_method.push(("bin", "Manually install binary".to_string()));
+        chosen_update_method.push(("bin", "Install via raw binary".to_string()));
     }
 
     let debian_build_warning = if installed_distro == DistroBase::Debian {
@@ -245,11 +256,20 @@ fn interactive_upgrade() {
         String::new()
     };
 
+    let compatability_notice = if cpu_arch_is_supported {
+        ""
+    } else {
+        ", universal compatibility"
+    };
+
     chosen_update_method.push((
         "src",
         format!(
-            "Build from source {blue}(latest git {green}(commit: {latest_commit}){blue}, \
-        universal compatibility{debian_build_warning}){reset}"
+            "\
+            Build from source{blue} \
+            (latest git {green}(commit: {latest_commit}){blue}\
+            {compatability_notice}\
+            {debian_build_warning}){reset}",
         ),
     ));
 
