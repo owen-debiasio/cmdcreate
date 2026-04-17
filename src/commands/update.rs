@@ -21,7 +21,7 @@ use crate::{
     meta::{author_information::AUTHOR, project_information::PROJECT},
     utils::{
         colors::COLORS,
-        fs::{delete_file, delete_folder, download_file_to_location_via_curl},
+        fs::{clone_repository, delete_file, delete_folder, download_file_to_location_via_curl},
         io::{ask_for_confirmation, error, input},
         net::not_connected_to_internet,
         sys::{
@@ -114,15 +114,17 @@ fn update_using_method(method_for_installation: &str) {
     let latest_stable_release = get_latest_tag_from_repo(author_username, project_name);
 
     cpu_arch_check(
-        "You cannot update cmdcreate via this method using CPU Architectures other than \"x86_64\"!",
+        "You cannot update cmdcreate via this method using \
+         CPU Architectures other than \"x86_64\"!",
     );
 
     let package_file_name =
         &format!("cmdcreate-{latest_stable_release}-linux-{ARCH}{method_for_installation}");
     let temp_package_file_path = &format!("/tmp/{package_file_name}");
-    let package_file_download_path = &format!(
-        "https://github.com/owen-debiasio/cmdcreate/releases/latest/download/{package_file_name}"
-    );
+
+    let project_repo = PROJECT.repository;
+    let package_file_download_path =
+        &format!("{project_repo}/releases/latest/download/{package_file_name}");
 
     download_file_to_location_via_curl(temp_package_file_path, package_file_download_path);
 
@@ -147,7 +149,7 @@ fn update_using_method(method_for_installation: &str) {
 }
 
 fn build_from_source() {
-    let (green, reset) = (COLORS.green, COLORS.reset);
+    let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
     let cloned_repository_destination = "/tmp/cmdcreate";
 
@@ -160,30 +162,31 @@ fn build_from_source() {
 
     let dependency_install_command = match get_distro_base() {
         DistroBase::Arch => {
-            "pacman -Sy && pacman -S --needed --noconfirm \
-            cargo git openssl curl base-devel"
+            "pacman -Sy > /dev/null 2>&1 && pacman -S --needed --noconfirm \
+            cargo git openssl curl base-devel > /dev/null 2>&1"
         }
         DistroBase::Debian => {
-            "apt update && apt install -y \
+            "apt update -qq && apt install -y -qq \
             git build-essential pkg-config libssl-dev curl"
         }
         DistroBase::Fedora => {
-            "dnf update && dnf install -y \
+            "dnf update -q && dnf install -yq \
             git-core openssl-devel pkgconf-pkg-config"
         }
         DistroBase::Unknown => error("Your distro is unsupported! Unable to proceed.", ""),
     };
 
-    let project_repo = PROJECT.repository;
+    clone_repository(PROJECT.repository, cloned_repository_destination);
 
     let script_to_build_cmdcreate = format!(
         "{dependency_install_command} && {rustup_install_command}
         set -e
         [ -f \"/root/.cargo/env\" ] && . \"/root/.cargo/env\"
-        git clone {project_repo}.git \"{cloned_repository_destination}\"
         cd \"{cloned_repository_destination}\"
-        rustup default stable
-        cargo build --release
+        echo \"{blue}Building... please wait...{reset}\"
+        rustup default stable > /dev/null 2>&1
+        cargo build --quiet --release
+        echo \"{blue}Installing...{reset}\"
         install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate",
     );
 
