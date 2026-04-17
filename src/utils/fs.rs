@@ -82,7 +82,7 @@ pub fn install_binary(mode: &str, binary: &str, destination: &str) {
     }
 
     log(
-        "utils/fs::install_binary(): Succesfully installed binary!",
+        "utils/fs::install_binary(): Successfully installed binary!",
         Severity::Normal,
     );
 }
