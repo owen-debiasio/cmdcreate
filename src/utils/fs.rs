@@ -20,11 +20,13 @@
 
 use crate::{
     logger::{Severity, log},
+    meta::project_information::PROJECT,
     utils::{
+        colors::COLORS,
         io::error,
         net::not_connected_to_internet,
         sys::{
-            command::run_shell_command,
+            command::{run_shell_command, system_command_is_installed},
             distro::{DistroBase, get_distro_base},
         },
     },
@@ -60,6 +62,39 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     },
     log_directory: format!("{MAIN_PATH}/logs"),
 });
+
+pub fn clone_repository(destination: &str) {
+    let (blue, reset) = (COLORS.blue, COLORS.reset);
+
+    log(
+        "utils/fs::clone_repository(): Cloning project repository...",
+        Severity::Normal,
+    );
+
+    if !system_command_is_installed("git") {
+        error(
+            "Unable to clone repository.",
+            "Please install git to continue.",
+        )
+    }
+
+    println!("{blue}Cloning project repository...{reset}");
+
+    let project_repo = PROJECT.repository;
+
+    run_shell_command(&format!(
+        "git clone --quiet --depth=1 {project_repo}.git {destination}"
+    ));
+
+    if !path_exists(destination) {
+        error("Failed to clone repository!", "Destination not found!")
+    }
+
+    log(
+        &format!("utils/fs::clone_repository(): Successfully cloned repository \"{project_repo}\""),
+        Severity::Normal,
+    );
+}
 
 pub fn download_file_to_location_via_curl(
     file_destination: &str,

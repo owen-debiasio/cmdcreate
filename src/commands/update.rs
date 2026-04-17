@@ -176,7 +176,7 @@ fn build_from_source() {
         DistroBase::Unknown => error("Your distro is unsupported! Unable to proceed.", ""),
     };
 
-    clone_repository(PROJECT.repository, cloned_repository_destination);
+    clone_repository(cloned_repository_destination);
 
     let script_to_build_cmdcreate = format!(
         "{dependency_install_command} && {rustup_install_command}
