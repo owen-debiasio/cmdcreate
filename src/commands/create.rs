@@ -61,15 +61,15 @@ pub fn create(
         Severity::Normal,
     );
 
-    if contents_of_new_command.is_empty() {
+    let user_edits_contents_in_editor = args_contains("--in_editor") || args_contains("-i");
+
+    if contents_of_new_command.is_empty() && !user_edits_contents_in_editor {
         error("The contents of your command can not be empty.", "");
     }
 
     create_file(path_to_command).expect("Failed to create initial command file");
 
     overwrite_file(path_to_command, full_contents_of_new_command).expect("Failed to write");
-
-    let user_edits_contents_in_editor = args_contains("--in_editor") || args_contains("-i");
 
     if user_edits_contents_in_editor {
         edit_command(command_to_create);
