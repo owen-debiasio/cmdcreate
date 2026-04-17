@@ -688,3 +688,9 @@ Licensed under the GNU General Public License v3.0 or later.
 - Made verbose output nicer in the development environment setup script
   (dev/setup_env.sh)
 - Success of installing license is now determined
+
+## v1.2.3
+
+- You can now create a command while not entering the command contents when
+  running with `-i`/`--in-editor`:
+  - `cmdcreate create command-name -i`
