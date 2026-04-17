@@ -21,7 +21,10 @@ use crate::{
     meta::{author_information::AUTHOR, project_information::PROJECT},
     utils::{
         colors::COLORS,
-        fs::{clone_repository, delete_file, delete_folder, download_file_to_location_via_curl},
+        fs::{
+            clone_repository, delete_file, delete_folder, download_file_to_location_via_curl,
+            install_binary, path_exists,
+        },
         io::{ask_for_confirmation, error, input},
         net::not_connected_to_internet,
         sys::{
@@ -179,18 +182,32 @@ fn build_from_source() {
     clone_repository(cloned_repository_destination);
 
     let script_to_build_cmdcreate = format!(
-        "{dependency_install_command} && {rustup_install_command}
-        set -e
+        "set -e
+        {dependency_install_command} && {rustup_install_command}
+        
         [ -f \"/root/.cargo/env\" ] && . \"/root/.cargo/env\"
+        
         cd \"{cloned_repository_destination}\"
-        echo \"{blue}Building... please wait...{reset}\"
+        
+        echo -e \"\n{blue}Building... please wait...{reset}\"
+        
         rustup default stable > /dev/null 2>&1
-        cargo build --quiet --release
-        echo \"{blue}Installing...{reset}\"
-        install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate",
+        
+        cargo build --quiet --release",
     );
 
     run_shell_command(&script_to_build_cmdcreate);
+
+    println!("\n{blue}Installing...{reset}");
+    install_binary(
+        "-Dm755",
+        &format!("{cloned_repository_destination}/target/release/cmdcreate"),
+        "/usr/bin/cmdcreate",
+    );
+
+    if !path_exists("/usr/bin/cmdcreate") {
+        error("Failed to update!", "Updated binary not found!")
+    }
 
     println!("\n{green}Update complete!{reset}");
 

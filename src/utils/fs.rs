@@ -63,6 +63,30 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     log_directory: format!("{MAIN_PATH}/logs"),
 });
 
+pub fn install_binary(mode: &str, binary: &str, destination: &str) {
+    log(
+        &format!(
+            "
+            utils/fs::install_binary(): \
+            Installing binary \"{binary}\" \
+            to \"{destination}\" \
+            using mode \"{mode}\"..."
+        ),
+        Severity::Normal,
+    );
+
+    run_shell_command(&format!("install {mode} {binary} {destination}"));
+
+    if !path_exists(destination) {
+        error("Failed to install binary!", "Binary not found!")
+    }
+
+    log(
+        "utils/fs::install_binary(): Succesfully installed binary!",
+        Severity::Normal,
+    );
+}
+
 pub fn clone_repository(destination: &str) {
     let (blue, reset) = (COLORS.blue, COLORS.reset);
 
@@ -78,12 +102,13 @@ pub fn clone_repository(destination: &str) {
         )
     }
 
-    println!("{blue}Cloning project repository...{reset}");
+    println!("\n{blue}Cloning project repository...{reset}");
 
     let project_repo = PROJECT.repository;
 
     run_shell_command(&format!(
-        "git clone --quiet --depth=1 {project_repo}.git {destination}"
+        "git clone --quiet --depth=1 \
+        {project_repo}.git {destination}"
     ));
 
     if !path_exists(destination) {
@@ -91,7 +116,10 @@ pub fn clone_repository(destination: &str) {
     }
 
     log(
-        &format!("utils/fs::clone_repository(): Successfully cloned repository \"{project_repo}\""),
+        &format!(
+            "utils/fs::clone_repository(): \
+            Successfully cloned repository \"{project_repo}\""
+        ),
         Severity::Normal,
     );
 }
@@ -109,7 +137,7 @@ pub fn download_file_to_location_via_curl(
     ));
 
     if !path_exists(file_destination) {
-        error("Downloaded file not found! Failed to download file!", "")
+        error("Downloaded file not found!", "Failed to download file!")
     }
 }
 
