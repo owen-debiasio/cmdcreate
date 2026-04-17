@@ -694,3 +694,6 @@ Licensed under the GNU General Public License v3.0 or later.
 - You can now create a command while not entering the command contents when
   running with `-i`/`--in-editor`:
   - `cmdcreate create command-name -i`
+- Enhanced the updating experience
+  - Made it less loud, only necesarry output
+- Code optimizations
