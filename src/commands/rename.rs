@@ -98,7 +98,8 @@ pub fn rename(old_command_name: &str, new_renamed_command_name: &str) {
     output!(
         "{green}Successfully renamed command \
         {blue}\"{old_command_name}\" \
-        to {blue}\"{new_renamed_command_name}\"{reset}"
+        to {blue}\"{new_renamed_command_name}\"{reset}",
+        true
     );
 }
 

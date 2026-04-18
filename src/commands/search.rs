@@ -21,16 +21,16 @@ use crate::{
 };
 
 pub fn search(command_to_search_for: &str) {
-    let (yellow, blue, reset) = (COLORS.yellow, COLORS.blue, COLORS.reset);
+    let (yellow, blue, magenta, reset) = (COLORS.yellow, COLORS.blue, COLORS.magenta, COLORS.reset);
 
     let mut command_search_index = 0;
     for installed_command in get_installed_commands() {
         if installed_command.contains(command_to_search_for) {
             if command_search_index == 0 {
-                println!("--------");
+                println!("{magenta}--------");
             }
 
-            output!("{installed_command}");
+            output!("{installed_command}", false);
 
             command_search_index += 1;
         }
@@ -43,15 +43,15 @@ pub fn search(command_to_search_for: &str) {
         );
     }
 
-    output!("--------");
+    output!("{magenta}--------", false);
 
     if command_search_index == 1 {
-        println!("Found one match for {blue}\"{command_to_search_for}\"{reset}");
+        output!("Found one match for {blue}\"{command_to_search_for}\"{reset}");
         return;
     }
 
-    println!(
-        "Found {blue}{command_search_index}{reset} matches for \
+    output!(
+        "Found {magenta}{command_search_index}{blue} matches for \
         {blue}\"{command_to_search_for}\"{reset}."
     );
 }

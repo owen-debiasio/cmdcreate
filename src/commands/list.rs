@@ -26,13 +26,14 @@ use crate::{
 };
 
 pub fn list() {
-    let (blue, reset) = (COLORS.blue, COLORS.reset);
+    let (blue, magenta) = (COLORS.blue, COLORS.magenta);
 
     let installed_commands = get_installed_commands();
+    let installed_commands_amount = installed_commands.len();
 
-    println!(
-        "Installed commands: ({blue}{}{reset})\n--------",
-        installed_commands.len()
+    output!(
+        "Installed commands: ({magenta}{installed_commands_amount}{blue})\n{magenta}--------",
+        true
     );
 
     for command_name in installed_commands {
@@ -48,7 +49,7 @@ pub fn list() {
         let favorite_command_identifier =
             load_configuration("appearance", "favorite_indicator", "\u{2605}");
         if command_is_in_favorites(&command_name) {
-            output!("{favorite_command_identifier} {command_name}");
+            output!("{favorite_command_identifier} {command_name}", false);
 
             continue;
         }
@@ -57,13 +58,13 @@ pub fn list() {
         let favorites_file_contents = read_file_to_string(favorites_path);
 
         if favorites_file_contents.is_empty() {
-            output!("{command_name}");
+            output!("{command_name}", false);
             continue;
         }
 
         let favorite_command_identifier_length = favorite_command_identifier.len();
 
         let output_spacing = " ".repeat(favorite_command_identifier_length);
-        output!("{output_spacing} {command_name}");
+        output!("{output_spacing} {command_name}", false);
     }
 }

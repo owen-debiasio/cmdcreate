@@ -17,7 +17,7 @@
 use crate::{
     commands::{edit::edit as edit_command, remove::remove, tools::cmdcreate_command_is_installed},
     logger::{Severity, log},
-    run_shell_command,
+    output, run_shell_command,
     utils::{
         colors::COLORS,
         fs::{PATHS, create_file, overwrite_file, read_file_to_string},
@@ -86,9 +86,10 @@ pub fn create(
     command_creation_success(command_to_create, contents_of_new_command, path_to_command);
 
     if run_this_function_verbose {
-        println!(
+        output!(
             "\n{green}Success! Created command: \
-        {blue}\"{command_to_create}\"{reset}"
+        {blue}\"{command_to_create}\"{reset}",
+            true
         );
     }
 }

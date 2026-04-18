@@ -44,13 +44,26 @@ pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool
 
 #[macro_export]
 macro_rules! output {
-    ($given_text:expr) => {{
+    // Case 1: Only text provided -> Default arrow to false
+    ($given_text:expr) => {
+        $crate::output!($given_text, false);
+    };
+
+    // Case 2: Both provided
+    ($given_text:expr, $include_arrow:expr) => {{
         let text_interpolated = format!($given_text);
         let text = text_interpolated.trim();
 
         let (blue, reset) = (COLORS.blue, COLORS.reset);
 
-        println!("{blue}> {text}{reset}");
+        println!(
+            "{blue}{}{text}{reset}",
+            if !text.is_empty() && $include_arrow {
+                "> "
+            } else {
+                ""
+            }
+        );
     }};
 }
 
@@ -60,9 +73,9 @@ macro_rules! input {
         use std::io::{self, Write};
 
         let text_interpolated = format!($given_text);
-        let text = text_interpolated.trim();
+        let text = text_interpolated.trim().replace("> ", "");
 
-        $crate::output!("{text}");
+        $crate::output!("{text}", true);
 
         let _ = io::stdout().flush();
 

@@ -60,7 +60,10 @@ pub fn import(command_import_file: &str) {
             }
         }
 
-        output!("{blue}Installing command: \"{green}{retrieved_command_name}{reset}\"");
+        output!(
+            "{blue}Installing command: \"{green}{retrieved_command_name}{reset}\"",
+            true
+        );
 
         create(retrieved_command_name, &command_contents, false);
 
@@ -69,5 +72,5 @@ pub fn import(command_import_file: &str) {
         }
     }
 
-    output!("\n{green}Successfully imported commands.{reset}");
+    output!("\n{green}Successfully imported commands.{reset}", true);
 }

@@ -101,7 +101,7 @@ pub fn clone_repository(destination: &str) {
         )
     }
 
-    output!("\nCloning project repository...");
+    output!("\nCloning project repository...", true);
 
     let project_repo = PROJECT.repository;
 

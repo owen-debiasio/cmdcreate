@@ -38,7 +38,7 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
 
     if !force_removal_of_command {
         let question = &format!(
-            "{red}Are you sure you want to delete command{yellow} \"{command}\"{red}?{reset}"
+            "\n{red}Are you sure you want to delete command{yellow} \"{command}\"{red}?{reset}"
         );
 
         ask_for_confirmation(question, true);
@@ -59,7 +59,11 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
 
     command_removal_success(path_of_command_to_remove);
 
-    output!("{green}Removed command {blue}\"{command}\"{reset}");
+    // I have to put this in because using "\n" on the second
+    // "output!() below doesn't do anything for some reason."
+    output!("");
+
+    output!("{green}Removed command {blue}\"{command}\"{reset}", true);
 }
 
 fn command_removal_success(path_of_command: &str) {

@@ -206,7 +206,8 @@ fn build_from_source() {
 
     run_shell_command!("{script_to_build_cmdcreate}");
 
-    output!("\n{blue}Installing...{reset}");
+    output!("\n{blue}Installing...{reset}", true);
+
     install_binary(
         "-Dm755",
         &format!("{cloned_repository_destination}/target/release/cmdcreate"),
@@ -233,7 +234,7 @@ fn interactive_upgrade() {
     let installed_distro = get_distro_base();
     let cpu_arch_is_supported = arch_is_supported();
 
-    output!("\nSelect an available upgrade method:\n");
+    output!("\nSelect an available upgrade method:\n", true);
 
     let mut chosen_update_method = Vec::new();
 
@@ -253,7 +254,7 @@ fn interactive_upgrade() {
         String::new()
     };
 
-    let compatability_notice = if cpu_arch_is_supported {
+    let compatibility_notice = if cpu_arch_is_supported {
         ""
     } else {
         ", universal compatibility"
@@ -265,7 +266,7 @@ fn interactive_upgrade() {
             "\
             Build from source{blue} \
             (latest git {green}(commit: {latest_commit}){blue}\
-            {compatability_notice}\
+            {compatibility_notice}\
             {debian_build_warning}){reset}",
         ),
     ));
@@ -293,7 +294,7 @@ fn interactive_upgrade() {
 }
 
 pub fn check() {
-    let (green, reset) = (COLORS.green, COLORS.reset);
+    let (blue, green, magenta, reset) = (COLORS.blue, COLORS.green, COLORS.magenta, COLORS.reset);
 
     if not_connected_to_internet() {
         error(
@@ -302,7 +303,7 @@ pub fn check() {
         )
     }
 
-    println!("\nChecking for updates...");
+    output!("\nChecking for updates...", true);
 
     let author_username = AUTHOR.username;
     let project_name = PROJECT.name;
@@ -311,18 +312,19 @@ pub fn check() {
     let current_version = CURRENT_PROJECT_VERSION;
 
     if version_is_development_build() {
-        println!(
-            "\nYou are running a newer version {}({current_version}){reset} \
+        output!(
+            "\nYou are running a newer version {magenta}({current_version}){blue} \
             than the latest release {green}({latest_stable_version}){reset}.",
-            COLORS.blue
+            true
         );
 
         return;
     }
 
     if current_version != latest_stable_version {
-        println!(
-            "{green}\nUpdate available: {current_version} -> {latest_stable_version}{reset}\n"
+        output!(
+            "{green}\nUpdate available: {current_version} -> {latest_stable_version}{reset}\n",
+            true
         );
 
         update();
@@ -330,5 +332,5 @@ pub fn check() {
         return;
     }
 
-    println!("Already up to date.");
+    output!("Already up to date.", true);
 }

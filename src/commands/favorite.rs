@@ -68,7 +68,10 @@ fn add(command: &str) {
 
     command_favorite_addition_check(command_to_write);
 
-    output!("{green}Command {blue}\"{command}\"{green} added to favorites.{reset}");
+    output!(
+        "{green}Command {blue}\"{command}\"{green} added to favorites.{reset}",
+        true
+    );
 }
 
 fn command_favorite_addition_check(command: &str) {
@@ -110,7 +113,10 @@ fn remove(command: &str) {
 
     command_favorite_removed_check(command);
 
-    output!("{green}Command {blue}\"{command}\"{green} removed from favorites.{reset}");
+    output!(
+        "{green}Command {blue}\"{command}\"{green} removed from favorites.{reset}",
+        true
+    );
 }
 
 fn command_favorite_removed_check(command: &str) {

@@ -75,7 +75,8 @@ Arguments and flags:
 
 About:
    {project_name} allows you to create custom commands for your Linux terminal
-   without needing to enter the same \"complex\" commands over and over."
+   without needing to enter the same \"complex\" commands over and over.",
+   false
     );
 
     exit(1)

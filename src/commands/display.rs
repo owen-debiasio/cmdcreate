@@ -24,7 +24,7 @@ use crate::{
 };
 
 pub fn display(command_to_display: &str) {
-    let (blue, reset) = (COLORS.blue, COLORS.reset);
+    let (blue, magenta, reset) = (COLORS.blue, COLORS.magenta, COLORS.reset);
 
     cmdcreate_command_is_installed(command_to_display);
 
@@ -41,7 +41,8 @@ pub fn display(command_to_display: &str) {
     output!(
         "Contents of command: \
         {blue}\"{command_to_display}\"{reset}\n\
-        --------\n\
-        {trimmed_contents_of_command}"
+        {magenta}--------{blue}\n\
+        {trimmed_contents_of_command}",
+        true
     );
 }
