@@ -41,7 +41,7 @@ pub static ENVIRONMENT_VARIABLES: LazyLock<Vars> = LazyLock::new(|| Vars {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::utils::sys::env::ENVIRONMENT_VARIABLES;
 
     #[test]
     fn vars_are_initialized() {

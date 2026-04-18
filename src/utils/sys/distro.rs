@@ -76,7 +76,7 @@ pub fn installation_method() -> InstallMethod {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::utils::sys::distro::{DistroBase, get_distro_base};
 
     #[test]
     fn distro_detection_returns_known_or_unknown() {
