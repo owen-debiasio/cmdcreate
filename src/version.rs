@@ -17,8 +17,9 @@
 use crate::{
     logger::{Severity, log},
     meta::{author_information::AUTHOR, get_project_copyright_info, project_information::PROJECT},
-    run_shell_command,
+    output, run_shell_command,
     utils::{
+        colors::COLORS,
         io::error,
         net::{http_client, not_connected_to_internet},
     },
@@ -26,7 +27,7 @@ use crate::{
 use serde_json::Value;
 use std::{cmp::Ordering, error::Error};
 
-pub const CURRENT_PROJECT_VERSION: &str = "v1.2.3";
+pub const CURRENT_PROJECT_VERSION: &str = "v1.2.4";
 
 pub fn version_is_development_build() -> bool {
     let parse_version = |parsed_version_digits: &str| -> (u32, u32, u32) {
@@ -120,7 +121,11 @@ pub fn get_latest_commit_from_repo(owner: &str, repo: &str, branch: &str) -> Str
 
     // And THIS is why cmdcreate can take forever to load on weak systems.
     log(
-        &format!("version::get_latest_commit_from_repo(): Retrieved latest commit: \"{commit}\""),
+        &format!(
+            "
+            version::get_latest_commit_from_repo(): \
+            Retrieved latest commit: \"{commit}\""
+        ),
         Severity::Normal,
     );
 
@@ -133,7 +138,7 @@ pub fn print_version_info() {
 
     let project_copyright_info = get_project_copyright_info();
 
-    println!(
+    output!(
         "
 cmdcreate {CURRENT_PROJECT_VERSION}
 Copyright (C) {project_copyright_info}.
@@ -143,6 +148,7 @@ There is NO WARRANTY, to the extent permitted by law.
 
 Written by {project_author} <{project_author_email}>.
         ",
+        true
     );
 }
 
@@ -157,8 +163,6 @@ pub fn print_version_changelog() {
         "version::print_version_changelog(): Displaying changelog...",
         Severity::Normal,
     );
-
-    //let command_to_get_changelog = &format!("curl -L {repo_path}/changes.md");
 
     run_shell_command!("curl -L {repo_path}/changes.md");
 }
