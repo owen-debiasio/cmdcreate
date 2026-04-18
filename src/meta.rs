@@ -19,12 +19,12 @@ use std::process::exit;
 use crate::{
     logger::{Severity, log},
     meta::{author_information::AUTHOR, project_information::PROJECT},
+    run_shell_command,
     utils::{
         colors::COLORS,
         fs::{PATHS, create_folder, path_exists, read_file_to_string},
         io::{ask_for_confirmation, error},
         net::not_connected_to_internet,
-        sys::command::run_shell_command,
     },
 };
 
@@ -110,7 +110,7 @@ fn download_and_install_license() {
         {raw_repo_path}/LICENSE"
     );
 
-    run_shell_command(command_to_download_and_install_license);
+    run_shell_command!("{command_to_download_and_install_license}");
 
     license_install_success_check(license_path);
 

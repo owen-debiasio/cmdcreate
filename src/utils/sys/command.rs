@@ -14,12 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::{
-    configs::load_configuration,
-    utils::{io::error, sys::env::ENVIRONMENT_VARIABLES},
-};
-
-use std::process::{Command, Stdio};
+use std::process::Command;
 
 pub fn system_command_is_installed(command_to_check: &str) -> bool {
     Command::new("which")
@@ -28,24 +23,28 @@ pub fn system_command_is_installed(command_to_check: &str) -> bool {
         .is_ok_and(|output_status| output_status.status.success())
 }
 
-pub fn run_shell_command(command: &str) {
-    let shell: &str = &load_configuration("sys", "shell", &ENVIRONMENT_VARIABLES.shell);
+#[macro_export]
+macro_rules! run_shell_command {
+    ($given_command:expr) => {{
+        use std::process::{Command, Stdio};
 
-    if command.trim().is_empty() {
-        return;
-    }
+        let command_interpolated = format!($given_command);
+        let command = command_interpolated.trim();
 
-    match Command::new(shell)
-        .arg("-c")
-        .arg(command)
-        .stdin(Stdio::inherit())
-        .stdout(Stdio::inherit())
-        .stderr(Stdio::inherit())
-        .status()
-    {
-        Ok(_) => {}
-        Err(error_message) => {
-            error("Failed to run shell command:", &error_message.to_string());
+        if !command.is_empty() {
+            let shell = "sh";
+
+            match Command::new(shell)
+                .arg("-c")
+                .arg(command)
+                .stdin(Stdio::inherit())
+                .stdout(Stdio::inherit())
+                .stderr(Stdio::inherit())
+                .status()
+            {
+                Ok(_) => {}
+                Err(e) => $crate::utils::io::error("Command failed", &e.to_string()),
+            }
         }
-    }
+    }};
 }

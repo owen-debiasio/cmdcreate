@@ -17,11 +17,12 @@
 use crate::{
     commands::{edit::edit as edit_command, remove::remove, tools::cmdcreate_command_is_installed},
     logger::{Severity, log},
+    run_shell_command,
     utils::{
         colors::COLORS,
         fs::{PATHS, create_file, overwrite_file, read_file_to_string},
         io::error,
-        sys::{arguments::args_contains, command::run_shell_command},
+        sys::arguments::args_contains,
     },
 };
 
@@ -80,7 +81,7 @@ pub fn create(
         Severity::Normal,
     );
 
-    run_shell_command(&format!("chmod +x {path_to_command}"));
+    run_shell_command!("chmod +x {path_to_command}");
 
     command_creation_success(command_to_create, contents_of_new_command, path_to_command);
 

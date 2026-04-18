@@ -17,18 +17,19 @@
 use std::process::exit;
 
 use crate::{
+    input,
     logger::{Severity, log},
     meta::{author_information::AUTHOR, project_information::PROJECT},
+    output, run_shell_command,
     utils::{
         colors::COLORS,
         fs::{
             clone_repository, delete_file, delete_folder, download_file_to_location_via_curl,
             install_binary, path_exists,
         },
-        io::{ask_for_confirmation, error, input},
+        io::{ask_for_confirmation, error},
         net::not_connected_to_internet,
         sys::{
-            command::run_shell_command,
             cpu::{ARCH, arch_is_supported, cpu_arch_check},
             distro::{DistroBase, InstallMethod, get_distro_base, installation_method},
         },
@@ -132,12 +133,8 @@ fn update_using_method(method_for_installation: &str) {
     download_file_to_location_via_curl(temp_package_file_path, package_file_download_path);
 
     match method_for_installation {
-        ".deb" => run_shell_command(&format!(
-            "dpkg -i {temp_package_file_path} > /dev/null 2>&1"
-        )),
-        ".rpm" => run_shell_command(&format!(
-            "rpm -Uvh {temp_package_file_path} > /dev/null 2>&1"
-        )),
+        ".deb" => run_shell_command!("dpkg -i {temp_package_file_path} > /dev/null 2>&1"),
+        ".rpm" => run_shell_command!("rpm -Uvh {temp_package_file_path} > /dev/null 2>&1"),
         "-bin" => install_binary("-Dm755", temp_package_file_path, "/usr/bin/cmdcreate"),
 
         _ => error(
@@ -207,9 +204,9 @@ fn build_from_source() {
         cargo build --quiet --release",
     );
 
-    run_shell_command(&script_to_build_cmdcreate);
+    run_shell_command!("{script_to_build_cmdcreate}");
 
-    println!("\n{blue}Installing...{reset}");
+    output!("\n{blue}Installing...{reset}");
     install_binary(
         "-Dm755",
         &format!("{cloned_repository_destination}/target/release/cmdcreate"),
@@ -236,7 +233,7 @@ fn interactive_upgrade() {
     let installed_distro = get_distro_base();
     let cpu_arch_is_supported = arch_is_supported();
 
-    println!("\nSelect an available upgrade method:\n");
+    output!("\nSelect an available upgrade method:\n");
 
     let mut chosen_update_method = Vec::new();
 
@@ -279,7 +276,7 @@ fn interactive_upgrade() {
         println!("{blue}{}]{reset} {update_option}", update_option_index + 1);
     }
 
-    let entered_update_method = input("").trim().parse::<usize>().unwrap_or(0);
+    let entered_update_method = input!("").trim().parse::<usize>().unwrap_or(0);
 
     if entered_update_method == 0 || entered_update_method > chosen_update_method.len() {
         error("Invalid selection: ", &entered_update_method.to_string());

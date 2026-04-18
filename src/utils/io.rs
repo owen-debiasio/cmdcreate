@@ -16,11 +16,13 @@
 
 use std::{
     fmt::{Display, Formatter},
-    io::stdin,
     process::exit,
 };
 
-use crate::utils::{colors::COLORS, sys::arguments::arguments_force_actions};
+use crate::{
+    input,
+    utils::{colors::COLORS, sys::arguments::arguments_force_actions},
+};
 
 pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool {
     let (red, green, reset) = (COLORS.red, COLORS.green, COLORS.reset);
@@ -29,8 +31,7 @@ pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool
         return true;
     }
 
-    let question_that_is_asked = &format!("{question}{reset}\n({green}Y{reset} or {red}N{reset})");
-    let get_response_to_question = input(question_that_is_asked);
+    let get_response_to_question = input!("{question}{reset}\n({green}Y{reset} or {red}N{reset})");
 
     if get_response_to_question.eq_ignore_ascii_case("y") {
         true
@@ -41,15 +42,37 @@ pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool
     }
 }
 
-pub fn input(text: &str) -> String {
-    let (blue, reset) = (COLORS.blue, COLORS.reset);
+#[macro_export]
+macro_rules! output {
+    ($given_text:expr) => {{
+        let text_interpolated = format!($given_text);
+        let text = text_interpolated.trim();
 
-    println!("{blue}{text}{reset}");
+        let (blue, reset) = (COLORS.blue, COLORS.reset);
 
-    let mut user_input = String::new();
-    stdin().read_line(&mut user_input).unwrap();
+        println!("{blue}> {text}{reset}");
+    }};
+}
 
-    user_input.trim().to_string()
+#[macro_export]
+macro_rules! input {
+    ($given_text:expr) => {{
+        use std::io::{self, Write};
+
+        let text_interpolated = format!($given_text);
+        let text = text_interpolated.trim();
+
+        $crate::output!("{text}");
+
+        let _ = io::stdout().flush();
+
+        let mut user_input = String::new();
+        io::stdin()
+            .read_line(&mut user_input)
+            .expect("Failed to read line");
+
+        user_input.trim().to_string()
+    }};
 }
 
 /// Error details are optional.

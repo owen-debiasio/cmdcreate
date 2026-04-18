@@ -21,11 +21,11 @@ use crate::{
         tools::{cmdcreate_command_is_installed, get_installed_commands},
     },
     logger::{Severity, log},
+    output, run_shell_command,
     utils::{
         colors::COLORS,
         fs::{PATHS, path_exists},
         io::{ask_for_confirmation, error},
-        sys::command::run_shell_command,
     },
 };
 
@@ -82,11 +82,11 @@ pub fn rename(old_command_name: &str, new_renamed_command_name: &str) {
     }
 
     // I should probably make a function to move files
-    run_shell_command(&format!(
+    run_shell_command!(
         "mv \
         {command_install_location}{old_command_name} \
         {command_install_location}{new_renamed_command_name}"
-    ));
+    );
 
     command_rename_success(
         old_command_name,
@@ -95,7 +95,7 @@ pub fn rename(old_command_name: &str, new_renamed_command_name: &str) {
         check_favorites_in_repair,
     );
 
-    println!(
+    output!(
         "{green}Successfully renamed command \
         {blue}\"{old_command_name}\" \
         to {blue}\"{new_renamed_command_name}\"{reset}"

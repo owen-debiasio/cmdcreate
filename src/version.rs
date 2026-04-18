@@ -17,10 +17,10 @@
 use crate::{
     logger::{Severity, log},
     meta::{author_information::AUTHOR, get_project_copyright_info, project_information::PROJECT},
+    run_shell_command,
     utils::{
         io::error,
         net::{http_client, not_connected_to_internet},
-        sys::command::run_shell_command,
     },
 };
 use serde_json::Value;
@@ -158,7 +158,7 @@ pub fn print_version_changelog() {
         Severity::Normal,
     );
 
-    let command_to_get_changelog = &format!("curl -L {repo_path}/changes.md");
+    //let command_to_get_changelog = &format!("curl -L {repo_path}/changes.md");
 
-    run_shell_command(command_to_get_changelog);
+    run_shell_command!("curl -L {repo_path}/changes.md");
 }

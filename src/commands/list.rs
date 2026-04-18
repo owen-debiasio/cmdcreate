@@ -18,6 +18,7 @@ use crate::{
     commands::{favorite::command_is_in_favorites, tools::get_installed_commands},
     configs::load_configuration,
     logger::{Severity, log},
+    output,
     utils::{
         colors::COLORS,
         fs::{PATHS, read_file_to_string},
@@ -47,7 +48,7 @@ pub fn list() {
         let favorite_command_identifier =
             load_configuration("appearance", "favorite_indicator", "\u{2605}");
         if command_is_in_favorites(&command_name) {
-            println!("{favorite_command_identifier} {command_name}");
+            output!("{favorite_command_identifier} {command_name}");
 
             continue;
         }
@@ -56,13 +57,13 @@ pub fn list() {
         let favorites_file_contents = read_file_to_string(favorites_path);
 
         if favorites_file_contents.is_empty() {
-            println!("{command_name}");
+            output!("{command_name}");
             continue;
         }
 
         let favorite_command_identifier_length = favorite_command_identifier.len();
 
         let output_spacing = " ".repeat(favorite_command_identifier_length);
-        println!("{output_spacing} {command_name}");
+        output!("{output_spacing} {command_name}");
     }
 }

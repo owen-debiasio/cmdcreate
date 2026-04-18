@@ -17,13 +17,11 @@
 use crate::{
     commands::tools::cmdcreate_command_is_installed,
     logger::{Severity, log},
+    run_shell_command,
     utils::{
         fs::PATHS,
         io::error,
-        sys::{
-            command::{run_shell_command, system_command_is_installed},
-            env::ENVIRONMENT_VARIABLES,
-        },
+        sys::{command::system_command_is_installed, env::ENVIRONMENT_VARIABLES},
     },
 };
 
@@ -72,10 +70,7 @@ pub fn edit(command_to_edit: &str) {
         Severity::Normal,
     );
 
-    let command_to_edit_command = &format!(
-        "{editor_to_use} {}{command_to_edit}",
-        PATHS.command_installation_directory
-    );
+    let command_install_directory = PATHS.command_installation_directory;
 
-    run_shell_command(command_to_edit_command);
+    run_shell_command!("{editor_to_use} {command_install_directory}{command_to_edit}");
 }

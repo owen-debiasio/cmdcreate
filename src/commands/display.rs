@@ -16,6 +16,7 @@
 
 use crate::{
     commands::{create::NEW_COMMAND_HEADER, tools::cmdcreate_command_is_installed},
+    output,
     utils::{
         colors::COLORS,
         fs::{PATHS, read_file_to_string},
@@ -35,12 +36,12 @@ pub fn display(command_to_display: &str) {
     // Remove command header because you
     // already know cmdcreate made the command
     let contents_of_command = read_file_to_string(&path_to_command).replace(NEW_COMMAND_HEADER, "");
-    let trimmed_contents_of_command = contents_of_command;
+    let trimmed_contents_of_command = contents_of_command.trim();
 
-    println!(
+    output!(
         "Contents of command: \
         {blue}\"{command_to_display}\"{reset}\n\
         --------\n\
-        {trimmed_contents_of_command}",
+        {trimmed_contents_of_command}"
     );
 }

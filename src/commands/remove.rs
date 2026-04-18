@@ -17,6 +17,7 @@
 use crate::{
     commands::{favorite::favorite, tools::cmdcreate_command_is_installed},
     logger::{Severity, log},
+    output,
     utils::{
         colors::COLORS,
         fs::{PATHS, delete_file, path_exists, read_file_to_string},
@@ -58,7 +59,7 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
 
     command_removal_success(path_of_command_to_remove);
 
-    println!("{green}Removed command {blue}\"{command}\"{reset}");
+    output!("{green}Removed command {blue}\"{command}\"{reset}");
 }
 
 fn command_removal_success(path_of_command: &str) {

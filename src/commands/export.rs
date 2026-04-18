@@ -17,6 +17,7 @@
 use crate::{
     commands::{create::NEW_COMMAND_HEADER, tools::get_installed_commands},
     logger::{Severity, log},
+    output,
     utils::{
         colors::COLORS,
         fs::{PATHS, create_file, read_file_to_string, write_to_file},
@@ -82,8 +83,8 @@ pub fn export(path: &str) {
         write_to_file(path_of_file_to_export_to, &data, true).expect("Failed to write to file");
     }
 
-    println!(
+    output!(
         "{green}Successfully exported commands to: \
-        {blue}\"{path_of_file_to_export_to}\"{green}.{reset}",
+        {blue}\"{path_of_file_to_export_to}\"{green}.{reset}"
     );
 }

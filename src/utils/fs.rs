@@ -21,12 +21,13 @@
 use crate::{
     logger::{Severity, log},
     meta::project_information::PROJECT,
+    output, run_shell_command,
     utils::{
         colors::COLORS,
         io::error,
         net::not_connected_to_internet,
         sys::{
-            command::{run_shell_command, system_command_is_installed},
+            command::system_command_is_installed,
             distro::{DistroBase, get_distro_base},
         },
     },
@@ -75,7 +76,7 @@ pub fn install_binary(mode: &str, binary: &str, destination: &str) {
         Severity::Normal,
     );
 
-    run_shell_command(&format!("install {mode} {binary} {destination}"));
+    run_shell_command!("install {mode} {binary} {destination}");
 
     if !path_exists(destination) {
         error("Failed to install binary!", "Binary not found!")
@@ -88,8 +89,6 @@ pub fn install_binary(mode: &str, binary: &str, destination: &str) {
 }
 
 pub fn clone_repository(destination: &str) {
-    let (blue, reset) = (COLORS.blue, COLORS.reset);
-
     log(
         "utils/fs::clone_repository(): Cloning project repository...",
         Severity::Normal,
@@ -102,14 +101,14 @@ pub fn clone_repository(destination: &str) {
         )
     }
 
-    println!("\n{blue}Cloning project repository...{reset}");
+    output!("\nCloning project repository...");
 
     let project_repo = PROJECT.repository;
 
-    run_shell_command(&format!(
+    run_shell_command!(
         "git clone --quiet --depth=1 \
         {project_repo}.git {destination}"
-    ));
+    );
 
     if !path_exists(destination) {
         error("Failed to clone repository!", "Destination not found!")
@@ -129,12 +128,14 @@ pub fn download_file_to_location_via_curl(
     path_of_file_to_be_downloaded: &str,
 ) {
     if not_connected_to_internet() {
-        error("Unable to retrieve file! You need internet first!", "")
+        error("Unable to retrieve file!", "You need internet first!")
     }
 
-    run_shell_command(&format!(
-        "curl -Lfo {file_destination} {path_of_file_to_be_downloaded}"
-    ));
+    run_shell_command!(
+        "
+        curl -Lfo {file_destination} \
+        {path_of_file_to_be_downloaded}"
+    );
 
     if !path_exists(file_destination) {
         error("Downloaded file not found!", "Failed to download file!")

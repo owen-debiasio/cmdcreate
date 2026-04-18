@@ -17,6 +17,7 @@
 use crate::{
     commands::{create::create, favorite::favorite as add_favorite},
     logger::{Severity, log},
+    output,
     utils::{colors::COLORS, fs::read_file_to_string, io::error},
 };
 
@@ -59,7 +60,7 @@ pub fn import(command_import_file: &str) {
             }
         }
 
-        println!("{blue}Installing command: \"{green}{retrieved_command_name}{reset}\"");
+        output!("{blue}Installing command: \"{green}{retrieved_command_name}{reset}\"");
 
         create(retrieved_command_name, &command_contents, false);
 
@@ -68,5 +69,5 @@ pub fn import(command_import_file: &str) {
         }
     }
 
-    println!("\n{green}Successfully imported commands.{reset}");
+    output!("\n{green}Successfully imported commands.{reset}");
 }

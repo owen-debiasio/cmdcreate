@@ -31,6 +31,7 @@ pub enum Severity {
     Warn = 1,
 }
 
+// TODO: Make this a macro
 pub fn log(text_to_log: &str, importance_level: Severity) {
     let (blue, cyan, yellow, reset) = (COLORS.blue, COLORS.cyan, COLORS.yellow, COLORS.reset);
 

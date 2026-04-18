@@ -16,6 +16,7 @@
 
 use crate::{
     commands::tools::get_installed_commands,
+    output,
     utils::{colors::COLORS, io::error},
 };
 
@@ -29,7 +30,7 @@ pub fn search(command_to_search_for: &str) {
                 println!("--------");
             }
 
-            println!("{installed_command}");
+            output!("{installed_command}");
 
             command_search_index += 1;
         }
@@ -42,7 +43,7 @@ pub fn search(command_to_search_for: &str) {
         );
     }
 
-    println!("--------");
+    output!("--------");
 
     if command_search_index == 1 {
         println!("Found one match for {blue}\"{command_to_search_for}\"{reset}");
