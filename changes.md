@@ -706,3 +706,10 @@ Licensed under the GNU General Public License v3.0 or later.
 - Overhauled output messages and text to look nicer
   - As of this update, there are some inconsistencies, which will be fixed in
     the future.
+
+# 1.2.4
+
+- Continued migration to macro my macro `output!()` located in src/utils/io.rs
+- Updated both `cmdcreate` and `cmdcreate-git` PKGBUILDs
+  - They were messy
+  - Added fixes needed for updated dependencies
