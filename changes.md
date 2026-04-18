@@ -697,3 +697,4 @@ Licensed under the GNU General Public License v3.0 or later.
 - Enhanced the updating experience
   - Made it less loud, only necessary output
 - Code optimizations
+- Overhauled output messages and text to look nicer
