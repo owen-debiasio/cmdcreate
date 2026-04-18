@@ -17,6 +17,7 @@
 use crate::{
     logger::{Severity, log},
     meta::project_information::PROJECT,
+    output,
     utils::colors::COLORS,
     version::CURRENT_PROJECT_VERSION,
 };
@@ -39,7 +40,7 @@ pub fn cmdcreate_usage() {
     let project_name = PROJECT.name;
     let version = CURRENT_PROJECT_VERSION;
 
-    println!(
+    output!(
         "
 {project_name} {version}
 Usage: {project_name} {magenta}(flags){red} [{blue}command{red}, {cyan}argument{red}] {yellow}<args> {magenta}(flags){red}
@@ -74,7 +75,7 @@ Arguments and flags:
 
 About:
    {project_name} allows you to create custom commands for your Linux terminal
-   without needing to enter the same \"complex\" commands over and over.",
+   without needing to enter the same \"complex\" commands over and over."
     );
 
     exit(1)
