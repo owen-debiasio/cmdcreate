@@ -697,4 +697,12 @@ Licensed under the GNU General Public License v3.0 or later.
 - Enhanced the updating experience
   - Made it less loud, only necessary output
 - Code optimizations
+  - Updated how messages are printing and better string formatting for functions
+    such as:
+    - `run_shell_command!()`
+    - `output!()`
+      - Replacing the use of `println!()`
+    - `input!()`
 - Overhauled output messages and text to look nicer
+  - As of this update, there are some inconsistencies, which will be fixed in
+    the future.
