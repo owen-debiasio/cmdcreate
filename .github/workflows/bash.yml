@@ -1,10 +1,28 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Owen Debiasio
-# Licensed under the GNU General Public License v3.0 or later.
-# Full notice available in the root README.md or COPYING file.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 name: Bash Lint
 
-on: [push]
+on:
+  push:
+    paths:
+      - '**.sh'
+  pull_request:
+    paths:
+      - '**.sh'
 
 permissions:
   contents: read
@@ -14,7 +32,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Install tools
         run: |
@@ -23,7 +42,7 @@ jobs:
 
       - name: shfmt (format check)
         run: |
-          shfmt -w -i 4 -ci -sr .
+          shfmt -d -i 4 -ci -sr .
 
       - name: shellcheck
         run: |

@@ -1,11 +1,20 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Owen Debiasio
-# Licensed under the GNU General Public License v3.0 or later.
-# Full notice available in the root README.md or COPYING file.
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 name: Markdown Lint
-
-permissions:
-  contents: read
 
 on:
   push:
@@ -15,27 +24,25 @@ on:
     paths:
       - "**/*.md"
 
+permissions:
+  contents: read
+
 jobs:
-  markdownlint:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Check formatting (Prettier)
+        uses: creyom/prettier-action@v4.3
         with:
-          node-version: 20
-
-      - name: Install Prettier
-        run: npm install -g prettier
-
-      - name: Run Prettier
-        run: prettier -c "**/*.md"
-
-      - name: Install markdownlint-cli2
-        run: npm install -g markdownlint-cli2@0.13.0
+          prettier_options: --check **/*.md
+          dry: true 
 
       - name: Run markdownlint
-        run: markdownlint-cli2 "**/*.md" --config .markdownlint.json
+        uses: DavidAnson/markdownlint-cli2-action@v16
+        with:
+          globs: "**/*.md"
+          config: ".markdownlint.json"
