@@ -41,7 +41,7 @@ use std::{
     sync::LazyLock,
 };
 
-pub static MAIN_PATH: &str = "/root/.local/share/cmdcreate";
+pub static MAIN_PATH: &str = "/usr/share/cmdcreate";
 
 pub struct Paths {
     pub configuration_file: &'static str,
@@ -133,7 +133,7 @@ pub fn download_file_to_location_via_curl(
 
     run_shell_command!(
         "
-        curl -Lfo {file_destination} \
+        curl -sLfo {file_destination} \
         {path_of_file_to_be_downloaded}"
     );
 
