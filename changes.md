@@ -707,7 +707,7 @@ Licensed under the GNU General Public License v3.0 or later.
   - As of this update, there are some inconsistencies, which will be fixed in
     the future.
 
-# 1.2.4
+## 1.2.4
 
 - Continued migration to macro my macro `output!()` located in src/utils/io.rs
 - Updated dependencies
@@ -721,3 +721,7 @@ Licensed under the GNU General Public License v3.0 or later.
 - Created an install script to more easily install cmdcreate on non-Arch based
   distros
 - Script `cmdcreate/dev/uninstall.sh` now handles the license when uninstalling
+
+## 1.2.5
+
+- Development utility bash scripts now have color to make them look cleaner
