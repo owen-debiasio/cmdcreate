@@ -156,9 +156,9 @@ echo -e "${BLUE}Welcome to the cmdcreate installer! Please choose an option:${RE
 
 case "$OS_TYPE" in
     debian)
-        echo "${BLUE}1)${RESET} Build from source"
-        echo "${BLUE}2)${RESET} Debian (.deb) package (x86 only)"
-        echo "${BLUE}3)${RESET} Raw binary (x86 only)"
+        echo -e "${BLUE}1)${RESET} Build from source"
+        echo -e "${BLUE}2)${RESET} Debian (.deb) package (x86 only)"
+        echo -e "${BLUE}3)${RESET} Raw binary (x86 only)"
         echo ""
         read -rp "Select: " choice
         [ "$choice" == "1" ] && build_from_source
@@ -184,8 +184,8 @@ case "$OS_TYPE" in
         [ "$choice" == "2" ] && install_aur
         ;;
     *)
-        echo "${BLUE}1)${RESET} Build from source"
-        echo "${BLUE}2)${RESET} Binary (x86 only)"
+        echo -e "${BLUE}1)${RESET} Build from source"
+        echo -e "${BLUE}2)${RESET} Binary (x86 only)"
         echo ""
         read -rp "Select: " choice
         [ "$choice" == "1" ] && build_from_source
