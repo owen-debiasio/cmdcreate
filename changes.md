@@ -713,3 +713,5 @@ Licensed under the GNU General Public License v3.0 or later.
 - Updated both `cmdcreate` and `cmdcreate-git` PKGBUILDs
   - They were messy
   - Added fixes needed for updated dependencies
+- Created an install script to more easily install cmdcreate on non-Arch based
+  distros

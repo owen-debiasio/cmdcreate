@@ -90,115 +90,13 @@ cd ~/.cache/cmdcreate-git
 makepkg -si
 ```
 
-### Debian/Ubuntu
+### Other distros (Debian, Ubuntu, Fedora , other distros)
 
-#### Package installation (recommended)
-
-You can get the `.deb` package file here:
-**[Latest Release](https://github.com/owen-debiasio/cmdcreate/releases/latest)**
-
-#### Using curl
+This script will walk you through the installation of cmdcreate on your distro.
 
 ```bash
-curl -Lf -o /tmp/cmdcreate-{version}-linux-x86_64.deb \
-https://github.com/owen-debiasio/cmdcreate/releases/latest/download/cmdcreate-{version}-linux-x86_64.deb && \
-sudo dpkg -i /tmp/cmdcreate-{version}-linux-x86_64.deb
-```
-
-### Fedora
-
-#### Package installation (recommended)
-
-You can get the `.rpm` package file file here:
-**[Latest Release](https://github.com/owen-debiasio/cmdcreate/releases/latest)**
-
-#### Using curl
-
-```bash
-curl -Lf -o /tmp/cmdcreate-{version}-linux-x86_64.rpm \
-https://github.com/owen-debiasio/cmdcreate/releases/latest/download/cmdcreate-{version}-linux-x86_64.rpm && \
-sudo rpm -Uvh /tmp/cmdcreate-{version}-linux-x86_64.rpm
-```
-
-### Other
-
-#### Standalone binary
-
-You can the get the standalone `x86_64` binary file here:
-**[Latest Release](https://github.com/owen-debiasio/cmdcreate/releases/latest)**
-
-#### Using curl
-
-```bash
-curl -Lf -o /tmp/cmdcreate-{version}-linux-x86_64-bin \
-https://github.com/owen-debiasio/cmdcreate/releases/latest/download/cmdcreate-{version}-linux-x86_64-bin && \
-sudo install -Dm755 /tmp/cmdcreate-{version}-linux-x86_64-bin /usr/bin/cmdcreate
-```
-
----
-
-## Building from source (Latest git)
-
-### Dependencies
-
-> [!NOTE]  
-> You can find more about developing cmdcreate here:
-> [Development Documentation](https://github.com/owen-debiasio/cmdcreate/blob/main/docs/developing.md)
-
-- rustup
-- openssl
-- git
-- curl
-
-> [!NOTE]  
-> You need the latest Rust version, so install rustup and run:
-> `rustup default stable`
-
-#### Arch Linux
-
-```bash
-sudo pacman -S rustup curl openssl nano git
-```
-
-#### Debian/Ubuntu
-
-```bash
-sudo apt install curl libssl-dev libssl3 build-essential pkg-config git nano
-```
-
-##### Install Rustup
-
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
-
-#### Fedora
-
-```bash
-sudo dnf install curl libssl-devel openssl-libs git nano
-```
-
-##### Install Rustup
-
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
-
-#### Other distros
-
-- Install necessary packages from your package manager
-
-### Download and install
-
-```bash
-cd "$HOME"
-git clone https://github.com/owen-debiasio/cmdcreate.git
-cd cmdcreate
-rustup default stable
-cargo build --release
-sudo install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate
-cd "$HOME"
-rm -rf cmdcreate
+curl -sSL https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/install.sh -o /tmp/install.sh
+bash -i /tmp/install.sh
 ```
 
 ---
