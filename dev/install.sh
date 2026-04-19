@@ -21,30 +21,35 @@ BIN_NAME="cmdcreate"
 TARGET="target/release/$BIN_NAME"
 INSTALL_DIR="/usr/bin/"
 
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RESET='\033[0m'
+
 if [[ "${1:-}" = "--help" && "${1:-}" != "-h" ]]; then
-    echo -ne "\n> Help:\n\nPass \"-o\" or \"--offline\" flags to use offline\n"
+    echo -ne "\n${YELLOW}> Help:\n\nPass \"-o\" or \"--offline\" flags to use offline${RESET}\n"
     exit 1
 fi
 
 if [[ "${1:-}" != "--offline" && "${1:-}" != "-o" ]]; then
-    echo -e "\n> Updating Rust toolchain..."
+    echo -e "\n${BLUE}> Updating Rust toolchain...${RESET}"
     rustup update stable
     rustup default stable
 
-    echo -e "\n> Updating Cargo..."
+    echo -e "\n${BLUE}> Updating Cargo...${RESET}"
     cargo update
 fi
 
 ./dev/format.sh
 
-echo -e "\n> Running clippy..."
+echo -e "\n${BLUE}> Running clippy...${RESET}"
 cargo clippy --fix --allow-no-vcs
 
-echo -e "\n> Building release..."
+echo -e "\n${BLUE}> Building release...${RESET}"
 cargo build --release
 
-echo -e "\n> Installing binary..."
+echo -e "\n${BLUE}> Installing binary...${RESET}"
 sudo install -Dm755 "$TARGET" "$INSTALL_DIR/$BIN_NAME"
 sudo chmod +x $INSTALL_DIR/$BIN_NAME
 
-echo -e "\n> Done. $BIN_NAME installed to $INSTALL_DIR"
+echo -e "\n${GREEN}> Done. $BIN_NAME installed to $INSTALL_DIR${RESET}"

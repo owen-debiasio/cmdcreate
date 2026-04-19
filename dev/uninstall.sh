@@ -21,7 +21,11 @@ BIN="cmdcreate"
 INSTALL_DIR="/usr/bin"
 LICENSE_PATH=""
 
-# Detect distro to find the license location
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RESET='\033[0m'
+
 if [ -f /etc/os-release ]; then
     . /etc/os-release
     case "$ID" in
@@ -44,22 +48,22 @@ fi
 
 if [ -f "$INSTALL_DIR/$BIN" ]; then
     sudo rm "$INSTALL_DIR/$BIN"
-    echo "> Removed binary: $INSTALL_DIR/$BIN"
+    echo -e "${BLUE}> Removed binary: ${RESET}$INSTALL_DIR/$BIN"
 else
-    echo "> Binary not found, skipping."
+    echo -e "${YELLOW}> Binary not found, skipping.${RESET}"
 fi
 
 if [ -n "$LICENSE_PATH" ] && [ -f "$LICENSE_PATH" ]; then
     LICENSE_DIR=$(dirname "$LICENSE_PATH")
     sudo rm "$LICENSE_PATH"
-    echo "> Removed license: $LICENSE_PATH"
+    echo -e "${BLUE}> Removed license: ${RESET}$LICENSE_PATH"
 
     if [ -d "$LICENSE_DIR" ] && [ ! "$(ls -A "$LICENSE_DIR")" ]; then
         sudo rm -rf "$LICENSE_DIR"
-        echo "> Removed empty directory: $LICENSE_DIR"
+        echo -e "${BLUE}> Removed empty directory:${RESET} $LICENSE_DIR"
     fi
 else
-    echo "> License not found, skipping."
+    echo -e "${YELLOW}> License not found, skipping.${RESET}"
 fi
 
-echo -e "\nDone."
+echo -e "\n${GREEN}Done.${RESET}"

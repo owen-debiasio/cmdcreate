@@ -20,56 +20,62 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+RESET='\033[0m'
+
 cd "$ROOT_DIR"
 
-echo -e "\n> Formatting cmdcreate..."
+echo -e "\n${BLUE}> Formatting cmdcreate...${RESET}"
 
 command -v cargo > /dev/null || {
-    echo -e "\n> cargo not found"
+    echo -e "\n${RED}> cargo not found${RESET}"
     exit 1
 }
 command -v black > /dev/null || {
-    echo -e "\n> black not found"
+    echo -e "\n${RED}> black not found${RESET}"
     exit 1
 }
 command -v shfmt > /dev/null || {
-    echo -e "\n> shfmt not found"
+    echo -e "\n${RED}> shfmt not found${RESET}"
     exit 1
 }
 command -v shellcheck > /dev/null || {
-    echo -e "\n> shellcheck not found"
+    echo -e "\n${RED}> shellcheck not found${RESET}"
     exit 1
 }
 command -v pylint > /dev/null || {
-    echo -e "\n> pylint not found"
+    echo -e "\n${RED}> pylint not found${RESET}"
     exit 1
 }
 command -v markdownlint-cli2 > /dev/null || {
-    echo -e "\n> markdownlint-cli2 not found"
+    echo -e "\n${RED}> markdownlint-cli2 not found${RESET}"
     exit 1
 }
 
-echo -e "\n> Formatting Rust source..."
+echo -e "\n${BLUE}> Formatting Rust source...${RESET}"
 cargo fmt --all --
 
 if [[ -d "$ROOT_DIR/testing/" ]]; then
-    echo -e "\n> Formatting Python testing scripts..."
+    echo -e "\n${BLUE}> Formatting Python testing scripts...${RESET}"
     black "$ROOT_DIR/testing/"
 
-    echo -e "\n> Linting Python testing scripts..."
+    echo -e "\n${BLUE}> Linting Python testing scripts...${RESET}"
     find . -name "*.py" -exec pylint {} +
 else
-    echo -e "\n> Skipping Python formatting (testing/features not found)"
+    echo -e "\n${YELLOW}> Skipping Python formatting (testing/features not found)${RESET}"
 fi
 
-echo -e "\n> Linting shell scripts..."
+echo -e "\n${BLUE}> Linting shell scripts...${RESET}"
 find . -name "*.sh" -exec shellcheck {} +
 
-echo -e "\n> Formatting shell scripts..."
+echo -e "\n${BLUE}> Formatting shell scripts...${RESET}"
 shfmt -w -i 4 -ci -sr "$ROOT_DIR"
 
-echo -e "\n> Linting and formatting markdown files..."
+echo -e "\n${BLUE}> Linting and formatting markdown files...${RESET}"
 markdownlint-cli2 "**/*.md" --config .markdownlint.json
 prettier -w "**/*.md"
 
-echo -e "\n> Formatting complete."
+echo -e "\n${GREEN}> Formatting complete!${RESET}"

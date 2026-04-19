@@ -15,17 +15,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+RESET='\033[0m'
+
 set -euo pipefail
 
-echo -e "\n> Cleaning up Cargo..."
+echo -e "\n${BLUE}> Cleaning up Cargo...${RESET}"
 
 cargo clean
 
-echo -e "\n> Cleaning up Python cache files..."
+echo -e "\n${BLUE}> Cleaning up Python cache files...${RESET}"
 
 rm -rf ./testing/__pycache__/
 rm -rf ./testing/scripts/__pycache__/
 
 ./dev/format.sh
 
-echo -e "\n> Cleaned up environment!"
+echo -e "\n${GREEN}> Cleaned up environment!${RESET}"

@@ -17,6 +17,11 @@
 
 set -euo pipefail
 
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+RESET='\033[0m'
+
 if [[ -f /etc/os-release ]]; then
     source /etc/os-release
 else
@@ -26,7 +31,9 @@ fi
 ID_LIKE="${ID_LIKE:-}"
 
 ask_yn() {
-    read -r -p "$1 [y/N]: " answer
+    echo -e "$1"
+    read -r -p "[y/N]: " answer
+    echo "${RESET}"
     answer="${answer,,}"
     if [[ "$answer" == "y" || "$answer" == "yes" ]]; then
         return 0
@@ -78,18 +85,19 @@ install_dependencies() {
             ;;
 
         *)
+            echo -e "${RED}Unsupported distro!${RESET}"
             exit 1
             ;;
     esac
 }
 
-ask_yn "> Do you want to set up cmdcreate's dev environment?"
+ask_yn "${BLUE}> Do you want to set up cmdcreate's dev environment?"
 
-echo "> Installing dependencies..."
+echo -e "${BLUE}> Installing dependencies...${RESET}"
 
 install_dependencies
 
-echo "> Configuring Rust..."
+echo -e "${BLUE}> Configuring Rust...${RESET}"
 
 if [ -f "$HOME/.cargo/env" ]; then
     source "$HOME/.cargo/env"
@@ -97,17 +105,19 @@ fi
 
 rustup default stable
 
-read -r -p "> Enter directory for cmdcreate dev environment: " dev_dir
+echo -e "${BLUE}> Enter directory for cmdcreate dev environment:${RESET}"
+read -r -p "> " dev_dir
+echo -e "${RESET}"
 
 dev_dir="${dev_dir/#\~/$HOME}"
 
-echo "> Setting up enviornment at: $dev_dir..."
+echo -e "${BLUE}> Setting up environment at: $dev_dir...${RESET}"
 
 git clone https://github.com/owen-debiasio/cmdcreate.git "$dev_dir"
 cd "$dev_dir"
 
-echo "> Activating shell scripts..."
+echo -e "${BLUE}> Activating shell scripts...${RESET}"
 
 find . -maxdepth 1 -name "*.sh" -exec chmod +x {} +
 
-echo -e "\nSetup complete!"
+echo -e "\n${GREEN}> Setup complete!${RESET}"

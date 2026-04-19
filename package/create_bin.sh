@@ -17,8 +17,14 @@
 
 set -euo pipefail
 
+BLUE='\033[0;34m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RESET='\033[0m'
+
 if [[ $# -ne 1 ]]; then
-    echo -e "\n> Usage: $0 <version> (no leading v)"
+    echo -e "\n${YELLOW}> Usage: $0 <version> (no leading v)${RESET}"
     exit 1
 fi
 
@@ -27,18 +33,22 @@ ARCH="x86_64"
 BINARY_NAME="cmdcreate-v$1-linux-${ARCH}-bin"
 BINARY_SRC="$HOME/Downloads/$BINARY_NAME"
 
+echo -e "${BLUE}> Building binary...${RESET}"
+
 cargo update
 rustup update
 
 cargo build --release
+
+echo -e "${BLUE}> Packaging binary...${RESET}"
 
 cp ../target/release/cmdcreate ~/Downloads/
 
 mv "$HOME/Downloads/cmdcreate" "$BINARY_SRC"
 
 if [[ ! -f "$BINARY_SRC" ]]; then
-    echo "Binary not found: $BINARY_SRC"
+    echo -e "${RED}Binary not found:${RESET} $BINARY_SRC"
     exit 1
 fi
 
-echo -e "\n> Packaged cmdcreate to \"$BINARY_NAME\""
+echo -e "\n${GREEN}> Packaged cmdcreate to:${RESET} $BINARY_NAME"

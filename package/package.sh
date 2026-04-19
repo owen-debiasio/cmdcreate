@@ -17,35 +17,35 @@
 
 set -Eeuo pipefail
 
+BLUE='\033[0;34m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+RESET='\033[0m'
+
 die() {
-    echo -e "\n> error: $*" >&2
+    echo -e "\n${RED}> error: ${RESET}$*" >&2
     exit 1
 }
 
-[[ $# -eq 1 ]] || die "Provide package version (MUST NOT START WITH v)"
-[[ "$1" != v* ]] || die "Version must NOT start with 'v'"
+[[ $# -eq 1 ]] || die -e "${RED}> Provide package version (MUST NOT START WITH v)${RESET}"
+[[ "$1" != v* ]] || die -e "${RED}> Version must NOT start with 'v'${RESET}"
 
 VERSION="$1"
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)"
 
 ./dev/format.sh
 
-echo -e "\n> Creating packages for version $VERSION..."
+echo -e "\n${BLUE}> Creating packages for version $VERSION...${RESET}\n"
 
 cd "$SCRIPT_DIR"
 
-echo -e "\n> Creating binary..."
 ./create_bin.sh "$VERSION"
-
-echo -e "\n> Creating Debian package..."
 ./create_deb.sh "$VERSION"
-
-echo -e "\n> Creating RPM package..."
 ./create_rpm.sh "$VERSION"
 
 cd ..
 
-echo -e "\n> Cleaning up..."
+echo -e "\n${BLUE}> Cleaning up...${RESET}"
 ./dev/clean.sh
 
-echo -e "\n> release artifacts created successfully"
+echo -e "\n${GREEN}> release artifacts created successfully${RESET}"

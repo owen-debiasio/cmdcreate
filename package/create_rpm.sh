@@ -17,8 +17,14 @@
 
 set -euo pipefail
 
+BLUE='\033[0;34m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RESET='\033[0m'
+
 if [[ $# -ne 1 ]]; then
-    echo -e "\n> Usage: $0 <version> (no leading v)"
+    echo -e "\n${YELLOW}> Usage: $0 <version> (no leading v)${RESET}"
     exit 1
 fi
 
@@ -34,14 +40,16 @@ SPEC_FILE="$RPMTOP/SPECS/cmdcreate.spec"
 SOURCE_FILE="cmdcreate-${VERSION}-linux-${ARCH}-bin"
 
 if [[ ! -f "$BINARY_SRC" ]]; then
-    echo -e "\n> Binary not found: $BINARY_SRC"
+    echo -e "\n${RED}> Binary not found:${RESET} $BINARY_SRC"
     exit 1
 fi
 
 if [[ ! -f "$LICENSE_FILE" ]]; then
-    echo -e "\n> License file not found: $LICENSE_FILE"
+    echo -e "\n${RED}> License file not found:${RESET} $LICENSE_FILE"
     exit 1
 fi
+
+echo -e "${BLUE}> Packaging .rpm package...${RESET}"
 
 mkdir -p "$RPMTOP"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 
@@ -91,4 +99,4 @@ cp "$RPM_FILE" "$FINAL_RPM"
 
 rm -rf ~/rpmbuild/
 
-echo -e "\n> Built and moved $FINAL_RPM to ~/Downloads"
+echo -e "\n${GREEN}> Built and moved $FINAL_RPM to ~/Downloads${RESET}"

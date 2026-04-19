@@ -17,8 +17,14 @@
 
 set -euo pipefail
 
+BLUE='\033[0;34m'
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RESET='\033[0m'
+
 if [[ $# -ne 1 ]]; then
-    echo -e "\n> Usage: $0 <version> (no leading v)"
+    echo -e "\n${YELLOW}> Usage: $0 <version> (no leading v)${RESET}"
     exit 1
 fi
 
@@ -35,21 +41,23 @@ cleanup() {
 trap cleanup EXIT
 
 if [[ ! -x ./create_bin.sh ]]; then
-    echo -e "\n> create_bin.sh missing or not executable"
+    echo -e "\n${RED}> create_bin.sh missing or not executable.${RESET}"
     exit 1
 fi
 
 if [[ ! -f "$LICENSE_FILE" ]]; then
-    echo -e "\n> License file not found: $LICENSE_FILE"
+    echo -e "\n${RED}> License file not found: ${RESET}$LICENSE_FILE"
     exit 1
 fi
 
 ./create_bin.sh "$VERSION"
 
 if [[ ! -f "$BINARY_SRC" ]]; then
-    echo -e "\n> Binary $BINARY_SRC not found. Build failed?"
+    echo -e "\n${RED}> Binary $BINARY_SRC not found. Build failed?${RESET}"
     exit 1
 fi
+
+echo -e "${BLUE}> Packaging .deb package...${RESET}"
 
 mkdir -p "$PKGDIR/DEBIAN" "$PKGDIR/usr/bin" "$PKGDIR/usr/share/doc/cmdcreate"
 
@@ -74,4 +82,4 @@ FINAL_DEB="cmdcreate-v${VERSION}-linux-${ARCH}.deb"
 mv "${PKGDIR}.deb" "$FINAL_DEB"
 mv "$FINAL_DEB" "$HOME/Downloads/"
 
-echo -e "\n> Built and moved $FINAL_DEB to ~/Downloads"
+echo -e "\n${GREEN}> Built and moved $FINAL_DEB to ~/Downloads${RESET}"
