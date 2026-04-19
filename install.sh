@@ -55,10 +55,10 @@ detect_distro() {
 }
 
 get_latest_version() {
-    echo -e "${BLUE}> Fetching latest version tag...${RESET}"
-    LATEST_TAG=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+    LATEST_TAG=$(curl -sSfL "https://api.github.com/repos/$REPO/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+
     if [ -z "$LATEST_TAG" ]; then
-        echo -e "${RED}> Error: Could not detect version.${RESET}"
+        echo -e "${RED}> Error: Could not detect version.${RESET}" >&2
         exit 1
     fi
     VERSION="$LATEST_TAG"
@@ -69,7 +69,7 @@ install_license() {
     if [ -f "$1" ]; then
         sudo cp "$1" "$LICENSE_PATH"
     else
-        sudo curl -sLf -o "$LICENSE_PATH" "https://raw.githubusercontent.com/$REPO/main/LICENSE"
+        sudo curl -sSfL -o "$LICENSE_PATH" "https://raw.githubusercontent.com/$REPO/main/LICENSE"
     fi
     sudo chmod 644 "$LICENSE_PATH"
 }
@@ -78,33 +78,41 @@ install_dependencies() {
     echo -e "${BLUE}> Installing dependencies...${RESET}"
     case "$OS_TYPE" in
         debian)
-            sudo apt update && sudo apt install -y curl libssl-dev build-essential pkg-config git
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq curl libssl-dev build-essential pkg-config git
             ;;
         fedora)
-            sudo dnf install -y curl openssl-devel git
+            sudo dnf install -y -q curl openssl-devel git
             ;;
         arch)
-            sudo pacman -Sy --needed base-devel git rustup curl
+            sudo pacman -Syq > /dev/null 2>&1
+            sudo pacman -S --needed --noconfirm --noprogressbar base-devel git rustup curl > /dev/null 2>&1
             ;;
     esac
 
     if ! command -v rustup &> /dev/null; then
-        echo -e "${BLUE}> Rustup not found. Installing...${RESET}"
-        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+        echo -e "${BLUE}> Rustup not found. Installing... ${RESET}"
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y -q
         source "$HOME/.cargo/env"
     fi
-    rustup default stable
+
+    rustup default stable > /dev/null 2>&1
 }
 
 build_from_source() {
     install_dependencies
     TEMP_DIR=$(mktemp -d)
     cd "$TEMP_DIR"
-    echo -e "${BLUE}> Cloning and building...${RESET}"
-    git clone "https://github.com/$REPO.git" .
-    cargo build --release
+
+    echo -e "${BLUE}> Building... (Please wait as this will take a while)${RESET}"
+    git clone --depth=1 --quiet "https://github.com/$REPO.git" .
+    cargo build --release -q
+
+    echo -e "${BLUE}> Installing...${RESET}"
+
     sudo install -Dm755 target/release/cmdcreate /usr/bin/cmdcreate
     install_license "LICENSE"
+
     cd "$HOME"
     rm -rf "$TEMP_DIR"
 }
@@ -113,7 +121,7 @@ install_bin() {
     get_latest_version
     echo -e "${BLUE}> Downloading standalone binary...${RESET}"
     URL="https://github.com/$REPO/releases/download/${VERSION}/cmdcreate-${VERSION}-linux-x86_64-bin"
-    sudo curl -Lf -o /usr/bin/cmdcreate "$URL"
+    sudo curl -sSfL -o /usr/bin/cmdcreate "$URL"
     sudo chmod +x /usr/bin/cmdcreate
     install_license ""
 }
@@ -122,17 +130,19 @@ install_pkg() {
     get_latest_version
     TEMP_DIR=$(mktemp -d)
     cd "$TEMP_DIR"
+
     if [ "$OS_TYPE" == "debian" ]; then
-        echo -e "${BLUE}> Installing .deb package...${RESET}"
+        echo -e "${BLUE}> Installing...${RESET}"
         URL="https://github.com/$REPO/releases/download/${VERSION}/cmdcreate-${VERSION}-linux-x86_64.deb"
-        curl -Lf -o cmdcreate.deb "$URL"
-        sudo dpkg -i cmdcreate.deb || sudo apt-get install -f -y
+        curl -sSfL -o cmdcreate.deb "$URL"
+        sudo dpkg -i cmdcreate.deb > /dev/null 2>&1 || sudo apt-get install -f -y -qq
     else
-        echo -e "${BLUE}> Installing .rpm package...${RESET}"
+        echo -e "${BLUE}> Installing...${RESET}"
         URL="https://github.com/$REPO/releases/download/${VERSION}/cmdcreate-${VERSION}-linux-x86_64.rpm"
-        curl -Lf -o cmdcreate.rpm "$URL"
-        sudo rpm -Uvh cmdcreate.rpm
+        curl -sSfL -o cmdcreate.rpm "$URL"
+        sudo rpm -Uvh --quiet cmdcreate.rpm
     fi
+
     install_license ""
     cd "$HOME"
     rm -rf "$TEMP_DIR"
@@ -146,9 +156,11 @@ install_aur() {
 
     TEMP_DIR=$(mktemp -d)
     cd "$TEMP_DIR"
-    echo -e "${BLUE}> Building from AUR...${RESET}"
-    git clone "https://aur.archlinux.org/$PKG_NAME.git" .
-    makepkg -si --noconfirm
+
+    echo -e "${BLUE}> Installing... (Please wait as this may take a while)${RESET}"
+    git clone --quiet "https://aur.archlinux.org/$PKG_NAME.git" .
+    makepkg -si --noconfirm > /dev/null 2>&1
+
     cd "$HOME"
     rm -rf "$TEMP_DIR"
 }
@@ -163,9 +175,11 @@ case "$OS_TYPE" in
         echo -e "${BLUE}3)${RESET} Raw binary (x86 only)"
         echo ""
         read -rp "Select: " choice
-        [ "$choice" == "1" ] && build_from_source
-        [ "$choice" == "2" ] && install_pkg
-        [ "$choice" == "3" ] && install_bin
+        case $choice in
+            1) build_from_source ;;
+            2) install_pkg ;;
+            3) install_bin ;;
+        esac
         ;;
     fedora)
         echo -e "${BLUE}1)${RESET} Build from source"
@@ -173,25 +187,33 @@ case "$OS_TYPE" in
         echo -e "${BLUE}3)${RESET} Raw binary (x86 only)"
         echo ""
         read -rp "Select: " choice
-        [ "$choice" == "1" ] && build_from_source
-        [ "$choice" == "2" ] && install_pkg
-        [ "$choice" == "3" ] && install_bin
+        case $choice in
+            1) build_from_source ;;
+            2) install_pkg ;;
+            3) install_bin ;;
+        esac
         ;;
     arch)
         echo -e "${BLUE}1)${RESET} Build from source"
         echo -e "${BLUE}2)${RESET} AUR (stable and git)"
+        echo -e "${BLUE}3)${RESET} Raw binary (x86 only)"
         echo ""
         read -rp "Select: " choice
-        [ "$choice" == "1" ] && build_from_source
-        [ "$choice" == "2" ] && install_aur
+        case $choice in
+            1) build_from_source ;;
+            2) install_aur ;;
+            3) install_bin ;;
+        esac
         ;;
     *)
         echo -e "${BLUE}1)${RESET} Build from source"
         echo -e "${BLUE}2)${RESET} Binary (x86 only)"
         echo ""
         read -rp "Select: " choice
-        [ "$choice" == "1" ] && build_from_source
-        [ "$choice" == "2" ] && install_bin
+        case $choice in
+            1) build_from_source ;;
+            2) install_bin ;;
+        esac
         ;;
 esac
 
@@ -199,8 +221,8 @@ if [ -f "/usr/bin/cmdcreate" ] && [ -f "$LICENSE_PATH" ]; then
     echo -e "\n${GREEN}> Done. cmdcreate has been installed successfully!${RESET}"
     exit 0
 else
-    echo -e "${RED}> Error: One or more files are missing from installation.${RESET}"
-    [ ! -f "/usr/bin/cmdcreate" ] && echo -e "${RED}> Missing: /usr/bin/cmdcreate${RESET}"
-    [ ! -f "$LICENSE_PATH" ] && echo -e "${RED}> Missing: $LICENSE_PATH${RESET}"
+    echo -e "${RED}> Error: One or more files are missing from installation.${RESET}" >&2
+    [ ! -f "/usr/bin/cmdcreate" ] && echo -e "${RED}> Missing: /usr/bin/cmdcreate${RESET}" >&2
+    [ ! -f "$LICENSE_PATH" ] && echo -e "${RED}> Missing: $LICENSE_PATH${RESET}" >&2
     exit 1
 fi
