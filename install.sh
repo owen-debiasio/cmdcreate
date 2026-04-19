@@ -1,26 +1,13 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Owen Debiasio
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 set -e
 
-BLUE='\x1b[34m'
-GREEN='\x1b[32m'
-RED='\x1b[31m'
-RESET='\x1b[0m'
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+RESET='\033[0m'
 
 REPO="owen-debiasio/cmdcreate"
 OS_TYPE=""
@@ -30,15 +17,15 @@ detect_distro() {
     if [ -f /etc/os-release ]; then
         . /etc/os-release
         case "$ID" in
-            ubuntu | debian | kali | pop | linuxmint)
+            ubuntu|debian|kali|pop|linuxmint)
                 OS_TYPE="debian"
                 LICENSE_PATH="/usr/share/doc/cmdcreate/copyright"
                 ;;
-            fedora | rhel | centos | amzn)
+            fedora|rhel|centos|amzn)
                 OS_TYPE="fedora"
                 LICENSE_PATH="/usr/share/doc/cmdcreate/LICENSE"
                 ;;
-            arch | manjaro | endeavouros)
+            arch|manjaro|endeavouros)
                 OS_TYPE="arch"
                 LICENSE_PATH="/usr/share/licenses/cmdcreate/LICENSE"
                 ;;
@@ -77,10 +64,10 @@ install_dependencies() {
     echo -e "${BLUE}> Installing dependencies...${RESET}"
     case "$OS_TYPE" in
         debian)
-            sudo apt update && sudo apt install -y curl libssl-dev libssl3 build-essential pkg-config git
+            sudo apt update && sudo apt install -y curl libssl-dev build-essential pkg-config git
             ;;
         fedora)
-            sudo dnf install -y curl libssl-devel openssl-libs git
+            sudo dnf install -y curl openssl-devel git
             ;;
         arch)
             sudo pacman -Sy --needed base-devel git rustup curl
@@ -111,7 +98,7 @@ build_from_source() {
 install_bin() {
     get_latest_version
     echo -e "${BLUE}> Downloading standalone binary...${RESET}"
-    URL="https://github.com/$REPO/releases/latest/download/cmdcreate-${VERSION}-linux-x86_64-bin"
+    URL="https://github.com/$REPO/releases/download/v${VERSION}/cmdcreate-${VERSION}-linux-x86_64-bin"
     sudo curl -Lf -o /usr/bin/cmdcreate "$URL"
     sudo chmod +x /usr/bin/cmdcreate
     install_license ""
@@ -123,11 +110,13 @@ install_pkg() {
     cd "$TEMP_DIR"
     if [ "$OS_TYPE" == "debian" ]; then
         echo -e "${BLUE}> Installing .deb package...${RESET}"
-        curl -Lf -o cmdcreate.deb "https://github.com/$REPO/releases/latest/download/cmdcreate-${VERSION}-linux-x86_64.deb"
-        sudo dpkg -i cmdcreate.deb
+        URL="https://github.com/$REPO/releases/download/v${VERSION}/cmdcreate-${VERSION}-linux-x86_64.deb"
+        curl -Lf -o cmdcreate.deb "$URL"
+        sudo dpkg -i cmdcreate.deb || sudo apt-get install -f -y
     else
         echo -e "${BLUE}> Installing .rpm package...${RESET}"
-        curl -Lf -o cmdcreate.rpm "https://github.com/$REPO/releases/latest/download/cmdcreate-${VERSION}-linux-x86_64.rpm"
+        URL="https://github.com/$REPO/releases/download/v${VERSION}/cmdcreate-${VERSION}-linux-x86_64.rpm"
+        curl -Lf -o cmdcreate.rpm "$URL"
         sudo rpm -Uvh cmdcreate.rpm
     fi
     install_license ""
@@ -145,7 +134,7 @@ install_aur() {
     cd "$TEMP_DIR"
     echo -e "${BLUE}> Building from AUR...${RESET}"
     git clone "https://aur.archlinux.org/$PKG_NAME.git" .
-    makepkg -si
+    makepkg -si --noconfirm
     cd "$HOME"
     rm -rf "$TEMP_DIR"
 }
@@ -197,7 +186,7 @@ if [ -f "/usr/bin/cmdcreate" ] && [ -f "$LICENSE_PATH" ]; then
     echo -e "\n${GREEN}> Done. cmdcreate has been installed successfully!${RESET}"
     exit 0
 else
-    echo -e "${RED}> Error: One or more files are missing from installation. Please try again.${RESET}"
+    echo -e "${RED}> Error: One or more files are missing from installation.${RESET}"
     [ ! -f "/usr/bin/cmdcreate" ] && echo -e "${RED}> Missing: /usr/bin/cmdcreate${RESET}"
     [ ! -f "$LICENSE_PATH" ] && echo -e "${RED}> Missing: $LICENSE_PATH${RESET}"
     exit 1
