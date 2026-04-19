@@ -710,8 +710,14 @@ Licensed under the GNU General Public License v3.0 or later.
 # 1.2.4
 
 - Continued migration to macro my macro `output!()` located in src/utils/io.rs
+- Updated dependencies
+  - reqwest
+    - `0.12.28` -> `0.13.2`
+  - toml
+    - `1.0.6` -> `1.1.2`
 - Updated both `cmdcreate` and `cmdcreate-git` PKGBUILDs
   - They were messy
   - Added fixes needed for updated dependencies
 - Created an install script to more easily install cmdcreate on non-Arch based
   distros
+- Script `cmdcreate/dev/uninstall.sh` now handles the license when uninstalling
