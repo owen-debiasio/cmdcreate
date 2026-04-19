@@ -35,30 +35,15 @@ of contents and information here:
 > **[Version Support Information](https://github.com/owen-debiasio/cmdcreate/tree/main?tab=security-ov-file#)**
 > for more information about updates.
 
-> [!WARNING]  
-> cmdcreate is mainly supported on systems with the `x86_64` CPU architecture.
-> It should work, but currently the only way I recommend to install it is to
-> build it from source. If you follow the
-> **[steps for building from source](https://github.com/owen-debiasio/cmdcreate?tab=readme-ov-file#building-from-source-latest-git)**,
-> (or using the
-> [AUR](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md#arch-linux)),
-> you should be fine.
+### Arch Linux (AUR manager)
 
-## Packaging information
-
-[![Packaging status](https://repology.org/badge/vertical-allrepos/cmdcreate.svg)](https://repology.org/project/cmdcreate/versions)
-
-### Arch Linux
-
-#### Install through an AUR manager
-
-##### Stable
+#### Stable
 
 ```bash
 yay -S cmdcreate
 ```
 
-##### Latest git
+#### Latest git
 
 > [!WARNING]  
 > Latest git builds have a possibility of being broken, unfinished, and
@@ -68,31 +53,15 @@ yay -S cmdcreate
 yay -S cmdcreate-git
 ```
 
-#### Clone AUR repo
+### Manual Package Install
 
-##### Stable
+You can find `.deb`, `.rpm` and standalone binary packages in the
+[latest release](https://github.com/owen-debiasio/cmdcreate/releases/latest).
 
-```bash
-git clone --branch cmdcreate --single-branch https://github.com/archlinux/aur.git ~/.cache/cmdcreate
-cd ~/.cache/cmdcreate
-makepkg -si
-```
+### Installer Script (Universal)
 
-##### Latest git
-
-> [!WARNING]  
-> Latest git builds have a possibility of being broken, unfinished, and
-> potentially dangerous to your system. Use with caution.
-
-```bash
-git clone --branch cmdcreate-git --single-branch https://github.com/archlinux/aur.git ~/.cache/cmdcreate-git
-cd ~/.cache/cmdcreate-git
-makepkg -si
-```
-
-### Other distros (Debian, Ubuntu, Fedora , other distros)
-
-This script will walk you through the installation of cmdcreate on your distro.
+This script will walk you through how you want to install cmdcreate depending on
+your distro.
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/install.sh)
