@@ -1,6 +1,20 @@
 #!/bin/bash
+
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Owen Debiasio
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 set -e
 
@@ -17,15 +31,15 @@ detect_distro() {
     if [ -f /etc/os-release ]; then
         . /etc/os-release
         case "$ID" in
-            ubuntu|debian|kali|pop|linuxmint)
+            ubuntu | debian | kali | pop | linuxmint)
                 OS_TYPE="debian"
                 LICENSE_PATH="/usr/share/doc/cmdcreate/copyright"
                 ;;
-            fedora|rhel|centos|amzn)
+            fedora | rhel | centos | amzn)
                 OS_TYPE="fedora"
                 LICENSE_PATH="/usr/share/doc/cmdcreate/LICENSE"
                 ;;
-            arch|manjaro|endeavouros)
+            arch | manjaro | endeavouros)
                 OS_TYPE="arch"
                 LICENSE_PATH="/usr/share/licenses/cmdcreate/LICENSE"
                 ;;
@@ -47,7 +61,7 @@ get_latest_version() {
         echo -e "${RED}> Error: Could not detect version.${RESET}"
         exit 1
     fi
-    VERSION="${LATEST_TAG#v}"
+    VERSION="$LATEST_TAG"
 }
 
 install_license() {
@@ -98,7 +112,7 @@ build_from_source() {
 install_bin() {
     get_latest_version
     echo -e "${BLUE}> Downloading standalone binary...${RESET}"
-    URL="https://github.com/$REPO/releases/download/v${VERSION}/cmdcreate-${VERSION}-linux-x86_64-bin"
+    URL="https://github.com/$REPO/releases/download/${VERSION}/cmdcreate-${VERSION}-linux-x86_64-bin"
     sudo curl -Lf -o /usr/bin/cmdcreate "$URL"
     sudo chmod +x /usr/bin/cmdcreate
     install_license ""
@@ -110,12 +124,12 @@ install_pkg() {
     cd "$TEMP_DIR"
     if [ "$OS_TYPE" == "debian" ]; then
         echo -e "${BLUE}> Installing .deb package...${RESET}"
-        URL="https://github.com/$REPO/releases/download/v${VERSION}/cmdcreate-${VERSION}-linux-x86_64.deb"
+        URL="https://github.com/$REPO/releases/download/${VERSION}/cmdcreate-${VERSION}-linux-x86_64.deb"
         curl -Lf -o cmdcreate.deb "$URL"
         sudo dpkg -i cmdcreate.deb || sudo apt-get install -f -y
     else
         echo -e "${BLUE}> Installing .rpm package...${RESET}"
-        URL="https://github.com/$REPO/releases/download/v${VERSION}/cmdcreate-${VERSION}-linux-x86_64.rpm"
+        URL="https://github.com/$REPO/releases/download/${VERSION}/cmdcreate-${VERSION}-linux-x86_64.rpm"
         curl -Lf -o cmdcreate.rpm "$URL"
         sudo rpm -Uvh cmdcreate.rpm
     fi
@@ -140,7 +154,6 @@ install_aur() {
 }
 
 detect_distro
-
 echo -e "${BLUE}Welcome to the cmdcreate installer! Please choose an option:${RESET}\n"
 
 case "$OS_TYPE" in
