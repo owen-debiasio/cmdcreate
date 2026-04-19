@@ -95,8 +95,7 @@ makepkg -si
 This script will walk you through the installation of cmdcreate on your distro.
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/install.sh -o /tmp/install.sh
-bash -i /tmp/install.sh
+bash <(curl -fsSL https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/install.sh)
 ```
 
 ---

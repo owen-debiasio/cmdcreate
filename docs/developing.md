@@ -16,8 +16,7 @@ You can set up the entire development environment using the provided Bash
 script.
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/dev/setup_env.sh -o /tmp/setup_env.sh
-bash -i /tmp/setup_env.sh
+bash <(curl -fsSL https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/dev/setup_env.sh)
 ```
 
 This script will:
