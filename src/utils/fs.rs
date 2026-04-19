@@ -185,7 +185,11 @@ pub fn write_to_file(
 ) -> Result<()> {
     if let Some(parent_directory) = Path::new(path_to_file_to_be_written_to).parent() {
         create_dir_all(parent_directory).with_context(|| {
-            format!("Failed to create parent directory for: {path_to_file_to_be_written_to}")
+            format!(
+                "
+                Failed to create parent directory for: \
+                {path_to_file_to_be_written_to}"
+            )
         })?;
     }
 
@@ -200,11 +204,23 @@ pub fn write_to_file(
 
     let mut file_that_should_be_written_to = file_options
         .open(path_to_file_to_be_written_to)
-        .with_context(|| format!("Failed to open file: {path_to_file_to_be_written_to}"))?;
+        .with_context(|| {
+            format!(
+                "
+            Failed to open file: \
+            {path_to_file_to_be_written_to}"
+            )
+        })?;
 
     file_that_should_be_written_to
         .write_all(contents_to_write_to_file.as_bytes())
-        .with_context(|| format!("Failed writing to file: {path_to_file_to_be_written_to}"))?;
+        .with_context(|| {
+            format!(
+                "
+            Failed writing to file: \
+            {path_to_file_to_be_written_to}"
+            )
+        })?;
 
     Ok(())
 }
@@ -221,19 +237,34 @@ pub fn path_exists(apparent_path: &str) -> bool {
 }
 
 pub fn create_folder(path_of_folder_to_create: &str) -> Result<()> {
-    create_dir_all(path_of_folder_to_create)
-        .with_context(|| format!("Failed to create folder: {path_of_folder_to_create}"))
+    create_dir_all(path_of_folder_to_create).with_context(|| {
+        format!(
+            "
+            Failed to create folder: \
+            {path_of_folder_to_create}"
+        )
+    })
 }
 
 pub fn create_file(file_to_be_created: &str) -> Result<()> {
     if let Some(parent_folder) = Path::new(file_to_be_created).parent() {
-        create_dir_all(parent_folder)
-            .with_context(|| format!("Failed to create parent folder for {file_to_be_created}"))?;
+        create_dir_all(parent_folder).with_context(|| {
+            format!(
+                "
+                Failed to create parent folder for: \
+                {file_to_be_created}"
+            )
+        })?;
     }
 
     if !path_exists(file_to_be_created) {
-        File::create(file_to_be_created)
-            .with_context(|| format!("Failed to create file: {file_to_be_created}"))?;
+        File::create(file_to_be_created).with_context(|| {
+            format!(
+                "
+                Failed to create file: \
+                {file_to_be_created}"
+            )
+        })?;
     }
 
     Ok(())
@@ -241,8 +272,13 @@ pub fn create_file(file_to_be_created: &str) -> Result<()> {
 
 pub fn delete_file(path_of_file_to_delete: &str) -> Result<()> {
     if path_exists(path_of_file_to_delete) {
-        remove_file(path_of_file_to_delete)
-            .with_context(|| format!("Failed to delete file: {path_of_file_to_delete}"))?;
+        remove_file(path_of_file_to_delete).with_context(|| {
+            format!(
+                "
+                Failed to delete file: \
+                {path_of_file_to_delete}"
+            )
+        })?;
     }
 
     Ok(())
@@ -250,8 +286,13 @@ pub fn delete_file(path_of_file_to_delete: &str) -> Result<()> {
 
 pub fn delete_folder(path_of_folder_to_delete: &str) -> Result<()> {
     if path_exists(path_of_folder_to_delete) {
-        remove_dir_all(path_of_folder_to_delete)
-            .with_context(|| format!("Failed to delete folder: {path_of_folder_to_delete}"))?;
+        remove_dir_all(path_of_folder_to_delete).with_context(|| {
+            format!(
+                "
+                Failed to delete folder: \
+                {path_of_folder_to_delete}"
+            )
+        })?;
     }
 
     Ok(())
