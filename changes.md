@@ -725,3 +725,4 @@ Licensed under the GNU General Public License v3.0 or later.
 ## 1.2.5
 
 - Development utility bash scripts now have color to make them look cleaner
+- Favorites data and logs are now stored in `/usr/share/cmdcreate/`
