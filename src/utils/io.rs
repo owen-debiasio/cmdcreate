@@ -44,12 +44,10 @@ pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool
 
 #[macro_export]
 macro_rules! output {
-    // Case 1: Only text provided -> Default arrow to false
     ($given_text:expr) => {
         $crate::output!($given_text, false);
     };
 
-    // Case 2: Both provided
     ($given_text:expr, $include_arrow:expr) => {{
         let text_interpolated = format!($given_text);
         let text = text_interpolated.trim();

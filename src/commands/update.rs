@@ -151,7 +151,7 @@ fn update_using_method(method_for_installation: &str) {
 }
 
 fn build_from_source() {
-    let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
+    let (blue, magenta, green, reset) = (COLORS.blue, COLORS.magenta, COLORS.green, COLORS.reset);
 
     let cloned_repository_destination = "/tmp/cmdcreate";
 
@@ -185,7 +185,10 @@ fn build_from_source() {
         DistroBase::Unknown => error("Your distro is unsupported!", "Unable to proceed."),
     };
 
-    println!("\n{blue}Updating cmdcreate...{reset}");
+    output!(
+        "\nUpdating cmdcreate {magenta}(please wait as this might take a while){blue}...",
+        true
+    );
 
     clone_repository(cloned_repository_destination);
 
@@ -206,7 +209,7 @@ fn build_from_source() {
 
     run_shell_command!("{script_to_build_cmdcreate}");
 
-    output!("\n{blue}Installing...{reset}", true);
+    output!("\nInstalling...", true);
 
     install_binary(
         "-Dm755",
