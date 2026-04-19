@@ -18,11 +18,48 @@
 set -euo pipefail
 
 BIN="cmdcreate"
-INSTALL_DIR="/usr/bin/"
+INSTALL_DIR="/usr/bin"
+LICENSE_PATH=""
+
+# Detect distro to find the license location
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    case "$ID" in
+        ubuntu | debian | kali | pop | linuxmint)
+            LICENSE_PATH="/usr/share/doc/cmdcreate/copyright"
+            ;;
+        fedora | rhel | centos | amzn)
+            LICENSE_PATH="/usr/share/doc/cmdcreate/LICENSE"
+            ;;
+        arch | manjaro | endeavouros)
+            LICENSE_PATH="/usr/share/licenses/cmdcreate/LICENSE"
+            ;;
+        *)
+            LICENSE_PATH="/usr/local/share/doc/cmdcreate/LICENSE"
+            ;;
+    esac
+else
+    LICENSE_PATH="/usr/local/share/doc/cmdcreate/LICENSE"
+fi
 
 if [ -f "$INSTALL_DIR/$BIN" ]; then
     sudo rm "$INSTALL_DIR/$BIN"
-    echo -e "\n> cmdcreate uninstalled"
+    echo "> Removed binary: $INSTALL_DIR/$BIN"
 else
-    echo -e "\n> cmdcreate not installed, nothing to do"
+    echo "> Binary not found, skipping."
 fi
+
+if [ -n "$LICENSE_PATH" ] && [ -f "$LICENSE_PATH" ]; then
+    LICENSE_DIR=$(dirname "$LICENSE_PATH")
+    sudo rm "$LICENSE_PATH"
+    echo "> Removed license: $LICENSE_PATH"
+
+    if [ -d "$LICENSE_DIR" ] && [ ! "$(ls -A "$LICENSE_DIR")" ]; then
+        sudo rm -rf "$LICENSE_DIR"
+        echo "> Removed empty directory: $LICENSE_DIR"
+    fi
+else
+    echo "> License not found, skipping."
+fi
+
+echo -e "\nDone."
