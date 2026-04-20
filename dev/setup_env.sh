@@ -49,16 +49,16 @@ install_dependencies() {
         *arch*)
             sudo pacman -S --needed --noconfirm \
                 rustup curl openssl git base-devel \
-                shfmt shellcheck \
-                python-black python-pylint \
-                nodejs npm markdownlint-cli2 prettier \
+                shfmt shellcheck bash-language-server \
+                python-black python-pylint python-lsp-server \
+                nodejs npm markdownlint-cli2 prettier marksman \
                 rpm-tools dpkg
             ;;
 
         *fedora* | *rhel* | *centos*)
             sudo dnf install -y \
                 curl openssl-devel git gcc gcc-c++ make \
-                shfmt ShellCheck \
+                shfmt ShellCheck nodejs-bash-language-server \
                 python3-black python3-pylint \
                 nodejs npm rpm-build dpkg-dev
 
@@ -77,7 +77,7 @@ install_dependencies() {
                 black pylint \
                 nodejs npm rpm dpkg-dev
 
-            sudo npm install -g prettier markdownlint-cli2@0.13.0
+            sudo npm install -g prettier markdownlint-cli2@0.13.0 bash-language-server
 
             if ! command -v rustup &> /dev/null; then
                 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
@@ -104,6 +104,7 @@ if [ -f "$HOME/.cargo/env" ]; then
 fi
 
 rustup default stable
+rustup component add rust-analyzer
 
 echo -e "${BLUE}> Enter directory for cmdcreate dev environment:${RESET}"
 read -r -p "> " dev_dir
