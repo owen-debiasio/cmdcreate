@@ -16,6 +16,7 @@
 
 use crate::{
     commands::{
+        config::config,
         create::create,
         display::display,
         edit::edit,
@@ -45,9 +46,15 @@ macro_rules! validate_args {
                 COLORS.reset,
             );
 
+            let include_additional_flags = if !$additional_args.is_empty() {
+                &format!("{reset}[{green}{}{reset}] ", $additional_args)
+            } else {
+                ""
+            };
+
             println!(
-                "Usage:\ncmdcreate {blue}{} {reset}[{green}{}{reset}] {yellow}{}{red}{reset}",
-                $command, $additional_args, $command_usage
+                "Usage:\ncmdcreate {blue}{} {include_additional_flags}{yellow}{}{red}{reset}",
+                $command, $command_usage
             );
 
             return;
@@ -55,6 +62,7 @@ macro_rules! validate_args {
     };
 }
 
+#[allow(clippy::too_many_lines)]
 pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
     log(
         &format!("parse::parse(): Parsing command: {supplied_command}"),
@@ -156,6 +164,22 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
             let destination_of_exported_commands = argument_index(1).unwrap();
 
             export(destination_of_exported_commands);
+        }
+
+        "config" => {
+            validate_args!(
+                supplied_command,
+                supplied_arguments,
+                3,
+                "<add/remove> <category> <value>",
+                ""
+            );
+
+            let config_mode = argument_index(1).expect("Missing mode");
+            let config_category = argument_index(2).expect("Missing command category");
+            let config_value = argument_index(3).expect("Missing value");
+
+            config(config_mode, config_category, config_value);
         }
 
         "list" => list(),

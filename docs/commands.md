@@ -378,3 +378,48 @@ Installing command: "xyz"
 Installing command: "cba"
 Command "cba" added to favorites. # (Shows if command was exported as favorite)
 ```
+
+## Config
+
+### Manage your configurations for cmdcreate
+
+#### Usage
+
+`cmdcreate config <add/remove> <category> <value>`
+
+#### Example output
+
+##### Successful addition
+
+```bash
+$ sudo cmdcreate config add sys shell="zsh"
+Successfully updated config: shell set to "zsh".
+```
+
+##### Successful removal
+
+```bash
+$ sudo cmdcreate config remove sys shell
+Successfully removed config: shell from sys.
+```
+
+> [!NOTE]  
+> If you remove the last remaining key in a category, cmdcreate will
+> automatically remove the category header to keep the file clean.
+
+##### Unsuccessful addition
+
+###### Invalid format
+
+```bash
+$ sudo cmdcreate config add sys shell
+Error: Invalid format! Use key=value
+Example: cmdcreate config add sys shell="bash"
+```
+
+###### Key not found
+
+```bash
+$ sudo cmdcreate config remove sys fake_key
+Error: Config key 'fake_key' not found in category 'sys'.
+```
