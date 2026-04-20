@@ -24,6 +24,13 @@ use crate::{
 };
 
 static AVAILABLE_CATEGORIES: &[&str] = &["[appearance]", "[logs]", "[sys]"];
+static AVAILABLE_VALUES: &[&str] = &[
+    "shell",
+    "time_format",
+    "verbose",
+    "favorite_indicator",
+    "disable_color",
+];
 
 pub fn config(mode: &str, category: &str, value: &str) {
     if mode == "add" {
@@ -36,6 +43,16 @@ pub fn config(mode: &str, category: &str, value: &str) {
 pub fn add(category: &str, value: &str) {
     let config_path = PATHS.configuration_file;
     let config_file_contents = read_file_to_string(config_path);
+
+    let category_header = format!("[{category}]");
+    if !AVAILABLE_CATEGORIES.contains(&category_header.as_str()) {
+        error("Not a valid category:", category);
+    }
+
+    let key = value.split('=').next().unwrap_or("");
+    if !AVAILABLE_VALUES.contains(&key) {
+        error("Not a valid value:", key);
+    }
 
     let parts: Vec<&str> = value.splitn(2, '=').collect();
     let key = parts[0];
