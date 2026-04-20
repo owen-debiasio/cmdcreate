@@ -726,3 +726,4 @@ Licensed under the GNU General Public License v3.0 or later.
 
 - Development utility bash scripts now have color to make them look cleaner
 - Favorites data and logs are now stored in `/usr/share/cmdcreate/`
+- Added more dependencies to development environment setup script
