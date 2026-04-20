@@ -86,6 +86,7 @@ change.
 - 📁 [src](https://github.com/owen-debiasio/cmdcreate/tree/main/src)
   - 📁
     [commands](https://github.com/owen-debiasio/cmdcreate/tree/main/src/commands)
+    - [config.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/config.rs)
     - [clean.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/clean.rs)
     - [create.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/create.rs)
     - [display.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/display.rs)
