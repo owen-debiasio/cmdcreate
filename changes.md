@@ -729,3 +729,6 @@ Licensed under the GNU General Public License v3.0 or later.
 - Added more dependencies to development environment setup script
 - `src/dev/format.sh` now formats/fixes markdown (`.md`) and yaml (`.yml`) files
 - Workflow `markdown` now lints markdown (`.md`) and yaml (`.yml`) files
+- Added new command: `config`
+  - Usage:
+    - `cmdcreate config <add/remove> <category> <value>`
