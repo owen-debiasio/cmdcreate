@@ -74,8 +74,8 @@ find . -name "*.sh" -exec shellcheck {} +
 echo -e "\n${BLUE}> Formatting shell scripts...${RESET}"
 shfmt -w -i 4 -ci -sr "$ROOT_DIR"
 
-echo -e "\n${BLUE}> Linting and formatting markdown files...${RESET}"
-markdownlint-cli2 "**/*.md" --config .markdownlint.json
-prettier -w "**/*.md"
+echo -e "\n${BLUE}> Linting and formatting markdown and yaml files...${RESET}"
+markdownlint-cli2 "**/*.md" "**/*.yml" --config .markdownlint.json --fix
+prettier -w "**/*.md" "**/*.yml"
 
 echo -e "\n${GREEN}> Formatting complete!${RESET}"
