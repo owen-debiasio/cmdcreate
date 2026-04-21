@@ -32,7 +32,7 @@ macro_rules! run_shell_command {
         let command = command_interpolated.trim();
 
         if !command.is_empty() {
-            let shell = "sh";
+            let shell = $crate::configs::load_configuration("sys", "shell", "sh");
 
             match Command::new(shell)
                 .arg("-c")
@@ -43,7 +43,7 @@ macro_rules! run_shell_command {
                 .status()
             {
                 Ok(_) => {}
-                Err(e) => $crate::utils::io::error("Command failed", &e.to_string()),
+                Err(e) => $crate::utils::io::error("Failed to run command:", &e.to_string()),
             }
         }
     }};
