@@ -732,3 +732,7 @@ Licensed under the GNU General Public License v3.0 or later.
 - Added new command: `config`
   - Usage:
     - `cmdcreate config <add/remove> <category> <value>`
+
+## 1.2.6
+
+- Brought back shell configuration after I accidentally removed it
