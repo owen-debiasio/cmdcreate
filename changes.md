@@ -736,3 +736,5 @@ Licensed under the GNU General Public License v3.0 or later.
 ## 1.2.6
 
 - Brought back shell configuration after I accidentally removed it
+- Code optimizations
+- Running `cmdcreate -v` now shows the build status
