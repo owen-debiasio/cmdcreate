@@ -29,22 +29,14 @@ use crate::{
             env::{ENVIRONMENT_VARIABLES, root_requirement_is_bypassed, running_as_root},
         },
     },
-    version::version_is_development_build,
+    version::get_build_status,
 };
 
 pub fn debug_intro() -> String {
     let author_name = AUTHOR.name;
     let author_email = AUTHOR.email;
 
-    let build_status = if version_is_development_build() {
-        if not_connected_to_internet() {
-            "(build status unknown)"
-        } else {
-            "(development)"
-        }
-    } else {
-        "(stable)"
-    };
+    let build_status = get_build_status();
 
     let distro_base = get_distro_base();
     let installation_method = installation_method();

@@ -58,6 +58,18 @@ pub fn version_is_development_build() -> bool {
     }
 }
 
+pub fn get_build_status() -> &'static str {
+    if version_is_development_build() {
+        if not_connected_to_internet() {
+            "(build status unknown)"
+        } else {
+            "(development)"
+        }
+    } else {
+        "(stable)"
+    }
+}
+
 pub fn get_latest_tag_from_repo(owner: &str, repo: &str) -> String {
     if not_connected_to_internet() {
         log(
@@ -133,14 +145,18 @@ pub fn get_latest_commit_from_repo(owner: &str, repo: &str, branch: &str) -> Str
 }
 
 pub fn print_version_info() {
+    let project_name = PROJECT.name;
+
     let project_author = AUTHOR.name;
     let project_author_email = AUTHOR.email;
 
     let project_copyright_info = get_project_copyright_info();
 
+    let build_status = get_build_status();
+
     output!(
         "
-cmdcreate {CURRENT_PROJECT_VERSION}
+{project_name} {CURRENT_PROJECT_VERSION} {build_status}
 Copyright (C) {project_copyright_info}.
 License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.
 This is free software: you are free to change and redistribute it.
