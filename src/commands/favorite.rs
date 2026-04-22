@@ -41,6 +41,7 @@ pub fn favorite(action: &str, command: &str) {
     }
 }
 
+/// Add command to favorites
 fn add(command: &str) {
     let (blue, green, yellow, reset) = (COLORS.blue, COLORS.green, COLORS.yellow, COLORS.reset);
 
@@ -56,7 +57,10 @@ fn add(command: &str) {
     }
 
     if command_is_in_favorites(command) {
-        println!("{yellow}Command {blue}\"{command}\"{yellow} is already in favorites.{reset}");
+        output!(
+            "{yellow}Command {blue}\"{command}\"{yellow} is already in favorites.",
+            true
+        );
 
         return;
     }
@@ -95,6 +99,7 @@ fn command_favorite_addition_check(command: &str) {
     );
 }
 
+/// Remove command from favorites
 fn remove(command: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
