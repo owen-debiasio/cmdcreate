@@ -14,12 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use std::process::exit;
-
 use crate::{
     logger::{Severity, log},
     meta::{author_information::AUTHOR, project_information::PROJECT},
-    run_shell_command,
+    output, run_shell_command,
     utils::{
         colors::COLORS,
         fs::{PATHS, create_folder, path_exists, read_file_to_string},
@@ -114,9 +112,7 @@ fn download_and_install_license() {
 
     license_install_success_check(license_path);
 
-    println!("\n{green}Successfully downloaded license!{reset}");
-
-    exit(0)
+    output!("\n{green}Successfully downloaded license!{reset}");
 }
 
 fn license_install_success_check(license_path: &str) {
