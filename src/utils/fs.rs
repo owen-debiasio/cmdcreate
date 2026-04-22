@@ -133,7 +133,7 @@ pub fn download_file_to_location_via_curl(
 
     run_shell_command!(
         "
-        curl -sLfo {file_destination} \
+        curl -sSLo {file_destination} \
         {path_of_file_to_be_downloaded}"
     );
 

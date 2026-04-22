@@ -17,10 +17,13 @@
 use crate::{
     logger::{Severity, log},
     meta::{author_information::AUTHOR, project_information::PROJECT},
-    output, run_shell_command,
+    output,
     utils::{
         colors::COLORS,
-        fs::{PATHS, create_folder, path_exists, read_file_to_string},
+        fs::{
+            PATHS, create_folder, download_file_to_location_via_curl, path_exists,
+            read_file_to_string,
+        },
         io::{ask_for_confirmation, error},
         net::not_connected_to_internet,
     },
@@ -96,19 +99,13 @@ fn download_and_install_license() {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
     let raw_repo_path = PROJECT.repository_raw;
-
     let license_path = &PATHS.license;
-    let license_install_directory = license_path.replace("LICENSE", "");
 
+    let license_install_directory = license_path.replace("LICENSE", "");
     create_folder(&license_install_directory).expect("Failed to create folder");
 
-    let command_to_download_and_install_license: &str = &format!(
-        "curl -sSLo \
-        {license_path} \
-        {raw_repo_path}/LICENSE"
-    );
-
-    run_shell_command!("{command_to_download_and_install_license}");
+    let license_download_path = &format!("{raw_repo_path}LICENSE");
+    download_file_to_location_via_curl(license_path, license_download_path);
 
     license_install_success_check(license_path);
 
