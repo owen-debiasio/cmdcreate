@@ -20,7 +20,6 @@ use crate::{
     commands::create::NEW_COMMAND_HEADER,
     logger::{Severity, log},
     utils::{
-        colors::COLORS,
         fs::{PATHS, path_exists, read_file_to_string},
         io::error,
     },
@@ -53,8 +52,6 @@ pub fn cmdcreate_command_is_installed(command_to_find: &str) -> bool {
 }
 
 pub fn get_installed_commands() -> Vec<String> {
-    let (red, reset) = (COLORS.red, COLORS.reset);
-
     log(
         "commands/tools::get_installed_commands(): Getting installed commands...",
         Severity::Normal,
@@ -63,7 +60,7 @@ pub fn get_installed_commands() -> Vec<String> {
     let command_install_directory = &PATHS.command_installation_directory;
 
     let mut retrieved_commands_pathbuf: Vec<PathBuf> = read_dir(command_install_directory)
-        .unwrap_or_else(|_| panic!("{red}Error: Failed to read install directory{reset}"))
+        .unwrap_or_else(|_| error("Error: Failed to read install directory!", ""))
         .flatten()
         .map(|entry_in_index| entry_in_index.path())
         .filter(|path_to_command| path_to_command.is_file())
@@ -82,15 +79,14 @@ pub fn get_installed_commands() -> Vec<String> {
     // Manually convert the original Vec<Pathbuf> to
     // Vec<String> because for me it makes it easier
     // to deal with retrieving the installed commands.
-    let mut retrieved_commands: Vec<String> = vec![];
+    let mut retrieved_commands: Vec<String> = Vec::new();
     for command in retrieved_commands_pathbuf {
         let command_vec_addition_full = command.to_str().unwrap().to_string();
 
         // Remove "/usr/local/bin/" to just provide
         // the names of the commands. They are all
         // installed in the same directory anyway.
-        let command_to_add =
-            command_vec_addition_full.replace(PATHS.command_installation_directory, "");
+        let command_to_add = command_vec_addition_full.replace(command_install_directory, "");
 
         retrieved_commands.push(command_to_add);
     }
