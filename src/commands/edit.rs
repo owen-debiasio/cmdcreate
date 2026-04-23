@@ -44,6 +44,7 @@ pub fn get_available_editor() -> String {
         "zed",
         "zed-preview",
         "mousepad",
+        "xed",
     ];
 
     let chosen_editor = available_editors
