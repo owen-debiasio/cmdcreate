@@ -738,3 +738,4 @@ Licensed under the GNU General Public License v3.0 or later.
 - Brought back shell configuration after I accidentally removed it
 - Code optimizations
 - Running `cmdcreate -v` now shows the build status
+- Added `xed` as a supported text editor
