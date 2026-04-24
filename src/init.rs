@@ -76,8 +76,8 @@ Shell in use: {shell_in_use}
 }
 
 fn root_check() {
-    let user_bypasses_root: bool = root_requirement_is_bypassed();
-    let user_is_running_as_root: bool = running_as_root();
+    let user_bypasses_root = root_requirement_is_bypassed();
+    let user_is_running_as_root = running_as_root();
 
     if !user_is_running_as_root && !user_bypasses_root {
         error("Please run cmdcreate as root.", "")
