@@ -30,6 +30,7 @@ words = [
     "openssl",
     "pacman",
     "paru",
+    "pkgconf",
     "pkgdir",
     "pylint",
     "pylintrc",
