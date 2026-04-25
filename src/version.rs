@@ -20,7 +20,6 @@ use crate::{
     output,
     utils::{
         colors::COLORS,
-        fs::{delete_file, download_file_to_location_via_curl, read_file_to_string},
         io::error,
         net::{http_client, not_connected_to_internet},
     },
@@ -167,26 +166,4 @@ Written by {project_author} <{project_author_email}>.
         ",
         true
     );
-}
-
-pub fn print_version_changelog() {
-    if not_connected_to_internet() {
-        error("You need internet to retrieve the changelog.", "")
-    }
-
-    log(
-        "version::print_version_changelog(): Displaying changelog...",
-        Severity::Normal,
-    );
-
-    let repo_path = PROJECT.repository_raw;
-    let changelog_download_path = &format!("{repo_path}/changes.md");
-
-    let changelog_path = "/tmp/cmdcreate-changelog.md";
-    download_file_to_location_via_curl(changelog_path, changelog_download_path);
-
-    let changelog_file_contents = read_file_to_string(changelog_path);
-    output!("{changelog_file_contents}", false);
-
-    delete_file(changelog_path).expect("Failed to delete changelog");
 }
