@@ -68,7 +68,7 @@ Source0:        $SOURCE_FILE
 Source1:        LICENSE
 
 BuildArch:      x86_64
-Requires:       curl, nano, git, openssl-libs, openssl-devel
+Requires:       curl, nano, git, less, openssl-libs, openssl-devel
 
 %description
 Allows you to create custom commands for your custom scripts.
