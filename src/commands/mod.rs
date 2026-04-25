@@ -17,6 +17,7 @@
 pub mod config;
 pub mod create;
 pub mod display;
+pub mod doc;
 pub mod edit;
 pub mod export;
 pub mod favorite;
