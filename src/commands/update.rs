@@ -168,18 +168,18 @@ fn build_from_source() {
     let dependency_install_command = match get_distro_base() {
         DistroBase::Arch => {
             "pacman -Sy > /dev/null 2>&1 && pacman -S --needed --noconfirm \
-            cargo git openssl curl base-devel > /dev/null 2>&1"
+            cargo git less openssl curl base-devel > /dev/null 2>&1"
         }
         DistroBase::Debian => {
             "apt update -qq /dev/null 2>&1 && \
             apt install -y -qq \
-            git build-essential pkg-config libssl-dev curl \
+            git less build-essential pkg-config libssl-dev curl \
             > /dev/null 2>&1"
         }
         DistroBase::Fedora => {
             "dnf update -q /dev/null 2>&1 && \
             dnf install -yq \
-            git-core openssl-devel pkgconf-pkg-config \
+            git-core less openssl-devel pkgconf-pkg-config \
             > /dev/null 2>&1"
         }
         DistroBase::Unknown => error("Your distro is unsupported!", "Unable to proceed."),
