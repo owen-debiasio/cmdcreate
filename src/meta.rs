@@ -22,12 +22,14 @@ use crate::{
         colors::COLORS,
         fs::{
             PATHS, create_folder, download_file_to_location_via_curl, path_exists,
-            read_file_to_string,
+            use_pager_on_file,
         },
         io::{ask_for_confirmation, error},
         net::not_connected_to_internet,
     },
 };
+
+use std::process::exit;
 
 pub const YEAR: &str = "2026";
 
@@ -72,9 +74,7 @@ pub fn display_full_license() {
     let path_to_license_file = &PATHS.license;
 
     if path_exists(path_to_license_file) {
-        let license_file_contents = read_file_to_string(path_to_license_file);
-
-        println!("{license_file_contents}");
+        use_pager_on_file(path_to_license_file);
     } else {
         let error_message: &str = "License file not found!";
 
@@ -93,6 +93,8 @@ pub fn display_full_license() {
 
         download_and_install_license();
     }
+
+    exit(0)
 }
 
 fn download_and_install_license() {
@@ -110,6 +112,8 @@ fn download_and_install_license() {
     license_install_success_check(license_path);
 
     output!("\n{green}Successfully downloaded license!{reset}");
+
+    exit(0)
 }
 
 fn license_install_success_check(license_path: &str) {
