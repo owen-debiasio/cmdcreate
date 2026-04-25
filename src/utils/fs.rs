@@ -64,6 +64,21 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     log_directory: format!("{MAIN_PATH}/logs"),
 });
 
+pub fn use_pager_on_file(file_path: &str) {
+    if !system_command_is_installed("less") {
+        error(
+            "Failed to find pager (less).",
+            "Please install 'less' to continue",
+        )
+    }
+
+    if !path_exists(file_path) {
+        error("Failed to page file!", "File not found!")
+    }
+
+    run_shell_command!("less {file_path}");
+}
+
 pub fn install_binary(mode: &str, binary: &str, destination: &str) {
     log(
         &format!(
