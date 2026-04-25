@@ -16,22 +16,23 @@ fn list_available_options() {
     output!(
         "Available options:\n\
         {magenta}----Main Repository Information----\n\
-        {blue}main             {cyan}The main README file.\n\
-        {blue}changelog        {cyan}The complete version history of cmdcreate.\n\
-        {blue}license          {cyan}The license for cmdcreate.\n\
-        {blue}security         {cyan}Security information.\n\
-        {blue}contributing     {cyan}Information about contributing.\n\
+        {blue}main              {cyan}The main README file.\n\
+        {blue}changelog         {cyan}The complete version history of cmdcreate.\n\
+        {blue}license           {cyan}The license for cmdcreate.\n\
+        {blue}security          {cyan}Security information.\n\
+        {blue}contributing      {cyan}Information about contributing.\n\
+        {blue}code_of_conduct   {cyan}View information about the code of conduct.\n\
         {magenta}----Main Documentation----\n\
-        {blue}intro            {cyan}Intro to the documentation.\n\
-        {blue}about            {cyan}About cmdcreate and its purpose.\n\
-        {blue}commands         {cyan}About the current commands in cmdcreate.\n\
-        {blue}configurations   {cyan}Information of configuring cmdcreate.\n\
-        {blue}developing       {cyan}Information on developing cmdcreate.\n\
-        {blue}structure        {cyan}The file structure of cmdcreate.\n\
-        {blue}updates          {cyan}Information on updates.\n\
+        {blue}intro             {cyan}Intro to the documentation.\n\
+        {blue}about             {cyan}About cmdcreate and its purpose.\n\
+        {blue}commands          {cyan}About the current commands in cmdcreate.\n\
+        {blue}configurations    {cyan}Information of configuring cmdcreate.\n\
+        {blue}developing        {cyan}Information on developing cmdcreate.\n\
+        {blue}structure         {cyan}The file structure of cmdcreate.\n\
+        {blue}updates           {cyan}Information on updates.\n\
         {magenta}----Other Information for Development----\n\
-        {blue}testing          {cyan}Information about testing the features of cmdcreate.\n\
-        {blue}packaging        {cyan}Information about packaging cmdcreate.",
+        {blue}testing           {cyan}Information about testing the features of cmdcreate.\n\
+        {blue}packaging         {cyan}Information about packaging cmdcreate.",
         true
     );
 }
@@ -59,8 +60,11 @@ pub fn doc(info_to_retrieve: &str) {
     // already have their own dedicated functions.
     let doc_file_path: &str = match info_to_retrieve {
         "main" => "README.md",
-        "changelog" | "license" => "none",
-        "security" | "contributing" => &format!("{}.md", info_to_retrieve.to_uppercase()),
+        "changelog" => "changes.md",
+        "license" => "none",
+        "security" | "contributing" | "code_of_conduct" => {
+            &format!("{}.md", info_to_retrieve.to_uppercase())
+        }
         "intro" => "docs/README.md",
         "about" | "commands" | "configurations" | "developing" | "structure" | "updates" => {
             &format!("docs/{info_to_retrieve}.md")
