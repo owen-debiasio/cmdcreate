@@ -19,6 +19,7 @@ use crate::{
         config::config,
         create::create,
         display::display,
+        doc::doc,
         edit::edit,
         export::export,
         favorite::favorite,
@@ -30,9 +31,8 @@ use crate::{
         update::{check, update},
     },
     logger::{Severity, log},
-    meta::display_full_license,
     utils::{colors::COLORS, io::error, sys::arguments::arguments_force_actions},
-    version::{print_version_changelog, print_version_info},
+    version::print_version_info,
 };
 
 macro_rules! validate_args {
@@ -181,14 +181,19 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
 
             config(config_mode, config_category, config_value);
         }
+        "doc" => {
+            validate_args!(supplied_command, supplied_arguments, 1, "<information>", "");
+
+            let information_to_get = argument_index(1).unwrap();
+
+            doc(information_to_get);
+        }
 
         "list" => list(),
         "check" => check(),
         "update" => update(),
 
         "--version" | "-v" => print_version_info(),
-        "--license" | "-l" => display_full_license(),
-        "--changelog" | "-c" => print_version_changelog(),
 
         _ if supplied_command.starts_with('-') => error("Invalid argument:", supplied_command),
         _ => error("Invalid command:", supplied_command),

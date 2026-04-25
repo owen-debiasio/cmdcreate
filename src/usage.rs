@@ -54,6 +54,7 @@ Commands:
   {blue}rename{yellow}   <command>    <renamed>{red}            Renames a command
   {blue}favorite{yellow} <add/remove> <command>{red}            Adds or removes a command from favorites
   {blue}config{yellow}   <add/remove> <category> <value>{red}   Manage your configurations for cmdcreate
+  {blue}doc{yellow}      <information>{red}                     View various documentation references
 
   Update:
     {blue}check{red}                                    Checks for updates
@@ -65,8 +66,6 @@ Commands:
 
 Arguments and flags:
   {cyan}-v{red}, {cyan}--version{red}                              Displays version
-  {cyan}-c{red}, {cyan}--changelog{red}                            Displays changelog
-  {cyan}-l{red}, {cyan}--license{red}                              Displays license
   {cyan}-o{red}, {cyan}--offline{red}                              Runs cmdcreate in offline mode
   {cyan}-m{red}, {cyan}--monochrome{red}                           Disables colorized output
   {cyan}-V{red}, {cyan}--verbose{red}                              Print logs to output
