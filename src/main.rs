@@ -33,6 +33,8 @@ use crate::{
     version::CURRENT_PROJECT_VERSION,
 };
 
+use std::process::exit;
+
 fn main() {
     init();
 
@@ -59,6 +61,8 @@ fn main() {
     }
 
     cmdcreate(&arguments_retrieved);
+
+    exit(0)
 }
 
 fn cmdcreate(arguments_provided: &[String]) {
