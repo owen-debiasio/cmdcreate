@@ -16,7 +16,7 @@
 
 [package]
 name = "cmdcreate"
-version = "1.2.6"
+version = "1.2.7"
 authors = ["Owen Debiasio <owen.debiasio@gmail.com>"]
 edition = "2024"
 license = "GPL-3.0-or-later"
