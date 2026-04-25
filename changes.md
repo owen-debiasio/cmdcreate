@@ -768,3 +768,8 @@ Licensed under the GNU General Public License v3.0 or later.
       - `cmdcreate doc license`
 - Viewing the changelog and license (along with new the documentation viewer)
   now uses `less`
+
+## v1.2.7
+
+- Fixed `cmdcreate doc changelog`, I got the code logic wrong
+- Added missing `code_of_conduct` option for `cmdcreate doc`
