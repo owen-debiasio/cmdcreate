@@ -739,3 +739,32 @@ Licensed under the GNU General Public License v3.0 or later.
 - Code optimizations
 - Running `cmdcreate -v` now shows the build status
 - Added `xed` as a supported text editor
+- Added new dependency:
+  - `less`
+- Added new command (`doc`):
+  - Usage:
+    - `sudo cmdcreate doc <information>`
+  - View the following documentation references:
+    - `main` (The main README file)
+    - `changelog` (The complete version history of cmdcreate)
+    - `license` (The license for cmdcreate)
+    - `security` (Security information)
+    - `contributing` (Information about contributing)
+    - `intro` (Intro to the documentation)
+    - `about` (About cmdcreate and its purpose)
+    - `commands` (About the current commands in cmdcreate)
+    - `configurations` (Information of configuring cmdcreate)
+    - `developing` (Information on developing cmdcreate)
+    - `structure` (The file structure of cmdcreate)
+    - `updates` (Information on updates)
+    - `testing` (Information about testing the features of cmdcreate)
+    - `packaging` (Information about packaging cmdcreate)
+- Retired the following flags for replacement with `cmdcreate doc`
+  - `-c`/`--changelog`
+    - New usage:
+      - `cmdcreate doc changelog`
+  - `-l`/`--license`
+    - New usage:
+      - `cmdcreate doc license`
+- Viewing the changelog and license (along with new the documentation viewer)
+  now uses `less`
