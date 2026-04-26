@@ -90,6 +90,7 @@ change.
     - [clean.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/clean.rs)
     - [create.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/create.rs)
     - [display.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/display.rs)
+    - [doc.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/doc.rs)
     - [edit.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/edit.rs)
     - [export.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/export.rs)
     - [favorite.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/favorite.rs)
