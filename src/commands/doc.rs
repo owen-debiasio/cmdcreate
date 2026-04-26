@@ -83,7 +83,9 @@ pub fn doc(info_to_retrieve: &str) {
         Severity::Normal,
     );
 
-    // Manual override
+    // Manual override, there is already a dedicated function
+    // to retrieve the license. Extra steps are needed so the
+    // function is kept.
     if info_to_retrieve == "license" {
         display_full_license();
     }
