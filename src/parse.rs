@@ -182,7 +182,12 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
             config(config_mode, config_category, config_value);
         }
         "doc" => {
-            validate_args!(supplied_command, supplied_arguments, 1, "<information>", "");
+            // Instead of showing the usage, default to the list of available
+            // documentation
+            if supplied_arguments.len() == 1 {
+                doc("list");
+                return;
+            }
 
             let information_to_get = argument_index(1).unwrap();
 
