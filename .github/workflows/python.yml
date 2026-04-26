@@ -7,6 +7,7 @@ on:
   pull_request:
     paths:
       - "**.py"
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -16,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.14"]
+        python-version: ["3.13", "3.14"]
 
     steps:
       - name: Checkout code
@@ -34,9 +35,9 @@ jobs:
           pip install pylint black
 
       - name: Black format check
-        run: |
-          black --check .
+        run: black --check .
 
       - name: Pylint
         run: |
-          pylint $(git ls-files '*.py')
+          # Finds all .py files and passes them to pylint
+          find . -name "*.py" | xargs pylint --errors-only
