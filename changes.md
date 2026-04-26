@@ -773,3 +773,5 @@ Licensed under the GNU General Public License v3.0 or later.
 
 - Fixed `cmdcreate doc changelog`, I got the code logic wrong
 - Added missing `code_of_conduct` option for `cmdcreate doc`
+- In addition to `cmdcreate doc list`, you can now just run `cmdcreate doc` to
+  get the list of available documentation.
