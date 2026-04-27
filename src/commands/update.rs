@@ -19,7 +19,7 @@ use std::process::exit;
 use crate::{
     input,
     logger::{Severity, log},
-    meta::project_information::PROJECT,
+    meta::{author_information::AUTHOR, project_information::PROJECT},
     output, run_shell_command,
     utils::{
         colors::COLORS,
@@ -35,7 +35,8 @@ use crate::{
         },
     },
     version::{
-        CURRENT_PROJECT_VERSION, get_latest_commit, get_latest_tag, version_is_development_build,
+        CURRENT_PROJECT_VERSION, get_latest_commit_from_repo, get_latest_tag_from_repo,
+        version_is_development_build,
     },
 };
 
@@ -111,7 +112,10 @@ pub fn update() {
 fn update_using_method(method_for_installation: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    let latest_stable_release = get_latest_tag();
+    let author_username = AUTHOR.username;
+    let project_name = PROJECT.name;
+
+    let latest_stable_release = get_latest_tag_from_repo(author_username, project_name);
 
     cpu_arch_check(
         "You cannot update cmdcreate via this method using \
@@ -182,7 +186,7 @@ fn build_from_source() {
     };
 
     output!(
-        "\nUpdating cmdcreate {magenta}(please wait as this might take a while){blue}...\n",
+        "\nUpdating cmdcreate {magenta}(please wait as this might take a while){blue}...",
         true
     );
 
@@ -225,7 +229,10 @@ fn build_from_source() {
 fn interactive_upgrade() {
     let (blue, green, red, reset) = (COLORS.blue, COLORS.green, COLORS.red, COLORS.reset);
 
-    let latest_commit = get_latest_commit();
+    let author_username = AUTHOR.username;
+    let project_name = PROJECT.name;
+
+    let latest_commit = get_latest_commit_from_repo(author_username, project_name, "main");
 
     let installed_distro = get_distro_base();
     let cpu_arch_is_supported = arch_is_supported();
@@ -276,7 +283,7 @@ fn interactive_upgrade() {
     let entered_update_method = input!("").trim().parse::<usize>().unwrap_or(0);
 
     if entered_update_method == 0 || entered_update_method > chosen_update_method.len() {
-        error("Invalid selection!", "");
+        error("Invalid selection: ", "");
     }
 
     match chosen_update_method[entered_update_method - 1].0 {
@@ -301,7 +308,10 @@ pub fn check() {
 
     output!("\nChecking for updates...", true);
 
-    let latest_stable_version = get_latest_tag();
+    let author_username = AUTHOR.username;
+    let project_name = PROJECT.name;
+
+    let latest_stable_version = get_latest_tag_from_repo(author_username, project_name);
     let current_version = CURRENT_PROJECT_VERSION;
 
     if version_is_development_build() {

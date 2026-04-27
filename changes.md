@@ -778,6 +778,4 @@ Licensed under the GNU General Public License v3.0 or later.
 
 ## v1.2.8
 
-- The latest repository commit and tag are now cached, making startup faster.
-  The files are stored in `/usr/share/cmdcreate/`.
 - Improved the visual output when building from source
