@@ -20,6 +20,7 @@ use crate::{
     output,
     utils::{
         colors::COLORS,
+        fs::{MAIN_PATH, path_exists, read_file_to_string, write_to_file},
         io::error,
         net::{http_client, not_connected_to_internet},
     },
@@ -46,10 +47,7 @@ pub fn version_is_development_build() -> bool {
         )
     };
 
-    let author_username = AUTHOR.username;
-    let project_name = PROJECT.name;
-
-    let latest_retrieved_tag = &get_latest_tag_from_repo(author_username, project_name);
+    let latest_retrieved_tag = &get_latest_tag();
     let version_to_parse = &parse_version(latest_retrieved_tag);
 
     match parse_version(CURRENT_PROJECT_VERSION).cmp(version_to_parse) {
@@ -70,78 +68,172 @@ pub fn get_build_status() -> &'static str {
     }
 }
 
-pub fn get_latest_tag_from_repo(owner: &str, repo: &str) -> String {
-    if not_connected_to_internet() {
-        log(
-            "version::get_latest_tag_from_repo(): No internet... Unable to retrieve latest tag...",
-            Severity::Warn,
-        );
-
-        return "unknown".to_string();
-    }
-
-    let result: Result<String, Box<dyn Error>> = (|| {
-        let tag_api_retrieval_url =
-            format!("https://api.github.com/repos/{owner}/{repo}/releases/latest");
-
-        let api_response = http_client()
-            .get(tag_api_retrieval_url)
-            .header("User-Agent", "rust-app")
-            .send()?;
-
-        let api_response_as_json: Value = api_response.json()?;
-
-        let tag_retrieved_via_api = api_response_as_json["tag_name"]
-            .as_str()
-            .ok_or("Missing tag_name")?
-            .to_owned();
-
-        Ok(tag_retrieved_via_api)
-    })();
-
-    match result {
-        Ok(latest_tag) => {
-            log(
-                &format!("version::get_latest_tag_from_repo(): Latest tag: {latest_tag}"),
-                Severity::Normal,
-            );
-            latest_tag
-        }
-        Err(tag_retrieve_error) => error(
-            "Unable to retrieve latest tag:",
-            &tag_retrieve_error.to_string(),
-        ),
-    }
-}
-
-pub fn get_latest_commit_from_repo(owner: &str, repo: &str, branch: &str) -> String {
-    let commit_hash_url = format!("https://api.github.com/repos/{owner}/{repo}/commits/{branch}");
-
-    let extracted_commit_from_hash: Value = http_client()
-        .get(commit_hash_url)
-        .send()
-        .expect("request failed")
-        .json()
-        .expect("invalid json");
-
-    let commit = extracted_commit_from_hash["sha"]
-        .as_str()
-        .expect("missing sha")
-        .chars()
-        .take(7)
-        .collect::<String>();
-
-    // And THIS is why cmdcreate can take forever to load on weak systems.
+fn cache_build_information(path_of_cache: &str, information_to_cache: &str) {
     log(
         &format!(
-            "
-            version::get_latest_commit_from_repo(): \
-            Retrieved latest commit: \"{commit}\""
+            "version::cache_build_information(): \
+            Caching information: \"{information_to_cache}\" \
+            to file: \"{path_of_cache}\"..."
         ),
         Severity::Normal,
     );
 
-    commit
+    write_to_file(path_of_cache, information_to_cache, false)
+        .expect("Failed to write cached information");
+
+    if !path_exists(path_of_cache) {
+        error("Failed to cache information", "File missing")
+    }
+
+    let cached_file_contents = read_file_to_string(path_of_cache);
+
+    if !cached_file_contents.contains(information_to_cache) {
+        error(
+            "Failed to cache information",
+            "File doesn't contain information",
+        )
+    }
+}
+
+pub fn get_latest_tag() -> String {
+    fn get_tag_from_repository() -> String {
+        let repository_owner = AUTHOR.username;
+        let repository = PROJECT.name;
+
+        if not_connected_to_internet() {
+            log(
+                "version::get_latest_tag::get_tag_from_repository(): \
+                No internet... Unable to retrieve latest tag...",
+                Severity::Warn,
+            );
+
+            return "unknown".to_string();
+        }
+
+        let retrieved_api_contents: Result<String, Box<dyn Error>> = (|| {
+            let tag_api_retrieval_url = format!(
+                "https://api.github.com/repos/{repository_owner}/{repository}/releases/latest"
+            );
+
+            let api_response = http_client()
+                .get(tag_api_retrieval_url)
+                .header("User-Agent", "rust-app")
+                .send()?;
+
+            let api_response_as_json: Value = api_response.json()?;
+
+            let tag_retrieved_via_api = api_response_as_json["tag_name"]
+                .as_str()
+                .ok_or("Missing tag_name")?
+                .to_owned();
+
+            Ok(tag_retrieved_via_api)
+        })();
+
+        match retrieved_api_contents {
+            Ok(latest_tag) => {
+                log(
+                    &format!(
+                        "version::get_latest_tag::get_tag_from_repository(): Latest tag: {latest_tag}"
+                    ),
+                    Severity::Normal,
+                );
+                latest_tag
+            }
+            Err(tag_retrieve_error) => error(
+                "Unable to retrieve latest tag:",
+                &tag_retrieve_error.to_string(),
+            ),
+        }
+    }
+
+    log(
+        "version::get_latest_tag(): Retrieving latest tag...",
+        Severity::Normal,
+    );
+
+    let file_to_store_tag = &format!("{MAIN_PATH}/LATEST_TAG");
+
+    // Use existing cached tag
+
+    if path_exists(file_to_store_tag) {
+        log(
+            "version::get_latest_tag(): Cached tag exists, using...",
+            Severity::Normal,
+        );
+
+        let extracted_tag = read_file_to_string(file_to_store_tag);
+
+        return extracted_tag;
+    }
+
+    log(
+        "version::get_latest_tag(): Latest tag not cached, retrieving...",
+        Severity::Normal,
+    );
+
+    let latest_tag = get_tag_from_repository();
+
+    cache_build_information(file_to_store_tag, &latest_tag);
+
+    latest_tag
+}
+
+pub fn get_latest_commit() -> String {
+    fn get_latest_commit_from_repository() -> String {
+        let repo_owner = AUTHOR.username;
+        let repository = PROJECT.name;
+
+        let commit_hash_url =
+            format!("https://api.github.com/repos/{repo_owner}/{repository}/commits/main");
+
+        let extracted_commit_from_hash: Value = http_client()
+            .get(commit_hash_url)
+            .send()
+            .expect("request failed")
+            .json()
+            .expect("invalid json");
+
+        extracted_commit_from_hash["sha"]
+            .as_str()
+            .expect("missing sha")
+            .chars()
+            .take(7)
+            .collect::<String>()
+    }
+
+    log(
+        "version::get_latest_commit(): Retrieving latest commit...",
+        Severity::Normal,
+    );
+
+    let file_to_store_commit = &format!("{MAIN_PATH}/LATEST_COMMIT");
+
+    log(
+        "version::get_latest_commit(): Latest commit not cached, retrieving...",
+        Severity::Normal,
+    );
+
+    // Use existing cached commit
+
+    if path_exists(file_to_store_commit) {
+        log(
+            "version::get_latest_commit(): Cached commit exists, using...",
+            Severity::Normal,
+        );
+
+        let extracted_tag = read_file_to_string(file_to_store_commit);
+
+        return extracted_tag;
+    }
+
+    // Cache the tag
+
+    let latest_commit = get_latest_commit_from_repository();
+
+    cache_build_information(file_to_store_commit, &latest_commit);
+
+    latest_commit
 }
 
 pub fn print_version_info() {
