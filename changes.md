@@ -775,3 +775,8 @@ Licensed under the GNU General Public License v3.0 or later.
 - Added missing `code_of_conduct` option for `cmdcreate doc`
 - In addition to `cmdcreate doc list`, you can now just run `cmdcreate doc` to
   get the list of available documentation.
+
+## v1.2.8
+
+- The latest repository commit and tag are now cached, making startup faster.
+  The files are stored in `/usr/share/cmdcreate/`.
