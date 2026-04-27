@@ -182,7 +182,7 @@ fn build_from_source() {
     };
 
     output!(
-        "\nUpdating cmdcreate {magenta}(please wait as this might take a while){blue}...",
+        "\nUpdating cmdcreate {magenta}(please wait as this might take a while){blue}...\n",
         true
     );
 
@@ -196,7 +196,7 @@ fn build_from_source() {
         
         cd \"{cloned_repository_destination}\"
         
-        echo -e \"\n{blue}Building... please wait...{reset}\"
+        echo -e \"{blue}> Building... please wait...{reset}\"
         
         rustup default stable > /dev/null 2>&1
         
@@ -276,7 +276,7 @@ fn interactive_upgrade() {
     let entered_update_method = input!("").trim().parse::<usize>().unwrap_or(0);
 
     if entered_update_method == 0 || entered_update_method > chosen_update_method.len() {
-        error("Invalid selection: ", &entered_update_method.to_string());
+        error("Invalid selection!", "");
     }
 
     match chosen_update_method[entered_update_method - 1].0 {
