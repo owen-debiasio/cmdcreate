@@ -779,3 +779,4 @@ Licensed under the GNU General Public License v3.0 or later.
 ## v1.2.8
 
 - Improved the visual output when building from source
+- Updated dependency 'reqwest' to v0.13.3
