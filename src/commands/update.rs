@@ -19,7 +19,7 @@ use std::process::exit;
 use crate::{
     input,
     logger::{Severity, log},
-    meta::{author_information::AUTHOR, project_information::PROJECT},
+    meta::project_information::PROJECT,
     output, run_shell_command,
     utils::{
         colors::COLORS,
@@ -35,8 +35,7 @@ use crate::{
         },
     },
     version::{
-        CURRENT_PROJECT_VERSION, get_latest_commit_from_repo, get_latest_tag_from_repo,
-        version_is_development_build,
+        CURRENT_PROJECT_VERSION, get_latest_commit, get_latest_tag, version_is_development_build,
     },
 };
 
@@ -112,10 +111,7 @@ pub fn update() {
 fn update_using_method(method_for_installation: &str) {
     let (green, reset) = (COLORS.green, COLORS.reset);
 
-    let author_username = AUTHOR.username;
-    let project_name = PROJECT.name;
-
-    let latest_stable_release = get_latest_tag_from_repo(author_username, project_name);
+    let latest_stable_release = get_latest_tag();
 
     cpu_arch_check(
         "You cannot update cmdcreate via this method using \
@@ -229,10 +225,7 @@ fn build_from_source() {
 fn interactive_upgrade() {
     let (blue, green, red, reset) = (COLORS.blue, COLORS.green, COLORS.red, COLORS.reset);
 
-    let author_username = AUTHOR.username;
-    let project_name = PROJECT.name;
-
-    let latest_commit = get_latest_commit_from_repo(author_username, project_name, "main");
+    let latest_commit = get_latest_commit();
 
     let installed_distro = get_distro_base();
     let cpu_arch_is_supported = arch_is_supported();
@@ -308,10 +301,7 @@ pub fn check() {
 
     output!("\nChecking for updates...", true);
 
-    let author_username = AUTHOR.username;
-    let project_name = PROJECT.name;
-
-    let latest_stable_version = get_latest_tag_from_repo(author_username, project_name);
+    let latest_stable_version = get_latest_tag();
     let current_version = CURRENT_PROJECT_VERSION;
 
     if version_is_development_build() {
