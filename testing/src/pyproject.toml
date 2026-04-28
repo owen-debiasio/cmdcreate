@@ -1,0 +1,11 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cmdcreate-testing"
+version = "0.2.0"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["testing*"]
