@@ -16,6 +16,7 @@
 
 from io_utils import output, error
 from sys_utils import return_args
+from src.colors import Colors
 
 VERSION = "v0.2.0"
 
@@ -40,6 +41,11 @@ def list_tests():
 
 def main():
     output(f"cmdcreate Testing Suite {VERSION}\n", enable_arrow=True)
+
+    output(
+        f"{Colors.yellow}UNFINISHED, STILL CURRENTLY BEING WORKED ON! PLEASE BE MINDFUL!",
+        enable_arrow=True,
+    )
 
     retrieved_args = return_args()
 
