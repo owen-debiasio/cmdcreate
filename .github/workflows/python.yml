@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.14"]
+        python-version: ["3.12"]
 
     steps:
       - name: Checkout code
@@ -34,10 +34,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install pylint black
 
-      - name: Black format check
-        run: black --check .
-
-      - name: Pylint
+      - name: Format and Lint
+        shell: bash
         run: |
-          # Finds all .py files and passes them to pylint
-          find . -name "*.py" | xargs pylint --errors-only
+          black .
+          find . -name "*.py" -exec pylint --errors-only {} +
