@@ -17,6 +17,7 @@
 from io_utils import output, error
 from sys_utils import return_args
 from colors import Colors
+from tests.init_tests import init_tests
 
 VERSION = "v0.2.0"
 
@@ -59,6 +60,10 @@ def main():
     match root_command:
         case "list":
             list_tests()
+
+        case "run":
+            init_tests()
+
         case _:
             error(f"Invalid option: {root_command}")
 
