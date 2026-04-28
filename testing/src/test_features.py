@@ -16,7 +16,7 @@
 
 from io_utils import output, error
 from sys_utils import return_args
-from src.colors import Colors
+from colors import Colors
 
 VERSION = "v0.2.0"
 
