@@ -22,7 +22,7 @@ def output(text: str, enable_arrow: bool) -> None:
     arrow_to_use: str = ""
 
     if len(text) != 0 and enable_arrow:
-        arrow_to_use: str = "> "
+        arrow_to_use = "> "
 
     print(f"{Colors.blue}{arrow_to_use}{text}{Colors.reset}")
 
