@@ -19,30 +19,18 @@ from sys import exit
 
 from io_utils import output, error
 from sys_utils import return_args
+from tests.run_tests import run_test, available_tests
 
 
 def list_tests() -> None:
-    available_options = [
-        "create",
-        "remove",
-        "edit",
-        "list",
-        "search",
-        "display",
-        "rename",
-        "favorite",
-        "config",
-        "doc",
-    ]
-
     output("Available tests:\n", enable_arrow=True)
 
-    for option in available_options:
+    for option in available_tests:
         output(option, enable_arrow=False)
 
 
 def list_subcommands() -> None:
-    available_options = [
+    available_options: list = [
         "list",
         "run",
     ]
@@ -66,5 +54,12 @@ def init_tests() -> None:
     match root_command:
         case "list":
             list_tests()
+
+        case "run":
+            if len(given_arguments) <= 2:
+                error("Provide the test name!")
+
+            test_to_run: str = given_arguments[2]
+            run_test(test_to_run)
         case _:
             error(f"Invalid command: {root_command}")
