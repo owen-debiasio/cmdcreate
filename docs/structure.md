@@ -131,8 +131,8 @@ change.
   - 📁 [src](https://github.com/owen-debiasio/cmdcreate/tree/main/testing/src/)
     - 📁
       [tests](https://github.com/owen-debiasio/cmdcreate/tree/main/testing/tests/)
-      - [init_tests.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/init_tests.py)
-      - [run_tests.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/run_tests.py)
+      - [init_tests.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/tests/init_tests.py)
+      - [run_tests.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/tests/run_tests.py)
     - [colors.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/colors.py)
     - [io_utils.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/io_utils.py)
     - [sys_utils.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/sys_utils.py)
