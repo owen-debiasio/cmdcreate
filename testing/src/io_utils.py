@@ -18,7 +18,7 @@ from sys import exit
 from colors import Colors
 
 
-def output(text: str, enable_arrow: bool):
+def output(text: str, enable_arrow: bool) -> None:
     arrow_to_use = ""
 
     if len(text) != 0 and enable_arrow:
@@ -27,6 +27,6 @@ def output(text: str, enable_arrow: bool):
     print(f"{Colors.blue}{arrow_to_use}{text}{Colors.reset}")
 
 
-def error(text: str):
+def error(text: str) -> None:
     output(f"{Colors.red}{text}", enable_arrow=True)
     exit(1)
