@@ -131,12 +131,12 @@ change.
   - 📁 [src](https://github.com/owen-debiasio/cmdcreate/tree/main/testing/src/)
     - 📁
       [tests](https://github.com/owen-debiasio/cmdcreate/tree/main/testing/tests/)
-      - [init_tests.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/init_tests.py)
-      - [run_tests.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/run_tests.py)
-    - [colors.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/colors.py)
-    - [io_utils.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/io_utils.py)
-    - [sys_utils.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/sys_utils.py)
-    - [test_features.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/test_features.py)
+      - [init_tests.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/init_tests.py)
+      - [run_tests.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/run_tests.py)
+    - [colors.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/colors.py)
+    - [io_utils.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/io_utils.py)
+    - [sys_utils.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/sys_utils.py)
+    - [test_features.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/test_features.py)
   - [README.md](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/README.md)
   - [pyproject.toml](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/pyproject.toml)
 
