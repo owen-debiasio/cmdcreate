@@ -21,13 +21,16 @@ use std::{
 
 use crate::{
     input,
-    utils::{colors::COLORS, sys::arguments::arguments_force_actions},
+    utils::{
+        colors::COLORS,
+        sys::arguments::{args_contains, arguments_force_actions},
+    },
 };
 
 pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool {
     let (red, green, reset) = (COLORS.red, COLORS.green, COLORS.reset);
 
-    if arguments_force_actions() {
+    if arguments_force_actions() || output_is_silent() {
         return true;
     }
 
@@ -42,6 +45,10 @@ pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool
     }
 }
 
+pub fn output_is_silent() -> bool {
+    args_contains("-s") || args_contains("--silent")
+}
+
 #[macro_export]
 macro_rules! output {
     ($given_text:expr) => {
@@ -50,7 +57,13 @@ macro_rules! output {
 
     ($given_text:expr, $include_arrow:expr) => {{
         let text_interpolated = format!($given_text);
-        let text = text_interpolated.trim();
+        let text: &str;
+
+        if $crate::utils::io::output_is_silent() {
+            text = ""
+        } else {
+            text = text_interpolated.trim()
+        }
 
         let (blue, reset) = (COLORS.blue, COLORS.reset);
 

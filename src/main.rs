@@ -53,6 +53,8 @@ fn main() {
                 | "--monochrome"
                 | "-b"
                 | "--bypass-root"
+                | "-s"
+                | "--silent"
         )
     });
 

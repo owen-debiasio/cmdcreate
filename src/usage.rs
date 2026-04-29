@@ -69,6 +69,7 @@ Arguments and flags:
   {cyan}-o{red}, {cyan}--offline{red}                              Runs cmdcreate in offline mode
   {cyan}-m{red}, {cyan}--monochrome{red}                           Disables colorized output
   {cyan}-V{red}, {cyan}--verbose{red}                              Print logs to output
+  {cyan}-s{red}, {cyan}--silent{red}                               Suppress any non-error output
   {cyan}-f{red}, {cyan}--force{red}                                Force commands to be ran
   {cyan}-b{red}, {cyan}--bypass-root{red}                          Bypass root requirement {yellow}(USE WITH CAUTION){red}
 

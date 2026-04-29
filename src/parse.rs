@@ -87,7 +87,7 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 "-i/--in_editor"
             );
 
-            let command_name = argument_index(1).expect("Missing command name");
+            let command_name = argument_index(1).unwrap_or("");
             let command_contents = argument_index(2).unwrap_or("");
 
             create(command_name, command_contents, true);
