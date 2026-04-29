@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from sys import exit
+
 from io_utils import output, error
 from sys_utils import return_args
 from colors import Colors
@@ -22,22 +24,18 @@ from tests.init_tests import init_tests
 VERSION = "v0.2.0"
 
 
-def list_tests():
+def list_available_commands():
     available_options = [
-        "create",
-        "remove",
-        "edit",
         "list",
-        "search",
-        "display",
-        "rename",
-        "favorite",
-        "config",
-        "doc",
+        "run",
     ]
+
+    output("Available Commands:\n", enable_arrow=True)
 
     for option in available_options:
         output(option, enable_arrow=False)
+
+    print()
 
 
 def main():
@@ -51,17 +49,14 @@ def main():
     retrieved_args = return_args()
 
     if len(retrieved_args) == 0:
-        list_tests()
+        list_available_commands()
 
-        return
+        exit(1)
 
     root_command = retrieved_args[0]
 
     match root_command:
-        case "list":
-            list_tests()
-
-        case "run":
+        case "test":
             init_tests()
 
         case _:
