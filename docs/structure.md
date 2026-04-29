@@ -128,20 +128,17 @@ change.
 ## Testing cmdcreate
 
 - 📁 [testing](https://github.com/owen-debiasio/cmdcreate/tree/main/testing)
-  - 📁
-    [scripts](https://github.com/owen-debiasio/cmdcreate/tree/main/testing/scripts)
-    - [backup.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/backup.py)
-    - [create.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/create.py)
-    - [display.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/display.py)
-    - [edit.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/edit.py)
-    - [listandfavorite.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/listandfavorite.py)
-    - [remove.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/remove.py)
-    - [rename.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/rename.py)
-    - [search.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/search.py)
-  - [lib.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/lib.py)
-  - [main.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/main.py)
+  - 📁 [src](https://github.com/owen-debiasio/cmdcreate/tree/main/testing/src/)
+    - 📁
+      [tests](https://github.com/owen-debiasio/cmdcreate/tree/main/testing/tests/)
+      - [init_tests.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/init_tests.py)
+      - [run_tests.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/run_tests.py)
+    - [colors.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/colors.py)
+    - [io_utils.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/io_utils.py)
+    - [sys_utils.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/sys_utils.py)
+    - [test_features.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/scripts/test_features.py)
   - [README.md](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/README.md)
-  - [shared.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/shared.py)
+  - [pyproject.toml](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/pyproject.toml)
 
 ## Linting files
 
