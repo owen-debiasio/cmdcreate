@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Owen Debiasio
+import os
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -14,13 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import sys
+from sys import argv
+from subprocess import run, CalledProcessError
+from shlex import split
+
+running_as_root: bool = os.geteuid() == 0
 
 
 def return_args() -> list[str]:
-    supplied_argument_vector = []
+    supplied_argument_vector: list[str] = []
 
-    for supplied_argument in sys.argv[1:]:
+    for supplied_argument in argv[1:]:
 
         if supplied_argument.startswith("-") and len(supplied_argument) > 2:
             for character in supplied_argument[1:]:
@@ -33,3 +38,19 @@ def return_args() -> list[str]:
 
 def args_contains(argument: str) -> bool:
     return argument in return_args()
+
+
+def run_shell_command(command: str) -> bool | None:
+    parts: list[str] = split(command)
+
+    if not parts:
+        return None
+
+    root_command: str = parts[0]
+    provided_args: list[str] = parts[1:]
+
+    try:
+        run([root_command] + provided_args, check=True)
+        return True
+    except FileNotFoundError or CalledProcessError:
+        return False
