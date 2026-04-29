@@ -25,9 +25,8 @@ VERSION = "v0.2.0"
 
 
 def list_available_commands():
-    available_options = [
-        "list",
-        "run",
+    available_options: list[str] = [
+        "test",
     ]
 
     output("Available Commands:\n", enable_arrow=True)
@@ -46,19 +45,18 @@ def main():
         enable_arrow=True,
     )
 
-    retrieved_args = return_args()
+    retrieved_args: list[str] = return_args()
 
     if len(retrieved_args) == 0:
         list_available_commands()
 
         exit(1)
 
-    root_command = retrieved_args[0]
+    root_command: str = retrieved_args[0]
 
     match root_command:
         case "test":
             init_tests()
-
         case _:
             error(f"Invalid option: {root_command}")
 

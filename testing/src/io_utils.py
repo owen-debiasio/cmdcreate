@@ -19,7 +19,7 @@ from colors import Colors
 
 
 def output(text: str, enable_arrow: bool) -> None:
-    arrow_to_use = ""
+    arrow_to_use: str = ""
 
     if len(text) != 0 and enable_arrow:
         arrow_to_use: str = "> "
