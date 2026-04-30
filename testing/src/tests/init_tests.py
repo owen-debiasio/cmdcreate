@@ -62,4 +62,4 @@ def init_tests() -> None:
             test_to_run: str = given_arguments[2]
             run_test(test_to_run)
         case _:
-            error(f"Invalid command: {root_command}")
+            error(f"Invalid subcommand: {root_command}")
