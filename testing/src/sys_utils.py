@@ -1,6 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Owen Debiasio
-import os
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -16,10 +15,11 @@ import os
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from sys import argv
+from os import geteuid
 from subprocess import run, CalledProcessError
 from shlex import split
 
-running_as_root: bool = os.geteuid() == 0
+running_as_root: bool = geteuid() == 0
 
 
 def return_args() -> list[str]:
