@@ -783,3 +783,4 @@ Licensed under the GNU General Public License v3.0 or later.
 - New flag: `-s`/`--silent`
   - Suppresses any output that's not an error
 - Began work on new testing suite
+- `dev/format.sh` now runs clippy
