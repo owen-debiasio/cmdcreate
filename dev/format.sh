@@ -55,8 +55,9 @@ command -v markdownlint-cli2 > /dev/null || {
     exit 1
 }
 
-echo -e "\n${BLUE}> Formatting Rust source...${RESET}"
+echo -e "\n${BLUE}> Linting and formatting cmdcreate...${RESET}"
 cargo fmt --all --
+cargo clippy
 
 if [[ -d "$ROOT_DIR/testing/" ]]; then
     echo -e "\n${BLUE}> Formatting Python testing scripts...${RESET}"
