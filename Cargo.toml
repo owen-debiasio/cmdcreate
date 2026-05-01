@@ -38,8 +38,8 @@ unsafe_code = "forbid"
 pedantic = "deny"
 nursery = "deny"
 perf = "deny"
-complexity = "warn"
-style = "warn"
+complexity = "deny"
+style = "deny"
 
 [profile.release]
 lto = true
