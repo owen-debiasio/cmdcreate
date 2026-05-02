@@ -51,7 +51,7 @@ install_dependencies() {
                 rustup curl openssl git base-devel \
                 shfmt shellcheck bash-language-server \
                 python-black python-pylint python-lsp-server \
-                nodejs npm markdownlint-cli2 prettier marksman \
+                nodejs npm markdownlint-cli2 prettier marksman vscode-json-languageserver \
                 rpm-tools dpkg
             ;;
 
