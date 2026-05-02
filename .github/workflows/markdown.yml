@@ -5,10 +5,12 @@ on:
     paths:
       - "**/*.md"
       - "**/*.yml"
+      - "**/*.json"
   pull_request:
     paths:
       - "**/*.md"
       - "**/*.yml"
+      - "**/*.json"
 
 permissions:
   contents: read
@@ -30,7 +32,7 @@ jobs:
         run: npm install -g prettier
 
       - name: Run Prettier
-        run: prettier -c "**/*.md" "**/*.yml"
+        run: prettier --config .prettierrc -w .
 
       - name: Install markdownlint-cli2
         run: npm install -g markdownlint-cli2@0.13.0

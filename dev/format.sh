@@ -77,6 +77,6 @@ shfmt -w -i 4 -ci -sr "$ROOT_DIR"
 
 echo -e "\n${BLUE}> Linting and formatting markdown and yaml files...${RESET}"
 markdownlint-cli2 "**/*.md" "**/*.yml" --config .markdownlint.json --fix
-prettier -w "**/*.md" "**/*.yml"
+prettier --config .prettierrc -w .
 
 echo -e "\n${GREEN}> Formatting complete!${RESET}"
