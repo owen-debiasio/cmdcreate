@@ -14,8 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::commands::doc::{doc, view_documentation_file};
+use crate::commands::edit::get_available_editor;
+use crate::utils::fs::use_pager_on_file;
 use crate::{
-    output,
+    output, run_shell_command,
     utils::{
         colors::COLORS,
         fs::{PATHS, read_file_to_string, write_to_file},
@@ -32,11 +35,46 @@ static AVAILABLE_VALUES: &[&str] = &[
     "disable_color",
 ];
 
+fn edit_config_file() {
+    let editor = get_available_editor();
+    let config_file = PATHS.configuration_file;
+
+    run_shell_command!("{editor} {config_file}");
+}
+
 pub fn config(mode: &str, category: &str, value: &str) {
-    if mode == "add" {
-        add(category, value);
-    } else {
-        remove(category, value);
+    match mode {
+        "add" | "remove" => init_config_changes(mode, category, value),
+
+        "help" => doc("configurations"),
+        "example" => view_documentation_file("docs/resources/config_example.toml"),
+
+        "edit" => edit_config_file(),
+        "display" => use_pager_on_file(PATHS.configuration_file),
+
+        _ => error("Invalid action:", mode),
+    }
+}
+
+fn init_config_changes(config_mode: &str, config_category: &str, config_value: &str) {
+    let category_header = format!("[{config_category}]");
+
+    if config_category.is_empty() {
+        error("Please provide a category.", "")
+    } else if !AVAILABLE_CATEGORIES.contains(&category_header.as_str()) {
+        error("Not a valid category:", config_category);
+    }
+
+    if config_value.is_empty() {
+        error("Please provide a value.", "")
+    } else if !AVAILABLE_VALUES.contains(&config_value) {
+        error("Not a valid value:", config_value);
+    }
+
+    if config_mode == "add" {
+        add(config_category, config_value);
+    } else if config_mode == "remove" {
+        remove(config_category, config_value);
     }
 }
 
@@ -44,14 +82,9 @@ pub fn add(category: &str, value: &str) {
     let config_path = PATHS.configuration_file;
     let config_file_contents = read_file_to_string(config_path);
 
-    let category_header = format!("[{category}]");
-    if !AVAILABLE_CATEGORIES.contains(&category_header.as_str()) {
-        error("Not a valid category:", category);
-    }
-
-    let key = value.split('=').next().unwrap_or("");
-    if !AVAILABLE_VALUES.contains(&key) {
-        error("Not a valid value:", key);
+    let key = value.split('=').next().unwrap();
+    if key.is_empty() || !value.contains('"') {
+        error("Please provide a setting.", "")
     }
 
     let parts: Vec<&str> = value.splitn(2, '=').collect();
@@ -88,14 +121,14 @@ pub fn add(category: &str, value: &str) {
         if in_target_section {
             if trimmed.starts_with('[') {
                 section_end_index = line_index;
-                break;
             }
 
             if trimmed.starts_with(key) && trimmed.contains('=') {
                 line.clone_from(&sanitized_value);
                 replaced = true;
-                break;
             }
+
+            break;
         }
     }
 
@@ -115,6 +148,7 @@ pub fn add(category: &str, value: &str) {
 
 pub fn remove(category: &str, value: &str) {
     let green = COLORS.green;
+
     let config_path = PATHS.configuration_file;
     let config_file_contents = read_file_to_string(config_path);
 
