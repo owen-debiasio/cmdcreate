@@ -783,4 +783,19 @@ Licensed under the GNU General Public License v3.0 or later.
 - New flag: `-s`/`--silent`
   - Suppresses any output that's not an error
 - Began work on new testing suite
+- Code optimizations
+- Updated documentation for cmdcreate commands
 - `dev/format.sh` now runs clippy
+- Overhauled the messages for getting usage for cmdcreate
+- Changes for command `config`:
+  - New subcommands:
+    - help
+      - Get documentation for configuring cmdcreate
+    - example
+      - View an example config file
+    - edit
+      - Edit the configurations through a text editor
+    - display
+      - Display the configurations to output
+  - Overhauled to be more user-friendly
+  - Fixed weird crashes
