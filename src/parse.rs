@@ -167,27 +167,33 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
         }
 
         "config" => {
-            validate_args!(
-                supplied_command,
-                supplied_arguments,
-                3,
-                "<add/remove> <category> <value>",
-                ""
-            );
+            // Instead of showing the usage, default to the list of available
+            // documentation
+            if supplied_arguments.len() == 1 {
+                validate_args!(
+                    supplied_command,
+                    supplied_arguments,
+                    3,
+                    "<help/example/add/remove/edit/display> <category> <value(=\"setting\")>",
+                    ""
+                );
+                return;
+            }
 
-            let config_mode = argument_index(1).expect("Missing mode");
-            let config_category = argument_index(2).expect("Missing command category");
-            let config_value = argument_index(3).expect("Missing value");
+            let config_mode = argument_index(1).unwrap_or("");
+            let config_category = argument_index(2).unwrap_or("");
+            let config_value = argument_index(3).unwrap_or("");
 
             config(config_mode, config_category, config_value);
         }
         "doc" => {
-            // Instead of showing the usage, default to the list of available
-            // documentation
-            if supplied_arguments.len() == 1 {
-                doc("list");
-                return;
-            }
+            validate_args!(
+                supplied_command,
+                supplied_arguments,
+                1,
+                "<list>/<information>",
+                ""
+            );
 
             let information_to_get = argument_index(1).unwrap();
 

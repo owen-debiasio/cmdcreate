@@ -24,7 +24,7 @@ use crate::{
 use std::process::exit;
 
 pub fn cmdcreate_usage() {
-    let (blue, cyan, yellow, magenta, red) = (
+    let (blue, cyan, yellow, magenta, reset) = (
         COLORS.blue,
         COLORS.cyan,
         COLORS.yellow,
@@ -42,36 +42,36 @@ pub fn cmdcreate_usage() {
     output!(
         "
 {project_name} {CURRENT_PROJECT_VERSION}
-Usage: {project_name} {magenta}(flags){red} [{blue}command{red}, {cyan}argument{red}] {yellow}<args> {magenta}(flags){red}
+Usage: {project_name} {magenta}<flag(s)>{reset} [{blue}command{reset}, {cyan}argument(s){reset}]{reset}
 
 Commands:
-  {blue}create{yellow}   <command>    <contents>{red}           Create a command
-  {blue}remove{yellow}   <command>{red}                         Remove a command
-  {blue}edit{yellow}     <command>{red}                         Modify contents of a command
-  {blue}list{red}                                       Display installed commands
-  {blue}search{yellow}   <command>{red}                         Searches for matched command
-  {blue}display{yellow}  <command>{red}                         Display contents of a command
-  {blue}rename{yellow}   <command>    <renamed>{red}            Renames a command
-  {blue}favorite{yellow} <add/remove> <command>{red}            Adds or removes a command from favorites
-  {blue}config{yellow}   <add/remove> <category> <value>{red}   Manage your configurations for cmdcreate
-  {blue}doc{yellow}      <information>{red}                     View various documentation references
+  {blue}create  {reset}   Create a command
+  {blue}remove  {reset}   Remove a command
+  {blue}edit    {reset}   Modify contents of a command
+  {blue}list    {reset}   Display installed commands
+  {blue}search  {reset}   Searches for matched command
+  {blue}display {reset}   Display contents of a command
+  {blue}rename  {reset}   Renames a command
+  {blue}favorite{reset}   Adds or removes a command from favorites
+  {blue}config  {reset}   Manage your configurations for cmdcreate
+  {blue}doc     {reset}   View various documentation references
 
   Update:
-    {blue}check{red}                                    Checks for updates
-    {blue}update{red}                                   Updates cmdcreate
+    {blue}check {reset}   Checks for updates
+    {blue}update{reset}   Updates cmdcreate
 
   Backup:
-    {blue}export{red} {yellow}<output directory>{red}                Exports your installed commands
-    {blue}import{red} {yellow}<file input>{red}                      Imports your exported commands
+    {blue}export{reset}   Exports your installed commands
+    {blue}import{reset}   Imports your exported commands
 
-Arguments and flags:
-  {cyan}-v{red}, {cyan}--version{red}                              Displays version
-  {cyan}-o{red}, {cyan}--offline{red}                              Runs cmdcreate in offline mode
-  {cyan}-m{red}, {cyan}--monochrome{red}                           Disables colorized output
-  {cyan}-V{red}, {cyan}--verbose{red}                              Print logs to output
-  {cyan}-s{red}, {cyan}--silent{red}                               Suppress any non-error output
-  {cyan}-f{red}, {cyan}--force{red}                                Force commands to be ran
-  {cyan}-b{red}, {cyan}--bypass-root{red}                          Bypass root requirement {yellow}(USE WITH CAUTION){red}
+Flags:
+  {cyan}-v{reset}, {cyan}--version    {reset}   Displays version
+  {cyan}-o{reset}, {cyan}--offline    {reset}   Runs cmdcreate in offline mode
+  {cyan}-m{reset}, {cyan}--monochrome {reset}   Disables colorized output
+  {cyan}-V{reset}, {cyan}--verbose    {reset}   Print logs to output
+  {cyan}-s{reset}, {cyan}--silent     {reset}   Suppress any non-error output
+  {cyan}-f{reset}, {cyan}--force      {reset}   Force commands to be ran
+  {cyan}-b{reset}, {cyan}--bypass-root{reset}   Bypass root requirement {yellow}(USE WITH CAUTION){reset}
 
 About:
    {project_name} allows you to create custom commands for your Linux terminal
