@@ -25,25 +25,28 @@ pub fn system_command_is_installed(command_to_check: &str) -> bool {
 
 #[macro_export]
 macro_rules! run_shell_command {
-    ($given_command:expr) => {{
+    ($($arg:tt)*) => {{
         use std::process::{Command, Stdio};
 
-        let command_interpolated = format!($given_command);
-        let command = command_interpolated.trim();
+        let command_string = format!($($arg)*);
+        let command = command_string.trim();
 
         if !command.is_empty() {
             let shell = $crate::configs::load_configuration("sys", "shell", "sh");
 
-            match Command::new(shell)
+            let result = Command::new(shell)
                 .arg("-c")
                 .arg(command)
                 .stdin(Stdio::inherit())
                 .stdout(Stdio::inherit())
                 .stderr(Stdio::inherit())
-                .status()
-            {
+                .status();
+
+            match result {
                 Ok(_) => {}
-                Err(e) => $crate::utils::io::error("Failed to run command:", &e.to_string()),
+                Err(e) => {
+                    $crate::utils::io::error("Failed to launch shell:", &e.to_string());
+                }
             }
         }
     }};
