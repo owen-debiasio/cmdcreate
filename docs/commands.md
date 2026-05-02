@@ -15,19 +15,20 @@ commands should function.
 
 ```none
 Commands:
-  create   <command>    <contents>   Create a custom command
-  remove   <command>                 Remove a custom command
-  edit     <command>                 Modify contents of a command
-  list                               Display custom commands
-  search   <command>                 Searches for matched command
-  reset                              Removes all installed commands
-  display  <command>                 Display contents of a command
-  rename   <command>    <renamed>    Renames a command
-  favorite <add/remove> <command>    Adds or removes a command from favorites
+  create     Create a command
+  remove     Remove a command
+  edit       Modify contents of a command
+  list       Display installed commands
+  search     Searches for matched command
+  display    Display contents of a command
+  rename     Renames a command
+  favorite   Adds or removes a command from favorites
+  config     Manage your configurations for cmdcreate
+  doc        View various documentation references
 
- Backup:
-    export <output directory>        Checks for updates
-    import <file input>              Imports your exported commands
+  Backup:
+    export   Exports your installed commands
+    import   Imports your exported commands
 ```
 
 ## Create
@@ -385,7 +386,7 @@ Command "cba" added to favorites. # (Shows if command was exported as favorite)
 
 #### Usage
 
-`cmdcreate config <add/remove> <category> <value>`
+`cmdcreate config <help/example/add/remove/edit/display> <category> <value(="setting")>`
 
 #### Example output
 
@@ -422,4 +423,80 @@ Example: cmdcreate config add sys shell="bash"
 ```bash
 $ sudo cmdcreate config remove sys fake_key
 Error: Config key 'fake_key' not found in category 'sys'.
+```
+
+###### Edit config
+
+```bash
+$ sudo cmdcreate config edit
+# The file `/etc/cmdcreate.toml` will open in a text editor
+```
+
+###### Display config
+
+```bash
+$ sudo cmdcreate config display
+# The file `/etc/cmdcreate.toml` will be opened in a pager
+```
+
+###### Example
+
+```bash
+$ sudo cmdcreate config example
+# An example config will be opened in a pager
+```
+
+###### Help
+
+> [!NOTE]  
+> You could also run: `sudo cmdcreate doc configurations`
+
+```bash
+$ sudo cmdcreate config help
+# Documentation for configurations will be opened in a pager
+```
+
+## Doc
+
+### Have documentation for cmdcreate at your fingertips
+
+#### Usage
+
+`cmdcreate doc <list>/<information>`
+
+#### Example output
+
+##### View information of your choice
+
+> [!NOTE]  
+> The resource `about` is being used in this example
+
+```bash
+$ sudo cmdcreate doc about
+# Documentation for your information your request will be opened in a pager
+```
+
+##### List available information to view
+
+```bash
+$ sudo cmdcreate doc list
+> Available options:
+----Main Repository Information----
+main              The main README file.
+changelog         The complete version history of cmdcreate.
+license           The license for cmdcreate.
+security          Security information.
+contributing      Information about contributing.
+code_of_conduct   View information about the code of conduct.
+----Main Documentation----
+intro             Intro to the documentation.
+about             About cmdcreate and its purpose.
+commands          About the current commands in cmdcreate.
+configurations    Information of configuring cmdcreate.
+developing        Information on developing cmdcreate.
+structure         The file structure of cmdcreate.
+updates           Information on updates.
+----Other Information for Development----
+testing           Information about testing the features of cmdcreate.
+packaging         Information about packaging cmdcreate.
 ```
