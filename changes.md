@@ -822,3 +822,4 @@ Licensed under the GNU General Public License v3.0 or later.
 - Logs are now stored in `/tmp/`. They are deleted on reboot/shutdown.
 - Readded the ability to update via the AUR when using `cmdcreate update`
 - Overhauled filesystem initialization
+- Fixed documentation not being deleted after being retrieved
