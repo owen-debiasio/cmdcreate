@@ -22,12 +22,10 @@ use crate::{
         colors::COLORS,
         io::{ask_for_confirmation, error},
         net::not_connected_to_internet,
+        fs::{core::{create_folder, path_exists}, paths::PATHS, misc::{download_file_to_location_via_curl, use_pager_on_file}}
     },
 };
 
-use crate::utils::fs::core::{create_folder, path_exists};
-use crate::utils::fs::misc::{download_file_to_location_via_curl, use_pager_on_file};
-use crate::utils::fs::paths::PATHS;
 use std::process::exit;
 
 pub const YEAR: &str = "2026";

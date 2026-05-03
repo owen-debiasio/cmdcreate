@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::version::check;
 use crate::{
     commands::{
         config::config, create::create, display::display, doc::doc, edit::edit, export::export,
@@ -27,7 +26,7 @@ use crate::{
         io::error,
         sys::{arguments::arguments_force_actions, env::root_check},
     },
-    version::print_version_info,
+    version::{check, print_version_info},
 };
 
 macro_rules! validate_args {

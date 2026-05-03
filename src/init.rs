@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::utils::fs::init::init_filesystem;
-use crate::utils::sys::env::running_as_root;
 use crate::{
     CURRENT_PROJECT_VERSION,
     configs::init_configs,
@@ -26,8 +24,9 @@ use crate::{
         sys::{
             cpu::ARCH,
             distro::{get_distro_base, installation_method},
-            env::ENVIRONMENT_VARIABLES,
+            env::{running_as_root, ENVIRONMENT_VARIABLES},
         },
+        fs::init::init_filesystem
     },
     version::get_build_status,
 };
