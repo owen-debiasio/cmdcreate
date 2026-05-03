@@ -77,7 +77,7 @@ pub fn get_installed_commands() -> Vec<String> {
     });
 
     // Manually convert the original Vec<Pathbuf> to
-    // Vec<String> because for me it makes it easier
+    // Vec<String> because for me, it makes it easier
     // to deal with retrieving the installed commands.
     let mut retrieved_commands: Vec<String> = Vec::new();
     for command in retrieved_commands_pathbuf {
