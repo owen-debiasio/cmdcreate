@@ -14,14 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::commands::doc::{doc, view_documentation_file};
-use crate::commands::edit::get_available_editor;
-use crate::utils::fs::use_pager_on_file;
 use crate::{
+    commands::{
+        doc::{doc, view_documentation_file},
+        edit::get_available_editor,
+    },
     output, run_shell_command,
     utils::{
         colors::COLORS,
-        fs::{PATHS, read_file_to_string, write_to_file},
+        fs::{PATHS, read_file_to_string, use_pager_on_file, write_to_file},
         io::error,
     },
 };
