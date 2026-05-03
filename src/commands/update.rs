@@ -24,8 +24,8 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{
-            clone_repository, delete_file, delete_folder, download_file_to_location_via_curl,
-            install_binary, path_exists,
+            core::{delete_file, delete_folder, path_exists},
+            misc::{clone_repository, download_file_to_location_via_curl, install_binary},
         },
         io::{ask_for_confirmation, error},
         net::not_connected_to_internet,
@@ -139,7 +139,7 @@ fn update_via_aur() {
 
     run_shell_command!("{command_to_install}");
 
-    delete_folder("/tmp/cmdcreate_aur_tmp").expect("Failed to delete AUR package");
+    delete_folder("/tmp/cmdcreate_aur_tmp");
 
     if !path_exists("/usr/bin/cmdcreate") {
         error("Update failed:", "Binary not found.")
@@ -188,7 +188,7 @@ fn update_via_package(package_type: &str) {
         ),
     }
 
-    delete_file(temp_package_file_path).expect("Failed to delete temp package file");
+    delete_file(temp_package_file_path);
 
     println!("\n{green}Update complete!");
 
@@ -200,7 +200,7 @@ fn build_from_source() {
 
     let cloned_repository_destination = "/tmp/cmdcreate";
 
-    delete_folder(cloned_repository_destination).expect("Failed to clear cache");
+    delete_folder(cloned_repository_destination);
 
     let rustup_install_command = "
         if ! command -v cargo >/dev/null; then \

@@ -21,7 +21,7 @@ use crate::{
     output,
     utils::{
         colors::COLORS,
-        fs::{PATHS, read_file_to_string},
+        fs::{core::read_file_to_string, paths::PATHS},
     },
 };
 

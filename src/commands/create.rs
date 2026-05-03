@@ -20,7 +20,10 @@ use crate::{
     output, run_shell_command,
     utils::{
         colors::COLORS,
-        fs::{PATHS, create_file, overwrite_file, read_file_to_string},
+        fs::{
+            core::{create_file, overwrite_file, read_file_to_string},
+            paths::PATHS,
+        },
         io::error,
         sys::arguments::args_contains,
     },
@@ -68,9 +71,9 @@ pub fn create(
         error("The contents of your command can not be empty.", "");
     }
 
-    create_file(path_to_command).expect("Failed to create initial command file");
+    create_file(path_to_command);
 
-    overwrite_file(path_to_command, full_contents_of_new_command).expect("Failed to write");
+    overwrite_file(path_to_command, full_contents_of_new_command);
 
     if user_edits_contents_in_editor {
         edit_command(command_to_create);

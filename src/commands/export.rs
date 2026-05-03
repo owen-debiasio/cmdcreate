@@ -20,7 +20,10 @@ use crate::{
     output,
     utils::{
         colors::COLORS,
-        fs::{PATHS, create_file, read_file_to_string, write_to_file},
+        fs::{
+            core::{create_file, read_file_to_string, write_to_file},
+            paths::PATHS,
+        },
     },
 };
 
@@ -41,7 +44,7 @@ pub fn export(path: &str) {
         Severity::Normal,
     );
 
-    create_file(path_of_file_to_export_to).expect("Failed to create file");
+    create_file(path_of_file_to_export_to);
 
     let installed_commands = get_installed_commands();
 
@@ -80,7 +83,7 @@ pub fn export(path: &str) {
             Severity::Normal,
         );
 
-        write_to_file(path_of_file_to_export_to, &data, true).expect("Failed to write to file");
+        write_to_file(path_of_file_to_export_to, &data, true);
     }
 
     output!(

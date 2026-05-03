@@ -20,7 +20,10 @@ use crate::{
     output,
     utils::{
         colors::COLORS,
-        fs::{PATHS, delete_file, path_exists, read_file_to_string},
+        fs::{
+            core::{delete_file, path_exists, read_file_to_string},
+            paths::PATHS,
+        },
         io::{ask_for_confirmation, error},
     },
 };
@@ -55,7 +58,7 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
 
     let path_of_command_to_remove = &format!("{}{command}", PATHS.command_installation_directory);
 
-    delete_file(path_of_command_to_remove).expect("Failed to delete command");
+    delete_file(path_of_command_to_remove);
 
     command_removal_success(path_of_command_to_remove);
 

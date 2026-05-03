@@ -24,7 +24,7 @@ use crate::{
     output, run_shell_command,
     utils::{
         colors::COLORS,
-        fs::{PATHS, path_exists},
+        fs::{core::path_exists, paths::PATHS},
         io::{ask_for_confirmation, error},
     },
 };

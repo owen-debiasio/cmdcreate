@@ -20,7 +20,10 @@ use crate::{
     commands::create::NEW_COMMAND_HEADER,
     logger::{Severity, log},
     utils::{
-        fs::{PATHS, path_exists, read_file_to_string},
+        fs::{
+            core::{path_exists, read_file_to_string},
+            paths::PATHS,
+        },
         io::error,
     },
 };

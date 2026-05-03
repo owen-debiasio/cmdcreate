@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::utils::fs::read_file_to_string;
+use crate::utils::fs::core::read_file_to_string;
 
 #[derive(Debug)]
 pub enum InstallMethod {

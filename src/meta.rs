@@ -20,15 +20,14 @@ use crate::{
     output,
     utils::{
         colors::COLORS,
-        fs::{
-            PATHS, create_folder, download_file_to_location_via_curl, path_exists,
-            use_pager_on_file,
-        },
         io::{ask_for_confirmation, error},
         net::not_connected_to_internet,
     },
 };
 
+use crate::utils::fs::core::{create_folder, path_exists};
+use crate::utils::fs::misc::{download_file_to_location_via_curl, use_pager_on_file};
+use crate::utils::fs::paths::PATHS;
 use std::process::exit;
 
 pub const YEAR: &str = "2026";
@@ -104,7 +103,7 @@ fn download_and_install_license() {
     let license_path = &PATHS.license;
 
     let license_install_directory = license_path.replace("LICENSE", "");
-    create_folder(&license_install_directory).expect("Failed to create folder");
+    create_folder(&license_install_directory);
 
     let license_download_path = &format!("{raw_repo_path}LICENSE");
     download_file_to_location_via_curl(license_path, license_download_path);

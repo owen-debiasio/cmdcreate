@@ -18,7 +18,7 @@ use crate::{
     commands::{create::create, favorite::favorite as add_favorite},
     logger::{Severity, log},
     output,
-    utils::{colors::COLORS, fs::read_file_to_string, io::error},
+    utils::{colors::COLORS, fs::core::read_file_to_string, io::error},
 };
 
 pub fn import(command_import_file: &str) {

@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::utils::fs::init::init_filesystem;
 use crate::utils::sys::env::running_as_root;
 use crate::{
     CURRENT_PROJECT_VERSION,
@@ -21,7 +22,6 @@ use crate::{
     logger::{Severity, log},
     meta::author_information::AUTHOR,
     utils::{
-        fs::init_filesystem,
         net::{internet_is_forced_disabled, not_connected_to_internet},
         sys::{
             cpu::ARCH,

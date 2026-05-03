@@ -20,7 +20,10 @@ use crate::{
     output,
     utils::{
         colors::COLORS,
-        fs::{PATHS, read_file_to_string, remove_from_file, write_to_file},
+        fs::{
+            core::{read_file_to_string, remove_from_file, write_to_file},
+            paths::PATHS,
+        },
         io::error,
     },
 };
@@ -68,7 +71,7 @@ fn add(command: &str) {
     // Newline added to avoid issues
     let command_to_write = &format!("{command}\n");
 
-    write_to_file(favorites_path, command_to_write, true).expect("Failed to write to file");
+    write_to_file(favorites_path, command_to_write, true);
 
     command_favorite_addition_check(command_to_write);
 
@@ -114,7 +117,7 @@ fn remove(command: &str) {
 
     let favorites_path = &PATHS.favorites;
 
-    remove_from_file(favorites_path, command).expect("Failed to remove contents from file");
+    remove_from_file(favorites_path, command);
 
     command_favorite_removed_check(command);
 

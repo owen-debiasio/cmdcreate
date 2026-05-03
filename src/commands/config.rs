@@ -22,7 +22,11 @@ use crate::{
     output, run_shell_command,
     utils::{
         colors::COLORS,
-        fs::{PATHS, read_file_to_string, use_pager_on_file, write_to_file},
+        fs::{
+            core::{read_file_to_string, write_to_file},
+            misc::use_pager_on_file,
+            paths::PATHS,
+        },
         io::error,
     },
 };
@@ -142,7 +146,7 @@ pub fn add(category: &str, value: &str) {
     }
 
     let new_contents = lines.join("\n");
-    write_to_file(config_path, &new_contents, false).expect("Failed to save configuration");
+    write_to_file(config_path, &new_contents, false);
 
     output!("Successfully updated config: {key} set to {setting}.", true);
 }
@@ -215,7 +219,7 @@ pub fn remove(category: &str, value: &str) {
         }
 
         let new_contents = lines.join("\n");
-        write_to_file(config_path, &new_contents, false).expect("Failed to update configuration");
+        write_to_file(config_path, &new_contents, false);
     } else {
         error(
             &format!("Config key '{value}' not found in category '{category}'."),

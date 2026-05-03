@@ -4,7 +4,10 @@ use crate::{
     output,
     utils::{
         colors::COLORS,
-        fs::{delete_file, download_file_to_location_via_curl, use_pager_on_file},
+        fs::{
+            core::delete_file,
+            misc::{download_file_to_location_via_curl, use_pager_on_file},
+        },
         io::error,
         net::not_connected_to_internet,
     },
@@ -102,5 +105,5 @@ pub fn view_documentation_file(file_path_name: &str) {
 
     use_pager_on_file(temp_doc_file_path);
 
-    delete_file(temp_doc_file_path).expect("Failed to delete doc file");
+    delete_file(temp_doc_file_path);
 }

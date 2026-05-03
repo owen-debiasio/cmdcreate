@@ -19,7 +19,7 @@ use crate::{
     logger::{Severity, log},
     run_shell_command,
     utils::{
-        fs::PATHS,
+        fs::paths::PATHS,
         io::error,
         sys::{command::system_command_is_installed, env::ENVIRONMENT_VARIABLES},
     },

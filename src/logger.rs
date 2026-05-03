@@ -16,11 +16,12 @@
 
 use chrono::Local;
 
+use crate::utils::fs::core::write_to_file;
+use crate::utils::fs::paths::PATHS;
 use crate::{
     configs::load_configuration,
     utils::{
         colors::{COLORS, remove_spare_color_codes},
-        fs::{PATHS, write_to_file},
         sys::arguments::args_contains,
     },
 };
@@ -57,9 +58,7 @@ pub fn log(text_to_log: &str, importance_level: Severity) {
     // Remove things like "\x1b[35m" from being written to the log file. It looks stupid
     let finalized_output_text = remove_spare_color_codes(log_file_text);
 
-    let potential_error_message =
-        &format!("Failed to write logs for message: {finalized_output_text}");
-    write_to_file(log_file_name, &finalized_output_text, true).expect(potential_error_message);
+    write_to_file(log_file_name, &finalized_output_text, true);
 }
 
 fn output_verbose_message(text_to_print: &str) {
