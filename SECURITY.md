@@ -11,6 +11,9 @@ Licensed under the GNU General Public License v3.0 or later.
 The only version I support is the latest. If you have any issues, open one and
 the fix should be available in the next version.
 
+However, I recommend running the latest git builds. They likely come with the
+latest patches for stupid mistakes I've made.
+
 | Version          | Supported          |
 | ---------------- | ------------------ |
 | Latest release   | :white_check_mark: |
