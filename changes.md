@@ -803,6 +803,8 @@ Licensed under the GNU General Public License v3.0 or later.
 ## v1.2.9
 
 - Code optimizations
+  - Reorganized filesystem related functions
+    - Now located in `src/utils/fs/`
 - Changes in usage for running as root
   - You now only need to run cmdcreate for some commands
     - You will need root for commands like:
