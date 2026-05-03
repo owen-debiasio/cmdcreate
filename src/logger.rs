@@ -20,8 +20,8 @@ use crate::{
     configs::load_configuration,
     utils::{
         colors::{COLORS, remove_spare_color_codes},
+        fs::{core::write_to_file, paths::PATHS},
         sys::arguments::args_contains,
-        fs::{paths::PATHS, core::write_to_file}
     },
 };
 

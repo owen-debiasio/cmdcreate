@@ -20,13 +20,13 @@ use crate::{
     logger::{Severity, log},
     meta::author_information::AUTHOR,
     utils::{
+        fs::init::init_filesystem,
         net::{internet_is_forced_disabled, not_connected_to_internet},
         sys::{
             cpu::ARCH,
             distro::{get_distro_base, installation_method},
-            env::{running_as_root, ENVIRONMENT_VARIABLES},
+            env::{ENVIRONMENT_VARIABLES, running_as_root},
         },
-        fs::init::init_filesystem
     },
     version::get_build_status,
 };

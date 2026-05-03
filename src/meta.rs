@@ -20,9 +20,13 @@ use crate::{
     output,
     utils::{
         colors::COLORS,
+        fs::{
+            core::{create_folder, path_exists},
+            misc::{download_file_to_location_via_curl, use_pager_on_file},
+            paths::PATHS,
+        },
         io::{ask_for_confirmation, error},
         net::not_connected_to_internet,
-        fs::{core::{create_folder, path_exists}, paths::PATHS, misc::{download_file_to_location_via_curl, use_pager_on_file}}
     },
 };
 
