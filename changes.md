@@ -799,3 +799,24 @@ Licensed under the GNU General Public License v3.0 or later.
       - Display the configurations to output
   - Overhauled to be more user-friendly
   - Fixed weird crashes
+
+## v1.2.9
+
+- Code optimizations
+- Changes in usage for running as root
+  - You now only need to run cmdcreate for some commands
+    - You will need root for commands like:
+      - `create`
+      - `remove`
+      - `edit`
+    - You will not need root for commands like:
+      - `list`
+      - `search`
+      - `export`
+    - `cmdcreate update` will require root depending on how you update
+    - Running flags no longer require root by themselves
+- Slightly improved the updating experience
+- Root status is now included in the verbose debug intro
+- Logs are now stored in `/tmp/`. They are deleted on reboot/shutdown.
+- Readded the ability to update via the AUR when using `cmdcreate update`
+- Overhauled filesystem initialization
