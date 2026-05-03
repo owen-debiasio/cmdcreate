@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
+    commands::update::update,
     logger::{Severity, log},
     meta::{author_information::AUTHOR, get_project_copyright_info, project_information::PROJECT},
     output,
@@ -166,4 +167,46 @@ Written by {project_author} <{project_author_email}>.
         ",
         true
     );
+}
+
+pub fn check() {
+    let (blue, green, magenta, reset) = (COLORS.blue, COLORS.green, COLORS.magenta, COLORS.reset);
+
+    if not_connected_to_internet() {
+        error(
+            "You must have internet to continue with this operation!",
+            "",
+        )
+    }
+
+    output!("\nChecking for updates...", true);
+
+    let author_username = AUTHOR.username;
+    let project_name = PROJECT.name;
+
+    let latest_stable_version = get_latest_tag_from_repo(author_username, project_name);
+    let current_version = CURRENT_PROJECT_VERSION;
+
+    if version_is_development_build() {
+        output!(
+            "\nYou are running a newer version {magenta}({current_version}){blue} \
+            than the latest release {green}({latest_stable_version}){reset}.",
+            true
+        );
+
+        return;
+    }
+
+    if current_version != latest_stable_version {
+        output!(
+            "{green}\nUpdate available: {current_version} -> {latest_stable_version}{reset}\n",
+            true
+        );
+
+        update();
+
+        return;
+    }
+
+    output!("Already up to date.", true);
 }
