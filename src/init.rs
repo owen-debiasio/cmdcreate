@@ -14,19 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::utils::sys::env::running_as_root;
 use crate::{
     CURRENT_PROJECT_VERSION,
     configs::init_configs,
     logger::{Severity, log},
     meta::author_information::AUTHOR,
     utils::{
-        fs::init_fs_layout,
-        io::{ask_for_confirmation, error},
+        fs::init_filesystem,
         net::{internet_is_forced_disabled, not_connected_to_internet},
         sys::{
             cpu::ARCH,
             distro::{get_distro_base, installation_method},
-            env::{ENVIRONMENT_VARIABLES, root_requirement_is_bypassed, running_as_root},
+            env::ENVIRONMENT_VARIABLES,
         },
     },
     version::get_build_status,
@@ -51,6 +51,8 @@ pub fn debug_intro() -> String {
         "connected"
     };
 
+    let root_status = running_as_root();
+
     let chosen_text_editor = &ENVIRONMENT_VARIABLES.text_editor;
     let shell_in_use = &ENVIRONMENT_VARIABLES.shell;
 
@@ -70,34 +72,14 @@ Installation Method: {installation_method:?}
 Internet status: {internet_status}
 Preferred text editor: {chosen_text_editor}
 Shell in use: {shell_in_use}
+Root status: {root_status}
 ----------------
 "
     )
 }
 
-fn root_check() {
-    let user_bypasses_root = root_requirement_is_bypassed();
-    let user_is_running_as_root = running_as_root();
-
-    if !user_is_running_as_root && !user_bypasses_root {
-        error("Please run cmdcreate as root.", "")
-    }
-
-    if user_bypasses_root && !user_is_running_as_root {
-        ask_for_confirmation(
-            "Root requirement is bypassed, which means instability \
-            and incompatibility will occur. Proceed?",
-            true,
-        );
-    }
-}
-
 pub fn init() {
-    root_check();
-
-    // These will NOT work if user is not running as root.
-    // Root access is required for the directories
-    init_fs_layout().expect("Failed to initialize filesystem");
+    init_filesystem();
     init_configs();
 
     log(

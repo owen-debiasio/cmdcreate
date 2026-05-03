@@ -14,24 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::version::check;
 use crate::{
     commands::{
-        config::config,
-        create::create,
-        display::display,
-        doc::doc,
-        edit::edit,
-        export::export,
-        favorite::favorite,
-        import::import,
-        list::list,
-        remove::remove,
-        rename::rename,
-        search::search,
-        update::{check, update},
+        config::config, create::create, display::display, doc::doc, edit::edit, export::export,
+        favorite::favorite, import::import, list::list, remove::remove, rename::rename,
+        search::search, update::update,
     },
     logger::{Severity, log},
-    utils::{colors::COLORS, io::error, sys::arguments::arguments_force_actions},
+    utils::{
+        colors::COLORS,
+        io::error,
+        sys::{arguments::arguments_force_actions, env::root_check},
+    },
     version::print_version_info,
 };
 
@@ -87,6 +82,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 "-i/--in_editor"
             );
 
+            root_check();
+
             let command_name = argument_index(1).unwrap_or("");
             let command_contents = argument_index(2).unwrap_or("");
 
@@ -100,6 +97,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 "<command> <new name>",
                 ""
             );
+
+            root_check();
 
             let old_command_name = argument_index(1).unwrap();
             let renamed_command_name = argument_index(2).unwrap();
@@ -115,6 +114,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 ""
             );
 
+            root_check();
+
             let command_operation = argument_index(1).unwrap(); // Either "add" or "remove"
             let name_of_command = argument_index(2).unwrap();
 
@@ -124,6 +125,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
         "remove" => {
             validate_args!(supplied_command, supplied_arguments, 1, "<command>", "");
 
+            root_check();
+
             for index in 1..=supplied_arguments.len() {
                 if let Some(command_to_remove) = argument_index(index) {
                     remove(command_to_remove, arguments_force_actions());
@@ -132,6 +135,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
         }
         "edit" => {
             validate_args!(supplied_command, supplied_arguments, 1, "<command>", "");
+
+            root_check();
 
             let command_to_edit = argument_index(1).unwrap();
 
@@ -153,6 +158,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
         }
         "import" => {
             validate_args!(supplied_command, supplied_arguments, 1, "<input file>", "");
+
+            root_check();
 
             let file_to_import_commands_from = argument_index(1).unwrap();
 
@@ -179,6 +186,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 );
                 return;
             }
+
+            root_check();
 
             let config_mode = argument_index(1).unwrap_or("");
             let config_category = argument_index(2).unwrap_or("");

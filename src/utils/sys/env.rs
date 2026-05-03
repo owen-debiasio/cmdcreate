@@ -14,10 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::{
+    logger::{Severity, log},
+    utils::{
+        io::{ask_for_confirmation, error},
+        sys::arguments::args_contains,
+    },
+};
 use rustix::process::geteuid;
 use std::{env::var, sync::LazyLock};
-
-use crate::utils::sys::arguments::args_contains;
 
 pub fn running_as_root() -> bool {
     // 0 is root, if it returns anything else, cmdcreate won't run
@@ -27,6 +32,40 @@ pub fn running_as_root() -> bool {
 pub fn root_requirement_is_bypassed() -> bool {
     // Either of these flags allow root bypass
     args_contains("-b") || args_contains("--bypass-root")
+}
+
+pub fn root_check() {
+    let user_bypasses_root = root_requirement_is_bypassed();
+    let user_is_running_as_root = running_as_root();
+
+    log(
+        "utils::sys::env::root_check(): \
+        Checking root status...",
+        Severity::Normal,
+    );
+
+    if !user_is_running_as_root && !user_bypasses_root {
+        error(
+            "\
+        To execute this action, \
+        please run cmdcreate as root.",
+            "",
+        )
+    }
+
+    if user_bypasses_root && !user_is_running_as_root {
+        log(
+            "utils::sys::env::root_check(): \
+            Root is being bypassed...",
+            Severity::Warn,
+        );
+
+        ask_for_confirmation(
+            "Root requirement is bypassed, which means instability \
+            and incompatibility will occur. Proceed?",
+            true,
+        );
+    }
 }
 
 pub struct Vars {
