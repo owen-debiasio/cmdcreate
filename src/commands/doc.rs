@@ -1,7 +1,7 @@
 use crate::{
     logger::{Severity, log},
     meta::{display_full_license, project_information::PROJECT},
-    output,
+    output, run_shell_command,
     utils::{
         colors::COLORS,
         fs::{
@@ -105,5 +105,9 @@ pub fn view_documentation_file(file_path_name: &str) {
 
     use_pager_on_file(temp_doc_file_path);
 
+    // Give the file perms to either root or regular user
+    // because it will not be able to be deleted otherwise
+    // for some reason
+    run_shell_command!("chmod 777 {temp_doc_file_path}");
     delete_file(temp_doc_file_path);
 }
