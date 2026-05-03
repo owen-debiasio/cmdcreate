@@ -171,7 +171,7 @@ pub fn delete_folder(path_of_folder_to_delete: &str) {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use anyhow::Result;
+
     use std::{
         env::temp_dir,
         fs::{create_dir_all, remove_dir_all, write},
@@ -188,31 +188,27 @@ mod tests {
     }
 
     #[test]
-    fn create_folder_creates_directory() -> Result<()> {
+    fn create_folder_creates_directory() {
         let temp_directory = test_dir("cmdcreate_create_folder").join("subdir");
         let path_of_temp_directory = temp_directory.to_string_lossy();
 
         create_folder(&path_of_temp_directory);
 
         assert!(temp_directory.exists());
-
-        Ok(())
     }
 
     #[test]
-    fn create_file_creates_file() -> Result<()> {
+    fn create_file_creates_file() {
         let file_to_be_created = test_dir("cmdcreate_create_file").join("file.txt");
         let path_of_file = file_to_be_created.to_string_lossy();
 
         create_file(&path_of_file);
 
         assert!(file_to_be_created.exists());
-
-        Ok(())
     }
 
     #[test]
-    fn write_to_file_overwrites() -> Result<()> {
+    fn write_to_file_overwrites() {
         let file_to_overwrite = test_dir("cmdcreate_write_file").join("file.txt");
         let path_of_file = file_to_overwrite.to_string_lossy();
 
@@ -221,12 +217,10 @@ mod tests {
         write_to_file(&path_of_file, sample_text, false);
 
         assert_eq!(read_file_to_string(&path_of_file), sample_text);
-
-        Ok(())
     }
 
     #[test]
-    fn write_to_file_appends() -> Result<()> {
+    fn write_to_file_appends() {
         let file_to_append = test_dir("cmdcreate_append_file").join("file.txt");
         let path_of_appended_file = file_to_append.to_string_lossy();
 
@@ -237,12 +231,10 @@ mod tests {
 
         assert!(appended_file_contents.contains('a'));
         assert!(appended_file_contents.contains('b'));
-
-        Ok(())
     }
 
     #[test]
-    fn remove_from_file_removes_line() -> Result<()> {
+    fn remove_from_file_removes_line() {
         let file_to_remove_contents = test_dir("cmdcreate_remove_from_file").join("file.txt");
         let path_of_that_file = file_to_remove_contents.to_string_lossy();
 
@@ -253,12 +245,10 @@ mod tests {
 
         assert!(!contents_of_that_file.contains("two"));
         assert!(contents_of_that_file.contains("one"));
-
-        Ok(())
     }
 
     #[test]
-    fn delete_file_removes_file() -> Result<()> {
+    fn delete_file_removes_file() {
         let file_to_delete = test_dir("cmdcreate_delete_file").join("file.txt");
         let path_to_deleted_file = file_to_delete.to_string_lossy();
 
@@ -266,12 +256,10 @@ mod tests {
         delete_file(&path_to_deleted_file);
 
         assert!(!file_to_delete.exists());
-
-        Ok(())
     }
 
     #[test]
-    fn delete_folder_removes_directory() -> Result<()> {
+    fn delete_folder_removes_directory() {
         let directory_to_delete = test_dir("cmdcreate_delete_folder").join("dir");
         let path_to_deleted_directory = directory_to_delete.to_string_lossy();
 
@@ -279,22 +267,18 @@ mod tests {
         delete_folder(&path_to_deleted_directory);
 
         assert!(!directory_to_delete.exists());
-
-        Ok(())
     }
 
     #[test]
-    fn path_exists_reports_correctly() -> Result<()> {
+    fn path_exists_reports_correctly() {
         let path_to_verify = test_dir("cmdcreate_exists").join("exists.txt");
         let path_of_the_path_that_needs_to_be_verified = path_to_verify.to_string_lossy();
 
         let sample_text = "this is a test";
 
         assert!(!path_exists(&path_of_the_path_that_needs_to_be_verified));
-        write(&path_to_verify, sample_text)?;
+        write(&path_to_verify, sample_text).expect("Failed to write file");
 
         assert!(path_exists(&path_of_the_path_that_needs_to_be_verified));
-
-        Ok(())
     }
 }
