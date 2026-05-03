@@ -32,12 +32,10 @@ use crate::{
         sys::{
             cpu::{ARCH, arch_is_supported, cpu_arch_check},
             distro::{DistroBase, InstallMethod, get_distro_base, installation_method},
+            env::{root_check, running_as_root},
         },
     },
-    version::{
-        CURRENT_PROJECT_VERSION, get_latest_commit_from_repo, get_latest_tag_from_repo,
-        version_is_development_build,
-    },
+    version::{get_latest_commit_from_repo, get_latest_tag_from_repo},
 };
 
 pub fn update() {
@@ -68,15 +66,12 @@ pub fn update() {
         InstallMethod::Aur => {
             let aur_install_confirmation = &format!(
                 "\n{blue}Arch Linux{reset}-based system detected. \
-                Updating via AUR is not directly supported here. \
-                Do you want to use the interactive update instead?"
+                Do you want to update via the AUR?"
             );
 
             if ask_for_confirmation(aur_install_confirmation, false) {
-                interactive_upgrade();
+                update_via_aur();
             }
-
-            error("Aborted.", "")
         }
 
         InstallMethod::Dpkg => {
@@ -86,10 +81,8 @@ pub fn update() {
             );
 
             if ask_for_confirmation(deb_install_confirmation, false) {
-                update_using_method(".deb");
+                update_via_package(".deb");
             }
-
-            interactive_upgrade();
         }
 
         InstallMethod::Rpm => {
@@ -99,18 +92,70 @@ pub fn update() {
             );
 
             if ask_for_confirmation(rpm_install_confirmation, false) {
-                update_using_method(".rpm");
+                update_via_package(".rpm");
             }
-
-            interactive_upgrade();
         }
 
-        InstallMethod::Other => interactive_upgrade(),
+        InstallMethod::Other => (),
     }
+
+    interactive_upgrade();
 }
 
-fn update_using_method(method_for_installation: &str) {
-    let (green, reset) = (COLORS.green, COLORS.reset);
+fn update_via_aur() {
+    let (blue, magenta, green) = (COLORS.blue, COLORS.magenta, COLORS.green);
+
+    if running_as_root() {
+        error(
+            "Please de-escalate from root to update using this method!",
+            "You can't use the AUR when running from root.",
+        )
+    }
+
+    let package_name: &str =
+        if ask_for_confirmation("Do you want to install the latest git?", false) {
+            "cmdcreate-git"
+        } else {
+            "cmdcreate"
+        };
+
+    output!(
+        "{blue}Updating... {magenta}Please wait as this will take a while",
+        true
+    );
+
+    let command_to_install = format!(
+        "set -e
+
+        sudo rm -rf /usr/bin/cmdcreate /tmp/cmdcreate_aur_tmp
+
+        git clone --quiet https://aur.archlinux.org/{package_name}.git /tmp/cmdcreate_aur_tmp
+
+        cd /tmp/cmdcreate_aur_tmp
+
+        makepkg -si --noconfirm -- --overwrite /usr/bin/cmdcreate > /dev/null 2>&1
+        ",
+    );
+
+    run_shell_command!("{command_to_install}");
+
+    delete_folder("/tmp/cmdcreate_aur_tmp").expect("Failed to delete AUR package");
+
+    if !path_exists("/usr/bin/cmdcreate") {
+        error("Update failed:", "Binary not found.")
+    }
+
+    output!("\n{green}Update complete!");
+
+    exit(0)
+}
+
+/// Only handles `.deb`, `.rpm`, and `binary` files. Updating via the `AUR` is handled separately.
+/// This is due to installing via the `AUR` requiring to not be run as root.
+fn update_via_package(package_type: &str) {
+    let green = COLORS.green;
+
+    root_check();
 
     let author_username = AUTHOR.username;
     let project_name = PROJECT.name;
@@ -123,7 +168,7 @@ fn update_using_method(method_for_installation: &str) {
     );
 
     let package_file_name =
-        &format!("cmdcreate-{latest_stable_release}-linux-{ARCH}{method_for_installation}");
+        &format!("cmdcreate-{latest_stable_release}-linux-{ARCH}{package_type}");
     let temp_package_file_path = &format!("/tmp/{package_file_name}");
 
     let project_repo = PROJECT.repository;
@@ -132,20 +177,20 @@ fn update_using_method(method_for_installation: &str) {
 
     download_file_to_location_via_curl(temp_package_file_path, package_file_download_path);
 
-    match method_for_installation {
+    match package_type {
         ".deb" => run_shell_command!("dpkg -i {temp_package_file_path} > /dev/null 2>&1"),
         ".rpm" => run_shell_command!("rpm -Uvh {temp_package_file_path} > /dev/null 2>&1"),
         "-bin" => install_binary("-Dm755", temp_package_file_path, "/usr/bin/cmdcreate"),
 
         _ => error(
             "Developer error: INVALID METHOD: (YOU SHOULDN'T BE ABLE TO SEE THIS)",
-            method_for_installation,
+            package_type,
         ),
     }
 
     delete_file(temp_package_file_path).expect("Failed to delete temp package file");
 
-    println!("\n{green}Update complete!{reset}");
+    println!("\n{green}Update complete!");
 
     exit(0)
 }
@@ -221,7 +266,7 @@ fn build_from_source() {
         error("Failed to update!", "Updated binary not found!")
     }
 
-    println!("\n{green}Update complete!{reset}");
+    output!("\n{green}Update complete!{reset}");
 
     exit(0)
 }
@@ -237,20 +282,6 @@ fn interactive_upgrade() {
     let installed_distro = get_distro_base();
     let cpu_arch_is_supported = arch_is_supported();
 
-    output!("\nSelect an available upgrade method:\n", true);
-
-    let mut chosen_update_method = Vec::new();
-
-    if installed_distro == DistroBase::Debian && cpu_arch_is_supported {
-        chosen_update_method.push(("deb", "Install via .deb file".to_string()));
-    }
-    if installed_distro == DistroBase::Fedora && cpu_arch_is_supported {
-        chosen_update_method.push(("rpm", "Install via .rpm file".to_string()));
-    }
-    if cpu_arch_is_supported {
-        chosen_update_method.push(("bin", "Install via raw binary".to_string()));
-    }
-
     let debian_build_warning = if installed_distro == DistroBase::Debian {
         format!(", {red}MAY INVOLVE MANUAL INTERVENTION{blue}")
     } else {
@@ -262,6 +293,31 @@ fn interactive_upgrade() {
     } else {
         ", universal compatibility"
     };
+
+    output!("\nSelect an available upgrade method:\n", true);
+
+    let mut chosen_update_method = Vec::new();
+
+    if installed_distro == DistroBase::Arch {
+        chosen_update_method.push((
+            "aur",
+            format!(
+                "\
+            Update via AUR{blue} \
+            {compatibility_notice}",
+            ),
+        ));
+    }
+
+    if installed_distro == DistroBase::Debian && cpu_arch_is_supported {
+        chosen_update_method.push(("deb", "Install via .deb file".to_string()));
+    }
+    if installed_distro == DistroBase::Fedora && cpu_arch_is_supported {
+        chosen_update_method.push(("rpm", "Install via .rpm file".to_string()));
+    }
+    if cpu_arch_is_supported {
+        chosen_update_method.push(("bin", "Install via raw binary".to_string()));
+    }
 
     chosen_update_method.push((
         "src",
@@ -282,58 +338,21 @@ fn interactive_upgrade() {
 
     let entered_update_method = input!("").trim().parse::<usize>().unwrap_or(0);
 
-    if entered_update_method == 0 || entered_update_method > chosen_update_method.len() {
-        error("Invalid selection: ", "");
+    if chosen_update_method.is_empty() || entered_update_method == 0 {
+        error("Please pick an option.", "")
+    }
+
+    if entered_update_method > chosen_update_method.len() {
+        error("Invalid selection.", "");
     }
 
     match chosen_update_method[entered_update_method - 1].0 {
-        "deb" => update_using_method(".deb"),
-        "rpm" => update_using_method(".rpm"),
-        "bin" => update_using_method("-bin"),
+        "deb" => update_via_package(".deb"),
+        "rpm" => update_via_package(".rpm"),
+        "bin" => update_via_package("-bin"),
+        "aur" => update_via_aur(),
         "src" => build_from_source(),
         "exit" => println!("Aborted."),
         _ => error("Unexpected error. Please try again.", ""),
     }
-}
-
-pub fn check() {
-    let (blue, green, magenta, reset) = (COLORS.blue, COLORS.green, COLORS.magenta, COLORS.reset);
-
-    if not_connected_to_internet() {
-        error(
-            "You must have internet to continue with this operation!",
-            "",
-        )
-    }
-
-    output!("\nChecking for updates...", true);
-
-    let author_username = AUTHOR.username;
-    let project_name = PROJECT.name;
-
-    let latest_stable_version = get_latest_tag_from_repo(author_username, project_name);
-    let current_version = CURRENT_PROJECT_VERSION;
-
-    if version_is_development_build() {
-        output!(
-            "\nYou are running a newer version {magenta}({current_version}){blue} \
-            than the latest release {green}({latest_stable_version}){reset}.",
-            true
-        );
-
-        return;
-    }
-
-    if current_version != latest_stable_version {
-        output!(
-            "{green}\nUpdate available: {current_version} -> {latest_stable_version}{reset}\n",
-            true
-        );
-
-        update();
-
-        return;
-    }
-
-    output!("Already up to date.", true);
 }
