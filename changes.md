@@ -823,3 +823,7 @@ Licensed under the GNU General Public License v3.0 or later.
 - Readded the ability to update via the AUR when using `cmdcreate update`
 - Overhauled filesystem initialization
 - Fixed documentation not being deleted after being retrieved
+
+## v1.3.0
+
+- Fixed passed args not being collected/read properly
