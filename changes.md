@@ -827,3 +827,4 @@ Licensed under the GNU General Public License v3.0 or later.
 ## v1.3.0
 
 - Fixed passed args not being collected/read properly
+- Code optimizations
