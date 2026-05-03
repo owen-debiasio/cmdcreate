@@ -29,6 +29,7 @@ use crate::{
         sys::{
             command::system_command_is_installed,
             distro::{DistroBase, get_distro_base},
+            env::{root_check, running_as_root},
         },
     },
 };
@@ -48,7 +49,7 @@ pub struct Paths {
     pub favorites: String,
     pub command_installation_directory: &'static str,
     pub license: &'static str,
-    pub log_directory: String,
+    pub log_directory: &'static str,
 }
 
 pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
@@ -61,7 +62,7 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     } else {
         "/usr/share/licenses/cmdcreate/LICENSE"
     },
-    log_directory: format!("{MAIN_PATH}/logs"),
+    log_directory: "/tmp/",
 });
 
 pub fn use_pager_on_file(file_path: &str) {
@@ -80,6 +81,8 @@ pub fn use_pager_on_file(file_path: &str) {
 }
 
 pub fn install_binary(mode: &str, binary: &str, destination: &str) {
+    root_check();
+
     log(
         &format!(
             "
@@ -157,18 +160,51 @@ pub fn download_file_to_location_via_curl(
     }
 }
 
-pub fn init_fs_layout() -> Result<()> {
-    create_folder(MAIN_PATH)?;
-    create_folder(&PATHS.log_directory)?;
-    create_folder(PATHS.command_installation_directory)?;
-    create_file(&PATHS.favorites)?;
-    create_file(PATHS.configuration_file)?;
+pub fn init_filesystem() {
+    let log_directory = &PATHS.log_directory;
+    let command_install_dir = PATHS.command_installation_directory;
+    let favorites_file = &PATHS.favorites;
+    let config_file = PATHS.configuration_file;
+
+    if path_exists(log_directory)
+        && path_exists(command_install_dir)
+        && path_exists(favorites_file)
+        && path_exists(config_file)
+        && path_exists(MAIN_PATH)
+    {
+        return;
+    }
+
+    if !running_as_root() {
+        error(
+            "Looks like you're running cmdcreate for the first time, \
+            please run cmdcreate as root to set up the filesystem.",
+            "",
+        )
+    }
+
+    create_folder(MAIN_PATH).expect("Failed to create main directory");
+    create_folder(log_directory).expect("Failed to create log directory");
+    create_folder(command_install_dir).expect("Failed to create the command install directory");
+    create_file(favorites_file).expect("Failed to create favorites file");
+    create_file(config_file).expect("Failed to create configuration file");
+
+    if !(path_exists(log_directory)
+        && path_exists(command_install_dir)
+        && path_exists(favorites_file)
+        && path_exists(config_file)
+        && path_exists(MAIN_PATH))
+    {
+        error(
+            "Failed to initialize filesystem!",
+            "Please make sure your are running as root!",
+        )
+    }
 
     log(
         "utils/fs::init_fs_layout(): Filesystem initialized",
         Severity::Normal,
     );
-    Ok(())
 }
 
 pub fn read_file_to_string(path_to_file_to_read: &str) -> String {
