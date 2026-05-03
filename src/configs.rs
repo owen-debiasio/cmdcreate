@@ -41,7 +41,7 @@ pub fn init_configs() {
 }
 
 static CONFIG: LazyLock<Value> = LazyLock::new(|| {
-    let config_file_contents: &str = &read_file_to_string(PATHS.configuration_file);
+    let config_file_contents = &read_file_to_string(PATHS.configuration_file);
 
     from_str(config_file_contents).expect("Failed to read file")
 });
