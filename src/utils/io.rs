@@ -30,7 +30,7 @@ use crate::{
 pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool {
     let (red, green, reset) = (COLORS.red, COLORS.green, COLORS.reset);
 
-    if arguments_force_actions() || output_is_silent() {
+    if arguments_force_actions() {
         return true;
     }
 
@@ -57,13 +57,12 @@ macro_rules! output {
 
     ($given_text:expr, $include_arrow:expr) => {{
         let text_interpolated = format!($given_text);
-        let text: &str;
 
-        if $crate::utils::io::output_is_silent() {
-            text = ""
+        let text = if $crate::utils::io::output_is_silent() {
+            ""
         } else {
-            text = text_interpolated.trim()
-        }
+            text_interpolated.trim()
+        };
 
         let (blue, reset) = (COLORS.blue, COLORS.reset);
 
@@ -82,11 +81,16 @@ macro_rules! output {
 macro_rules! input {
     ($given_text:expr) => {{
         use std::io::{self, Write};
+        use $crate::utils::colors::COLORS;
+
+        let (blue, reset) = (COLORS.blue, COLORS.reset);
 
         let text_interpolated = format!($given_text);
         let text = text_interpolated.trim().replace("> ", "");
 
-        $crate::output!("{text}", true);
+        // I'm using `println!` here to bypass the silent flag, because the user may need
+        // to read the things that cmdcreate asks you.
+        println!("{blue}> {text}{reset}");
 
         let _ = io::stdout().flush();
 
