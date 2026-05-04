@@ -829,3 +829,8 @@ Licensed under the GNU General Public License v3.0 or later.
 - Fixed passed args not being collected/read properly
 - Code optimizations
 - Fixed permission denied error for when you download license not as root
+- Y/N question prompts can no longer be silent, even when passing
+  `-s`/`--silent`. This is done to prevent cmdcreate from doing things without
+  your consent.
+- Shell commands are now made silent through the `-s`/`--silent` flags rather
+  than manually
