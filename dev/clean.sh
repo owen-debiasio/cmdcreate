@@ -21,6 +21,8 @@ RESET='\033[0m'
 
 set -euo pipefail
 
+./dev/format.sh
+
 echo -e "\n${BLUE}> Cleaning up Cargo...${RESET}"
 
 cargo clean
@@ -29,7 +31,5 @@ echo -e "\n${BLUE}> Cleaning up Python cache files...${RESET}"
 
 rm -rf ./testing/__pycache__/
 rm -rf ./testing/scripts/__pycache__/
-
-./dev/format.sh
 
 echo -e "\n${GREEN}> Cleaned up environment!${RESET}"
