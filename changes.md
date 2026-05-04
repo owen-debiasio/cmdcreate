@@ -834,3 +834,6 @@ Licensed under the GNU General Public License v3.0 or later.
   your consent.
 - Shell commands are now made silent through the `-s`/`--silent` flags rather
   than manually
+- `dev/clean.sh` now formats code before cleaning up cargo
+  - Before, it would clean up the Rust enviornment first, then run `clippy`
+    which created the directory `target` again.
