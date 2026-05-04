@@ -828,3 +828,4 @@ Licensed under the GNU General Public License v3.0 or later.
 
 - Fixed passed args not being collected/read properly
 - Code optimizations
+- Fixed permission denied error for when you download license not as root
