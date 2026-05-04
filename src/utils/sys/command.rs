@@ -34,19 +34,23 @@ macro_rules! run_shell_command {
         if !command.is_empty() {
             let shell = $crate::configs::load_configuration("sys", "shell", "sh");
 
+            // Determine if terminal output is visible
+            let stdout = if $crate::utils::io::output_is_silent() {
+                Stdio::null()
+            } else {
+                Stdio::inherit()
+            };
+
             let result = Command::new(shell)
                 .arg("-c")
                 .arg(command)
                 .stdin(Stdio::inherit())
-                .stdout(Stdio::inherit())
+                .stdout(stdout)
                 .stderr(Stdio::inherit())
                 .status();
 
-            match result {
-                Ok(_) => {}
-                Err(e) => {
-                    $crate::utils::io::error("Failed to launch shell:", &e.to_string());
-                }
+            if let Err(e) = result {
+                $crate::utils::io::error("Failed to launch shell:", &e.to_string());
             }
         }
     }};

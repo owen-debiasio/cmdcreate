@@ -27,7 +27,7 @@ use crate::{
             core::{delete_file, delete_folder, path_exists},
             misc::{clone_repository, download_file_to_location_via_curl, install_binary},
         },
-        io::{ask_for_confirmation, error},
+        io::{ask_for_confirmation, error, output_is_silent},
         net::not_connected_to_internet,
         sys::{
             cpu::{ARCH, arch_is_supported, cpu_arch_check},
@@ -48,6 +48,14 @@ pub fn update() {
             "You must have internet to continue with this operation!",
             "",
         )
+    }
+
+    if output_is_silent() {
+        ask_for_confirmation(
+            "I seriously don't recommend running the update \
+             command silently, do you want to continue?",
+            true,
+        );
     }
 
     let question_to_ask = &format!("\nDo you want to upgrade {project_name}?");
@@ -129,11 +137,11 @@ fn update_via_aur() {
 
         sudo rm -rf /usr/bin/cmdcreate /tmp/cmdcreate_aur_tmp
 
-        git clone --quiet https://aur.archlinux.org/{package_name}.git /tmp/cmdcreate_aur_tmp
+        git clone https://aur.archlinux.org/{package_name}.git /tmp/cmdcreate_aur_tmp
 
         cd /tmp/cmdcreate_aur_tmp
 
-        makepkg -si --noconfirm -- --overwrite /usr/bin/cmdcreate > /dev/null 2>&1
+        makepkg -si --noconfirm -- --overwrite /usr/bin/cmdcreate
         ",
     );
 
@@ -178,8 +186,8 @@ fn update_via_package(package_type: &str) {
     download_file_to_location_via_curl(temp_package_file_path, package_file_download_path);
 
     match package_type {
-        ".deb" => run_shell_command!("dpkg -i {temp_package_file_path} > /dev/null 2>&1"),
-        ".rpm" => run_shell_command!("rpm -Uvh {temp_package_file_path} > /dev/null 2>&1"),
+        ".deb" => run_shell_command!("dpkg -i {temp_package_file_path}"),
+        ".rpm" => run_shell_command!("rpm -Uvh {temp_package_file_path}"),
         "-bin" => install_binary("-Dm755", temp_package_file_path, "/usr/bin/cmdcreate"),
 
         _ => error(
@@ -207,25 +215,22 @@ fn build_from_source() {
             curl --proto '=https' --tlsv1.2 -sSf \
             https://sh.rustup.rs \
             | sh -s -- -y \
-            > /dev/null 2>&1; \
         fi";
 
     let dependency_install_command = match get_distro_base() {
         DistroBase::Arch => {
-            "pacman -Sy > /dev/null 2>&1 && pacman -S --needed --noconfirm \
-            cargo git less openssl curl base-devel > /dev/null 2>&1"
+            "pacman -Sy && pacman -S --needed --noconfirm \
+            cargo git less openssl curl base-devel"
         }
         DistroBase::Debian => {
-            "apt update -qq /dev/null 2>&1 && \
-            apt install -y -qq \
-            git less build-essential pkg-config libssl-dev curl \
-            > /dev/null 2>&1"
+            "apt update && \
+            apt install -y \
+            git less build-essential pkg-config libssl-dev curl"
         }
         DistroBase::Fedora => {
-            "dnf update -q /dev/null 2>&1 && \
-            dnf install -yq \
-            git-core less openssl-devel pkgconf-pkg-config \
-            > /dev/null 2>&1"
+            "dnf update && \
+            dnf install -y\
+            git-core less openssl-devel pkgconf-pkg-config"
         }
         DistroBase::Unknown => error("Your distro is unsupported!", "Unable to proceed."),
     };
@@ -247,9 +252,9 @@ fn build_from_source() {
         
         echo -e \"{blue}> Building... please wait...{reset}\"
         
-        rustup default stable > /dev/null 2>&1
+        rustup default stable
         
-        cargo build --quiet --release",
+        cargo build --release",
     );
 
     run_shell_command!("{script_to_build_cmdcreate}");

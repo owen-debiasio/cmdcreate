@@ -21,7 +21,7 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::core::path_exists,
-        io::error,
+        io::{error, output_is_silent},
         net::not_connected_to_internet,
         sys::{command::system_command_is_installed, env::root_check},
     },
@@ -85,8 +85,10 @@ pub fn clone_repository(destination: &str) {
 
     let project_repo = PROJECT.repository;
 
+    let clone_silently = if output_is_silent() { "--quiet" } else { "" };
+
     run_shell_command!(
-        "git clone --quiet --depth=1 \
+        "git clone {clone_silently} --depth=1 \
         {project_repo}.git {destination}"
     );
 
