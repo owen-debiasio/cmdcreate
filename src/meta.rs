@@ -27,6 +27,7 @@ use crate::{
         },
         io::{ask_for_confirmation, error},
         net::not_connected_to_internet,
+        sys::env::root_check,
     },
 };
 
@@ -100,6 +101,8 @@ pub fn display_full_license() {
 
 fn download_and_install_license() {
     let (green, reset) = (COLORS.green, COLORS.reset);
+
+    root_check();
 
     let raw_repo_path = PROJECT.repository_raw;
     let license_path = &PATHS.license;
