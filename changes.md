@@ -839,3 +839,4 @@ Licensed under the GNU General Public License v3.0 or later.
 - Slightly modified the output for the usage of cmdcreate to be better at color
   coding
 - Fix crash when user tries to build from source without root
+- Changed log directory to `/tmp/cmdcreate-logs/`
