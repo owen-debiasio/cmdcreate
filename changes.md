@@ -718,8 +718,7 @@ Licensed under the GNU General Public License v3.0 or later.
 - Updated both `cmdcreate` and `cmdcreate-git` PKGBUILD scripts
   - They were messy
   - Added fixes needed for updated dependencies
-- Created script to more easily install cmdcreate on non-Arch based
-  distros
+- Created script to more easily install cmdcreate on non-Arch based distros
 - Script `cmdcreate/dev/uninstall.sh` now handles the license when uninstalling
 
 ## 1.2.5
