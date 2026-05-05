@@ -837,3 +837,5 @@ Licensed under the GNU General Public License v3.0 or later.
 - `dev/clean.sh` now formats code before cleaning up cargo
   - Before, it would clean up the Rust enviornment first, then run `clippy`
     which created the directory `target` again.
+- Slightly modified the output for the usage of cmdcreate to be better at color
+  coding
