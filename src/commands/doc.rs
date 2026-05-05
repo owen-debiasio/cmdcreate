@@ -59,8 +59,8 @@ pub fn doc(info_to_retrieve: &str) {
     // docs/documentation.md.
     //
     // Note:
-    // "license" and "changelog" are exempt because they
-    // already have their own dedicated functions.
+    // "license" is exempt because it already has its own
+    // dedicated function.
     let doc_file_path: &str = match info_to_retrieve {
         "main" => "README.md",
         "changelog" => "changes.md",
