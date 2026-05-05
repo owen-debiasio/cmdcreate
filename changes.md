@@ -839,3 +839,4 @@ Licensed under the GNU General Public License v3.0 or later.
     which created the directory `target` again.
 - Slightly modified the output for the usage of cmdcreate to be better at color
   coding
+- Fix crash when user tries to build from source without root
