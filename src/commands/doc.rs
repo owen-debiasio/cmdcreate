@@ -61,7 +61,7 @@ pub fn doc(info_to_retrieve: &str) {
     // Note:
     // "license" is exempt because it already has its own
     // dedicated function.
-    let doc_file_path: &str = match info_to_retrieve {
+    let doc_file_path = match info_to_retrieve {
         "main" => "README.md",
         "changelog" => "changes.md",
         "license" => "none",

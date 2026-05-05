@@ -78,7 +78,7 @@ pub fn display_full_license() {
     if path_exists(path_to_license_file) {
         use_pager_on_file(path_to_license_file);
     } else {
-        let error_message: &str = "License file not found!";
+        let error_message = "License file not found!";
 
         let question = &format!(
             "{red}{error_message}{reset}{}",
