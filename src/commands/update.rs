@@ -358,7 +358,7 @@ fn interactive_upgrade() {
         "bin" => update_via_package("-bin"),
         "aur" => update_via_aur(),
         "src" => build_from_source(),
-        "exit" => println!("Aborted."),
+        "exit" => error("Aborted.", ""),
         _ => error("Unexpected error. Please try again.", ""),
     }
 }
