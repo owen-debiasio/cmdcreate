@@ -835,7 +835,7 @@ Licensed under the GNU General Public License v3.0 or later.
 - Shell commands are now made silent through the `-s`/`--silent` flags rather
   than manually
 - `dev/clean.sh` now formats code before cleaning up cargo
-  - Before, it would clean up the Rust enviornment first, then run `clippy`
+  - Before, it would clean up the Rust environment first, then run `clippy`
     which created the directory `target` again.
 - Slightly modified the output for the usage of cmdcreate to be better at color
   coding
