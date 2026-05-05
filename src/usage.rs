@@ -24,13 +24,7 @@ use crate::{
 use std::process::exit;
 
 pub fn cmdcreate_usage() {
-    let (blue, cyan, yellow, magenta, reset) = (
-        COLORS.blue,
-        COLORS.cyan,
-        COLORS.yellow,
-        COLORS.magenta,
-        COLORS.reset,
-    );
+    let (blue, cyan, yellow, reset) = (COLORS.blue, COLORS.cyan, COLORS.yellow, COLORS.reset);
 
     log(
         "usage::cmdcreate_usage(): Displaying usage information...",
@@ -41,8 +35,8 @@ pub fn cmdcreate_usage() {
 
     output!(
         "
-{project_name} {CURRENT_PROJECT_VERSION}
-Usage: {project_name} {magenta}<flag(s)>{reset} [{blue}command{reset}, {cyan}argument(s){reset}]{reset}
+{project_name} {reset}{CURRENT_PROJECT_VERSION}
+Usage: {blue}{project_name} {cyan}<flag(s)>{reset} [{blue}command{reset}, {yellow}argument(s){reset}]
 
 Commands:
   {blue}create  {reset}   Create a command
