@@ -206,6 +206,8 @@ fn update_via_package(package_type: &str) {
 fn build_from_source() {
     let (blue, magenta, green, reset) = (COLORS.blue, COLORS.magenta, COLORS.green, COLORS.reset);
 
+    root_check();
+
     let cloned_repository_destination = "/tmp/cmdcreate";
 
     delete_folder(cloned_repository_destination);
