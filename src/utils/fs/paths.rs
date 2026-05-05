@@ -37,5 +37,5 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     } else {
         "/usr/share/licenses/cmdcreate/LICENSE"
     },
-    log_directory: "/tmp/",
+    log_directory: "/tmp/cmdcreate-logs/",
 });
