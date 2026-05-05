@@ -214,9 +214,7 @@ fn build_from_source() {
 
     let rustup_install_command = "
         if ! command -v cargo >/dev/null; then \
-            curl --proto '=https' --tlsv1.2 -sSf \
-            https://sh.rustup.rs \
-            | sh -s -- -y \
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable; \
         fi";
 
     let dependency_install_command = match get_distro_base() {
@@ -231,7 +229,7 @@ fn build_from_source() {
         }
         DistroBase::Fedora => {
             "dnf update && \
-            dnf install -y\
+            dnf install -y \
             git-core less openssl-devel pkgconf-pkg-config"
         }
         DistroBase::Unknown => error("Your distro is unsupported!", "Unable to proceed."),
@@ -246,17 +244,18 @@ fn build_from_source() {
 
     let script_to_build_cmdcreate = format!(
         "set -e
-        {dependency_install_command} && {rustup_install_command}
+        {dependency_install_command}
+        {rustup_install_command}
         
-        [ -f \"/root/.cargo/env\" ] && . \"/root/.cargo/env\"
+        # Source from HOME to be more resilient than hardcoded /root/
+        [ -f \"$HOME/.cargo/env\" ] && . \"$HOME/.cargo/env\"
         
         cd \"{cloned_repository_destination}\"
         
         echo -e \"{blue}> Building... please wait...{reset}\"
         
-        rustup default stable
-        
-        cargo build --release",
+        # --locked ensures the build uses your exact dependency versions
+        cargo build --release --locked",
     );
 
     run_shell_command!("{script_to_build_cmdcreate}");
