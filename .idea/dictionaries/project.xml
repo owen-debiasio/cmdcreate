@@ -11,6 +11,7 @@
       <w>makepkg</w>
       <w>markdownlint</w>
       <w>noconfirm</w>
+      <w>reqwest</w>
       <w>tlsv</w>
     </words>
   </dictionary>
