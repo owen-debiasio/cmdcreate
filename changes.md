@@ -840,3 +840,7 @@ Licensed under the GNU General Public License v3.0 or later.
   coding
 - Fix crash when user tries to build from source without root
 - Changed log directory to `/tmp/cmdcreate-logs/`
+
+## v1.3.1
+
+- Enhanced UX
