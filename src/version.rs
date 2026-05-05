@@ -28,7 +28,7 @@ use crate::{
 use serde_json::Value;
 use std::{cmp::Ordering, error::Error};
 
-pub const CURRENT_PROJECT_VERSION: &str = "v1.3.0";
+pub const CURRENT_PROJECT_VERSION: &str = "v1.3.1";
 
 pub fn version_is_development_build() -> bool {
     let parse_version = |parsed_version_digits: &str| -> (u32, u32, u32) {
