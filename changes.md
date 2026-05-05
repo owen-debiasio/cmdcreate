@@ -715,10 +715,10 @@ Licensed under the GNU General Public License v3.0 or later.
     - `0.12.28` -> `0.13.2`
   - toml
     - `1.0.6` -> `1.1.2`
-- Updated both `cmdcreate` and `cmdcreate-git` PKGBUILDs
+- Updated both `cmdcreate` and `cmdcreate-git` PKGBUILD scripts
   - They were messy
   - Added fixes needed for updated dependencies
-- Created an install script to more easily install cmdcreate on non-Arch based
+- Created script to more easily install cmdcreate on non-Arch based
   distros
 - Script `cmdcreate/dev/uninstall.sh` now handles the license when uninstalling
 
@@ -727,8 +727,8 @@ Licensed under the GNU General Public License v3.0 or later.
 - Development utility bash scripts now have color to make them look cleaner
 - Favorites data and logs are now stored in `/usr/share/cmdcreate/`
 - Added more dependencies to development environment setup script
-- `src/dev/format.sh` now formats/fixes markdown (`.md`) and yaml (`.yml`) files
-- Workflow `markdown` now lints markdown (`.md`) and yaml (`.yml`) files
+- `src/dev/format.sh` now formats/fixes Markdown (`.md`) and YAML (`.yml`) files
+- Workflow `markdown` now lints Markdown (`.md`) and YAML (`.yml`) files
 - Added new command: `config`
   - Usage:
     - `cmdcreate config <add/remove> <category> <value>`
