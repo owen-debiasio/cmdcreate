@@ -88,20 +88,23 @@ cmdcreate update
 
 ##### Available options
 
+- Update using the AUR
+  - **Stable** and **latest git**
+  - **`x86_64` and `aarch64 (ARM64)`**
 - Download and install through the latest `Ubuntu/Debian` package file (`.deb`)
-  - **Stable version only**
-  - **x86_64 architectures only**
+  - **Stable only**
+  - **`x86_64` only**
 - Download and install through the latest `Fedora` package file (`.rpm`)
   - **Stable version only**
-  - **x86_64 architectures only**
+  - **`x86_64` architectures only**
 - Download the raw cmdcreate binary file
-  - **Stable version only**
-  - **x86_64 architectures only**
-  - **Should work on any distro**
+  - **Stable only**
+  - **`x86_64` architectures only**
+  - **Any distro**
 - Build from source
   - **Latest git only**
-  - **Should work on any CPU architecture**
-  - **Should work on any distro**
+  - **Any CPU architecture**
+  - **Any distro**
 
 > [!WARNING]
 >
