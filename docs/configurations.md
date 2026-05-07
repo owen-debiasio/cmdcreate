@@ -18,7 +18,8 @@ You are able to configure cmdcreate in various ways. All are listed here.
 - Your preferred shell for which cmdcreate runs shell commands in
 - Default: `sh`
 
-> [!NOTE] I recommend using `bash` just for compatibility’s sake.
+> [!NOTE]  
+> I recommend using `bash` just for compatibility’s sake.
 
 ## logs
 
