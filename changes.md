@@ -819,7 +819,7 @@ Licensed under the GNU General Public License v3.0 or later.
 - Slightly improved the updating experience
 - Root status is now included in the verbose debug intro
 - Logs are now stored in `/tmp/`. They are deleted on reboot/shutdown.
-- Readded the ability to update via the AUR when using `cmdcreate update`
+- Reintroduced the ability to update via the AUR when using `cmdcreate update`
 - Overhauled filesystem initialization
 - Fixed documentation not being deleted after being retrieved
 
@@ -844,3 +844,7 @@ Licensed under the GNU General Public License v3.0 or later.
 ## v1.3.1
 
 - Enhanced UX
+- Code optimizations
+- Fixed hang on startup when running for the first time
+  - I have no idea if this problem was exclusive to virtual machines, but that's
+    how I discovered the issue.
