@@ -44,6 +44,7 @@
     "PKGBUILD",
     "pkgdir",
     "pkgver",
+    "println",
     "printsrcinfo",
     "pycache",
     "pylint",
