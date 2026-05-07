@@ -58,7 +58,7 @@ yay -S cmdcreate-git
 You can find `.deb`, `.rpm` and standalone binary packages in the
 [latest release](https://github.com/owen-debiasio/cmdcreate/releases/latest).
 
-### Installer Script (Universal)
+### Installer Script
 
 This script will walk you through how you want to install cmdcreate depending on
 your distro.
