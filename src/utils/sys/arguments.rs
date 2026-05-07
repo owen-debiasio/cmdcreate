@@ -14,14 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use std::{env::args, sync::OnceLock};
+use std::env::args;
 
 pub fn args_contains(argument: &str) -> bool {
-    static ARGS: OnceLock<Vec<String>> = OnceLock::new();
+    let collected_args = return_args();
 
-    let processed_args = ARGS.get_or_init(return_args);
-
-    processed_args.iter().any(|arg| arg == argument)
+    collected_args.contains(&argument.to_string())
 }
 
 pub fn return_args() -> Vec<String> {

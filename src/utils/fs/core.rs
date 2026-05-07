@@ -24,6 +24,10 @@ use std::{
 };
 
 pub fn read_file_to_string(path_to_file_to_read: &str) -> String {
+    if !path_exists(path_to_file_to_read) {
+        return String::new();
+    }
+
     read_to_string(path_to_file_to_read)
         .unwrap_or_else(|err| {
             error(

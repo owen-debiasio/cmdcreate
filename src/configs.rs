@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use std::sync::LazyLock;
-use toml::{Value, from_str};
+use toml::{Value, from_str, map::Map};
 
 use crate::utils::{
     fs::core::{read_file_to_string, write_to_file},
@@ -41,9 +41,9 @@ pub fn init_configs() {
 }
 
 static CONFIG: LazyLock<Value> = LazyLock::new(|| {
-    let config_file_contents = &read_file_to_string(PATHS.configuration_file);
+    let config_file_contents = read_file_to_string(PATHS.configuration_file);
 
-    from_str(config_file_contents).expect("Failed to read file")
+    from_str(&config_file_contents).unwrap_or_else(|_| Value::Table(Map::new()))
 });
 
 pub fn load_configuration(

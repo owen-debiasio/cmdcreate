@@ -14,10 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use std::{
-    fmt::{Display, Formatter},
-    process::exit,
-};
+use std::process::exit;
 
 use crate::{
     input,
@@ -106,7 +103,9 @@ macro_rules! input {
 /// Error details are optional.
 /// In that case, provide the string but leave it empty
 pub fn error(error_message: &str, error_details: &str) -> ! {
-    let (red, reset) = (COLORS.red, COLORS.reset);
+    // Colors need to be hardcoded because it would crash otherwise
+    let red = "\x1b[31m";
+    let reset = "\x1b[0m";
 
     eprintln!(
         "{red}Error: {} {error_details}{reset}",
@@ -116,25 +115,24 @@ pub fn error(error_message: &str, error_details: &str) -> ! {
     exit(1)
 }
 
-#[derive(Debug)]
-pub struct TestError(pub String);
-
-use core::fmt;
-
-impl Display for TestError {
-    fn fmt(&self, formatter: &mut Formatter<'_>) -> fmt::Result {
-        write!(formatter, "{}", self.0)
-    }
-}
-
-#[allow(dead_code)]
-pub fn error_result<T>(error_result_message: &str) -> Result<T, TestError> {
-    Err(TestError(error_result_message.to_owned()))
-}
-
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use core::fmt;
+    use std::fmt::{Display, Formatter};
+
+    #[derive(Debug)]
+    pub struct TestError(pub String);
+
+    impl Display for TestError {
+        fn fmt(&self, formatter: &mut Formatter<'_>) -> fmt::Result {
+            write!(formatter, "{}", self.0)
+        }
+    }
+
+    #[allow(dead_code)]
+    pub fn error_result<T>(error_result_message: &str) -> Result<T, TestError> {
+        Err(TestError(error_result_message.to_owned()))
+    }
 
     #[test]
     fn error_returns_err() {
