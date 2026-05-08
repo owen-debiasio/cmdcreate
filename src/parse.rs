@@ -186,8 +186,6 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 return;
             }
 
-            root_check();
-
             let config_mode = argument_index(1).unwrap_or("");
             let config_category = argument_index(2).unwrap_or("");
             let config_value = argument_index(3).unwrap_or("");

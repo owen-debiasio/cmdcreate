@@ -28,6 +28,7 @@ use crate::{
             paths::PATHS,
         },
         io::error,
+        sys::env::root_check,
     },
 };
 
@@ -48,6 +49,12 @@ fn edit_config_file() {
 }
 
 pub fn config(mode: &str, category: &str, value: &str) {
+    // I have to make a whole separate match statement for this bro
+    match mode {
+        "add" | "remove" | "edit" => root_check(),
+        _ => (), // Continue if none of those
+    }
+
     match mode {
         "add" | "remove" => init_config_changes(mode, category, value),
 
