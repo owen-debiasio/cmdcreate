@@ -40,7 +40,7 @@ pub fn favorite(action: &str, command: &str) {
         "add" => add(command),
         "remove" => remove(command),
 
-        _ => error("Invalid option:", action),
+        _ => error("Invalid option:", Some(action)),
     }
 }
 
@@ -56,7 +56,7 @@ fn add(command: &str) {
     let favorites_path = &PATHS.favorites;
 
     if !cmdcreate_command_is_installed(command) {
-        error(&format!("Command \"{command}\" does not exist!"), "")
+        error(&format!("Command \"{command}\" does not exist!"), None)
     }
 
     if command_is_in_favorites(command) {
@@ -91,7 +91,7 @@ fn command_favorite_addition_check(command: &str) {
     if !command_is_in_favorites(command) {
         error(
             "Failed to remove command from favorites!",
-            "Command is still located in configuration.",
+            Some("Command is still located in configuration."),
         );
     }
 
@@ -112,7 +112,7 @@ fn remove(command: &str) {
     );
 
     if !command_is_in_favorites(command) {
-        error("Command isn't in favorites:", command);
+        error("Command isn't in favorites:", Some(command));
     }
 
     let favorites_path = &PATHS.favorites;
@@ -137,7 +137,7 @@ fn command_favorite_removed_check(command: &str) {
     if command_is_in_favorites(command) {
         error(
             "Failed to remove command from favorites!",
-            "Command is still located in configuration.",
+            Some("Command is still located in configuration."),
         );
     }
 

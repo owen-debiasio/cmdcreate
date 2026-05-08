@@ -46,7 +46,7 @@ pub fn update() {
     if not_connected_to_internet() {
         error(
             "You must have internet to continue with this operation!",
-            "",
+            None,
         )
     }
 
@@ -116,7 +116,7 @@ fn update_via_aur() {
     if running_as_root() {
         error(
             "Please de-escalate from root to update using this method!",
-            "You can't use the AUR when running from root.",
+            Some("You can't use the AUR when running from root."),
         )
     }
 
@@ -150,7 +150,7 @@ fn update_via_aur() {
     delete_folder("/tmp/cmdcreate_aur_tmp");
 
     if !path_exists("/usr/bin/cmdcreate") {
-        error("Update failed:", "Binary not found.")
+        error("Update failed:", Some("Binary not found."))
     }
 
     output!("\n{green}Update complete!");
@@ -192,7 +192,7 @@ fn update_via_package(package_type: &str) {
 
         _ => error(
             "Developer error: INVALID METHOD: (YOU SHOULDN'T BE ABLE TO SEE THIS)",
-            package_type,
+            Some(package_type),
         ),
     }
 
@@ -232,7 +232,7 @@ fn build_from_source() {
             dnf install -y \
             git-core less openssl-devel pkgconf-pkg-config"
         }
-        DistroBase::Unknown => error("Your distro is unsupported!", "Unable to proceed."),
+        DistroBase::Unknown => error("Your distro is unsupported! Unable to proceed.", None),
     };
 
     output!(
@@ -269,7 +269,7 @@ fn build_from_source() {
     );
 
     if !path_exists("/usr/bin/cmdcreate") {
-        error("Failed to update!", "Updated binary not found!")
+        error("Failed to update!", Some("Updated binary not found!"))
     }
 
     output!("\n{green}Update complete!{reset}");
@@ -345,11 +345,11 @@ fn interactive_upgrade() {
     let entered_update_method = input!("").trim().parse::<usize>().unwrap_or(0);
 
     if chosen_update_method.is_empty() || entered_update_method == 0 {
-        error("Please pick an option.", "")
+        error("Please pick an option.", None)
     }
 
     if entered_update_method > chosen_update_method.len() {
-        error("Invalid selection.", "");
+        error("Invalid selection.", None);
     }
 
     match chosen_update_method[entered_update_method - 1].0 {
@@ -358,7 +358,7 @@ fn interactive_upgrade() {
         "bin" => update_via_package("-bin"),
         "aur" => update_via_aur(),
         "src" => build_from_source(),
-        "exit" => error("Aborted.", ""),
-        _ => error("Unexpected error. Please try again.", ""),
+        "exit" => error("Aborted.", None),
+        _ => error("Unexpected error. Please try again.", None),
     }
 }

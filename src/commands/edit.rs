@@ -54,7 +54,7 @@ pub fn get_available_editor() -> String {
     chosen_editor
         .map_or_else(
             || {
-                error("No known editor is installed on your device.", "");
+                error("No known editor is installed on your device.", None);
             },
             |editor_that_is_chosen| *editor_that_is_chosen,
         )

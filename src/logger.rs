@@ -44,12 +44,11 @@ pub fn log(text_to_log: &str, importance_level: Severity) {
         Severity::Normal => &format!("{cyan}LOG{reset}"),
     };
 
-    // Should be located in /root/.local/share/cmdcreate/logs/
     let log_dir = &PATHS.log_directory;
     let log_file_name = &format!("{log_dir}/{time}.log");
 
     // Example:
-    // [<time>] [ERROR] Uh oh this happened
+    // [<time>] [LOG] <source function> <message>
     let log_file_text = format!("[{blue}{time}{reset}] [{log_type}] {text_to_log}\n");
 
     output_verbose_message(&log_file_text);

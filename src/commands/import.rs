@@ -34,7 +34,7 @@ pub fn import(command_import_file: &str) {
     let command_import_file_contents = read_file_to_string(command_import_file);
 
     if command_import_file_contents.trim().is_empty() {
-        error("Import file is empty or unreadable.", "");
+        error("Import file is empty or unreadable.", None);
     }
 
     for entry in command_import_file_contents.replace("[|", "|").lines() {

@@ -57,7 +57,7 @@ pub fn config(mode: &str, category: &str, value: &str) {
         "edit" => edit_config_file(),
         "display" => use_pager_on_file(PATHS.configuration_file),
 
-        _ => error("Invalid action:", mode),
+        _ => error("Invalid action:", Some(mode)),
     }
 }
 
@@ -65,15 +65,15 @@ fn init_config_changes(config_mode: &str, config_category: &str, config_value: &
     let category_header = format!("[{config_category}]");
 
     if config_category.is_empty() {
-        error("Please provide a category.", "")
+        error("Please provide a category.", None)
     } else if !AVAILABLE_CATEGORIES.contains(&category_header.as_str()) {
-        error("Not a valid category:", config_category);
+        error("Not a valid category:", Some(config_category));
     }
 
     if config_value.is_empty() {
-        error("Please provide a value.", "")
+        error("Please provide a value.", None)
     } else if !AVAILABLE_VALUES.contains(&config_value) {
-        error("Not a valid value:", config_value);
+        error("Not a valid value:", Some(config_value));
     }
 
     if config_mode == "add" {
@@ -89,7 +89,7 @@ pub fn add(category: &str, value: &str) {
 
     let key = value.split('=').next().unwrap();
     if key.is_empty() || !value.contains('"') {
-        error("Please provide a setting.", "")
+        error("Please provide a setting.", None)
     }
 
     let parts: Vec<&str> = value.splitn(2, '=').collect();
@@ -222,8 +222,8 @@ pub fn remove(category: &str, value: &str) {
         write_to_file(config_path, &new_contents, false);
     } else {
         error(
-            &format!("Config key '{value}' not found in category '{category}'."),
-            "",
+            &format!("Config key \"{value}\" not found in category:"),
+            Some(category),
         );
     }
 }

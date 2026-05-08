@@ -39,7 +39,7 @@ pub fn search(command_to_search_for: &str) {
     if command_search_index == 0 {
         error(
             "No installed commands contain:",
-            &format!("{yellow}\"{command_to_search_for}\"{reset}"),
+            Some(&format!("{yellow}\"{command_to_search_for}\"{reset}")),
         );
     }
 

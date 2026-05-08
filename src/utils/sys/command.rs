@@ -50,7 +50,7 @@ macro_rules! run_shell_command {
                 .status();
 
             if let Err(e) = result {
-                $crate::utils::io::error("Failed to launch shell:", &e.to_string());
+                $crate::utils::io::error("Failed to launch shell:", Some(&e.to_string()));
             }
         }
     }};

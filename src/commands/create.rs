@@ -68,9 +68,8 @@ pub fn create(
     let user_edits_contents_in_editor = args_contains("--in_editor") || args_contains("-i");
 
     if contents_of_new_command.is_empty() && !user_edits_contents_in_editor {
-        error("The contents of your command can not be empty.", "");
+        error("The contents of your command can not be empty.", None)
     }
-
     create_file(path_to_command);
 
     overwrite_file(path_to_command, full_contents_of_new_command);
@@ -113,7 +112,10 @@ fn command_creation_success(
     if !cmdcreate_command_is_installed(command_to_check) {
         clean_from_failure(installed_command_path);
 
-        error("Failed to create command!", "Failed to create script.");
+        error(
+            "Failed to create command!",
+            Some("Failed to create script."),
+        );
     }
 
     if !installed_command_contents.contains(user_chosen_contents) {
@@ -121,7 +123,7 @@ fn command_creation_success(
 
         error(
             "Failed to create command!",
-            "Failed to write command contents.",
+            Some("Failed to write command contents."),
         )
     }
 

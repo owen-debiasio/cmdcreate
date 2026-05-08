@@ -214,7 +214,9 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
 
         "--version" | "-v" => print_version_info(),
 
-        _ if supplied_command.starts_with('-') => error("Invalid argument:", supplied_command),
-        _ => error("Invalid command:", supplied_command),
+        _ if supplied_command.starts_with('-') => {
+            error("Invalid argument:", Some(supplied_command))
+        }
+        _ => error("Invalid command:", Some(supplied_command)),
     }
 }

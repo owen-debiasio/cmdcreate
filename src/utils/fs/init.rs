@@ -43,7 +43,7 @@ pub fn init_filesystem() {
         error(
             "Looks like you're running cmdcreate for the first time, \
             please run cmdcreate as root to set up the filesystem.",
-            "",
+            None,
         )
     }
 
@@ -54,7 +54,7 @@ pub fn init_filesystem() {
     if !(path_exists(favorites_file) && path_exists(config_file) && path_exists(MAIN_PATH)) {
         error(
             "Failed to initialize filesystem!",
-            "Please make sure your are running as root!",
+            Some("Root access needed!"),
         )
     }
 

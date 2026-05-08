@@ -110,7 +110,7 @@ pub fn get_latest_tag_from_repo(owner: &str, repo: &str) -> String {
         }
         Err(tag_retrieve_error) => error(
             "Unable to retrieve latest tag:",
-            &tag_retrieve_error.to_string(),
+            Some(&tag_retrieve_error.to_string()),
         ),
     }
 }
@@ -175,7 +175,7 @@ pub fn check() {
     if not_connected_to_internet() {
         error(
             "You must have internet to continue with this operation!",
-            "",
+            None,
         )
     }
 

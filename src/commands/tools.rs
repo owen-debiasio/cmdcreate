@@ -50,7 +50,7 @@ pub fn cmdcreate_command_is_installed(command_to_find: &str) -> bool {
 
     error(
         &format!("Command \"{command_to_find}\" is not installed"),
-        "",
+        None,
     );
 }
 
@@ -63,7 +63,7 @@ pub fn get_installed_commands() -> Vec<String> {
     let command_install_directory = &PATHS.command_installation_directory;
 
     let mut retrieved_commands_pathbuf: Vec<PathBuf> = read_dir(command_install_directory)
-        .unwrap_or_else(|_| error("Error: Failed to read install directory!", ""))
+        .unwrap_or_else(|_| error("Error: Failed to read install directory!", None))
         .flatten()
         .map(|entry_in_index| entry_in_index.path())
         .filter(|path_to_command| path_to_command.is_file())
@@ -95,7 +95,7 @@ pub fn get_installed_commands() -> Vec<String> {
     }
 
     if retrieved_commands.is_empty() {
-        error("No commands are installed.", "");
+        error("No commands are installed.", None);
     }
 
     retrieved_commands

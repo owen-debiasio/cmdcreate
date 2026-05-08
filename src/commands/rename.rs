@@ -61,7 +61,10 @@ pub fn rename(old_command_name: &str, new_renamed_command_name: &str) {
         if ask_for_confirmation(question, false) {
             remove(new_renamed_command_name, true);
         } else {
-            error("You need to remove the old command before proceeding!", "");
+            error(
+                "You need to remove the old command before proceeding!",
+                None,
+            );
         }
     }
 
@@ -119,25 +122,31 @@ fn command_rename_success(
     // because it assumes command was already deleted.
     // It is checked manually instead.
     if !path_exists(path_of_old_command) {
-        error("Failed to rename command!", "Old command is still present.");
+        error(
+            "Failed to rename command!",
+            Some("Old command failed to be deleted."),
+        );
     }
 
     if !cmdcreate_command_is_installed(new_name) {
-        error("Failed to rename command!", "New command does not exist.");
+        error(
+            "Failed to rename command!",
+            Some("New command does not exist."),
+        );
     }
 
     if check_favorite_status {
         if command_is_in_favorites(old_name) {
             error(
                 "Failed to rename command!",
-                "Old command still remains in favorites.",
+                Some("Old command still remains in favorites."),
             );
         }
 
         if !command_is_in_favorites(new_name) {
             error(
                 "Failed to rename command!",
-                "New command is not in the favorites file.",
+                Some("New command is not in the favorites file."),
             );
         }
     }

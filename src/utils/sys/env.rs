@@ -49,7 +49,7 @@ pub fn root_check() {
             "\
         To execute this action, \
         please run cmdcreate as root.",
-            "",
+            None,
         )
     }
 

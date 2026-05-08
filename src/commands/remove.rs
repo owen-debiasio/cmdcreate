@@ -80,7 +80,10 @@ fn command_removal_success(path_of_command: &str) {
     // because it assumes command was already deleted.
     // It is checked manually instead.
     if path_exists(path_of_command) {
-        error("Failed to remove command!", "Failed to delete script.");
+        error(
+            "Failed to remove command!",
+            Some("Failed to delete script."),
+        );
     }
 
     log(

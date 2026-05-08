@@ -32,7 +32,7 @@ pub fn read_file_to_string(path_to_file_to_read: &str) -> String {
         .unwrap_or_else(|err| {
             error(
                 &format!("Failed reading file: {path_to_file_to_read}"),
-                &err.to_string(),
+                Some(&err.to_string()),
             );
         })
         .replace("\r\n", "\n") // Avoid CRLF encoding (because it screws shit up)

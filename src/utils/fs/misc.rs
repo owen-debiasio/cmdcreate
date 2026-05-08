@@ -31,12 +31,12 @@ pub fn use_pager_on_file(file_path: &str) {
     if !system_command_is_installed("less") {
         error(
             "Failed to find pager (less).",
-            "Please install 'less' to continue",
+            Some("Executable not found."),
         )
     }
 
     if !path_exists(file_path) {
-        error("Failed to page file!", "File not found!")
+        error("Failed to page file!", Some("File not found!"))
     }
 
     run_shell_command!("less {file_path}");
@@ -59,7 +59,7 @@ pub fn install_binary(mode: &str, binary: &str, destination: &str) {
     run_shell_command!("install {mode} {binary} {destination}");
 
     if !path_exists(destination) {
-        error("Failed to install binary!", "Binary not found!")
+        error("Failed to install binary!", Some("Binary not found!"))
     }
 
     log(
@@ -77,7 +77,7 @@ pub fn clone_repository(destination: &str) {
     if !system_command_is_installed("git") {
         error(
             "Unable to clone repository.",
-            "Please install git to continue.",
+            Some("Executable \"git\" not installed."),
         )
     }
 
@@ -93,7 +93,10 @@ pub fn clone_repository(destination: &str) {
     );
 
     if !path_exists(destination) {
-        error("Failed to clone repository!", "Destination not found!")
+        error(
+            "Failed to clone repository!",
+            Some("Destination not found!"),
+        )
     }
 
     log(
@@ -110,7 +113,10 @@ pub fn download_file_to_location_via_curl(
     path_of_file_to_be_downloaded: &str,
 ) {
     if not_connected_to_internet() {
-        error("Unable to retrieve file!", "You need internet first!")
+        error(
+            "Unable to retrieve file!",
+            Some("Not connected to the internet!"),
+        )
     }
 
     run_shell_command!(
@@ -120,6 +126,6 @@ pub fn download_file_to_location_via_curl(
     );
 
     if !path_exists(file_destination) {
-        error("Downloaded file not found!", "Failed to download file!")
+        error("Downloaded file not found!", None)
     }
 }

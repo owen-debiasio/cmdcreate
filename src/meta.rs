@@ -85,7 +85,7 @@ pub fn display_full_license() {
             if not_connected_to_internet() {
                 // Exit here now because there is no need to download and install the license
                 // if user has no internet
-                error(error_message, "")
+                error(error_message, None)
             } else {
                 " Do you want to download and install the license?"
             }
@@ -128,7 +128,10 @@ fn license_install_success_check(license_path: &str) {
     );
 
     if !path_exists(license_path) {
-        error("Failed to install license!", "License file not found!")
+        error(
+            "Failed to install license!",
+            Some("License file not found!"),
+        )
     }
 
     log(

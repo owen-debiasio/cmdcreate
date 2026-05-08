@@ -34,7 +34,7 @@ pub fn cpu_arch_check(error_reason: &str) {
     );
 
     if !arch_is_supported() {
-        error(error_reason, "")
+        error(error_reason, None)
     }
 
     log(

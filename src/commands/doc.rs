@@ -42,10 +42,7 @@ fn list_available_options() {
 
 pub fn doc(info_to_retrieve: &str) {
     if not_connected_to_internet() {
-        error(
-            "You need internet to continue!",
-            "Please connect to the internet!",
-        )
+        error("Internet access is needed for this action!", None)
     }
 
     if info_to_retrieve == "list" {
@@ -75,7 +72,7 @@ pub fn doc(info_to_retrieve: &str) {
         "testing" => "testing/README.md",
         "packaging" => "package/README.md",
 
-        _ => error("Invalid option:", info_to_retrieve),
+        _ => error("Invalid option:", Some(info_to_retrieve)),
     };
 
     log(

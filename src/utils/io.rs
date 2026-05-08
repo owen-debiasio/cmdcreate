@@ -36,7 +36,7 @@ pub fn ask_for_confirmation(question: &str, exit_if_user_declines: bool) -> bool
     if get_response_to_question.eq_ignore_ascii_case("y") {
         true
     } else if exit_if_user_declines {
-        error("\n\nAborted.", "")
+        error("\n\nAborted.", None)
     } else {
         false
     }
@@ -101,16 +101,21 @@ macro_rules! input {
 }
 
 /// Error details are optional.
-/// In that case, provide the string but leave it empty
-pub fn error(error_message: &str, error_details: &str) -> ! {
+/// In that case, provide `None`
+pub fn error(error_message: &str, error_details: Option<&str>) -> ! {
     // Colors need to be hardcoded because it would crash otherwise
     let red = "\x1b[31m";
     let reset = "\x1b[0m";
 
-    eprintln!(
-        "{red}Error: {} {error_details}{reset}",
-        error_message.trim()
-    );
+    if error_details.unwrap_or("").is_empty() {
+        eprintln!("{red}Error: {}{reset}", error_message.trim());
+    } else {
+        eprintln!(
+            "{red}Error: {} {}{reset}",
+            error_details.unwrap(),
+            error_message.trim()
+        );
+    }
 
     exit(1)
 }
