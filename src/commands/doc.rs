@@ -102,9 +102,13 @@ pub fn view_documentation_file(file_path_name: &str) {
     let temp_doc_file_path = "/tmp/cmdcreate_doc_temp.md";
     download_file_to_location_via_curl(temp_doc_file_path, doc_file_download_path);
 
-    if file_path_name == "changes.md" && args_contains("--latest") {
-        let changelog_file_contents = get_latest_changelog_entry(temp_doc_file_path).join("\n");
-        write_to_file(temp_doc_file_path, &changelog_file_contents, false);
+    let user_requests_latest = args_contains("--latest") || args_contains("-l");
+    if file_path_name == "changes.md" && user_requests_latest {
+        write_to_file(
+            temp_doc_file_path,
+            &get_latest_changelog_entry(temp_doc_file_path),
+            false,
+        );
     }
 
     use_pager_on_file(temp_doc_file_path);
@@ -116,7 +120,7 @@ pub fn view_documentation_file(file_path_name: &str) {
     delete_file(temp_doc_file_path);
 }
 
-fn get_latest_changelog_entry(changelog_file: &str) -> Vec<String> {
+fn get_latest_changelog_entry(changelog_file: &str) -> String {
     let contents = read_file_to_string(changelog_file);
     let mut latest_section = Vec::new();
 
@@ -130,7 +134,7 @@ fn get_latest_changelog_entry(changelog_file: &str) -> Vec<String> {
 
         latest_section.push(line.to_string());
     }
-
     latest_section.reverse();
-    latest_section
+
+    latest_section.join("\n")
 }
