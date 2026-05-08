@@ -5,11 +5,12 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{
-            core::delete_file,
+            core::{delete_file, read_file_to_string, write_to_file},
             misc::{download_file_to_location_via_curl, use_pager_on_file},
         },
         io::error,
         net::not_connected_to_internet,
+        sys::arguments::args_contains,
     },
 };
 
@@ -19,23 +20,24 @@ fn list_available_options() {
     output!(
         "Available options:\n\
         {magenta}----Main Repository Information----\n\
-        {blue}main              {cyan}The main README file.\n\
-        {blue}changelog         {cyan}The complete version history of cmdcreate.\n\
-        {blue}license           {cyan}The license for cmdcreate.\n\
-        {blue}security          {cyan}Security information.\n\
-        {blue}contributing      {cyan}Information about contributing.\n\
-        {blue}code_of_conduct   {cyan}View information about the code of conduct.\n\
+        {blue}main                 {cyan}The main README file.\n\
+        {blue}changelog            {cyan}The complete version history of cmdcreate.\\n
+    {blue}> {magenta}--latest{blue}/{magenta}-l        {cyan}View the entry for the latest version.\n\
+        {blue}license              {cyan}The license for cmdcreate.\n\
+        {blue}security             {cyan}Security information.\n\
+        {blue}contributing         {cyan}Information about contributing.\n\
+        {blue}code_of_conduct      {cyan}View information about the code of conduct.\n\
         {magenta}----Main Documentation----\n\
-        {blue}intro             {cyan}Intro to the documentation.\n\
-        {blue}about             {cyan}About cmdcreate and its purpose.\n\
-        {blue}commands          {cyan}About the current commands in cmdcreate.\n\
-        {blue}configurations    {cyan}Information of configuring cmdcreate.\n\
-        {blue}developing        {cyan}Information on developing cmdcreate.\n\
-        {blue}structure         {cyan}The file structure of cmdcreate.\n\
-        {blue}updates           {cyan}Information on updates.\n\
+        {blue}intro                {cyan}Intro to the documentation.\n\
+        {blue}about                {cyan}About cmdcreate and its purpose.\n\
+        {blue}commands             {cyan}About the current commands in cmdcreate.\n\
+        {blue}configurations       {cyan}Information of configuring cmdcreate.\n\
+        {blue}developing           {cyan}Information on developing cmdcreate.\n\
+        {blue}structure            {cyan}The file structure of cmdcreate.\n\
+        {blue}updates              {cyan}Information on updates.\n\
         {magenta}----Other Information for Development----\n\
-        {blue}testing           {cyan}Information about testing the features of cmdcreate.\n\
-        {blue}packaging         {cyan}Information about packaging cmdcreate.",
+        {blue}testing              {cyan}Information about testing the features of cmdcreate.\n\
+        {blue}packaging            {cyan}Information about packaging cmdcreate.",
         true
     );
 }
@@ -83,7 +85,7 @@ pub fn doc(info_to_retrieve: &str) {
         Severity::Normal,
     );
 
-    // Manual override, there is already a dedicated function
+    // Manual override: there is already a dedicated function
     // to retrieve the license. Extra steps are needed so the
     // function is kept.
     if info_to_retrieve == "license" {
@@ -100,6 +102,11 @@ pub fn view_documentation_file(file_path_name: &str) {
     let temp_doc_file_path = "/tmp/cmdcreate_doc_temp.md";
     download_file_to_location_via_curl(temp_doc_file_path, doc_file_download_path);
 
+    if file_path_name == "changes.md" && args_contains("--latest") {
+        let changelog_file_contents = get_latest_changelog_entry(temp_doc_file_path).join("\n");
+        write_to_file(temp_doc_file_path, &changelog_file_contents, false);
+    }
+
     use_pager_on_file(temp_doc_file_path);
 
     // Give the file perms to either root or regular user
@@ -107,4 +114,23 @@ pub fn view_documentation_file(file_path_name: &str) {
     // for some reason
     run_shell_command!("chmod 777 {temp_doc_file_path}");
     delete_file(temp_doc_file_path);
+}
+
+fn get_latest_changelog_entry(changelog_file: &str) -> Vec<String> {
+    let contents = read_file_to_string(changelog_file);
+    let mut latest_section = Vec::new();
+
+    for line in contents.lines().rev() {
+        let is_version = line.starts_with("# v") || line.starts_with("## v");
+
+        if is_version {
+            latest_section.push(line.to_string());
+            break;
+        }
+
+        latest_section.push(line.to_string());
+    }
+
+    latest_section.reverse();
+    latest_section
 }
