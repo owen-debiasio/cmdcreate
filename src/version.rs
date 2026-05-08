@@ -185,11 +185,10 @@ pub fn check() {
     let project_name = PROJECT.name;
 
     let latest_stable_version = get_latest_tag_from_repo(author_username, project_name);
-    let current_version = CURRENT_PROJECT_VERSION;
 
     if version_is_development_build() {
         output!(
-            "\nYou are running a newer version {magenta}({current_version}){blue} \
+            "\nYou are running a newer version {magenta}({CURRENT_PROJECT_VERSION}){blue} \
             than the latest release {green}({latest_stable_version}){reset}.",
             true
         );
@@ -197,9 +196,9 @@ pub fn check() {
         return;
     }
 
-    if current_version != latest_stable_version {
+    if CURRENT_PROJECT_VERSION != latest_stable_version {
         output!(
-            "{green}\nUpdate available: {current_version} -> {latest_stable_version}{reset}\n",
+            "{green}\nUpdate available: {CURRENT_PROJECT_VERSION} -> {latest_stable_version}{reset}\n",
             true
         );
 
