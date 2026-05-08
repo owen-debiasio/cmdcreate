@@ -848,3 +848,7 @@ Licensed under the GNU General Public License v3.0 or later.
 - Fixed hang on startup when running for the first time
   - I have no idea if this problem was exclusive to virtual machines, but that's
     how I discovered the issue.
+- You can now use the following subcommands of command `config` without root:
+  - `help`
+  - `example`
+  - `display`
