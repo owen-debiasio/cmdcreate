@@ -856,3 +856,7 @@ Licensed under the GNU General Public License v3.0 or later.
   `cmdcreate doc changelog`
   - `--latest`/`-l`
     - Get the latest entry in the changelog
+
+## v1.3.2
+
+- Fixed flag `-l` not being detected when running `cmdcreate doc changelog -l`
