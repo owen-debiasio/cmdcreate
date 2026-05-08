@@ -852,3 +852,7 @@ Licensed under the GNU General Public License v3.0 or later.
   - `help`
   - `example`
   - `display`
+- New flag for documentation file `changelog` in command
+  `cmdcreate doc changelog`
+  - `--latest`/`-l`
+    - Get the latest entry in the changelog
