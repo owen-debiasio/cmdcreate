@@ -30,6 +30,7 @@ words = [
     "openssl",
     "pacman",
     "paru",
+    "pkgbuild",
     "pkgconf",
     "pkgdir",
     "pylint",
@@ -48,5 +49,6 @@ words = [
     "uvh",
     "vscodium",
     "vvcr",
+    "xed",
     "yay",
 ]
