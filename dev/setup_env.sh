@@ -19,7 +19,6 @@ set -euo pipefail
 
 BLUE='\033[0;34m'
 GREEN='\033[0;32m'
-RED='\033[0;31m'
 RESET='\033[0m'
 
 if [[ -f /etc/os-release ]]; then
@@ -44,49 +43,20 @@ ask_yn() {
 
 install_dependencies() {
     local OS_FAMILY="${ID:-$ID_LIKE}"
-
     case "$OS_FAMILY" in
         *arch*)
             sudo pacman -S --needed --noconfirm \
-                rustup curl openssl git base-devel \
-                shfmt shellcheck bash-language-server \
-                python-black python-pylint python-lsp-server \
-                nodejs npm markdownlint-cli2 prettier marksman vscode-json-languageserver \
-                rpm-tools dpkg
+                rustup curl openssl git base-devel musl zig \
+                shfmt shellcheck bash-language-server rpm-tools dpkg
             ;;
-
-        *fedora* | *rhel* | *centos*)
-            sudo dnf install -y \
-                curl openssl-devel git gcc gcc-c++ make \
-                shfmt ShellCheck nodejs-bash-language-server \
-                python3-black python3-pylint \
-                nodejs npm rpm-build dpkg-dev
-
-            sudo npm install -g prettier markdownlint-cli2@0.13.0
-
-            if ! command -v rustup &> /dev/null; then
-                curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-            fi
+        *fedora*)
+            sudo dnf install -y curl openssl-devel git gcc gcc-c++ make musl-libc zig \
+                shfmt ShellCheck nodejs-bash-language-server rpm-build dpkg-dev
             ;;
-
-        *debian* | *ubuntu* | *pop*)
+        *debian* | *ubuntu*)
             sudo apt-get update
-            sudo apt-get install -y \
-                curl libssl-dev build-essential pkg-config git \
-                shfmt shellcheck \
-                black pylint \
-                nodejs npm rpm dpkg-dev
-
-            sudo npm install -g prettier markdownlint-cli2@0.13.0 bash-language-server
-
-            if ! command -v rustup &> /dev/null; then
-                curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-            fi
-            ;;
-
-        *)
-            echo -e "${RED}Unsupported distro!${RESET}"
-            exit 1
+            sudo apt-get install -y curl libssl-dev build-essential pkg-config git \
+                musl-tools zig shfmt shellcheck rpm dpkg-dev
             ;;
     esac
 }
@@ -105,6 +75,8 @@ fi
 
 rustup default stable
 rustup component add rust-analyzer
+rustup target add x86_64-unknown-linux-musl i686-unknown-linux-musl
+cargo install cargo-zigbuild
 
 echo -e "${BLUE}> Enter directory for cmdcreate dev environment:${RESET}"
 read -r -p "> " dev_dir

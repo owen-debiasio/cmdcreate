@@ -26,6 +26,7 @@ RESET='\033[0m'
 REPO="owen-debiasio/cmdcreate"
 OS_TYPE=""
 LICENSE_PATH=""
+ARCH="x86_64" # Default
 
 detect_distro() {
     if [ -f /etc/os-release ]; then
@@ -52,6 +53,18 @@ detect_distro() {
         OS_TYPE="other"
         LICENSE_PATH="/usr/local/share/doc/cmdcreate/LICENSE"
     fi
+}
+
+# Added architecture selection
+select_arch() {
+    echo -e "${BLUE}Select Architecture:${RESET}"
+    echo -e "1) x86_64 (64-bit)"
+    echo -e "2) i686 (32-bit)"
+    read -rp "Choice [1]: " arch_choice
+    case "$arch_choice" in
+        2) ARCH="i686" ;;
+        *) ARCH="x86_64" ;;
+    esac
 }
 
 get_latest_version() {
@@ -118,27 +131,29 @@ build_from_source() {
 }
 
 install_bin() {
+    select_arch
     get_latest_version
-    echo -e "${BLUE}> Downloading standalone binary...${RESET}"
-    URL="https://github.com/$REPO/releases/download/${VERSION}/cmdcreate-${VERSION}-linux-x86_64-bin"
+    echo -e "${BLUE}> Downloading standalone binary ($ARCH)...${RESET}"
+    URL="https://github.com/$REPO/releases/download/${VERSION}/cmdcreate-${VERSION}-linux-${ARCH}-bin"
     sudo curl -sSfL -o /usr/bin/cmdcreate "$URL"
     sudo chmod +x /usr/bin/cmdcreate
     install_license ""
 }
 
 install_pkg() {
+    select_arch
     get_latest_version
     TEMP_DIR=$(mktemp -d)
     cd "$TEMP_DIR"
 
     if [ "$OS_TYPE" == "debian" ]; then
-        echo -e "${BLUE}> Installing...${RESET}"
-        URL="https://github.com/$REPO/releases/download/${VERSION}/cmdcreate-${VERSION}-linux-x86_64.deb"
+        echo -e "${BLUE}> Installing .deb ($ARCH)...${RESET}"
+        URL="https://github.com/$REPO/releases/download/${VERSION}/cmdcreate-${VERSION}-linux-${ARCH}.deb"
         curl -sSfL -o cmdcreate.deb "$URL"
         sudo dpkg -i cmdcreate.deb > /dev/null 2>&1 || sudo apt-get install -f -y -qq
     else
-        echo -e "${BLUE}> Installing...${RESET}"
-        URL="https://github.com/$REPO/releases/download/${VERSION}/cmdcreate-${VERSION}-linux-x86_64.rpm"
+        echo -e "${BLUE}> Installing .rpm ($ARCH)...${RESET}"
+        URL="https://github.com/$REPO/releases/download/${VERSION}/cmdcreate-${VERSION}-linux-${ARCH}.rpm"
         curl -sSfL -o cmdcreate.rpm "$URL"
         sudo rpm -Uvh --quiet cmdcreate.rpm
     fi
@@ -171,8 +186,8 @@ echo -e "${BLUE}Welcome to the cmdcreate installer! Please choose an option:${RE
 case "$OS_TYPE" in
     debian)
         echo -e "${BLUE}1)${RESET} Build from source"
-        echo -e "${BLUE}2)${RESET} Debian (.deb) package (x86 only)"
-        echo -e "${BLUE}3)${RESET} Raw binary (x86 only)"
+        echo -e "${BLUE}2)${RESET} Debian (.deb) package"
+        echo -e "${BLUE}3)${RESET} Raw binary"
         echo ""
         read -rp "Select: " choice
         case $choice in
@@ -183,8 +198,8 @@ case "$OS_TYPE" in
         ;;
     fedora)
         echo -e "${BLUE}1)${RESET} Build from source"
-        echo -e "${BLUE}2)${RESET} RPM (.rpm) package (x86 only)"
-        echo -e "${BLUE}3)${RESET} Raw binary (x86 only)"
+        echo -e "${BLUE}2)${RESET} RPM (.rpm) package"
+        echo -e "${BLUE}3)${RESET} Raw binary"
         echo ""
         read -rp "Select: " choice
         case $choice in
@@ -196,7 +211,7 @@ case "$OS_TYPE" in
     arch)
         echo -e "${BLUE}1)${RESET} Build from source"
         echo -e "${BLUE}2)${RESET} AUR (stable and git)"
-        echo -e "${BLUE}3)${RESET} Raw binary (x86 only)"
+        echo -e "${BLUE}3)${RESET} Raw binary"
         echo ""
         read -rp "Select: " choice
         case $choice in
@@ -207,7 +222,7 @@ case "$OS_TYPE" in
         ;;
     *)
         echo -e "${BLUE}1)${RESET} Build from source"
-        echo -e "${BLUE}2)${RESET} Binary (x86 only)"
+        echo -e "${BLUE}2)${RESET} Binary"
         echo ""
         read -rp "Select: " choice
         case $choice in

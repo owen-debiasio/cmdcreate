@@ -24,79 +24,69 @@ YELLOW='\033[0;33m'
 RESET='\033[0m'
 
 if [[ $# -ne 1 ]]; then
-    echo -e "\n${YELLOW}> Usage: $0 <version> (no leading v)${RESET}"
+    echo -e "\n${YELLOW}> Usage: $0 <version>${RESET}"
     exit 1
 fi
 
 VERSION="$1"
-ARCH="x86_64"
+ARCHS=("x86_64" "i686")
 
-BINARY_NAME="cmdcreate-v${VERSION}-linux-${ARCH}-bin"
-BINARY_SRC="$HOME/Downloads/$BINARY_NAME"
-LICENSE_FILE="../LICENSE"
+cd "$(dirname "$0")/.."
 
-RPMTOP="$HOME/rpmbuild"
-SPEC_FILE="$RPMTOP/SPECS/cmdcreate.spec"
-SOURCE_FILE="cmdcreate-${VERSION}-linux-${ARCH}-bin"
+for ARCH in "${ARCHS[@]}"; do
+    BINARY_SRC="$HOME/Downloads/cmdcreate-v${VERSION}-linux-${ARCH}-bin"
 
-if [[ ! -f "$BINARY_SRC" ]]; then
-    echo -e "\n${RED}> Binary not found:${RESET} $BINARY_SRC"
-    exit 1
-fi
+    if [[ ! -f "$BINARY_SRC" ]]; then
+        echo -e "${RED}Error: Binary for $ARCH not found in Downloads.${RESET}"
+        continue
+    fi
 
-if [[ ! -f "$LICENSE_FILE" ]]; then
-    echo -e "\n${RED}> License file not found:${RESET} $LICENSE_FILE"
-    exit 1
-fi
+    echo -e "${BLUE}> Packaging .rpm for ${ARCH}...${RESET}"
 
-echo -e "${BLUE}> Packaging .rpm package...${RESET}"
+    RPMTOP="$(pwd)/rpmbuild_${ARCH}"
+    mkdir -p "$RPMTOP"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+    SPEC_FILE="$RPMTOP/SPECS/cmdcreate.spec"
 
-mkdir -p "$RPMTOP"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+    cat > "$SPEC_FILE" << EOF
+%define _dbpath %{_topdir}/db
+%define _binary_payload w9.gzdio
+%define _build_id_links none
+%define debug_package %{nil}
+%define __strip /bin/true
+%define _binaries_in_noarch_packages_terminate_build 0
 
-cp "$BINARY_SRC" "$RPMTOP/SOURCES/$SOURCE_FILE"
-cp "$LICENSE_FILE" "$RPMTOP/SOURCES/LICENSE"
-
-cat > "$SPEC_FILE" << EOF
 Name:           cmdcreate
 Version:        $VERSION
-Release:        1%{?dist}
-Summary:        Allows you to create custom commands for your custom scripts
-
+Release:        1
+Summary:        Custom command creator
 License:        GPL-3.0-or-later
-URL:            https://github.com/owen-debiasio/cmdcreate
-Source0:        $SOURCE_FILE
-Source1:        LICENSE
-
-BuildArch:      x86_64
-Requires:       curl, nano, git, less, openssl-libs, openssl-devel
+BuildArch:      noarch
 
 %description
 Allows you to create custom commands for your custom scripts.
 
-%prep
-cp %{SOURCE0} .
-cp %{SOURCE1} .
-
 %install
 mkdir -p %{buildroot}%{_bindir}
-install -m 755 %{SOURCE0} %{buildroot}%{_bindir}/cmdcreate
+install -m 755 $BINARY_SRC %{buildroot}%{_bindir}/cmdcreate
 
 %files
-%license LICENSE
 %{_bindir}/cmdcreate
-
-%changelog
-* $(date +"%a %b %d %Y") Owen Debiasio <owen.debiasio@gmail.com> - $VERSION-1
-- Initial RPM release
 EOF
 
-rpmbuild -bb "$SPEC_FILE"
+    mkdir -p "$RPMTOP/db"
+    rpmbuild -bb "$SPEC_FILE" --define "_topdir $RPMTOP" > /dev/null
 
-RPM_FILE=$(find "$RPMTOP/RPMS/x86_64" -name "cmdcreate-${VERSION}-*.rpm" | head -n1)
-FINAL_RPM="$HOME/Downloads/cmdcreate-v${VERSION}-linux-${ARCH}.rpm"
+    GENERATED_RPM=$(find "$RPMTOP/RPMS" -name "*.rpm" | head -n 1)
 
-cp "$RPM_FILE" "$FINAL_RPM"
+    if [[ -f "$GENERATED_RPM" ]]; then
+        FINAL_NAME="$HOME/Downloads/cmdcreate-v${VERSION}-linux-${ARCH}.rpm"
+        cp "$GENERATED_RPM" "$FINAL_NAME"
+        echo -e "${GREEN}> Successfully packaged ${ARCH} as ${FINAL_NAME}${RESET}"
+    else
+        echo -e "${RED}Error: RPM build failed for ${ARCH}${RESET}"
+    fi
 
-rm -rf ~/rpmbuild/
+    rm -rf "$RPMTOP"
+done
 
-echo -e "\n${GREEN}> Built and moved $FINAL_RPM to ~/Downloads${RESET}"
+echo -e "\n${GREEN}> Built and moved .rpm packages to ~/Downloads${RESET}"

@@ -18,7 +18,6 @@
 set -euo pipefail
 
 BLUE='\033[0;34m'
-RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 RESET='\033[0m'
@@ -28,27 +27,28 @@ if [[ $# -ne 1 ]]; then
     exit 1
 fi
 
-ARCH="x86_64"
+VERSION="$1"
+ARCHS=("x86_64" "i686")
 
-BINARY_NAME="cmdcreate-v$1-linux-${ARCH}-bin"
-BINARY_SRC="$HOME/Downloads/$BINARY_NAME"
+cd "$(dirname "$0")/.."
 
-echo -e "${BLUE}> Building binary...${RESET}"
+for ARCH in "${ARCHS[@]}"; do
+    echo -e "${BLUE}> Building static binary for ${ARCH}...${RESET}"
 
-cargo update
-rustup update
+    TARGET="${ARCH}-unknown-linux-musl"
+    BINARY_NAME="cmdcreate-v${VERSION}-linux-${ARCH}-bin"
 
-cargo build --release
+    cargo zigbuild --release --target "$TARGET"
 
-echo -e "${BLUE}> Packaging binary...${RESET}"
+    BUILD_PATH="target/${TARGET}/release/cmdcreate"
 
-cp ../target/release/cmdcreate ~/Downloads/
+    if [[ -f "$BUILD_PATH" ]]; then
+        cp "$BUILD_PATH" "$HOME/Downloads/${BINARY_NAME}"
+        echo -e "${GREEN}> Successfully packaged ${ARCH}${RESET}"
+    else
+        echo -e "${RED}Error: Could not find binary at $BUILD_PATH${RESET}"
+        exit 1
+    fi
+done
 
-mv "$HOME/Downloads/cmdcreate" "$BINARY_SRC"
-
-if [[ ! -f "$BINARY_SRC" ]]; then
-    echo -e "${RED}Binary not found:${RESET} $BINARY_SRC"
-    exit 1
-fi
-
-echo -e "\n${GREEN}> Packaged cmdcreate to:${RESET} $BINARY_NAME"
+echo -e "\n${GREEN}> All binaries built and moved to ~/Downloads${RESET}"

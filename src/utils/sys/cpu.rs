@@ -24,7 +24,7 @@ use crate::{
 pub static ARCH: &str = ARCHITECTURE;
 
 pub fn arch_is_supported() -> bool {
-    ARCH == "x86_64"
+    ARCH == "x86_64" || ARCH == "x86" || ARCH == "i386" || ARCH == "i686"
 }
 
 pub fn cpu_arch_check(error_reason: &str) {

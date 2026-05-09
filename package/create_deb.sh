@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # SPDX-License-Identifier: GPL-3.0-or-later
 # Copyright (C) 2026 Owen Debiasio
 #
@@ -29,57 +30,57 @@ if [[ $# -ne 1 ]]; then
 fi
 
 VERSION="$1"
-ARCH="x86_64"
-PKGDIR="cmdcreate-${VERSION}-linux-${ARCH}-deb"
-BINARY_NAME="cmdcreate-v${VERSION}-linux-${ARCH}-bin"
-BINARY_SRC="$HOME/Downloads/$BINARY_NAME"
+ARCHS=("x86_64" "i686")
 LICENSE_FILE="../LICENSE"
 
-cleanup() {
-    rm -rf "$PKGDIR"
-}
-trap cleanup EXIT
+cd "$(dirname "$0")"
 
 if [[ ! -x ./create_bin.sh ]]; then
     echo -e "\n${RED}> create_bin.sh missing or not executable.${RESET}"
     exit 1
 fi
 
-if [[ ! -f "$LICENSE_FILE" ]]; then
-    echo -e "\n${RED}> License file not found: ${RESET}$LICENSE_FILE"
-    exit 1
-fi
-
 ./create_bin.sh "$VERSION"
 
-if [[ ! -f "$BINARY_SRC" ]]; then
-    echo -e "\n${RED}> Binary $BINARY_SRC not found. Build failed?${RESET}"
-    exit 1
-fi
+echo -e "${BLUE}> Packaging .deb packages...${RESET}"
 
-echo -e "${BLUE}> Packaging .deb package...${RESET}"
+for ARCH in "${ARCHS[@]}"; do
+    DEB_ARCH="amd64"
+    [[ "$ARCH" == "i686" ]] && DEB_ARCH="i386"
 
-mkdir -p "$PKGDIR/DEBIAN" "$PKGDIR/usr/bin" "$PKGDIR/usr/share/doc/cmdcreate"
+    PKGDIR="cmdcreate-${VERSION}-linux-${ARCH}-deb"
+    BINARY_SRC="$HOME/Downloads/cmdcreate-v${VERSION}-linux-${ARCH}-bin"
 
-cat > "$PKGDIR/DEBIAN/control" << EOF
+    if [[ ! -f "$BINARY_SRC" ]]; then
+        echo -e "${RED}> Binary $BINARY_SRC not found. Skipping $ARCH.${RESET}"
+        continue
+    fi
+
+    echo -e "${BLUE}> Creating .deb for ${ARCH}...${RESET}"
+
+    mkdir -p "$PKGDIR/DEBIAN" "$PKGDIR/usr/bin" "$PKGDIR/usr/share/doc/cmdcreate"
+
+    cat > "$PKGDIR/DEBIAN/control" << EOF
 Package: cmdcreate
 Version: $VERSION
 Section: utils
 Priority: optional
-Architecture: amd64
-Maintainer: Owen Debiasio <owen.debiasio@gmail.com>
-Depends: curl, nano, git, less, build-essential, pkg-config, libssl-dev, libssl3 | libssl1.1
-Description: Allows you to create custom commands for your custom scripts
+Architecture: $DEB_ARCH
+Maintainer: Owen Debiasio <owen.debiasio@proton.me>
+Description: Create your own custom commands for your convenience
 EOF
 
-install -m755 "$BINARY_SRC" "$PKGDIR/usr/bin/cmdcreate"
-install -m644 "$LICENSE_FILE" "$PKGDIR/usr/share/doc/cmdcreate/copyright"
+    cp "$BINARY_SRC" "$PKGDIR/usr/bin/cmdcreate"
 
-dpkg-deb --build --root-owner-group "$PKGDIR"
+    if [[ -f "$LICENSE_FILE" ]]; then
+        cp "$LICENSE_FILE" "$PKGDIR/usr/share/doc/cmdcreate/copyright"
+    fi
 
-FINAL_DEB="cmdcreate-v${VERSION}-linux-${ARCH}.deb"
+    chmod 755 "$PKGDIR/usr/bin/cmdcreate"
 
-mv "${PKGDIR}.deb" "$FINAL_DEB"
-mv "$FINAL_DEB" "$HOME/Downloads/"
+    dpkg-deb --build --root-owner-group "$PKGDIR" "$HOME/Downloads/cmdcreate-v${VERSION}-linux-${ARCH}.deb" > /dev/null
 
-echo -e "\n${GREEN}> Built and moved $FINAL_DEB to ~/Downloads${RESET}"
+    rm -rf "$PKGDIR"
+done
+
+echo -e "\n${GREEN}> Built and moved .deb packages to ~/Downloads${RESET}"
