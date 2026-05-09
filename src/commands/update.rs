@@ -161,7 +161,7 @@ fn update_via_aur() {
 /// Only handles `.deb`, `.rpm`, and `binary` files. Updating via the `AUR` is handled separately.
 /// This is due to installing via the `AUR` requiring to not be run as root.
 fn update_via_package(package_type: &str) {
-    let green = COLORS.green;
+    let (green, blue, reset) = (COLORS.green, COLORS.blue, COLORS.reset);
 
     root_check();
 
@@ -172,11 +172,25 @@ fn update_via_package(package_type: &str) {
 
     cpu_arch_check(
         "You cannot update cmdcreate via this method using \
-         CPU Architectures other than \"x86_64\"!",
+         CPU Architectures other than x86 variants!",
     );
 
+    let target_arch = if ARCH == "x86_64" {
+        output!(
+            "
+            \nSelect target architecture:\n\
+            1]{reset} x86_64 {blue}(64-bit)\n\
+            2]{reset} i686 {blue}(32-bit)"
+        );
+
+        let arch_choice = input!("").trim().parse::<usize>().unwrap_or(1);
+        if arch_choice == 2 { "i686" } else { "x86_64" }
+    } else {
+        "i686"
+    };
+
     let package_file_name =
-        &format!("cmdcreate-{latest_stable_release}-linux-{ARCH}{package_type}");
+        &format!("cmdcreate-{latest_stable_release}-linux-{target_arch}{package_type}");
     let temp_package_file_path = &format!("/tmp/{package_file_name}");
 
     let project_repo = PROJECT.repository;
@@ -190,10 +204,7 @@ fn update_via_package(package_type: &str) {
         ".rpm" => run_shell_command!("rpm -Uvh {temp_package_file_path}"),
         "-bin" => install_binary("-Dm755", temp_package_file_path, "/usr/bin/cmdcreate"),
 
-        _ => error(
-            "Developer error: INVALID METHOD: (YOU SHOULDN'T BE ABLE TO SEE THIS)",
-            Some(package_type),
-        ),
+        _ => error("Developer error: INVALID METHOD", Some(package_type)),
     }
 
     delete_file(temp_package_file_path);
