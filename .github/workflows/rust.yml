@@ -1,4 +1,4 @@
-name: Rust Lint
+Name: Rust Lint
 
 on:
   push:
@@ -31,6 +31,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          # musl-tools provides musl-gcc for x86_64
+          # gcc-multilib provides the headers/tools for 32-bit (i686)
+          sudo apt-get install -y musl-tools gcc-multilib
+
       - name: Install Rust and Targets
         uses: dtolnay/rust-toolchain@stable
         with:
@@ -44,14 +51,10 @@ jobs:
         run: cargo fmt --all -- --check
 
       - name: Clippy (x86_64)
-        run:
-          cargo clippy --target x86_64-unknown-linux-musl --all-targets
-          --all-features
+        run: cargo clippy --target x86_64-unknown-linux-musl --all-targets --all-features
 
       - name: Clippy (i686)
-        run:
-          cargo clippy --target i686-unknown-linux-musl --all-targets
-          --all-features
+        run: cargo clippy --target i686-unknown-linux-musl --all-targets --all-features
 
       - name: Build (x86_64 release)
         run: cargo build --release --target x86_64-unknown-linux-musl
