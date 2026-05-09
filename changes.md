@@ -863,3 +863,10 @@ Licensed under the GNU General Public License v3.0 or later.
 - cmdcreate is now statically linked, meaning that dependencies such as
   `openssl` and `cmake` are no longer needed
 - Added support for 32 bit systems, and options for 32 bit binaries amd packages
+
+## v1.3.3
+
+- Replaced dependency `reqwest` with `ureq`
+  - Less/no build dependencies
+  - Shorter compile time
+- Code optimizations
