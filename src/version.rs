@@ -22,13 +22,13 @@ use crate::{
     utils::{
         colors::COLORS,
         io::error,
-        net::{http_client, not_connected_to_internet},
+        net::{not_connected_to_internet, ureq_agent},
     },
 };
-use serde_json::Value;
+use serde_json::{Value, from_reader};
 use std::{cmp::Ordering, error::Error};
 
-pub const CURRENT_PROJECT_VERSION: &str = "v1.3.2";
+pub const CURRENT_PROJECT_VERSION: &str = "v1.3.3";
 
 pub fn version_is_development_build() -> bool {
     let parse_version = |parsed_version_digits: &str| -> (u32, u32, u32) {
@@ -47,10 +47,7 @@ pub fn version_is_development_build() -> bool {
         )
     };
 
-    let author_username = AUTHOR.username;
-    let project_name = PROJECT.name;
-
-    let latest_retrieved_tag = &get_latest_tag_from_repo(author_username, project_name);
+    let latest_retrieved_tag = &get_latest_tag_from_repo();
     let version_to_parse = &parse_version(latest_retrieved_tag);
 
     match parse_version(CURRENT_PROJECT_VERSION).cmp(version_to_parse) {
@@ -71,33 +68,28 @@ pub fn get_build_status() -> &'static str {
     }
 }
 
-pub fn get_latest_tag_from_repo(owner: &str, repo: &str) -> String {
+pub fn get_latest_tag_from_repo() -> String {
     if not_connected_to_internet() {
         log(
-            "version::get_latest_tag_from_repo(): No internet... Unable to retrieve latest tag...",
+            "version::get_latest_tag_from_repo(): No internet...",
             Severity::Warn,
         );
-
         return "unknown".to_string();
     }
 
+    let repository_api_url = format!("{}/releases/latest", PROJECT.repository_api);
+
     let result: Result<String, Box<dyn Error>> = (|| {
-        let tag_api_retrieval_url =
-            format!("https://api.github.com/repos/{owner}/{repo}/releases/latest");
+        let mut response = ureq_agent().get(&repository_api_url).call()?;
 
-        let api_response = http_client()
-            .get(tag_api_retrieval_url)
-            .header("User-Agent", "rust-app")
-            .send()?;
+        let api_response_as_json: Value = from_reader(response.body_mut().as_reader())?;
 
-        let api_response_as_json: Value = api_response.json()?;
-
-        let tag_retrieved_via_api = api_response_as_json["tag_name"]
+        let tag = api_response_as_json["tag_name"]
             .as_str()
             .ok_or("Missing tag_name")?
             .to_owned();
 
-        Ok(tag_retrieved_via_api)
+        Ok(tag)
     })();
 
     match result {
@@ -108,41 +100,45 @@ pub fn get_latest_tag_from_repo(owner: &str, repo: &str) -> String {
             );
             latest_tag
         }
-        Err(tag_retrieve_error) => error(
+        Err(tag_error) => error(
             "Unable to retrieve latest tag:",
-            Some(&tag_retrieve_error.to_string()),
+            Some(&tag_error.to_string()),
         ),
     }
 }
 
-pub fn get_latest_commit_from_repo(owner: &str, repo: &str, branch: &str) -> String {
-    let commit_hash_url = format!("https://api.github.com/repos/{owner}/{repo}/commits/{branch}");
+pub fn get_latest_commit_from_repo() -> String {
+    let repository_api_url = format!("{}/commits/main", PROJECT.repository_api);
 
-    let extracted_commit_from_hash: Value = http_client()
-        .get(commit_hash_url)
-        .send()
-        .expect("request failed")
-        .json()
-        .expect("invalid json");
+    let result: Result<String, Box<dyn Error>> = (|| {
+        let mut api_response = ureq_agent().get(&repository_api_url).call()?;
 
-    let commit = extracted_commit_from_hash["sha"]
-        .as_str()
-        .expect("missing sha")
-        .chars()
-        .take(7)
-        .collect::<String>();
+        let extracted_json: Value = from_reader(api_response.body_mut().as_reader())?;
 
-    // And THIS is why cmdcreate can take forever to load on weak systems.
-    log(
-        &format!(
-            "
-            version::get_latest_commit_from_repo(): \
-            Retrieved latest commit: \"{commit}\""
-        ),
-        Severity::Normal,
-    );
+        let full_sha = extracted_json["sha"].as_str().ok_or("missing sha")?;
+        Ok(full_sha.chars().take(7).collect())
+    })();
 
-    commit
+    match result {
+        Ok(commit_retrieved) => {
+            log(
+                &format!(
+                    "version::get_latest_commit_from_repo(): Retrieved latest commit: \"{commit_retrieved}\""
+                ),
+                Severity::Normal,
+            );
+            commit_retrieved
+        }
+        Err(commit_retrieval_error) => {
+            log(
+                &format!(
+                    "version::get_latest_commit_from_repo(): Failed to get commit: {commit_retrieval_error}"
+                ),
+                Severity::Warn,
+            );
+            "unknown".to_string()
+        }
+    }
 }
 
 pub fn print_version_info() {
@@ -181,10 +177,7 @@ pub fn check() {
 
     output!("\nChecking for updates...", true);
 
-    let author_username = AUTHOR.username;
-    let project_name = PROJECT.name;
-
-    let latest_stable_version = get_latest_tag_from_repo(author_username, project_name);
+    let latest_stable_version = get_latest_tag_from_repo();
 
     if version_is_development_build() {
         output!(

@@ -19,7 +19,7 @@ use std::process::exit;
 use crate::{
     input,
     logger::{Severity, log},
-    meta::{author_information::AUTHOR, project_information::PROJECT},
+    meta::project_information::PROJECT,
     output, run_shell_command,
     utils::{
         colors::COLORS,
@@ -165,10 +165,7 @@ fn update_via_package(package_type: &str) {
 
     root_check();
 
-    let author_username = AUTHOR.username;
-    let project_name = PROJECT.name;
-
-    let latest_stable_release = get_latest_tag_from_repo(author_username, project_name);
+    let latest_stable_release = get_latest_tag_from_repo();
 
     cpu_arch_check(
         "You cannot update cmdcreate via this method using \
@@ -291,10 +288,7 @@ fn build_from_source() {
 fn interactive_upgrade() {
     let (blue, green, red, reset) = (COLORS.blue, COLORS.green, COLORS.red, COLORS.reset);
 
-    let author_username = AUTHOR.username;
-    let project_name = PROJECT.name;
-
-    let latest_commit = get_latest_commit_from_repo(author_username, project_name, "main");
+    let latest_commit = get_latest_commit_from_repo();
 
     let installed_distro = get_distro_base();
     let cpu_arch_is_supported = arch_is_supported();

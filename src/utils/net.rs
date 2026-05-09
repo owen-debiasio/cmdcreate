@@ -14,24 +14,21 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use reqwest::blocking::Client;
 use std::{
     net::{TcpStream, ToSocketAddrs},
     time::Duration,
 };
 
+use ureq::Agent;
+
 use crate::utils::sys::arguments::args_contains;
 
-pub fn http_client() -> Client {
-    let user_agent = "cmdcreate-updater";
-
-    let client_builder_timeout = Duration::from_secs(15);
-
-    Client::builder()
-        .timeout(client_builder_timeout)
-        .user_agent(user_agent)
+pub fn ureq_agent() -> Agent {
+    Agent::config_builder()
+        .timeout_global(Some(Duration::from_secs(15)))
+        .user_agent("cmdcreate-updater")
         .build()
-        .expect("Failed to build HTTP client")
+        .into()
 }
 
 pub fn internet_is_forced_disabled() -> bool {
