@@ -860,3 +860,6 @@ Licensed under the GNU General Public License v3.0 or later.
 ## v1.3.2
 
 - Fixed flag `-l` not being detected when running `cmdcreate doc changelog -l`
+- cmdcreate is now statically linked, meaning that dependencies such as
+  `openssl` and `cmake` are no longer needed
+- Added support for 32 bit systems, and options for 32 bit binaries amd packages
