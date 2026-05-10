@@ -103,7 +103,7 @@ pub fn display_full_license() {
 }
 
 fn download_and_install_license() {
-    let (green, reset) = (COLORS.green, COLORS.reset);
+    let green = COLORS.green;
 
     root_check();
 
