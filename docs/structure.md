@@ -12,6 +12,11 @@ change.
 > [!NOTE]  
 > File structure may be inaccurate. Please let me know if it needs to be updated
 
+## Cargo configuration
+
+- 📁 [.cargo](https://github.com/owen-debiasio/cmdcreate/tree/main/.cargo)
+  - [config.toml](https://github.com/owen-debiasio/cmdcreate/tree/main/.cargo/config.toml)
+
 ## GitHub templates, actions, workflows
 
 - 📁 [.github](https://github.com/owen-debiasio/cmdcreate/tree/main/.github)
@@ -30,15 +35,26 @@ change.
 
 - 📁 [.idea](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea)
   - 📁
+    [codeStyles](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/codeStyles)
+    - [codeStyleConfig.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/codeStyles/codeStyleConfig.xml)
+    - [Project.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/codeStyles/Project.xml)
+  - 📁
     [dictionaries](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/dictionaries)
     - [project.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/dictionaries/project.xml)
   - 📁
+    [inspectionProfiles](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/inspectionProfiles)
+    - [Project_Default.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/inspectionProfiles/Project_Default.xml)
+  - 📁
     [runConfigurations](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/runConfigurations)
     - [Test.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/runConfigurations/Test.xml)
+  - [.gitignore](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/.gitignore)
   - [cmdcreate.iml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/cmdcreate.iml)
+  - [cmdcreate-testing.iml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/cmdcreate-testing.iml)
+  - [discord.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/discord.xml)
+  - [jsonSchemas.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/jsonSchemas.xml)
   - [misc.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/misc.xml)
   - [modules.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/modules.xml)
-  - [rust.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/rust.xml)
+  - [pyProjectModel.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/pyProjectModel.xml)
   - [vcs.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/vcs.xml)
   - [workspace.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/workspace.xml)
 
