@@ -34,9 +34,10 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt-get update
-          # musl-tools provides musl-gcc for x86_64
-          # gcc-multilib provides the headers/tools for 32-bit (i686)
           sudo apt-get install -y musl-tools gcc-multilib
+          # Download the specific i686 musl toolchain for the 32-bit build
+          curl -L https://musl.cc/i686-linux-musl-cross.tgz | tar xz
+          echo "$(pwd)/i686-linux-musl-cross/bin" >> $GITHUB_PATH
 
       - name: Install Rust and Targets
         uses: dtolnay/rust-toolchain@stable
@@ -54,13 +55,22 @@ jobs:
         run: cargo clippy --target x86_64-unknown-linux-musl --all-targets --all-features
 
       - name: Clippy (i686)
+        env:
+          CC_i686_unknown_linux_musl: i686-linux-musl-gcc
+          AR_i686_unknown_linux_musl: i686-linux-musl-ar
+          CARGO_TARGET_I686_UNKNOWN_LINUX_MUSL_LINKER: i686-linux-musl-gcc
         run: cargo clippy --target i686-unknown-linux-musl --all-targets --all-features
 
       - name: Build (x86_64 release)
         run: cargo build --release --target x86_64-unknown-linux-musl
 
       - name: Build (i686 release)
+        env:
+          CC_i686_unknown_linux_musl: i686-linux-musl-gcc
+          AR_i686_unknown_linux_musl: i686-linux-musl-ar
+          CARGO_TARGET_I686_UNKNOWN_LINUX_MUSL_LINKER: i686-linux-musl-gcc
         run: cargo build --release --target i686-unknown-linux-musl
 
       - name: Run tests
+        # Tests run on the host architecture (x86_64 glibc)
         run: cargo test
