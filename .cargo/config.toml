@@ -1,5 +1,10 @@
-[target.i386-unknown-linux-musl]
-rustflags = ["-C", "target-feature=+crt-static"]
+[target.i686-unknown-linux-musl]
+linker = "rust-lld"
+rustflags = [
+    "-C", "target-feature=+crt-static",
+    "-C", "link-arg=-fuse-ld=lld",
+]
 
 [target.x86_64-unknown-linux-musl]
+linker = "rust-lld"
 rustflags = ["-C", "target-feature=+crt-static"]
