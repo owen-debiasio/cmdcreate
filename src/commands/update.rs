@@ -35,7 +35,7 @@ use crate::{
             env::{root_check, running_as_root},
         },
     },
-    version::{get_latest_commit_from_repo, get_latest_tag_from_repo},
+    version::{get_latest_commit, get_latest_tag},
 };
 
 pub fn update() {
@@ -165,7 +165,7 @@ fn update_via_package(package_type: &str) {
 
     root_check();
 
-    let latest_stable_release = get_latest_tag_from_repo();
+    let latest_stable_release = get_latest_tag();
 
     cpu_arch_check(
         "You cannot update cmdcreate via this method using \
@@ -288,7 +288,7 @@ fn build_from_source() {
 fn interactive_upgrade() {
     let (blue, green, red, reset) = (COLORS.blue, COLORS.green, COLORS.red, COLORS.reset);
 
-    let latest_commit = get_latest_commit_from_repo();
+    let latest_commit = get_latest_commit();
 
     let installed_distro = get_distro_base();
     let cpu_arch_is_supported = arch_is_supported();
