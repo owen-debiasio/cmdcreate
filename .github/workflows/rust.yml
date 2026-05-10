@@ -3,29 +3,14 @@ name: Rust Lint
 on:
   push:
     branches: [main]
-    paths:
-      - "**.rs"
-      - "**/Cargo.toml"
-      - "**/Cargo.lock"
-      - "**/.cargo/config.toml"
-      - ".github/workflows/rust-lint.yml"
   pull_request:
     branches: [main]
-    paths:
-      - "**.rs"
-      - "**/Cargo.toml"
-      - "**/Cargo.lock"
-      - "**/.cargo/config.toml"
-      - ".github/workflows/rust-lint.yml"
 
 permissions:
   contents: read
 
 env:
   CARGO_TERM_COLOR: always
-
-  # Deny warnings to ensure the CI fails on Clippy issues
-
   RUSTFLAGS: "-Dwarnings"
 
 jobs:
@@ -55,6 +40,7 @@ jobs:
 
       - name: Clippy (x86_64)
         run: |
+          CRATE_CC_NO_DEFAULTS=true \
           CC_x86_64_unknown_linux_musl="zig cc -target x86_64-linux-musl" \
           cargo clippy --target x86_64-unknown-linux-musl --all-targets --all-features
 
@@ -66,6 +52,7 @@ jobs:
 
       - name: Build (x86_64 release)
         run: |
+          CRATE_CC_NO_DEFAULTS=true \
           CC_x86_64_unknown_linux_musl="zig cc -target x86_64-linux-musl" \
           cargo build --release --target x86_64-unknown-linux-musl
 
