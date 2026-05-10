@@ -47,7 +47,7 @@ pub fn version_is_development_build() -> bool {
         )
     };
 
-    let latest_retrieved_tag = &get_latest_tag_from_repo();
+    let latest_retrieved_tag = &get_latest_tag();
     let version_to_parse = &parse_version(latest_retrieved_tag);
 
     match parse_version(CURRENT_PROJECT_VERSION).cmp(version_to_parse) {
@@ -68,72 +68,68 @@ pub fn get_build_status() -> &'static str {
     }
 }
 
-pub fn get_latest_tag_from_repo() -> String {
+fn fetch_github_json(endpoint: &str) -> Result<Value, Box<dyn Error>> {
+    let repo_api_url = PROJECT.repository_api.trim_end_matches('/');
+    let github_json_url = format!("{repo_api_url}/{endpoint}");
+
+    let response = ureq_agent()
+        .get(&github_json_url)
+        .header("User-Agent", PROJECT.name)
+        .call()?;
+
+    let json: Value = from_reader(response.into_body().into_reader())?;
+
+    Ok(json)
+}
+
+pub fn get_latest_tag() -> String {
     if not_connected_to_internet() {
-        log(
-            "version::get_latest_tag_from_repo(): No internet...",
-            Severity::Warn,
-        );
+        log("version::get_latest_tag(): No internet...", Severity::Warn);
         return "unknown".to_string();
     }
 
-    let repository_api_url = format!("{}/releases/latest", PROJECT.repository_api);
-
-    let result: Result<String, Box<dyn Error>> = (|| {
-        let mut response = ureq_agent().get(&repository_api_url).call()?;
-
-        let api_response_as_json: Value = from_reader(response.body_mut().as_reader())?;
-
-        let tag = api_response_as_json["tag_name"]
-            .as_str()
-            .ok_or("Missing tag_name")?
-            .to_owned();
-
-        Ok(tag)
-    })();
-
-    match result {
-        Ok(latest_tag) => {
+    match fetch_github_json("releases/latest") {
+        Ok(json) => {
+            let tag = json["tag_name"].as_str().unwrap_or("unknown").to_string();
             log(
-                &format!("version::get_latest_tag_from_repo(): Latest tag: {latest_tag}"),
+                &format!("version::get_latest_tag(): Latest tag: {tag}"),
                 Severity::Normal,
             );
-            latest_tag
+            tag
         }
-        Err(tag_error) => error(
-            "Unable to retrieve latest tag:",
-            Some(&tag_error.to_string()),
-        ),
+        Err(tag_retrieval_error) => {
+            log(
+                &format!("version::get_latest_tag(): Error: {tag_retrieval_error}"),
+                Severity::Warn,
+            );
+            "unknown".to_string()
+        }
     }
 }
 
-pub fn get_latest_commit_from_repo() -> String {
-    let repository_api_url = format!("{}/commits/main", PROJECT.repository_api);
+pub fn get_latest_commit() -> String {
+    if not_connected_to_internet() {
+        return "unknown".to_string();
+    }
 
-    let result: Result<String, Box<dyn Error>> = (|| {
-        let mut api_response = ureq_agent().get(&repository_api_url).call()?;
+    match fetch_github_json("commits/main") {
+        Ok(json) => {
+            let full_sha = json["sha"].as_str().unwrap_or("");
+            let short_sha = full_sha.chars().take(7).collect::<String>();
 
-        let extracted_json: Value = from_reader(api_response.body_mut().as_reader())?;
+            if short_sha.is_empty() {
+                return "unknown".to_string();
+            }
 
-        let full_sha = extracted_json["sha"].as_str().ok_or("missing sha")?;
-        Ok(full_sha.chars().take(7).collect())
-    })();
-
-    match result {
-        Ok(commit_retrieved) => {
             log(
-                &format!(
-                    "version::get_latest_commit_from_repo(): Retrieved latest commit: \"{commit_retrieved}\""
-                ),
+                &format!("version::get_latest_commit(): Short SHA: {short_sha}"),
                 Severity::Normal,
             );
-            commit_retrieved
+            short_sha
         }
         Err(commit_retrieval_error) => {
             log(
-                &format!(
-                    "version::get_latest_commit_from_repo(): Failed to get commit: {commit_retrieval_error}"
-                ),
+                &format!("version::get_latest_commit(): Error: {commit_retrieval_error}"),
                 Severity::Warn,
             );
             "unknown".to_string()
@@ -177,7 +173,7 @@ pub fn check() {
 
     output!("\nChecking for updates...", true);
 
-    let latest_stable_version = get_latest_tag_from_repo();
+    let latest_stable_version = get_latest_tag();
 
     if version_is_development_build() {
         output!(
