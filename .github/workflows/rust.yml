@@ -35,7 +35,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y musl-tools gcc-multilib
-          # Download the specific i686 musl toolchain for the 32-bit build
           curl -L https://musl.cc/i686-linux-musl-cross.tgz | tar xz
           echo "$(pwd)/i686-linux-musl-cross/bin" >> $GITHUB_PATH
 
@@ -72,5 +71,4 @@ jobs:
         run: cargo build --release --target i686-unknown-linux-musl
 
       - name: Run tests
-        # Tests run on the host architecture (x86_64 glibc)
         run: cargo test
