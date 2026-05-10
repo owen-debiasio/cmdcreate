@@ -870,3 +870,4 @@ Licensed under the GNU General Public License v3.0 or later.
   - Less/no build dependencies
   - Shorter compile time
 - Code optimizations
+- `dev/install.sh` now installs a statically linked file
