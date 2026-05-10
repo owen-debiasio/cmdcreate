@@ -166,7 +166,7 @@ Written by {project_author} <{project_author_email}>.
 }
 
 pub fn check() {
-    let (blue, green, magenta, reset) = (COLORS.blue, COLORS.green, COLORS.magenta, COLORS.reset);
+    let (blue, green, magenta) = (COLORS.blue, COLORS.green, COLORS.magenta);
 
     if not_connected_to_internet() {
         error(
@@ -182,7 +182,7 @@ pub fn check() {
     if version_is_development_build() {
         output!(
             "\nYou are running a newer version {magenta}({CURRENT_PROJECT_VERSION}){blue} \
-            than the latest release {green}({latest_stable_version}){reset}.",
+            than the latest release {green}({latest_stable_version}).",
             true
         );
 
@@ -191,7 +191,7 @@ pub fn check() {
 
     if CURRENT_PROJECT_VERSION != latest_stable_version {
         output!(
-            "{green}\nUpdate available: {CURRENT_PROJECT_VERSION} -> {latest_stable_version}{reset}\n",
+            "{green}\nUpdate available: {CURRENT_PROJECT_VERSION} -> {latest_stable_version}\n",
             true
         );
 
