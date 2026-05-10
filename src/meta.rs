@@ -118,7 +118,7 @@ fn download_and_install_license() {
 
     license_install_success_check(license_path);
 
-    output!("\n{green}Successfully downloaded license!{reset}");
+    output!("\n{green}Successfully downloaded license!");
 
     exit(0)
 }
