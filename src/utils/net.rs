@@ -25,7 +25,7 @@ use crate::utils::sys::arguments::args_contains;
 
 pub fn ureq_agent() -> Agent {
     Agent::config_builder()
-        .timeout_global(Some(Duration::from_secs(15)))
+        .timeout_global(Some(Duration::from_secs(5)))
         .user_agent("cmdcreate-updater")
         .build()
         .into()
