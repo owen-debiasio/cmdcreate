@@ -56,7 +56,6 @@ change.
   - [modules.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/modules.xml)
   - [pyProjectModel.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/pyProjectModel.xml)
   - [vcs.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/vcs.xml)
-  - [workspace.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/workspace.xml)
 
 ## VSCode files
 
