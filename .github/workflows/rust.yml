@@ -1,4 +1,4 @@
-Name: Rust Lint
+name: Rust Lint
 
 on:
   push:
