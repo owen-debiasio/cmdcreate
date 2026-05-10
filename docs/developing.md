@@ -21,66 +21,63 @@ bash <(curl -fsSL https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main
 
 This script will:
 
-- Detect your Linux distribution
-- Install all required dependencies
-- Install Rust using `rustup`
-- Clone the `cmdcreate` repository
-- Prepare shell scripts for development
+- Detect your Linux distribution and install necesarry packages.
+- Install `Rust` and the `Zig` compiler
+- Install `cargo-zigbuild` for 32-bit binaries.
+- Clone the repository and configure `musl`
 
 ---
 
 ### Manual setup
 
-If you prefer setting everything up yourself, follow the instructions below.
-
 #### Installing dependencies
 
-> [!NOTE]  
-> Package names vary between distributions. The lists below match what the setup
-> script installs.
+> [!IMPORTANT]  
+> To build cmdcreate successfully (especially the `ring` crate), you MUST have
+> `Zig` installed.
 
 ##### Arch Linux
 
 ```bash
-sudo pacman -S --needed \
-  rustup curl openssl git base-devel \
-  shfmt shellcheck \
-  python-black python-pylint \
-  nodejs npm markdownlint-cli2 prettier
+sudo pacman -S --needed --noconfirm \
+    rustup curl openssl git base-devel \
+    shfmt shellcheck bash-language-server \
+    python-black python-pylint python-lsp-server \
+    nodejs npm markdownlint-cli2 prettier marksman vscode-json-languageserver \
+    rpm-tools dpkg
 ```
 
 ##### Debian / Ubuntu
 
 ```bash
-sudo apt update
-sudo apt install -y \
-  curl libssl-dev build-essential pkg-config git \
-  shfmt shellcheck \
-  black pylint \
-  nodejs npm \
-  rpm-tools dpkg
-
+sudo apt-get install -y \
+    curl libssl-dev build-essential pkg-config git \
+    shfmt shellcheck \
+    black pylint \
+    nodejs npm rpm dpkg-dev
 ```
 
 ##### Fedora
 
 ```bash
 sudo dnf install -y \
-  curl openssl-devel git \
-  shfmt ShellCheck \
-  python3-black python3-pylint \
-  nodejs npm \
-  rpm-build dpkg-dev
+    curl openssl-devel git gcc gcc-c++ make \
+    shfmt ShellCheck nodejs-bash-language-server \
+    python3-black python3-pylint \
+    nodejs npm rpm-build dpkg-dev
 ```
 
 ---
 
-#### Install Rust (Debian / Ubuntu / Fedora)
+#### Set up Rust
 
-Rust is installed using `rustup`.
+##### Install Rust
+
+> [!NOTE]  
+> If you installed `rustup` on Arch using `pacman` you can skip this step.
 
 ```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
 After installation, load Cargo into your shell:
@@ -95,16 +92,24 @@ Set the default toolchain:
 rustup default stable
 ```
 
+##### Install dependencies
+
+```bash
+rustup component add rust-analyzer
+rustup target add x86_64-unknown-linux-musl i686-unknown-linux-musl
+cargo install cargo-zigbuild
+```
+
 ---
 
 #### Install Markdownlint and Prettier
 
 > [!NOTE]  
-> Arch Linux users can skip this step if `markdownlint-cli2` and `prettier` was
+> Arch Linux users can skip this step if `markdownlint-cli2` and `prettier` were
 > installed via `pacman`.
 
 ```bash
-npm install -g prettier markdownlint-cli2
+sudo npm install -g prettier markdownlint-cli2@0.13.0
 ```
 
 ---
@@ -132,55 +137,16 @@ The `<desired directory>` may include paths such as `~/dev/cmdcreate` or
 ##### Installing
 
 ```bash
-./testing/install.sh
+./dev/install.sh
 ```
 
 ##### Uninstalling
 
 ```bash
-./testing/uninstall.sh
+./dev/uninstall.sh
 ```
 
 ---
-
-## IDEs I recommend for their purposes
-
-- **RustRover**
-  - Primary IDE for developing cmdcreate
-- **PyCharm**
-  - Working with testing scripts
-- **Visual Studio Code**
-  - Editing and revising documentation
-
----
-
-## Linters
-
-I recommend using the following linters and formatters to keep the cmdcreate
-codebase clean:
-
-### Rust
-
-- RustFmt
-- Rust-Analyzer
-
-### Python
-
-- PyLint
-- Black
-
-### Shell Scripts
-
-- Shfmt
-- Shellcheck
-
-### Markdown / Other
-
-- Prettier
-- Markdownlint
-
-> [!NOTE]  
-> In the end, I don't care what you use, these are just my recommendations.
 
 ---
 
@@ -200,7 +166,8 @@ codebase clean:
 
 ### Testing Purposes
 
-- `testing/main.py` Run a script that exercises cmdcreate features.
+- `testing/src/test_cmdcreate.py` Run a script that exercises cmdcreate
+  features.
 
 > [!NOTE]  
 > You can read more here:
@@ -210,17 +177,62 @@ codebase clean:
 
 ### Packaging cmdcreate
 
-- `package/create_bin.sh` Packages a standalone `x86_64` binary.
+> [!NOTE]  
+> Packaged and standalone binaries are automatically moved to `~/Downloads.`
+> Feel free to modify the script to change this. Might break things though.
 
-- `package/create_deb.sh` Packages a Debian `.deb`.
+#### Automatic packaging
 
-- `package/create_rpm.sh` Packages an RPM.
+- `package/package.sh` Builds all packages automatically (`.deb`, `.rpm`,
+  binary). Both `x86` and `x64`.
 
-- `package/package.sh` Builds all supported package formats.
+#### Manual packaging
+
+##### Debian package
+
+- `package/create_deb.sh` Packages a 32 and 64 bit `.deb` package.
+
+##### `.rpm` package
+
+- `package/create_rpm.sh` Packages a 32 and 64 bit `.rpm` package.
+
+##### Standalone binary
+
+###### Via automatic script
+
+- `package/create_rpm.sh` Compiles both 32 and 64 bit binaries.
+
+###### Manually
+
+```bash
+export RUSTFLAGS="-C target-feature=+crt-static -C link-arg=-fno-sanitize=all"
+export CFLAGS="-O3 -pipe"
+
+cargo zigbuild --release --target $(uname -m)-unknown-linux-musl
+```
 
 > [!NOTE]  
 > You can read more here:
 > [Packaging cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/package/README.md)
+
+### Troubleshooting
+
+#### `Invalid -flto mode: 'flto=auto'`
+
+This is caused by Arch Linux system flags in `/etc/makepkg.conf`. `Zig (Clang)`
+does not recognize the `'auto'` value. The development scripts override `CFLAGS`
+to solve this, but if building manually, ensure `CFLAGS` does not contain
+`-flto=auto`.
+
+#### `Undefined symbol: ring_core...`
+
+This occurs when the assembly components of the `ring` crate are not linked
+correctly. Ensure:
+
+1. You are using `cargo zigbuild`
+2. `RUSTFLAGS` includes `-C link-arg=-fno-sanitize=all`.
+3. You have cleared any local `.cargo/config.toml` that might be forcing a
+   different linker.
 
 ---
 
