@@ -1,3 +1,19 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 Owen Debiasio
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 name: Rust Lint
 
 on:
@@ -8,6 +24,7 @@ on:
       - "**/Cargo.toml"
       - "**/Cargo.lock"
       - "**/.cargo/config.toml"
+      - "**/.github/workflows/rust.yml"
   pull_request:
     branches: [main]
     paths:
@@ -15,6 +32,7 @@ on:
       - "**/Cargo.toml"
       - "**/Cargo.lock"
       - "**/.cargo/config.toml"
+      - "**/.github/workflows/rust.yml"
 
 permissions:
   contents: read
@@ -31,18 +49,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install System Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y musl-tools gcc-multilib
-          curl -L https://musl.cc/i686-linux-musl-cross.tgz | tar xz
-          echo "$(pwd)/i686-linux-musl-cross/bin" >> $GITHUB_PATH
-
-      - name: Install Rust and Targets
+      - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
           targets: x86_64-unknown-linux-musl, i686-unknown-linux-musl
+
+      - name: Install Zig
+        uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.13.0
+
+      - name: Install cargo-zigbuild
+        run: cargo install cargo-zigbuild
 
       - name: Cache cargo
         uses: Swatinem/rust-cache@v2
@@ -51,24 +70,16 @@ jobs:
         run: cargo fmt --all -- --check
 
       - name: Clippy (x86_64)
-        run: cargo clippy --target x86_64-unknown-linux-musl --all-targets --all-features
+        run: cargo zigbuild --clippy --target x86_64-unknown-linux-musl --all-targets --all-features
 
       - name: Clippy (i686)
-        env:
-          CC_i686_unknown_linux_musl: i686-linux-musl-gcc
-          AR_i686_unknown_linux_musl: i686-linux-musl-ar
-          CARGO_TARGET_I686_UNKNOWN_LINUX_MUSL_LINKER: i686-linux-musl-gcc
-        run: cargo clippy --target i686-unknown-linux-musl --all-targets --all-features
+        run: cargo zigbuild --clippy --target i686-unknown-linux-musl --all-targets --all-features
 
       - name: Build (x86_64 release)
-        run: cargo build --release --target x86_64-unknown-linux-musl
+        run: cargo zigbuild --release --target x86_64-unknown-linux-musl
 
       - name: Build (i686 release)
-        env:
-          CC_i686_unknown_linux_musl: i686-linux-musl-gcc
-          AR_i686_unknown_linux_musl: i686-linux-musl-ar
-          CARGO_TARGET_I686_UNKNOWN_LINUX_MUSL_LINKER: i686-linux-musl-gcc
-        run: cargo build --release --target i686-unknown-linux-musl
+        run: cargo zigbuild --release --target i686-unknown-linux-musl
 
       - name: Run tests
         run: cargo test
