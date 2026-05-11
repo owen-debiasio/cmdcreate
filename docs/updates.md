@@ -23,6 +23,7 @@ cmdcreate check
 ```
 
 > [!NOTE]
+>
 > - This only checks for the latest stable version, not latest git commits.
 > - Update methods are only listed if they apply to your system
 
