@@ -72,14 +72,17 @@ fn fetch_github_json(endpoint: &str) -> Result<Value, Box<dyn Error>> {
     let repo_api_url = PROJECT.repository_api.trim_end_matches('/');
     let github_json_url = format!("{repo_api_url}/{endpoint}");
 
-    let response = ureq_agent()
+    let api_response = ureq_agent()
         .get(&github_json_url)
         .header("User-Agent", PROJECT.name)
-        .call()?;
+        .call()
+        .expect("Failed to call user agent")
+        .into_body()
+        .into_reader();
 
-    let json: Value = from_reader(response.into_body().into_reader())?;
+    let retrieved_json = from_reader(api_response)?;
 
-    Ok(json)
+    Ok(retrieved_json)
 }
 
 pub fn get_latest_tag() -> String {
