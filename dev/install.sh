@@ -52,6 +52,7 @@ if [[ "${1:-}" != "--offline" && "${1:-}" != "-o" ]]; then
     rustup target add "$RUST_TARGET"
 
     echo -e "\n${BLUE}> Updating Cargo...${RESET}"
+    cargo install cargo-zigbuild
     cargo update
 fi
 
@@ -64,7 +65,7 @@ export "$CC_ENV_VAR"="zig cc -target $ZIG_TARGET -fno-sanitize=all"
 cargo clippy --fix --allow-no-vcs --target "$RUST_TARGET"
 
 echo -e "\n${BLUE}> Building release (Static Musl $ARCH)...${RESET}"
-cargo build --release --target "$RUST_TARGET"
+cargo zigbuild --release --target $RUST_TARGET
 
 echo -e "\n${BLUE}> Installing binary...${RESET}"
 sudo install -Dm755 "$TARGET_BIN" "$INSTALL_DIR/$BIN_NAME"
