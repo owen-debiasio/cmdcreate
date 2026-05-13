@@ -875,3 +875,5 @@ Licensed under the GNU General Public License v3.0 or later.
 ## v1.3.4
 
 - Organized file structure for command source files (`src/commands/*`)
+- Fixed parsing errors when adding a new config
+- Code optimizations
