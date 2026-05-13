@@ -15,41 +15,25 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::tools::cmdcreate_command_is_installed,
+    commands::{
+        core::favorite::main::command_is_in_favorites, tools::cmdcreate_command_is_installed,
+    },
     logger::{Severity, log},
     output,
     utils::{
         colors::COLORS,
-        fs::{
-            core::{read_file_to_string, remove_from_file, write_to_file},
-            paths::PATHS,
-        },
+        fs::{core::write_to_file, paths::PATHS},
         io::error,
     },
 };
 
-pub fn command_is_in_favorites(command: &str) -> bool {
-    let favorites_path = &PATHS.favorites;
-    let favorites_file_contents = read_file_to_string(favorites_path);
-
-    favorites_file_contents.contains(command)
-}
-
-pub fn favorite(action: &str, command: &str) {
-    match action {
-        "add" => add(command),
-        "remove" => remove(command),
-
-        _ => error("Invalid option:", Some(action)),
-    }
-}
-
-/// Add command to favorites
-fn add(command: &str) {
+pub fn add(command: &str) {
     let (blue, green, yellow, reset) = (COLORS.blue, COLORS.green, COLORS.yellow, COLORS.reset);
 
     log(
-        &format!("commands/favorite::add(): Adding command \"{command}\" to favorites..."),
+        &format!(
+            "commands/favorite/add_favorite::add(): Adding command \"{command}\" to favorites..."
+        ),
         Severity::Normal,
     );
 
@@ -83,7 +67,7 @@ fn add(command: &str) {
 
 fn command_favorite_addition_check(command: &str) {
     log(
-        "commands/favorite::command_favorite_addition_check(): \
+        "commands/favorite/add_favorite::command_favorite_addition_check(): \
         Determining command favorite addition status...",
         Severity::Normal,
     );
@@ -96,54 +80,8 @@ fn command_favorite_addition_check(command: &str) {
     }
 
     log(
-        "commands/favorite::command_favorite_addition_check(): \
+        "commands/favorite/add_favorite::command_favorite_addition_check(): \
         Command has been added to favorites correctly...",
-        Severity::Normal,
-    );
-}
-
-/// Remove command from favorites
-fn remove(command: &str) {
-    let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
-
-    log(
-        &format!("commands/favorite::remove(): Removing command \"{command}\" from favorites..."),
-        Severity::Normal,
-    );
-
-    if !command_is_in_favorites(command) {
-        error("Command isn't in favorites:", Some(command));
-    }
-
-    let favorites_path = &PATHS.favorites;
-
-    remove_from_file(favorites_path, command);
-
-    command_favorite_removed_check(command);
-
-    output!(
-        "{green}Command {blue}\"{command}\"{green} removed from favorites.{reset}",
-        true
-    );
-}
-
-fn command_favorite_removed_check(command: &str) {
-    log(
-        "commands/favorite::command_favorite_removed_check(): \
-        Determining command favorite removal status...",
-        Severity::Normal,
-    );
-
-    if command_is_in_favorites(command) {
-        error(
-            "Failed to remove command from favorites!",
-            Some("Command is still located in configuration."),
-        );
-    }
-
-    log(
-        "commands/favorite::command_favorite_removed_check(): \
-        Command has been removed from favorites correctly...",
         Severity::Normal,
     );
 }

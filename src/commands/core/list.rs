@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::{favorite::command_is_in_favorites, tools::get_installed_commands},
+    commands::{core::favorite::main::command_is_in_favorites, tools::get_installed_commands},
     configs::load_configuration,
     logger::{Severity, log},
     output,
@@ -39,7 +39,7 @@ pub fn list() {
     for command_name in installed_commands {
         log(
             &format!(
-                "commands/list::list(): Current command: \"{command_name}\" (favorited={})",
+                "commands/core/list::list(): Current command: \"{command_name}\" (favorited={})",
                 command_is_in_favorites(&command_name)
             ),
             Severity::Normal,

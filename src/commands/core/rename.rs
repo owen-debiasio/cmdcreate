@@ -16,8 +16,10 @@
 
 use crate::{
     commands::{
-        favorite::{command_is_in_favorites, favorite},
-        remove::remove,
+        core::{
+            favorite::main::{command_is_in_favorites, favorite},
+            remove::remove,
+        },
         tools::{cmdcreate_command_is_installed, get_installed_commands},
     },
     logger::{Severity, log},

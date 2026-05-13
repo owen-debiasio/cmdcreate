@@ -14,11 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-pub mod doc;
+use crate::{
+    commands::core::favorite::{add_favorite::add, remove_favorite::remove},
+    utils::{
+        fs::{core::read_file_to_string, paths::PATHS},
+        io::error,
+    },
+};
 
-pub mod config;
-pub mod updater;
+pub fn command_is_in_favorites(command: &str) -> bool {
+    let favorites_path = &PATHS.favorites;
+    let favorites_file_contents = read_file_to_string(favorites_path);
 
-pub mod core;
+    favorites_file_contents.contains(command)
+}
 
-mod tools;
+pub fn favorite(action: &str, command: &str) {
+    match action {
+        "add" => add(command),
+        "remove" => remove(command),
+
+        _ => error("Invalid option:", Some(action)),
+    }
+}

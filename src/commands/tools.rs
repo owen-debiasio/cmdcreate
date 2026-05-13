@@ -17,7 +17,7 @@
 use std::{fs::read_dir, path::PathBuf};
 
 use crate::{
-    commands::create::NEW_COMMAND_HEADER,
+    commands::core::create::NEW_COMMAND_HEADER,
     logger::{Severity, log},
     utils::{
         fs::{

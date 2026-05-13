@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::{create::NEW_COMMAND_HEADER, tools::get_installed_commands},
+    commands::{core::create::NEW_COMMAND_HEADER, tools::get_installed_commands},
     logger::{Severity, log},
     output,
     utils::{
@@ -34,13 +34,15 @@ pub fn export(path: &str) {
 
     log(
         &format!(
-            "commands/export::export(): Exporting commands to: \"{path_of_file_to_export_to}\"..."
+            "commands/core/backup_actions/export::export(): \
+            Exporting commands to: \"{path_of_file_to_export_to}\"..."
         ),
         Severity::Normal,
     );
 
     log(
-        "commands/export::export(): Creating export file...",
+        "commands/core/backup_options/export::export(): \
+        Creating export file...",
         Severity::Normal,
     );
 
@@ -50,7 +52,10 @@ pub fn export(path: &str) {
 
     for retrieved_command in installed_commands {
         log(
-            &format!("commands/export::export(): Exporting command: \"{retrieved_command}\"..."),
+            &format!(
+                "commands/core/backup_actions/export::export(): \
+                Exporting command: \"{retrieved_command}\"..."
+            ),
             Severity::Normal,
         );
 
@@ -79,7 +84,10 @@ pub fn export(path: &str) {
         };
 
         log(
-            &format!("commands/export::export(): Writing data to file: \"{data}\"..."),
+            &format!(
+                "commands/core/backup_actions/export::export(): \
+                Writing data to file: \"{data}\"..."
+            ),
             Severity::Normal,
         );
 

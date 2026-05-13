@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::{favorite::favorite, tools::cmdcreate_command_is_installed},
+    commands::{core::favorite::main::favorite, tools::cmdcreate_command_is_installed},
     logger::{Severity, log},
     output,
     utils::{
@@ -41,7 +41,8 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
 
     if !force_removal_of_command {
         let question = &format!(
-            "\n{red}Are you sure you want to delete command{yellow} \"{command}\"{red}?{reset}"
+            "\n{red}Are you sure you want to delete command\
+            {yellow} \"{command}\"{red}?{reset}"
         );
 
         ask_for_confirmation(question, true);
@@ -52,7 +53,10 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
     }
 
     log(
-        &format!("commands/remove::remove(): Removing command \"{command}\"..."),
+        &format!(
+            "commands/core/remove::remove(): \
+            Removing command \"{command}\"..."
+        ),
         Severity::Normal,
     );
 
@@ -71,7 +75,7 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
 
 fn command_removal_success(path_of_command: &str) {
     log(
-        "commands/remove::command_removal_success(): \
+        "commands/core/remove::command_removal_success(): \
         Determining command removal status...",
         Severity::Normal,
     );
@@ -87,7 +91,7 @@ fn command_removal_success(path_of_command: &str) {
     }
 
     log(
-        "commands/remove::command_creation_success(): \
+        "commands/core/remove::command_creation_success(): \
         Command has been removed correctly...",
         Severity::Normal,
     );

@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::{create::create, favorite::favorite as add_favorite},
+    commands::core::{create::create, favorite::add_favorite::add as add_favorite},
     logger::{Severity, log},
     output,
     utils::{colors::COLORS, fs::core::read_file_to_string, io::error},
@@ -26,7 +26,8 @@ pub fn import(command_import_file: &str) {
 
     log(
         &format!(
-            "commands/import::import(): Importing commands from file: \"{command_import_file}\"..."
+            "commands/core/backup_actions/import::import(): \
+            Importing commands from file: \"{command_import_file}\"..."
         ),
         Severity::Normal,
     );
@@ -68,7 +69,7 @@ pub fn import(command_import_file: &str) {
         create(retrieved_command_name, &command_contents, false);
 
         if command_favorite_status {
-            add_favorite("add", retrieved_command_name);
+            add_favorite(retrieved_command_name);
         }
     }
 

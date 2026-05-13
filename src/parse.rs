@@ -16,9 +16,20 @@
 
 use crate::{
     commands::{
-        config::config, create::create, display::display, doc::doc, edit::edit, export::export,
-        favorite::favorite, import::import, list::list, remove::remove, rename::rename,
-        search::search, update::update,
+        config::main::config,
+        core::{
+            backup_actions::{export::export, import::import},
+            create::create,
+            display::display,
+            edit::edit,
+            favorite::main::favorite,
+            list::list,
+            remove::remove,
+            rename::rename,
+            search::search,
+        },
+        doc::doc,
+        updater::main::update,
     },
     logger::{Severity, log},
     utils::{

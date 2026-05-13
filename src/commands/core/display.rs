@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::{create::NEW_COMMAND_HEADER, tools::cmdcreate_command_is_installed},
+    commands::{core::create::NEW_COMMAND_HEADER, tools::cmdcreate_command_is_installed},
     output,
     utils::{
         colors::COLORS,

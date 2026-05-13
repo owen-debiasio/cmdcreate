@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::update::update,
+    commands::updater::main::update,
     logger::{Severity, log},
     meta::{author_information::AUTHOR, get_project_copyright_info, project_information::PROJECT},
     output,
