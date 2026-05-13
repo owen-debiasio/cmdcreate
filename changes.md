@@ -871,3 +871,7 @@ Licensed under the GNU General Public License v3.0 or later.
   - Shorter compile time
 - Code optimizations
 - `dev/install.sh` now installs a statically linked file
+
+## v1.3.4
+
+- Organized file structure for command source files (`src/commands/*`)
