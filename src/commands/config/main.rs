@@ -14,10 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::commands::core::edit::get_available_editor;
 use crate::{
     commands::{
         config::{config_add::add, config_remove::remove},
+        core::edit::get_available_editor,
         doc::{doc, view_documentation_file},
     },
     run_shell_command,
