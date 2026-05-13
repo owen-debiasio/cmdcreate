@@ -73,10 +73,12 @@ fn init_config_changes(config_mode: &str, config_category: &str, config_value: &
         error("Not a valid category:", Some(config_category));
     }
 
+    let config_value_raw = config_value.split('=').next().unwrap();
+
     if config_value.is_empty() {
         error("Please provide a value.", None)
-    } else if !AVAILABLE_VALUES.contains(&config_value) {
-        error("Not a valid value:", Some(config_value));
+    } else if !AVAILABLE_VALUES.contains(&config_value_raw) {
+        error("Not a valid value:", Some(config_value_raw));
     }
 
     if config_mode == "add" {

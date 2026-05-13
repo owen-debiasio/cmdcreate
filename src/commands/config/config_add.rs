@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::logger::{Severity, log};
 use crate::{
     commands::config::main::AVAILABLE_CATEGORIES,
     output,
@@ -27,16 +28,41 @@ use crate::{
     },
 };
 
-pub fn add(category: &str, value: &str) {
+pub fn add(category: &str, full_setting: &str) {
     let config_path = PATHS.configuration_file;
     let config_file_contents = read_file_to_string(config_path);
 
-    let key = value.split('=').next().unwrap();
-    if key.is_empty() || !value.contains('"') {
+    log(
+        &format!(
+            "commands/config/config_add::add(): \
+        Config full setting: {full_setting}"
+        ),
+        Severity::Normal,
+    );
+
+    let value = full_setting.split('=').next_back().unwrap();
+    let key = full_setting.split('=').next().unwrap();
+
+    log(
+        &format!(
+            "commands/config/config_add::add(): \
+        Config value: {value}"
+        ),
+        Severity::Normal,
+    );
+    log(
+        &format!(
+            "commands/config/config_add::add(): \
+        Config key: {key}"
+        ),
+        Severity::Normal,
+    );
+
+    if key.is_empty() || value.is_empty() || !full_setting.contains('=') {
         error("Please provide a setting.", None)
     }
 
-    let parts: Vec<&str> = value.splitn(2, '=').collect();
+    let parts: Vec<&str> = full_setting.splitn(2, '=').collect();
     let key = parts[0];
     let mut setting = parts[1].to_string();
 
