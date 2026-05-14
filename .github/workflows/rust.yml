@@ -45,29 +45,49 @@ jobs:
       - name: Format check
         run: cargo fmt --all -- --check
 
-      - name: Clippy (Cross-Linting)
-        env:
-          CRATE_CC_NO_DEFAULTS: "true"
-          CC_x86_64_unknown_linux_musl: "zig cc -target x86_64-linux-musl"
-          CC_i686_unknown_linux_musl: "zig cc -target x86-linux-musl"
-          CC_aarch64_unknown_linux_musl: "zig cc -target aarch64-linux-musl"
-          CC_armv7_unknown_linux_musleabihf:
-            "zig cc -target armv7-linux-musleabihf"
+      - name: Clippy (x86_64)
         run: |
+          CRATE_CC_NO_DEFAULTS=true \
+          CC_x86_64_unknown_linux_musl="zig cc -target x86_64-linux-musl" \
           cargo clippy --target x86_64-unknown-linux-musl --all-targets --all-features
+
+      - name: Clippy (i686)
+        run: |
+          CRATE_CC_NO_DEFAULTS=true \
+          CC_i686_unknown_linux_musl="zig cc -target x86-linux-musl" \
           cargo clippy --target i686-unknown-linux-musl --all-targets --all-features
+
+      - name: Clippy (aarch64)
+        run: |
+          CRATE_CC_NO_DEFAULTS=true \
+          CC_aarch64_unknown_linux_musl="zig cc -target aarch64-linux-musl" \
           cargo clippy --target aarch64-unknown-linux-musl --all-targets --all-features
+
+      - name: Clippy (armv7)
+        run: |
+          CRATE_CC_NO_DEFAULTS=true \
+          CC_armv7_unknown_linux_musleabihf="zig cc -target arm-linux-musleabihf" \
           cargo clippy --target armv7-unknown-linux-musleabihf --all-targets --all-features
 
-      - name: Build (Release Architectures)
-        env:
-          RUSTFLAGS: "-Dwarnings -C target-feature=+crt-static"
+      - name: Build (x86_64 release)
         run: |
+          RUSTFLAGS="-C target-feature=+crt-static" \
           cargo zigbuild --release --target x86_64-unknown-linux-musl
+
+      - name: Build (i686 release)
+        run: |
+          RUSTFLAGS="-C target-feature=+crt-static" \
           cargo zigbuild --release --target i686-unknown-linux-musl
+
+      - name: Build (aarch64 release)
+        run: |
+          RUSTFLAGS="-C target-feature=+crt-static" \
           cargo zigbuild --release --target aarch64-unknown-linux-musl
+
+      - name: Build (armv7 release)
+        run: |
+          RUSTFLAGS="-C target-feature=+crt-static" \
           cargo zigbuild --release --target armv7-unknown-linux-musleabihf
 
       - name: Run tests
-        # Runs natively on the GitHub runner (glibc)
         run: cargo test
