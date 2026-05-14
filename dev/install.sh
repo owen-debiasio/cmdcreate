@@ -21,6 +21,7 @@ BIN_NAME="cmdcreate"
 INSTALL_DIR="/usr/bin/"
 
 ARCH=$(uname -m)
+
 if [[ "$ARCH" == "x86_64" ]]; then
     RUST_TARGET="x86_64-unknown-linux-musl"
     ZIG_TARGET="x86_64-linux-musl"
@@ -29,6 +30,15 @@ elif [[ "$ARCH" == "i686" || "$ARCH" == "i386" ]]; then
     RUST_TARGET="i686-unknown-linux-musl"
     ZIG_TARGET="x86-linux-musl"
     CC_ENV_VAR="CC_i686_unknown_linux_musl"
+elif [[ "$ARCH" == "aarch64" || "$ARCH" == "arm64" ]]; then
+    RUST_TARGET="aarch64-unknown-linux-musl"
+    ZIG_TARGET="aarch64-linux-musl"
+    CC_ENV_VAR="CC_aarch64_unknown_linux_musl"
+elif [[ "$ARCH" == "armv7l" || "$ARCH" == "armv7" ]]; then
+    # Note: Zig uses 'arm', Rust uses 'armv7'
+    RUST_TARGET="armv7-unknown-linux-musleabihf"
+    ZIG_TARGET="arm-linux-musleabihf"
+    CC_ENV_VAR="CC_armv7_unknown_linux_musleabihf"
 else
     echo "Error: Unsupported architecture $ARCH"
     exit 1
@@ -52,11 +62,15 @@ if [[ "${1:-}" != "--offline" && "${1:-}" != "-o" ]]; then
     rustup target add "$RUST_TARGET"
 
     echo -e "\n${BLUE}> Updating Cargo...${RESET}"
-    cargo install cargo-zigbuild
+    if ! command -v cargo-zigbuild &> /dev/null; then
+        cargo install cargo-zigbuild
+    fi
     cargo update
 fi
 
-./dev/format.sh
+if [[ -f "./dev/format.sh" ]]; then
+    ./dev/format.sh
+fi
 
 echo -e "\n${BLUE}> Running clippy ($ARCH)...${RESET}"
 export CRATE_CC_NO_DEFAULTS=true
@@ -65,7 +79,7 @@ export "$CC_ENV_VAR"="zig cc -target $ZIG_TARGET -fno-sanitize=all"
 cargo clippy --fix --allow-no-vcs --target "$RUST_TARGET"
 
 echo -e "\n${BLUE}> Building release (Static Musl $ARCH)...${RESET}"
-cargo zigbuild --release --target $RUST_TARGET
+cargo zigbuild --release --target "$RUST_TARGET"
 
 echo -e "\n${BLUE}> Installing binary...${RESET}"
 sudo install -Dm755 "$TARGET_BIN" "$INSTALL_DIR/$BIN_NAME"
