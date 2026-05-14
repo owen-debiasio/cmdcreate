@@ -877,3 +877,6 @@ Licensed under the GNU General Public License v3.0 or later.
 - Organized file structure for command source files (`src/commands/*`)
 - Fixed parsing errors when adding a new config
 - Code optimizations
+- Added support for 32 and 64-bit ARM CPUS
+  - `aarch64`
+  - `armv7`
