@@ -11,16 +11,7 @@ permissions:
 
 env:
   CARGO_TERM_COLOR: always
-
-  # Essential for crates with C dependencies (like ring) when cross-compiling
-
-  CC: "zig cc"
-  CXX: "zig c++"
-  AR: "zig ar"
-
-  # Ensures warnings fail CI and forces static linking for musl
-
-  RUSTFLAGS: "-Dwarnings -C target-feature=+crt-static"
+  RUSTFLAGS: "-Dwarnings"
 
 jobs:
   lint-and-test:
@@ -54,37 +45,26 @@ jobs:
       - name: Format check
         run: cargo fmt --all -- --check
 
-      - name: Clippy (x86_64)
-        run:
-          cargo clippy --target x86_64-unknown-linux-musl --all-targets
-          --all-features
+      - name: Clippy (All Targets)
+        env:
+          CC: "zig cc"
+          AR: "zig ar"
+        run: |
+          cargo clippy --target x86_64-unknown-linux-musl --all-targets --all-features
+          cargo clippy --target i686-unknown-linux-musl --all-targets --all-features
+          cargo clippy --target aarch64-unknown-linux-musl --all-targets --all-features
+          cargo clippy --target armv7-unknown-linux-musleabihf --all-targets --all-features
 
-      - name: Clippy (i686)
-        run:
-          cargo clippy --target i686-unknown-linux-musl --all-targets
-          --all-features
-
-      - name: Clippy (aarch64)
-        run:
-          cargo clippy --target aarch64-unknown-linux-musl --all-targets
-          --all-features
-
-      - name: Clippy (armv7)
-        run:
-          cargo clippy --target armv7-unknown-linux-musleabihf --all-targets
-          --all-features
-
-      - name: Build (x86_64 release)
-        run: cargo zigbuild --release --target x86_64-unknown-linux-musl
-
-      - name: Build (i686 release)
-        run: cargo zigbuild --release --target i686-unknown-linux-musl
-
-      - name: Build (aarch64 release)
-        run: cargo zigbuild --release --target aarch64-unknown-linux-musl
-
-      - name: Build (armv7 release)
-        run: cargo zigbuild --release --target armv7-unknown-linux-musleabihf
+      - name: Build All Architectures
+        env:
+          CC: "zig cc"
+          AR: "zig ar"
+          RUSTFLAGS: "-Dwarnings -C target-feature=+crt-static"
+        run: |
+          cargo zigbuild --release --target x86_64-unknown-linux-musl
+          cargo zigbuild --release --target i686-unknown-linux-musl
+          cargo zigbuild --release --target aarch64-unknown-linux-musl
+          cargo zigbuild --release --target armv7-unknown-linux-musleabihf
 
       - name: Run tests
         run: cargo test
