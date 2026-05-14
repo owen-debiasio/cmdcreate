@@ -43,9 +43,4 @@ cd "$SCRIPT_DIR"
 ./create_deb.sh "$VERSION"
 ./create_rpm.sh "$VERSION"
 
-cd ..
-
-echo -e "\n${BLUE}> Cleaning up...${RESET}"
-./dev/clean.sh
-
 echo -e "\n${GREEN}> release artifacts created successfully${RESET}"
