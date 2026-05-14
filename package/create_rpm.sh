@@ -29,7 +29,7 @@ if [[ $# -ne 1 ]]; then
 fi
 
 VERSION="$1"
-ARCHS=("x86_64" "i686")
+ARCHS=("x86_64" "i686" "aarch64" "armv7")
 
 cd "$(dirname "$0")/.."
 
@@ -43,6 +43,16 @@ for ARCH in "${ARCHS[@]}"; do
 
     echo -e "${BLUE}> Packaging .rpm for ${ARCH}...${RESET}"
 
+    if [[ "$ARCH" == "aarch64" ]]; then
+        RPM_ARCH="aarch64"
+    elif [[ "$ARCH" == "armv7" ]]; then
+        RPM_ARCH="armv7hl"
+    elif [[ "$ARCH" == "i686" ]]; then
+        RPM_ARCH="i686"
+    else
+        RPM_ARCH="x86_64"
+    fi
+
     RPMTOP="$(pwd)/rpmbuild_${ARCH}"
     mkdir -p "$RPMTOP"/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
     SPEC_FILE="$RPMTOP/SPECS/cmdcreate.spec"
@@ -53,14 +63,12 @@ for ARCH in "${ARCHS[@]}"; do
 %define _build_id_links none
 %define debug_package %{nil}
 %define __strip /bin/true
-%define _binaries_in_noarch_packages_terminate_build 0
 
 Name:           cmdcreate
 Version:        $VERSION
 Release:        1
 Summary:        Custom command creator
 License:        GPL-3.0-or-later
-BuildArch:      noarch
 
 %description
 Allows you to create custom commands for your custom scripts.
@@ -74,7 +82,7 @@ install -m 755 $BINARY_SRC %{buildroot}%{_bindir}/cmdcreate
 EOF
 
     mkdir -p "$RPMTOP/db"
-    rpmbuild -bb "$SPEC_FILE" --define "_topdir $RPMTOP" > /dev/null
+    rpmbuild -bb "$SPEC_FILE" --define "_topdir $RPMTOP" --target "$RPM_ARCH" > /dev/null 2>&1
 
     GENERATED_RPM=$(find "$RPMTOP/RPMS" -name "*.rpm" | head -n 1)
 

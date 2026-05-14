@@ -89,7 +89,7 @@ fi
 
 rustup default stable
 rustup component add rust-analyzer
-rustup target add x86_64-unknown-linux-musl i686-unknown-linux-musl
+rustup target add x86_64-unknown-linux-musl i686-unknown-linux-musl aarch64-unknown-linux-musl armv7-unknown-linux-musleabihf
 cargo install cargo-zigbuild
 
 echo -e "${BLUE}> Enter directory for cmdcreate dev environment:${RESET}"

@@ -20,6 +20,7 @@ set -euo pipefail
 BLUE='\033[0;34m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
+RED='\033[0;31m'
 RESET='\033[0m'
 
 if [[ $# -ne 1 ]]; then
@@ -28,15 +29,26 @@ if [[ $# -ne 1 ]]; then
 fi
 
 VERSION="$1"
-ARCHS=("x86_64" "i686")
+ARCHS=("x86_64" "i686" "aarch64" "armv7")
 
 cd "$(dirname "$0")/.."
 
 for ARCH in "${ARCHS[@]}"; do
     echo -e "${BLUE}> Building static binary for ${ARCH}...${RESET}"
 
-    TARGET="${ARCH}-unknown-linux-musl"
+    if [[ "$ARCH" == "armv7" ]]; then
+        TARGET="armv7-unknown-linux-musleabihf"
+    elif [[ "$ARCH" == "aarch64" ]]; then
+        TARGET="aarch64-unknown-linux-musl"
+    else
+        TARGET="${ARCH}-unknown-linux-musl"
+    fi
+
     BINARY_NAME="cmdcreate-v${VERSION}-linux-${ARCH}-bin"
+
+    export RUSTFLAGS="-C target-feature=+crt-static -C link-arg=-fno-sanitize=all"
+    export CFLAGS="-O3 -pipe"
+    export CRATE_CC_NO_DEFAULTS=true
 
     cargo zigbuild --release --target "$TARGET"
 

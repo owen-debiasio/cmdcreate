@@ -23,8 +23,16 @@ use crate::{
 
 pub static ARCH: &str = ARCHITECTURE;
 
+/// Provides support for the following:
+/// 32-bit (`x86`, `i386`, `i686`, `armv7`)
+/// 64-bit (`x86_64`, `aarch64`)
 pub fn arch_is_supported() -> bool {
-    ARCH == "x86_64" || ARCH == "x86" || ARCH == "i386" || ARCH == "i686"
+    ARCH == "x86_64"
+        || ARCH == "x86"
+        || ARCH == "i386"
+        || ARCH == "i686"
+        || ARCH == "aarch64"
+        || ARCH == "armv7"
 }
 
 pub fn cpu_arch_check(error_reason: &str) {

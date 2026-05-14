@@ -25,12 +25,19 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
-          targets: x86_64-unknown-linux-musl, i686-unknown-linux-musl
+          targets: |
+            x86_64-unknown-linux-musl
+            i686-unknown-linux-musl
+            aarch64-unknown-linux-musl
+            armv7-unknown-linux-musleabihf
 
       - name: Install Zig
         uses: goto-bus-stop/setup-zig@v2
         with:
           version: 0.13.0
+
+      - name: Install cargo-zigbuild
+        run: cargo install cargo-zigbuild
 
       - name: Cache cargo
         uses: Swatinem/rust-cache@v2
@@ -40,27 +47,51 @@ jobs:
 
       - name: Clippy (x86_64)
         run: |
-          CRATE_CC_NO_DEFAULTS=true \
-          CC_x86_64_unknown_linux_musl="zig cc -target x86_64-linux-musl" \
+          export CRATE_CC_NO_DEFAULTS=true
+          export RUSTFLAGS="-C target-feature=+crt-static -C link-arg=-fno-sanitize=all"
           cargo clippy --target x86_64-unknown-linux-musl --all-targets --all-features
 
       - name: Clippy (i686)
         run: |
-          CRATE_CC_NO_DEFAULTS=true \
-          CC_i686_unknown_linux_musl="zig cc -target x86-linux-musl" \
+          export CRATE_CC_NO_DEFAULTS=true
+          export RUSTFLAGS="-C target-feature=+crt-static -C link-arg=-fno-sanitize=all"
           cargo clippy --target i686-unknown-linux-musl --all-targets --all-features
+
+      - name: Clippy (aarch64)
+        run: |
+          export CRATE_CC_NO_DEFAULTS=true
+          export RUSTFLAGS="-C target-feature=+crt-static -C link-arg=-fno-sanitize=all"
+          cargo clippy --target aarch64-unknown-linux-musl --all-targets --all-features
+
+      - name: Clippy (armv7)
+        run: |
+          export CRATE_CC_NO_DEFAULTS=true
+          export RUSTFLAGS="-C target-feature=+crt-static -C link-arg=-fno-sanitize=all"
+          cargo clippy --target armv7-unknown-linux-musleabihf --all-targets --all-features
 
       - name: Build (x86_64 release)
         run: |
-          CRATE_CC_NO_DEFAULTS=true \
-          CC_x86_64_unknown_linux_musl="zig cc -target x86_64-linux-musl" \
-          cargo build --release --target x86_64-unknown-linux-musl
+          export CRATE_CC_NO_DEFAULTS=true
+          export RUSTFLAGS="-C target-feature=+crt-static -C link-arg=-fno-sanitize=all"
+          cargo zigbuild --release --target x86_64-unknown-linux-musl
 
       - name: Build (i686 release)
         run: |
-          CRATE_CC_NO_DEFAULTS=true \
-          CC_i686_unknown_linux_musl="zig cc -target x86-linux-musl" \
-          cargo build --release --target i686-unknown-linux-musl
+          export CRATE_CC_NO_DEFAULTS=true
+          export RUSTFLAGS="-C target-feature=+crt-static -C link-arg=-fno-sanitize=all"
+          cargo zigbuild --release --target i686-unknown-linux-musl
+
+      - name: Build (aarch64 release)
+        run: |
+          export CRATE_CC_NO_DEFAULTS=true
+          export RUSTFLAGS="-C target-feature=+crt-static -C link-arg=-fno-sanitize=all"
+          cargo zigbuild --release --target aarch64-unknown-linux-musl
+
+      - name: Build (armv7 release)
+        run: |
+          export CRATE_CC_NO_DEFAULTS=true
+          export RUSTFLAGS="-C target-feature=+crt-static -C link-arg=-fno-sanitize=all"
+          cargo zigbuild --release --target armv7-unknown-linux-musleabihf
 
       - name: Run tests
         run: cargo test

@@ -45,21 +45,23 @@ pub fn update_via_package(package_type: &str) {
 
     cpu_arch_check(
         "You cannot update cmdcreate via this method using \
-         CPU Architectures other than x86 variants!",
+          CPU Architectures other than x86 or ARM variants!",
     );
 
-    let target_arch = if ARCH == "x86_64" {
-        output!(
-            "
-            \nSelect target architecture:\n\
-            1]{reset} x86_64 {blue}(64-bit)\n\
-            2]{reset} i686 {blue}(32-bit)"
-        );
-
-        let arch_choice = input!("").trim().parse::<usize>().unwrap_or(1);
-        if arch_choice == 2 { "i686" } else { "x86_64" }
-    } else {
-        "i686"
+    let target_arch = match ARCH {
+        "x86_64" => {
+            output!(
+                "
+                \nSelect target architecture:\n\
+                1]{reset} x86_64 {blue}(64-bit)\n\
+                2]{reset} i686 {blue}(32-bit)"
+            );
+            let arch_choice = input!("").trim().parse::<usize>().unwrap_or(1);
+            if arch_choice == 2 { "i686" } else { "x86_64" }
+        }
+        "aarch64" => "aarch64",
+        "armv7" => "armv7",
+        _ => "i686",
     };
 
     let package_file_name =

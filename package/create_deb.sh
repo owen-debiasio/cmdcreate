@@ -30,7 +30,7 @@ if [[ $# -ne 1 ]]; then
 fi
 
 VERSION="$1"
-ARCHS=("x86_64" "i686")
+ARCHS=("x86_64" "i686" "aarch64" "armv7")
 LICENSE_FILE="../LICENSE"
 
 cd "$(dirname "$0")"
@@ -46,7 +46,13 @@ echo -e "${BLUE}> Packaging .deb packages...${RESET}"
 
 for ARCH in "${ARCHS[@]}"; do
     DEB_ARCH="amd64"
-    [[ "$ARCH" == "i686" ]] && DEB_ARCH="i386"
+    if [[ "$ARCH" == "i686" ]]; then
+        DEB_ARCH="i386"
+    elif [[ "$ARCH" == "aarch64" ]]; then
+        DEB_ARCH="arm64"
+    elif [[ "$ARCH" == "armv7" ]]; then
+        DEB_ARCH="armhf"
+    fi
 
     PKGDIR="cmdcreate-${VERSION}-linux-${ARCH}-deb"
     BINARY_SRC="$HOME/Downloads/cmdcreate-v${VERSION}-linux-${ARCH}-bin"
