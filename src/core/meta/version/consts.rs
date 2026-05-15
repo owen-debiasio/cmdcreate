@@ -14,4 +14,4 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-pub const CURRENT_PROJECT_VERSION: &str = "v1.3.4";
+pub const CURRENT_PROJECT_VERSION: &str = "v1.3.5";
