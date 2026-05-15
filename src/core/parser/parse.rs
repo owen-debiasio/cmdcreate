@@ -29,48 +29,23 @@ use crate::{
             search::search,
         },
         doc::doc,
-        updater::main::update,
+        updater::{check::check, main::update},
     },
-    logger::{Severity, log},
+    core::{
+        logger::{consts::Severity, main::log},
+        meta::version::display_info::print_version_info,
+    },
     utils::{
-        colors::COLORS,
         io::error,
         sys::{arguments::arguments_force_actions, env::root_check},
     },
-    version::{check, print_version_info},
+    validate_args,
 };
-
-macro_rules! validate_args {
-    ($command:expr, $amount_of_arguments_given:expr, $amount_of_arguments_needed:expr, $command_usage:expr, $additional_args:expr) => {
-        if $amount_of_arguments_given.len() <= $amount_of_arguments_needed {
-            let (blue, yellow, red, green, reset) = (
-                COLORS.blue,
-                COLORS.yellow,
-                COLORS.red,
-                COLORS.green,
-                COLORS.reset,
-            );
-
-            let include_additional_flags = if !$additional_args.is_empty() {
-                &format!("{reset}[{green}{}{reset}] ", $additional_args)
-            } else {
-                ""
-            };
-
-            println!(
-                "Usage:\ncmdcreate {blue}{} {include_additional_flags}{yellow}{}{red}{reset}",
-                $command, $command_usage
-            );
-
-            return;
-        }
-    };
-}
 
 #[allow(clippy::too_many_lines)]
 pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
     log(
-        &format!("parse::parse(): Parsing command: {supplied_command}"),
+        &format!("core/parser::parse(): Parsing command: {supplied_command}"),
         Severity::Normal,
     );
 

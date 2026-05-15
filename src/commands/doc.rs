@@ -15,8 +15,10 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    logger::{Severity, log},
-    meta::{display_full_license, project_information::PROJECT},
+    core::{
+        logger::{consts::Severity, main::log},
+        meta::{license::display_full, project::project_information::PROJECT},
+    },
     output, run_shell_command,
     utils::{
         colors::COLORS,
@@ -105,7 +107,7 @@ pub fn doc(info_to_retrieve: &str) {
     // to retrieve the license. Extra steps are needed so the
     // function is kept.
     if info_to_retrieve == "license" {
-        display_full_license();
+        display_full();
     }
 
     view_documentation_file(doc_file_path);

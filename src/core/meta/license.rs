@@ -15,8 +15,10 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    logger::{Severity, log},
-    meta::{author_information::AUTHOR, project_information::PROJECT},
+    core::{
+        logger::{consts::Severity, main::log},
+        meta::project::project_information::PROJECT,
+    },
     output,
     utils::{
         colors::COLORS,
@@ -33,47 +35,7 @@ use crate::{
 
 use std::process::exit;
 
-pub const YEAR: &str = "2026";
-
-#[allow(dead_code)]
-pub mod author_information {
-    pub struct Author {
-        pub name: &'static str,
-        pub username: &'static str,
-        pub email: &'static str,
-    }
-
-    pub const AUTHOR: Author = Author {
-        name: "Owen Debiasio",
-        username: "owen-debiasio",
-        email: "owen.debiasio@proton.me",
-    };
-}
-
-pub mod project_information {
-    pub struct Project {
-        pub name: &'static str,
-        pub repository: &'static str,
-        pub repository_raw: &'static str,
-        pub repository_api: &'static str,
-    }
-
-    pub const PROJECT: Project = Project {
-        name: "cmdcreate",
-        repository: "https://github.com/owen-debiasio/cmdcreate",
-        repository_raw: "https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/",
-        repository_api: "https://api.github.com/repos/owen-debiasio/cmdcreate/",
-    };
-}
-
-pub fn get_project_copyright_info() -> String {
-    let project_author = AUTHOR.name;
-    let author_email = AUTHOR.email;
-
-    format!("Copyright {YEAR} {project_author} <{author_email}>")
-}
-
-pub fn display_full_license() {
+pub fn display_full() {
     let (red, reset) = (COLORS.red, COLORS.reset);
 
     let path_to_license_file = &PATHS.license;
@@ -96,13 +58,13 @@ pub fn display_full_license() {
 
         ask_for_confirmation(question, true);
 
-        download_and_install_license();
+        install();
     }
 
     exit(0)
 }
 
-fn download_and_install_license() {
+fn install() {
     let green = COLORS.green;
 
     root_check();
@@ -116,16 +78,16 @@ fn download_and_install_license() {
     let license_download_path = &format!("{raw_repo_path}LICENSE");
     download_file_to_location_via_curl(license_path, license_download_path);
 
-    license_install_success_check(license_path);
+    install_success_check(license_path);
 
     output!("\n{green}Successfully downloaded license!");
 
     exit(0)
 }
 
-fn license_install_success_check(license_path: &str) {
+fn install_success_check(license_path: &str) {
     log(
-        "meta::license_install_success_check(): \
+        "core/meta/license::install_success_check(): \
         Determining License installation status...",
         Severity::Normal,
     );
@@ -138,7 +100,7 @@ fn license_install_success_check(license_path: &str) {
     }
 
     log(
-        "meta::license_install_success_check(): \
+        "core/meta/license::install_success_check(): \
         License installed correctly, continuing...",
         Severity::Normal,
     );

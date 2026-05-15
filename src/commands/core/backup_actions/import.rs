@@ -16,7 +16,7 @@
 
 use crate::{
     commands::core::{create::create, favorite::add_favorite::add as add_favorite},
-    logger::{Severity, log},
+    core::logger::{consts::Severity, main::log},
     output,
     utils::{colors::COLORS, fs::core::read_file_to_string, io::error},
 };

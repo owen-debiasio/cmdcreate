@@ -17,7 +17,7 @@
 use std::env::consts::ARCH as ARCHITECTURE;
 
 use crate::{
-    logger::{Severity, log},
+    core::logger::{consts::Severity, main::log},
     utils::io::error,
 };
 

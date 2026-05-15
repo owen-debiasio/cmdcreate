@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    logger::{Severity, log},
+    core::logger::{consts::Severity, main::log},
     utils::{
         io::{ask_for_confirmation, error},
         sys::arguments::args_contains,

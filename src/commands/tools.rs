@@ -14,11 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use std::{fs::read_dir, path::PathBuf};
-
 use crate::{
     commands::core::create::NEW_COMMAND_HEADER,
-    logger::{Severity, log},
+    core::logger::{consts::Severity, main::log},
     utils::{
         fs::{
             core::{path_exists, read_file_to_string},
@@ -27,6 +25,8 @@ use crate::{
         io::error,
     },
 };
+
+use std::{fs::read_dir, path::PathBuf};
 
 pub fn cmdcreate_command_is_installed(command_to_find: &str) -> bool {
     let command_install_path =

@@ -16,7 +16,7 @@
 
 use crate::{
     commands::{core::create::NEW_COMMAND_HEADER, tools::get_installed_commands},
-    logger::{Severity, log},
+    core::logger::{consts::Severity, main::log},
     output,
     utils::{
         colors::COLORS,

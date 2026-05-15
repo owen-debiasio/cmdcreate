@@ -19,8 +19,10 @@ use crate::{
         interactive::interactive_upgrade,
         update_methods::{aur::update_via_aur, package::update_via_package},
     },
-    logger::{Severity, log},
-    meta::project_information::PROJECT,
+    core::{
+        logger::{consts::Severity, main::log},
+        meta::project::project_information::PROJECT,
+    },
     utils::{
         colors::COLORS,
         io::{ask_for_confirmation, error, output_is_silent},

@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::logger::{Severity, log};
 use crate::{
     commands::config::main::AVAILABLE_CATEGORIES,
+    core::logger::{consts::Severity, main::log},
     output,
     utils::{
         colors::COLORS,

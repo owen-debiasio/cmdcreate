@@ -14,8 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-pub mod interactive;
-pub mod main;
+use crate::utils::fs::{core::read_file_to_string, paths::PATHS};
 
-pub mod check;
-pub mod update_methods;
+use std::sync::LazyLock;
+use toml::{Value, from_str, map::Map};
+
+static CONFIG: LazyLock<Value> = LazyLock::new(|| {
+    let config_file_contents = read_file_to_string(PATHS.configuration_file);
+
+    from_str(&config_file_contents).unwrap_or_else(|_| Value::Table(Map::new()))
+});
+
+pub fn load_configuration(
+    config_category: &str,
+    config_value: &str,
+    default_value: &str,
+) -> String {
+    CONFIG
+        .get(config_category)
+        .and_then(|category| category.get(config_value))
+        .and_then(|value| value.as_str())
+        .unwrap_or(default_value)
+        .to_string()
+}

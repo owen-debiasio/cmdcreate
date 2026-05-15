@@ -19,7 +19,7 @@ use crate::{
         core::{edit::edit as edit_command, remove::remove},
         tools::cmdcreate_command_is_installed,
     },
-    logger::{Severity, log},
+    core::logger::{consts::Severity, main::log},
     output, run_shell_command,
     utils::{
         colors::COLORS,

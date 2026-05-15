@@ -16,7 +16,7 @@
 
 use crate::{
     commands::tools::cmdcreate_command_is_installed,
-    logger::{Severity, log},
+    core::logger::{consts::Severity, main::log},
     run_shell_command,
     utils::{
         fs::paths::PATHS,

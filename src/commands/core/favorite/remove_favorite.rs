@@ -16,7 +16,7 @@
 
 use crate::{
     commands::core::favorite::main::command_is_in_favorites,
-    logger::{Severity, log},
+    core::logger::{consts::Severity, main::log},
     output,
     utils::{
         colors::COLORS,

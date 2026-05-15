@@ -15,10 +15,14 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    CURRENT_PROJECT_VERSION,
-    configs::init_configs,
-    logger::{Severity, log},
-    meta::author_information::AUTHOR,
+    core::{
+        configs::init::init_configs,
+        logger::{consts::Severity, main::log},
+        meta::{
+            project::author_information::AUTHOR,
+            version::{build::get_build_status, consts::CURRENT_PROJECT_VERSION},
+        },
+    },
     utils::{
         fs::init::init_filesystem,
         net::{internet_is_forced_disabled, not_connected_to_internet},
@@ -28,9 +32,9 @@ use crate::{
             env::{ENVIRONMENT_VARIABLES, running_as_root},
         },
     },
-    version::get_build_status,
 };
 
+#[must_use]
 pub fn debug_intro() -> String {
     let author_name = AUTHOR.name;
     let author_email = AUTHOR.email;
@@ -83,7 +87,7 @@ pub fn init() {
 
     log(
         &format!(
-            "init::init(): Starting cmdcreate...\n         {}",
+            "core/init::init(): Starting cmdcreate...\n         {}",
             debug_intro()
         ),
         Severity::Normal,

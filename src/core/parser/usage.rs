@@ -15,11 +15,12 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    logger::{Severity, log},
-    meta::project_information::PROJECT,
+    core::{
+        logger::{consts::Severity, main::log},
+        meta::{project::project_information::PROJECT, version::consts::CURRENT_PROJECT_VERSION},
+    },
     output,
     utils::colors::COLORS,
-    version::CURRENT_PROJECT_VERSION,
 };
 use std::process::exit;
 
@@ -27,7 +28,7 @@ pub fn cmdcreate_usage() {
     let (blue, cyan, yellow, reset) = (COLORS.blue, COLORS.cyan, COLORS.yellow, COLORS.reset);
 
     log(
-        "usage::cmdcreate_usage(): Displaying usage information...",
+        "core/parser/usage::cmdcreate_usage(): Displaying usage information...",
         Severity::Normal,
     );
 

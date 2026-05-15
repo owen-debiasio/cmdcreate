@@ -22,7 +22,7 @@ use crate::{
         },
         tools::{cmdcreate_command_is_installed, get_installed_commands},
     },
-    logger::{Severity, log},
+    core::logger::{consts::Severity, main::log},
     output, run_shell_command,
     utils::{
         colors::COLORS,

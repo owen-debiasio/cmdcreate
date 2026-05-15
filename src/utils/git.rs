@@ -15,8 +15,10 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    logger::{Severity, log},
-    meta::project_information::PROJECT,
+    core::{
+        logger::{consts::Severity, main::log},
+        meta::project::project_information::PROJECT,
+    },
     output, run_shell_command,
     utils::{
         colors::COLORS,

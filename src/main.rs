@@ -15,22 +15,16 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 mod commands;
-mod configs;
-mod init;
-mod logger;
-mod meta;
-mod parse;
-mod usage;
+mod core;
 mod utils;
-mod version;
 
 use crate::{
-    init::init,
-    logger::{Severity, log},
-    parse::parse,
-    usage::cmdcreate_usage,
+    core::{
+        init::init,
+        logger::{consts::Severity, main::log},
+        parser::{parse::parse, usage::cmdcreate_usage},
+    },
     utils::sys::arguments::return_args,
-    version::CURRENT_PROJECT_VERSION,
 };
 
 use std::process::exit;
@@ -62,20 +56,16 @@ fn main() {
         cmdcreate_usage();
     }
 
-    cmdcreate(&arguments_retrieved);
-
-    exit(0)
-}
-
-fn cmdcreate(arguments_provided: &[String]) {
-    let arguments_to_parse = arguments_provided.iter().enumerate();
+    let arguments_to_parse = arguments_retrieved.iter().enumerate();
 
     for (index_of_provided_arguments, command) in arguments_to_parse {
         if !command.starts_with('-') {
-            parse(command, &arguments_provided[index_of_provided_arguments..]);
+            parse(command, &arguments_retrieved[index_of_provided_arguments..]);
             return;
         }
 
-        parse(command, arguments_provided);
+        parse(command, &arguments_retrieved);
     }
+
+    exit(0)
 }

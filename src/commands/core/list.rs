@@ -16,8 +16,10 @@
 
 use crate::{
     commands::{core::favorite::main::command_is_in_favorites, tools::get_installed_commands},
-    configs::load_configuration,
-    logger::{Severity, log},
+    core::{
+        configs::load::load_configuration,
+        logger::{consts::Severity, main::log},
+    },
     output,
     utils::{
         colors::COLORS,

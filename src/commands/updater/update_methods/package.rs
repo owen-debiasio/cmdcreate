@@ -15,9 +15,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    input,
-    meta::project_information::PROJECT,
-    output, run_shell_command,
+    core::meta::project::project_information::PROJECT,
+    input, output, run_shell_command,
     utils::{
         colors::COLORS,
         fs::{

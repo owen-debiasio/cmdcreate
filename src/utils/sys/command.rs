@@ -32,7 +32,7 @@ macro_rules! run_shell_command {
         let command = command_string.trim();
 
         if !command.is_empty() {
-            let shell = $crate::configs::load_configuration("sys", "shell", "sh");
+            let shell = $crate::core::configs::load::load_configuration("sys", "shell", "sh");
 
             // Determine if terminal output is visible
             let stdout = if $crate::utils::io::output_is_silent() {
