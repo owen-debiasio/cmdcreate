@@ -880,3 +880,8 @@ Licensed under the GNU General Public License v3.0 or later.
 - Added support for 32 and 64-bit ARM CPUS
   - `aarch64`
   - `armv7`
+
+## v1.3.5
+
+- Absolutely overhaul file structure
+- Code optimizations
