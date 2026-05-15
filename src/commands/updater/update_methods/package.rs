@@ -24,13 +24,13 @@ use crate::{
             core::delete_file,
             misc::{download_file_to_location_via_curl, install_binary},
         },
+        git::get_latest_tag,
         io::error,
         sys::{
             cpu::{ARCH, cpu_arch_check},
             env::root_check,
         },
     },
-    version::get_latest_tag,
 };
 use std::process::exit;
 

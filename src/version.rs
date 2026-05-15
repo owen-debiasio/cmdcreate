@@ -16,17 +16,12 @@
 
 use crate::{
     commands::updater::main::update,
-    logger::{Severity, log},
     meta::{author_information::AUTHOR, get_project_copyright_info, project_information::PROJECT},
     output,
-    utils::{
-        colors::COLORS,
-        io::error,
-        net::{not_connected_to_internet, ureq_agent},
-    },
+    utils::{colors::COLORS, git::get_latest_tag, io::error, net::not_connected_to_internet},
 };
-use serde_json::{Value, from_reader};
-use std::{cmp::Ordering, error::Error};
+
+use std::cmp::Ordering;
 
 pub const CURRENT_PROJECT_VERSION: &str = "v1.3.4";
 
@@ -65,78 +60,6 @@ pub fn get_build_status() -> &'static str {
         }
     } else {
         "(stable)"
-    }
-}
-
-fn fetch_github_json(endpoint: &str) -> Result<Value, Box<dyn Error>> {
-    let repo_api_url = PROJECT.repository_api.trim_end_matches('/');
-    let github_json_url = format!("{repo_api_url}/{endpoint}");
-
-    let api_response = ureq_agent()
-        .get(&github_json_url)
-        .header("User-Agent", PROJECT.name)
-        .call()
-        .expect("Failed to call user agent")
-        .into_body()
-        .into_reader();
-
-    let retrieved_json = from_reader(api_response)?;
-
-    Ok(retrieved_json)
-}
-
-pub fn get_latest_tag() -> String {
-    if not_connected_to_internet() {
-        log("version::get_latest_tag(): No internet...", Severity::Warn);
-        return "unknown".to_string();
-    }
-
-    match fetch_github_json("releases/latest") {
-        Ok(json) => {
-            let tag = json["tag_name"].as_str().unwrap_or("unknown").to_string();
-            log(
-                &format!("version::get_latest_tag(): Latest tag: {tag}"),
-                Severity::Normal,
-            );
-            tag
-        }
-        Err(tag_retrieval_error) => {
-            log(
-                &format!("version::get_latest_tag(): Error: {tag_retrieval_error}"),
-                Severity::Warn,
-            );
-            "unknown".to_string()
-        }
-    }
-}
-
-pub fn get_latest_commit() -> String {
-    if not_connected_to_internet() {
-        return "unknown".to_string();
-    }
-
-    match fetch_github_json("commits/main") {
-        Ok(json) => {
-            let full_sha = json["sha"].as_str().unwrap_or("");
-            let short_sha = full_sha.chars().take(7).collect::<String>();
-
-            if short_sha.is_empty() {
-                return "unknown".to_string();
-            }
-
-            log(
-                &format!("version::get_latest_commit(): Short SHA: {short_sha}"),
-                Severity::Normal,
-            );
-            short_sha
-        }
-        Err(commit_retrieval_error) => {
-            log(
-                &format!("version::get_latest_commit(): Error: {commit_retrieval_error}"),
-                Severity::Warn,
-            );
-            "unknown".to_string()
-        }
     }
 }
 

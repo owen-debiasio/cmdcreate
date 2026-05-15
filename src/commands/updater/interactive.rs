@@ -21,13 +21,13 @@ use crate::{
     input, output,
     utils::{
         colors::COLORS,
+        git::get_latest_commit,
         io::error,
         sys::{
             cpu::arch_is_supported,
             distro::{DistroBase, get_distro_base},
         },
     },
-    version::get_latest_commit,
 };
 
 pub fn interactive_upgrade() {

@@ -20,8 +20,9 @@ use crate::{
         colors::COLORS,
         fs::{
             core::{delete_folder, path_exists},
-            misc::{clone_repository, install_binary},
+            misc::install_binary,
         },
+        git::clone_repository,
         io::error,
         sys::{
             cpu::ARCH,

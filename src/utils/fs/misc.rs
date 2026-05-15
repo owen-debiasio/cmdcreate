@@ -16,12 +16,10 @@
 
 use crate::{
     logger::{Severity, log},
-    meta::project_information::PROJECT,
-    output, run_shell_command,
+    run_shell_command,
     utils::{
-        colors::COLORS,
         fs::core::path_exists,
-        io::{error, output_is_silent},
+        io::error,
         net::not_connected_to_internet,
         sys::{command::system_command_is_installed, env::root_check},
     },
@@ -64,46 +62,6 @@ pub fn install_binary(mode: &str, binary: &str, destination: &str) {
 
     log(
         "utils/fs::misc::install_binary(): Successfully installed binary!",
-        Severity::Normal,
-    );
-}
-
-pub fn clone_repository(destination: &str) {
-    log(
-        "utils/fs::misc::clone_repository(): Cloning project repository...",
-        Severity::Normal,
-    );
-
-    if !system_command_is_installed("git") {
-        error(
-            "Unable to clone repository.",
-            Some("Executable \"git\" not installed."),
-        )
-    }
-
-    output!("\nCloning project repository...", true);
-
-    let project_repo = PROJECT.repository;
-
-    let clone_silently = if output_is_silent() { "--quiet" } else { "" };
-
-    run_shell_command!(
-        "git clone {clone_silently} --depth=1 \
-        {project_repo}.git {destination}"
-    );
-
-    if !path_exists(destination) {
-        error(
-            "Failed to clone repository!",
-            Some("Destination not found!"),
-        )
-    }
-
-    log(
-        &format!(
-            "utils/fs::misc::clone_repository(): \
-            Successfully cloned repository \"{project_repo}\""
-        ),
         Severity::Normal,
     );
 }

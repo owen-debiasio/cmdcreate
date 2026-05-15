@@ -163,6 +163,7 @@ change.
     - [distro.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/fs/misc.rs)
     - [env.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/fs/paths.rs)
   - [colors.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/colors.rs)
+  - [git.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/git.rs)
   - [io.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/io.rs)
   - [mod.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/mod.rs)
   - [net.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/net.rs)
