@@ -24,6 +24,7 @@ use crate::{
         },
         io::error,
         sys::{
+            cpu::ARCH,
             distro::{DistroBase, get_distro_base},
             env::root_check,
         },
@@ -48,17 +49,17 @@ pub fn build() {
     let dependency_install_command = match get_distro_base() {
         DistroBase::Arch => {
             "pacman -Sy && pacman -S --needed --noconfirm \
-            cargo git less openssl curl base-devel"
+            cargo git less openssl curl base-devel zig"
         }
         DistroBase::Debian => {
             "apt update && \
             apt install -y \
-            git less build-essential pkg-config libssl-dev curl"
+            git less build-essential pkg-config libssl-dev curl zig"
         }
         DistroBase::Fedora => {
             "dnf update && \
             dnf install -y \
-            git-core less openssl-devel pkgconf-pkg-config"
+            git-core less openssl-devel pkgconf-pkg-config zig"
         }
         DistroBase::Unknown => error("Your distro is unsupported! Unable to proceed.", None),
     };
@@ -70,6 +71,30 @@ pub fn build() {
 
     clone_repository(cloned_repository_destination);
 
+    let (rust_target, zig_target, cc_var) = match ARCH {
+        "x86_64" => (
+            "x86_64-unknown-linux-musl",
+            "x86_64-linux-musl",
+            "CC_x86_64_unknown_linux_musl",
+        ),
+        "i686" | "i386" => (
+            "i686-unknown-linux-musl",
+            "x86-linux-musl",
+            "CC_i686_unknown_linux_musl",
+        ),
+        "aarch64" | "arm64" => (
+            "aarch64-unknown-linux-musl",
+            "aarch64-linux-musl",
+            "CC_aarch64_unknown_linux_musl",
+        ),
+        "armv7" | "armv7l" => (
+            "armv7-unknown-linux-musleabihf",
+            "arm-linux-musleabihf",
+            "CC_armv7_unknown_linux_musleabihf",
+        ),
+        _ => error(&format!("Unsupported architecture: {ARCH}"), None),
+    };
+
     let script_to_build_cmdcreate = format!(
         "set -e
         {dependency_install_command}
@@ -77,11 +102,19 @@ pub fn build() {
 
         [ -f \"$HOME/.cargo/env\" ] && . \"$HOME/.cargo/env\"
 
+        rustup target add {rust_target}
+        if ! command -v cargo-zigbuild >/dev/null; then
+            cargo install cargo-zigbuild
+        fi
+
         cd \"{cloned_repository_destination}\"
 
-        echo -e \"{blue}> Building... please wait...{reset}\"
+        echo -e \"{blue}> Building ({ARCH})... please wait...{reset}\"
 
-        cargo build --release --locked",
+        export CRATE_CC_NO_DEFAULTS=true
+        export {cc_var}=\"zig cc -target {zig_target} -fno-sanitize=all\"
+
+        cargo zigbuild --release --locked --target {rust_target}",
     );
 
     run_shell_command!("{script_to_build_cmdcreate}");
@@ -90,7 +123,7 @@ pub fn build() {
 
     install_binary(
         "-Dm755",
-        &format!("{cloned_repository_destination}/target/release/cmdcreate"),
+        &format!("{cloned_repository_destination}/target/{rust_target}/release/cmdcreate"),
         "/usr/bin/cmdcreate",
     );
 
