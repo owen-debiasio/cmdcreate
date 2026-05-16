@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::core::{create::create, favorite::add_favorite::add as add_favorite},
+    commands::core::{create::create, favorite::main::favorite},
     core::logger::{consts::Severity, main::log},
     output,
     utils::{colors::COLORS, fs::core::read_file_to_string, io::error},
@@ -62,14 +62,14 @@ pub fn import(command_import_file: &str) {
         }
 
         output!(
-            "{blue}Installing command: \"{green}{retrieved_command_name}{reset}\"",
+            "Installing command: \"{green}{retrieved_command_name}{blue}\"",
             true
         );
 
         create(retrieved_command_name, &command_contents, false);
 
         if command_favorite_status {
-            add_favorite(retrieved_command_name);
+            favorite("add", retrieved_command_name);
         }
     }
 

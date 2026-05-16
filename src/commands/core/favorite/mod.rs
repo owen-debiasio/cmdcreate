@@ -14,6 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-pub mod add_favorite;
+mod add_favorite;
 pub mod main;
-pub mod remove_favorite;
+mod remove_favorite;

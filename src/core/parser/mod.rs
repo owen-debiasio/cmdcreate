@@ -16,4 +16,4 @@
 
 pub mod parse;
 pub mod usage;
-pub mod validate_args;
+mod validate_args;

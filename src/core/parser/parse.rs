@@ -166,7 +166,7 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                     supplied_command,
                     supplied_arguments,
                     3,
-                    "<help/example/add/remove/edit/display> <category> <value(=\"setting\")>",
+                    "<help/example/add/remove/edit/display> <category> <key=\"value\">",
                     ""
                 );
                 return;
