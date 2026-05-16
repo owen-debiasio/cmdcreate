@@ -55,7 +55,6 @@ detect_distro() {
     fi
 }
 
-# Added architecture selection
 select_arch() {
     echo -e "${BLUE}Select Architecture:${RESET}"
     echo -e "1) x86_64 (64-bit)"
