@@ -23,8 +23,9 @@ pub enum Severity {
 }
 
 impl Severity {
-    pub(crate) fn to_colored_string(self) -> String {
+    pub fn to_colored_string(self) -> String {
         let (cyan, yellow, reset) = (COLORS.cyan, COLORS.yellow, COLORS.reset);
+
         match self {
             Self::Normal => format!("{cyan}LOG{reset}"),
             Self::Warn => format!("{yellow}WARN{reset}"),

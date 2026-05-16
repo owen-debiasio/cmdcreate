@@ -24,12 +24,13 @@ use crate::{
 };
 
 pub fn log(text_to_log: &str, importance_level: Severity) {
-    let time = get_formatted_timestamp();
-
-    let log_type = importance_level.to_colored_string();
-
     let (blue, reset) = (COLORS.blue, COLORS.reset);
 
+    let time = get_formatted_timestamp();
+    let log_type = importance_level.to_colored_string();
+
+    // Example output:
+    // [<date> <time>] [<message type>] path/to/file::function(): Message
     let console_output = format!("[{blue}{time}{reset}] [{log_type}] {text_to_log}\n");
     output_verbose_message(&console_output);
 
