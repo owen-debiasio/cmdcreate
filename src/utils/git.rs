@@ -51,7 +51,10 @@ fn fetch_github_json(endpoint: &str) -> Result<Value, Box<dyn Error>> {
 
 pub fn get_latest_tag() -> String {
     if not_connected_to_internet() {
-        log("version::get_latest_tag(): No internet...", Severity::Warn);
+        log(
+            "utils/git::get_latest_tag(): No internet...",
+            Severity::Warn,
+        );
         return "unknown".to_string();
     }
 
@@ -59,14 +62,14 @@ pub fn get_latest_tag() -> String {
         Ok(json) => {
             let tag = json["tag_name"].as_str().unwrap_or("unknown").to_string();
             log(
-                &format!("version::get_latest_tag(): Latest tag: {tag}"),
+                &format!("utils/git::get_latest_tag(): Latest tag: {tag}"),
                 Severity::Normal,
             );
             tag
         }
         Err(tag_retrieval_error) => {
             log(
-                &format!("version::get_latest_tag(): Error: {tag_retrieval_error}"),
+                &format!("utils/git::get_latest_tag(): Error: {tag_retrieval_error}"),
                 Severity::Warn,
             );
             "unknown".to_string()
@@ -89,14 +92,14 @@ pub fn get_latest_commit() -> String {
             }
 
             log(
-                &format!("version::get_latest_commit(): Short SHA: {short_sha}"),
+                &format!("utils/git::get_latest_commit(): Short SHA: {short_sha}"),
                 Severity::Normal,
             );
             short_sha
         }
         Err(commit_retrieval_error) => {
             log(
-                &format!("version::get_latest_commit(): Error: {commit_retrieval_error}"),
+                &format!("utils/git::get_latest_commit(): Error: {commit_retrieval_error}"),
                 Severity::Warn,
             );
             "unknown".to_string()
@@ -106,7 +109,7 @@ pub fn get_latest_commit() -> String {
 
 pub fn clone_repository(destination: &str) {
     log(
-        "utils/fs::misc::clone_repository(): Cloning project repository...",
+        "utils/git::clone_repository(): Cloning project repository...",
         Severity::Normal,
     );
 
@@ -137,7 +140,7 @@ pub fn clone_repository(destination: &str) {
 
     log(
         &format!(
-            "utils/fs::misc::clone_repository(): \
+            "utils/git::clone_repository(): \
             Successfully cloned repository \"{project_repo}\""
         ),
         Severity::Normal,
