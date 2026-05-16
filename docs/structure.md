@@ -147,6 +147,38 @@ change.
   - [mod.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/mod.rs)
   - [tools.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/tools.rs)
 
+- 📁 [core](https://github.com/owen-debiasio/cmdcreate/tree/main/src/core)
+  - 📁
+    [configs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/configs/)
+    - [init.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/configs/init.rs)
+    - [load.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/configs/load.rs)
+    - [mod.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/configs/mod.rs)
+  - 📁
+    [logger](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/logger/)
+    - [consts.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/logger/init.rs)
+    - [main.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/logger/main.rs)
+    - [mod.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/logger/mod.rs)
+    - [utils.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/logger/utils.rs)
+    - [verbose.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/logger/verbose.rs)
+  - 📁
+    [meta](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/meta/)
+    - 📁
+      [version](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/meta/version/)
+      - [build.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/meta/version/build.rs)
+      - [consts.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/meta/version/consts.rs)
+      - [display_info.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/meta/version/display_info.rs)
+      - [mod.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/meta/version/mod.rs)
+    - [license.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/meta/license.rs)
+    - [mod.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/meta/mod.rs)
+    - [project.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/meta/project.rs)
+  - 📁
+    [parser](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/fs/)
+    - [mod.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/parser/mod.rs)
+    - [parse.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/parser/parse.rs)
+    - [usage.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/parser/usage.rs)
+    - [validate_args.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/parser/validate_args.rs)
+  - [init.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/init.rs)
+  - [mod.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/core/mod.rs)
 - 📁 [utils](https://github.com/owen-debiasio/cmdcreate/tree/main/src/utils)
   - 📁
     [sys](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/sys/)
@@ -167,14 +199,7 @@ change.
   - [io.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/io.rs)
   - [mod.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/mod.rs)
   - [net.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/net.rs)
-- [configs.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/configs.rs)
-- [init.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/init.rs)
-- [logger.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/logger.rs)
 - [main.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/main.rs)
-- [parse.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/parse.rs)
-- [usage.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/usage.rs)
-- [version.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/version.rs)
-- [meta.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/meta.rs)
 
 ## Testing cmdcreate
 
