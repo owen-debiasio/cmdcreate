@@ -69,8 +69,7 @@ Flags:
   {cyan}-b{reset}, {cyan}--bypass-root{reset}   Bypass root requirement {yellow}(USE WITH CAUTION){reset}
 
 About:
-   {project_name} allows you to create custom commands for your Linux terminal
-   without needing to enter the same \"complex\" commands over and over.",
+   {project_name}: Easily create and manage your own custom commands.",
    false
     );
 

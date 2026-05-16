@@ -6,8 +6,7 @@ Licensed under the GNU General Public License v3.0 or later.
 
 # cmdcreate
 
-Create your own custom commands for your convenience without needing to enter
-the same "complex" commands over and over.
+Easily create and manage your own custom commands
 
 [Badge Commits]:
   https://img.shields.io/github/commit-activity/m/owen-debiasio/cmdcreate?label=Commits
