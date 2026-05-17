@@ -885,3 +885,5 @@ Licensed under the GNU General Public License v3.0 or later.
 
 - Absolutely overhaul file structure
 - Code optimizations
+- Overhauled how usage of commands is displayed
+- Fixed confusing parsing for command `export`
