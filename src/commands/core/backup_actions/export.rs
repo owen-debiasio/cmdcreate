@@ -21,16 +21,30 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{
-            core::{create_file, read_file_to_string, write_to_file},
+            core::{create_file, path_exists, read_file_to_string, write_to_file},
             paths::PATHS,
         },
+        io::error,
+        sys::env::root_check,
     },
 };
 
 pub fn export(path: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
-    let path_of_file_to_export_to = &format!("{path}/export.cmdcreate");
+    if !(path.starts_with('/') || path.starts_with('~')) {
+        error("Not a valid path:", Some(path))
+    }
+
+    if path.starts_with('/') && !path.starts_with("/home") {
+        root_check();
+    }
+
+    if !path_exists(path) {
+        error("Not a valid path:", Some(path))
+    }
+
+    let path_of_file_to_export_to = &format!("{path}/export.cmdcreate").replace("//", "/");
 
     log(
         &format!(
