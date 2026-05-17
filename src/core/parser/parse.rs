@@ -63,7 +63,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 supplied_command,
                 supplied_arguments,
                 2,
-                "<command> <contents>",
+                "&<command>:Name of command to create+
+                &<contents>:Command(s) the command runs (script contents)",
                 "-i/--in_editor"
             );
 
@@ -79,7 +80,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 supplied_command,
                 supplied_arguments,
                 2,
-                "<command> <new name>",
+                "&<old>:Current command name+
+                &<new>:New name of the old command name",
                 ""
             );
 
@@ -95,7 +97,9 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 supplied_command,
                 supplied_arguments,
                 2,
-                "<add/remove> <command>",
+                "&<add>:Add command to favorites+
+                &<remove>:Remove command from favorites+
+                &<command>:Command to be modified",
                 ""
             );
 
@@ -108,7 +112,13 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
         }
 
         "remove" => {
-            validate_args!(supplied_command, supplied_arguments, 1, "<command>", "");
+            validate_args!(
+                supplied_command,
+                supplied_arguments,
+                1,
+                "&<output>:Command to be removed",
+                ""
+            );
 
             root_check();
 
@@ -119,7 +129,13 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
             }
         }
         "edit" => {
-            validate_args!(supplied_command, supplied_arguments, 1, "<command>", "");
+            validate_args!(
+                supplied_command,
+                supplied_arguments,
+                1,
+                "&<command>:Command whose contents to edit",
+                ""
+            );
 
             root_check();
 
@@ -128,21 +144,39 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
             edit(command_to_edit);
         }
         "search" => {
-            validate_args!(supplied_command, supplied_arguments, 1, "<command>", "");
+            validate_args!(
+                supplied_command,
+                supplied_arguments,
+                1,
+                "&<output>:Command to search for",
+                ""
+            );
 
             let command_to_search_for = argument_index(1).unwrap();
 
             search(command_to_search_for);
         }
         "display" => {
-            validate_args!(supplied_command, supplied_arguments, 1, "<command>", "");
+            validate_args!(
+                supplied_command,
+                supplied_arguments,
+                1,
+                "&<command>:Command to display contents from",
+                ""
+            );
 
             let command_to_display_contents_of = argument_index(1).unwrap();
 
             display(command_to_display_contents_of);
         }
         "import" => {
-            validate_args!(supplied_command, supplied_arguments, 1, "<input file>", "");
+            validate_args!(
+                supplied_command,
+                supplied_arguments,
+                1,
+                "&<input>:File to import from",
+                ""
+            );
 
             root_check();
 
@@ -151,7 +185,13 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
             import(file_to_import_commands_from);
         }
         "export" => {
-            validate_args!(supplied_command, supplied_arguments, 1, "<output dir>", "");
+            validate_args!(
+                supplied_command,
+                supplied_arguments,
+                1,
+                "&<output>:Directory to export to",
+                ""
+            );
 
             let destination_of_exported_commands = argument_index(1).unwrap();
 
@@ -159,14 +199,19 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
         }
 
         "config" => {
-            // Instead of showing the usage, default to the list of available
-            // documentation
             if supplied_arguments.len() == 1 {
                 validate_args!(
                     supplied_command,
                     supplied_arguments,
                     3,
-                    "<help/example/add/remove/edit/display> <category> <key=\"value\">",
+                    "&help:View the available configuration options+
+                    &example:View an example configuration file+
+                    &add:Add a new configuration+
+                    &remove:Remove an existing configuration+
+                    &edit:Edit the config file directory+
+                    &display:Display the current configuration file
+                    &<category>:Category of configs to modify
+                    &<key='value'>:Direct config to modify",
                     ""
                 );
                 return;
@@ -183,7 +228,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 supplied_command,
                 supplied_arguments,
                 1,
-                "<list>/<information>",
+                "&list:List available documentation entries+
+                &<documentation>:Documentation to view+",
                 ""
             );
 

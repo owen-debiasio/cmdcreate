@@ -14,16 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+use crate::utils::colors::COLORS;
+
 #[macro_export]
 macro_rules! validate_args {
-    ($command:expr, $amount_of_arguments_given:expr, $amount_of_arguments_needed:expr, $command_usage:expr, $additional_args:expr) => {
+    ($command:expr,
+    $amount_of_arguments_given:expr,
+    $amount_of_arguments_needed:expr,
+    $subcommands_with_desc:expr, // Formatted like this: "&command:desc+command:desc+..."
+    $additional_args:expr
+    ) => {
         if $amount_of_arguments_given.len() <= $amount_of_arguments_needed {
             use $crate::utils::colors::COLORS;
 
-            let (blue, yellow, red, green, reset) = (
+            let (blue, yellow, magenta, green, reset) = (
                 COLORS.blue,
                 COLORS.yellow,
-                COLORS.red,
+                COLORS.magenta,
                 COLORS.green,
                 COLORS.reset,
             );
@@ -34,12 +41,47 @@ macro_rules! validate_args {
                 ""
             };
 
+            let formatted_subcommand_list =
+                $crate::core::parser::validate_args::format_subcommand_list(stringify!($subcommands_with_desc));
+
             println!(
-                "Usage:\ncmdcreate {blue}{} {include_additional_flags}{yellow}{}{red}{reset}",
-                $command, $command_usage
+                "{blue}> Usage:\n{reset}cmdcreate {yellow}{} {blue}[commands/fields] {magenta}{include_additional_flags}{reset}\n\
+                Commands/Fields:\n\
+                {formatted_subcommand_list}",
+                $command
             );
 
             return;
         }
     };
+}
+
+pub fn format_subcommand_list(list: &str) -> String {
+    let (blue, reset) = (COLORS.blue, COLORS.reset);
+
+    let cleaned_string = list.replace(['+', '"'], "").replace('&', blue);
+
+    let lines: Vec<&str> = cleaned_string.lines().collect();
+
+    let max_cmd_len = lines
+        .iter()
+        .filter_map(|line| line.split_once(':'))
+        .map(|(cmd, _)| cmd.trim().len())
+        .max()
+        .unwrap_or(0);
+
+    lines
+        .iter()
+        .map(|line| {
+            if let Some((cmd, desc)) = line.split_once(':') {
+                let trimmed_cmd = cmd.trim();
+                let trimmed_desc = desc.trim();
+                format!("{trimmed_cmd:max_cmd_len$} {reset}: {trimmed_desc}")
+            } else {
+                line.to_string()
+            }
+        })
+        .collect::<Vec<String>>()
+        .join("\n")
+        .replace(':', " ")
 }
