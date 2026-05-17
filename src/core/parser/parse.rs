@@ -148,7 +148,7 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 supplied_command,
                 supplied_arguments,
                 1,
-                "&<output>:Command to search for",
+                "&<command>:Command to search for or text you want to match",
                 ""
             );
 
@@ -209,8 +209,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                     &add:Add a new configuration+
                     &remove:Remove an existing configuration+
                     &edit:Edit the config file directory+
-                    &display:Display the current configuration file
-                    &<category>:Category of configs to modify
+                    &display:Display the current configuration file+
+                    &<category>:Category of configs to modify+
                     &<key='value'>:Direct config to modify",
                     ""
                 );
@@ -229,7 +229,7 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 supplied_arguments,
                 1,
                 "&list:List available documentation entries+
-                &<documentation>:Documentation to view+",
+                &<documentation>:Documentation to view",
                 ""
             );
 
