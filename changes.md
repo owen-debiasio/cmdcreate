@@ -891,4 +891,4 @@ Licensed under the GNU General Public License v3.0 or later.
 
 ## v1.3.6
 
-- Fix usage displayed for command `search`
+- Fix usage displayed for commands `search` and `favorite`
