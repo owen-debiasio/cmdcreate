@@ -97,8 +97,8 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 supplied_command,
                 supplied_arguments,
                 2,
-                "&<add>:Add command to favorites+
-                &<remove>:Remove command from favorites+
+                "&add:Add command to favorites+
+                &remove:Remove command from favorites+
                 &<command>:Command to be modified",
                 ""
             );
