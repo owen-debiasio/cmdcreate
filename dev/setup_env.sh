@@ -50,14 +50,14 @@ install_dependencies() {
                 shfmt shellcheck bash-language-server \
                 python-black python-pylint python-lsp-server \
                 nodejs npm markdownlint-cli2 prettier marksman vscode-json-languageserver \
-                rpm-tools dpkg
+                rpm-tools dpkg zig
             ;;
         *fedora*)
             sudo dnf install -y \
                 curl openssl-devel git gcc gcc-c++ make \
                 shfmt ShellCheck nodejs-bash-language-server \
                 python3-black python3-pylint \
-                nodejs npm rpm-build dpkg-dev
+                nodejs npm rpm-build dpkg-dev zig
 
             sudo npm install -g prettier markdownlint-cli2@0.13.0
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
@@ -68,7 +68,7 @@ install_dependencies() {
                 curl libssl-dev build-essential pkg-config git \
                 shfmt shellcheck \
                 black pylint \
-                nodejs npm rpm dpkg-dev
+                nodejs npm rpm dpkg-dev zig
             sudo npm install -g prettier markdownlint-cli2@0.13.0
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
             ;;
