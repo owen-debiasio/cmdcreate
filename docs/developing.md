@@ -21,7 +21,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main
 
 This script will:
 
-- Detect your Linux distribution and install necesarry packages.
+- Detect your Linux distribution and install necessary packages.
 - Install `Rust` and the `Zig` compiler
 - Install `cargo-zigbuild` for 32-bit binaries.
 - Clone the repository and configure `musl`
