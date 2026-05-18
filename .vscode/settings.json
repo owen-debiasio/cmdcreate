@@ -2,10 +2,12 @@
   "cSpell.words": [
     "Addrs",
     "archlinux",
+    "armv",
     "aur",
     "bindir",
     "buildroot",
     "centos",
+    "CFLAGS",
     "chmod",
     "chrono",
     "clippy",
@@ -23,6 +25,7 @@
     "endeavouros",
     "favorited",
     "favoriting",
+    "flto",
     "gedit",
     "geteuid",
     "hijk",
@@ -34,6 +37,7 @@
     "makepkg",
     "manjaro",
     "misdetection",
+    "musleabihf",
     "noconfirm",
     "noprogressbar",
     "nums",
@@ -73,7 +77,8 @@
     "uvh",
     "vscodium",
     "Vvcr",
-    "yay"
+    "yay",
+    "zigbuild"
   ],
   "markdownlint.config": {
     "MD013": false,
