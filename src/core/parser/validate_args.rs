@@ -66,17 +66,17 @@ pub fn format_subcommand_list(list: &str) -> String {
     let max_cmd_len = lines
         .iter()
         .filter_map(|line| line.split_once(':'))
-        .map(|(cmd, _)| cmd.trim().len())
+        .map(|(command, _)| command.trim().len())
         .max()
         .unwrap_or(0);
 
     lines
         .iter()
         .map(|line| {
-            if let Some((cmd, desc)) = line.split_once(':') {
-                let trimmed_cmd = cmd.trim();
+            if let Some((command, desc)) = line.split_once(':') {
+                let trimmed_command = command.trim();
                 let trimmed_desc = desc.trim();
-                format!("{trimmed_cmd:max_cmd_len$} {reset}: {trimmed_desc}")
+                format!("{trimmed_command:max_cmd_len$} {reset}: {trimmed_desc}")
             } else {
                 line.to_string()
             }
