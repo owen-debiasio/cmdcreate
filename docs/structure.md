@@ -135,10 +135,21 @@ change.
     [updater](https://github.com/owen-debiasio/cmdcreate/tree/main/src/commands/updater)
     - 📁
       [update_methods](https://github.com/owen-debiasio/cmdcreate/tree/main/src/commands/updater/update_methods)
-      - [aur.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/update_methods/aur.rs)
+      - 📁
+        [source](https://github.com/owen-debiasio/cmdcreate/tree/main/src/commands/updater/update_methods/source/)
+        - 📁
+          [actions](https://github.com/owen-debiasio/cmdcreate/tree/main/src/commands/updater/update_methods/source/actions/)
+          - [mod.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/update_methods/source/actions/mod.rs)
+          - [build.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/update_methods/source/actions/build.rs)
+          - [clean.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/update_methods/source/actions/clean.rs)
+          - [install.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/update_methods/source/actions/install.rs)
+        - [mod.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/update_methods/source/mod.rs)
+        - [consts.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/update_methods/source/consts.rs)
+        - [dependencies.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/update_methods/source/dependencies.rs)
+        - [main.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/update_methods/source/main.rs)
       - [mod.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/update_methods/mod.rs)
+      - [aur.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/update_methods/aur.rs)
       - [package.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/update_methods/package.rs)
-      - [source.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/update_methods/source.rs)
     - [interactive.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/interactive.rs)
     - [main.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/main.rs)
     - [mod.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/commands/updater/mod.rs)
