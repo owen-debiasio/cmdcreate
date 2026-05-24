@@ -61,7 +61,10 @@ macro_rules! output {
             text_interpolated.trim()
         };
 
-        let (blue, reset) = (COLORS.blue, COLORS.reset);
+        let (blue, reset) = (
+            $crate::utils::colors::COLORS.blue,
+            $crate::utils::colors::COLORS.reset,
+        );
 
         println!(
             "{blue}{}{text}{reset}",
@@ -78,9 +81,11 @@ macro_rules! output {
 macro_rules! input {
     ($given_text:expr) => {{
         use std::io::{self, Write};
-        use $crate::utils::colors::COLORS;
 
-        let (blue, reset) = (COLORS.blue, COLORS.reset);
+        let (blue, reset) = (
+            $crate::utils::colors::COLORS.blue,
+            $crate::utils::colors::COLORS.reset,
+        );
 
         let text_interpolated = format!($given_text);
         let text = text_interpolated.trim().replace("> ", "");

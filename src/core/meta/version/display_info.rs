@@ -22,7 +22,6 @@ use crate::{
         version::{build::get_build_status, consts::CURRENT_PROJECT_VERSION},
     },
     output,
-    utils::colors::COLORS,
 };
 
 pub fn print_version_info() {

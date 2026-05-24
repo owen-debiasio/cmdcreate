@@ -21,7 +21,6 @@ use crate::{
     },
     output, run_shell_command,
     utils::{
-        colors::COLORS,
         fs::core::path_exists,
         io::{error, output_is_silent},
         net::{not_connected_to_internet, ureq_agent},

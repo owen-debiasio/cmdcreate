@@ -19,7 +19,6 @@ use crate::{
     core::logger::{consts::Severity, main::log},
     output,
     utils::{
-        colors::COLORS,
         fs::{
             core::{read_file_to_string, write_to_file},
             paths::PATHS,
