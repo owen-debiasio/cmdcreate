@@ -14,9 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::commands::updater::update_methods::source::main::source;
 use crate::{
-    commands::updater::update_methods::{aur::update_via_aur, package::update_via_package},
+    commands::updater::update_methods::{
+        aur::update_via_aur, package::update_via_package, source::main::source,
+    },
     input, output,
     utils::{
         colors::COLORS,
