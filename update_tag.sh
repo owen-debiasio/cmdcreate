@@ -21,6 +21,11 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 RESET='\033[0m'
 
+die() {
+    echo -e "$@"
+    exit 1
+}
+
 [[ $# -eq 1 ]] || die -e "${RED}> Provide cmdcreate version (MUST NOT START WITH v)${RESET}"
 [[ "$1" != v* ]] || die -e "${RED}> Version must NOT start with 'v'${RESET}"
 
