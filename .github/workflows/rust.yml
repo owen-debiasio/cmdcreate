@@ -3,8 +3,19 @@ name: Rust Lint
 on:
   push:
     branches: [main]
+    paths:
+      - "**.rs"
+      - "**/.github/workflows/rust.yml"
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
   pull_request:
     branches: [main]
+    paths:
+      - "**.rs"
+      - "**/.github/workflows/rust.yml"
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+  workflow_dispatch:
 
 permissions:
   contents: read
