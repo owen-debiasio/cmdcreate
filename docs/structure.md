@@ -236,7 +236,6 @@ change.
 
 ## Other files
 
-- [aur_update.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/aur_update.sh)
 - [Cargo.lock](https://github.com/owen-debiasio/cmdcreate/blob/main/Cargo.lock)
 - [Cargo.toml](https://github.com/owen-debiasio/cmdcreate/blob/main/Cargo.toml)
 - [changes.md](https://github.com/owen-debiasio/cmdcreate/blob/main/changes.md)
@@ -247,3 +246,4 @@ change.
 - [LICENSE](https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE)
 - [README.md](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md)
 - [SECURITY.md](https://github.com/owen-debiasio/cmdcreate/blob/main/SECURITY.md)
+- [update_tag.md](https://github.com/owen-debiasio/cmdcreate/blob/main/update_tag.md)
