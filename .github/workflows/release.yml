@@ -90,6 +90,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          name: Release ${{ github.ref_name }}
           files: dist/*
           body_path: latest_changelog.txt
           draft: false
@@ -130,7 +131,8 @@ jobs:
             passwd -d builder && \
             echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers && \
             chown -R builder:builder /pkg && \
-            sudo -u builder makepkg --printsrcinfo > .SRCINFO"
+            sudo -u builder makepkg --printsrcinfo > .SRCINFO && \
+            chown -R $(id -u):$(id -g) /pkg"
 
           git add PKGBUILD .SRCINFO
           git commit -m "Update to version $VERSION"
