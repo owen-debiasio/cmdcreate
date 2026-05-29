@@ -895,3 +895,11 @@ Licensed under the GNU General Public License v3.0 or later.
 - Code optimizations
   - Especially involving the files for building from source
 - Update file structure of building from source scripts
+
+## v1.3.7
+
+- New releases of cmdcreate are how handled by an automatic CI
+- Code optimizations
+- `./aur_update.sh` is removed, now no longer needed.
+- New development script: `./update_tag`.
+  - Pushes new tag version to trigger update CI
