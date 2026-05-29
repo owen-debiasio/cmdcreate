@@ -122,8 +122,14 @@ jobs:
           sed -i "s/^pkgver=.*/pkgver=$VERSION/" PKGBUILD
           sed -i "s/^pkgrel=.*/pkgrel=1/" PKGBUILD 
 
-          docker run --rm -v "$(pwd):/pkg" -w /pkg archlinux:latest bash -c "pacman -Syu --noconfirm pacman-contrib && makepkg --printsrcinfo > .SRCINFO"
+          docker run --rm -v "$(pwd):/pkg" -w /pkg archlinux:latest bash -c " \
+            pacman -Syu --noconfirm pacman-contrib sudo && \
+            useradd -m builder && \
+            passwd -d builder && \
+            echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers && \
+            chown -R builder:builder /pkg && \
+            sudo -u builder makepkg --printsrcinfo > .SRCINFO"
 
           git add PKGBUILD .SRCINFO
           git commit -m "Update to version $VERSION"
-          #git push origin master
+          git push origin master
