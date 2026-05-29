@@ -92,6 +92,8 @@ jobs:
         with:
           files: dist/*
           body_path: latest_changelog.txt
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   update-aur:
