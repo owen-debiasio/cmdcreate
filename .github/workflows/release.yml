@@ -1,0 +1,127 @@
+name: Release and Deploy
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    outputs:
+      pkg_version: ${{ steps.cargo_info.outputs.version }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Debian & RPM Packaging Utilities
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y dpkg rpm jq
+
+      - name: Install Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: |
+            x86_64-unknown-linux-musl
+            i686-unknown-linux-musl
+            aarch64-unknown-linux-musl
+            armv7-unknown-linux-musleabihf
+
+      - name: Install Zig
+        uses: korandiru/setup-zig@v1
+        with:
+          zig-version: 0.13.0
+
+      - name: Install cargo-zigbuild
+        run: cargo install cargo-zigbuild
+
+      - name: Rust Cache
+        uses: swatinem/rust-cache@v2
+
+      - name: Get Cargo version
+        id: cargo_info
+        run: |
+          VERSION=$(cargo metadata --format-version 1 | jq -r '.packages[] | select(.manifest_path == "'"$PWD"/Cargo.toml'") | .version')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Get changelog
+        id: changelog_reader
+        run: |
+          TAG="${{ github.ref_name }}"
+          awk -v tag="$TAG" '
+            $0 ~ "^## " tag {p=1; next} 
+            p && /^## / {p=0} 
+            p {print}
+          ' changes.md > latest_changelog.txt
+          echo "Changelog extracted for $TAG:"
+          cat latest_changelog.txt
+
+      - name: Run Main Packaging Script
+        run: |
+          mkdir -p ${{ github.workspace }}/dist
+          mkdir -p $HOME
+          rm -rf $HOME/Downloads
+          ln -s ${{ github.workspace }}/dist $HOME/Downloads
+
+          mkdir -p dev
+          echo -e "#!/bin/bash\necho '> Skipping format in CI'\nexit 0" > ./dev/format.sh
+          chmod +x ./dev/format.sh
+
+          VERSION_RAW=$(echo "${{ github.ref_name }}" | sed 's/^v//')
+
+          chmod +x ./package/package.sh
+          chmod +x ./package/create_bin.sh
+          chmod +x ./package/create_deb.sh
+          chmod +x ./package/create_rpm.sh
+
+          # Execute the primary script cascade
+          cd package
+          ./package.sh "$VERSION_RAW"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          body_path: latest_changelog.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  update-aur:
+    needs: build-and-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH for AUR
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+
+      - name: Update AUR Package
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+          mkdir -p ~/.ssh
+          ssh-keyscan -t ed25519 aur.archlinux.org >> ~/.ssh/known_hosts
+
+          git clone aur@aur.archlinux.org:cmdcreate.git aur-repo
+          cd aur-repo
+
+          VERSION="${{ needs.build-and-release.outputs.pkg_version }}"
+
+          sed -i "s/^pkgver=.*/pkgver=$VERSION/" PKGBUILD
+          sed -i "s/^pkgrel=.*/pkgrel=1/" PKGBUILD 
+
+          docker run --rm -v "$(pwd):/pkg" -w /pkg archlinux:latest bash -c "pacman -Syu --noconfirm pacman-contrib && makepkg --printsrcinfo > .SRCINFO"
+
+          git add PKGBUILD .SRCINFO
+          git commit -m "Update to version $VERSION"
+          git push origin master
