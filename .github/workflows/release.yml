@@ -74,6 +74,9 @@ jobs:
           echo -e "#!/bin/bash\necho '> Skipping format in CI'\nexit 0" > ./dev/format.sh
           chmod +x ./dev/format.sh
 
+          mkdir -p package
+          ln -s ../dev ./package/dev
+
           VERSION_RAW=$(echo "${{ github.ref_name }}" | sed 's/^v//')
 
           chmod +x ./package/package.sh
@@ -81,7 +84,6 @@ jobs:
           chmod +x ./package/create_deb.sh
           chmod +x ./package/create_rpm.sh
 
-          # Execute the primary script cascade
           cd package
           ./package.sh "$VERSION_RAW"
 
