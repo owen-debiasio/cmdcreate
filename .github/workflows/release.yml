@@ -3,7 +3,7 @@ name: Release and Deploy
 on:
   push:
     tags:
-      - "v*.*.*-test"
+      - "v*.*.*"
 
 permissions:
   contents: write
