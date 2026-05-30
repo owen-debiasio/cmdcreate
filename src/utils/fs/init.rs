@@ -16,6 +16,7 @@
 
 use crate::{
     core::logger::{consts::Severity, main::log},
+    run_shell_command,
     utils::{
         fs::{
             core::{create_file, create_folder, path_exists},
@@ -27,15 +28,20 @@ use crate::{
 };
 
 pub fn init_filesystem() {
-    let favorites_file = &PATHS.favorites;
-    let config_file = PATHS.configuration_file;
-
     log(
         "utils/fs::init::init_filesystem(): Initializing filesystem...",
         Severity::Normal,
     );
 
-    if path_exists(favorites_file) && path_exists(config_file) && path_exists(MAIN_PATH) {
+    let favorites_file = &PATHS.favorites;
+    let config_file = PATHS.configuration_file;
+    let log_directory = PATHS.log_directory;
+
+    if path_exists(favorites_file)
+        && path_exists(config_file)
+        && path_exists(MAIN_PATH)
+        && path_exists(log_directory)
+    {
         return;
     }
 
@@ -51,7 +57,16 @@ pub fn init_filesystem() {
     create_file(favorites_file);
     create_file(config_file);
 
-    if !(path_exists(favorites_file) && path_exists(config_file) && path_exists(MAIN_PATH)) {
+    create_folder(log_directory);
+
+    // Fix issues with running cmdcreate not as root on some systems
+    run_shell_command!("chmod -R 777 /tmp/cmdcreate-logs");
+
+    if !(path_exists(favorites_file)
+        && path_exists(config_file)
+        && path_exists(MAIN_PATH)
+        && path_exists(log_directory))
+    {
         error(
             "Failed to initialize filesystem!",
             Some("Root access needed!"),
