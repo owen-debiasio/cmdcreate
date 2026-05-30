@@ -46,8 +46,6 @@ pub fn cleanup() {
     }
 
     if dependencies.contains("rustup") && get_distro_base() != DistroBase::Arch {
-        run_shell_command!("rustup self uninstall -y");
-
         delete_folder("/root/.cargo");
         delete_folder("/root/.rustup");
     }
@@ -55,7 +53,7 @@ pub fn cleanup() {
     if dependencies.contains("zig") && get_distro_base() == DistroBase::Debian
         || get_distro_base() == DistroBase::Unknown
     {
-        delete_file("/usr/local/bin/zig");
-        delete_folder("/usr/local/share/zig");
+        delete_file("/usr/bin/zig");
+        delete_folder("/usr/share/zig");
     }
 }
