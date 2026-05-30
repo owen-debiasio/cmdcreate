@@ -903,3 +903,9 @@ Licensed under the GNU General Public License v3.0 or later.
 - `./aur_update.sh` is removed, now no longer needed.
 - New development script: `./update_tag`.
   - Pushes new tag version to trigger update CI
+
+## v1.3.8
+
+- Fix building from source issues
+- Fix permission issues regarding logging
+- Code optimizations
