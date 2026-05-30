@@ -101,13 +101,14 @@ pub fn install_dependencies() {
 
 pub fn get_cargo_env() -> &'static str {
     match ENVIRONMENT_VARIABLES.shell.as_str() {
-        "sh" | "bash" | "zsh" | "ash" | "dash" | "pdksh" => ". \"$HOME/.cargo/env\"",
         "fish" => "source \"$HOME/.cargo/env.fish\"",
         "nushell" => "source \"~/.cargo/env.nu\"",
         "tcsh" => "source \"$HOME/.cargo/env.tcsh\"",
         "pwsh" => ". \"$HOME/.cargo/env.ps1\"",
         "xonsh" => "source \"$HOME/.cargo/env.xsh\"",
-        _ => "test4",
+
+        // Bash is the default cause most distros use it
+        _ => ". \"$HOME/.cargo/env\"",
     }
 }
 
