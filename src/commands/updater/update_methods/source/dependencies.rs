@@ -114,10 +114,10 @@ pub fn get_cargo_env() -> &'static str {
 
 fn install_rustup() {
     run_shell_command!(
-        "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable \
-        {}",
-        get_cargo_env()
+        "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable",
     );
+
+    run_shell_command!("{}", get_cargo_env());
 }
 
 fn install_zig() {
