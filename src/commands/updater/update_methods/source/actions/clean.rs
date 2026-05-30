@@ -18,7 +18,7 @@ use crate::{
     commands::updater::update_methods::source::dependencies::DEPENDENCIES_TO_INSTALL,
     output, run_shell_command,
     utils::{
-        fs::core::{delete_file, delete_folder},
+        fs::core::delete_folder,
         io::{ask_for_confirmation, error},
         sys::distro::{DistroBase, get_distro_base},
     },
@@ -42,10 +42,12 @@ pub fn cleanup() {
     };
 
     if !dependencies.is_empty() {
+        output!("Removing dependencies...", true);
         run_shell_command!("{dependency_removal_command}");
     }
 
     if dependencies.contains("rustup") && get_distro_base() != DistroBase::Arch {
+        output!("Removing rustup...", true);
         delete_folder("/root/.cargo");
         delete_folder("/root/.rustup");
     }
@@ -53,7 +55,7 @@ pub fn cleanup() {
     if dependencies.contains("zig") && get_distro_base() == DistroBase::Debian
         || get_distro_base() == DistroBase::Unknown
     {
-        delete_file("/usr/bin/zig");
-        delete_folder("/usr/share/zig");
+        output!("Removing zig...", true);
+        delete_folder("/tmp/cmdcreate-zig-tmp");
     }
 }
