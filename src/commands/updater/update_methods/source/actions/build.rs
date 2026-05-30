@@ -44,6 +44,8 @@ pub fn build() {
         rustup target add {target}
         cargo install cargo-zigbuild
 
+        export PATH=\"/tmp/cmdcreate-zig-tmp:$PATH\"
+
         CRATE_CC_NO_DEFAULTS=true {}=\"zig cc -target {} -fno-sanitize=all\" \
         CARGO_ZIGBUILD_ZIG_PATH=\"/tmp/cmdcreate-zig-tmp/zig\" \
         cargo zigbuild --release --locked --target {target}
