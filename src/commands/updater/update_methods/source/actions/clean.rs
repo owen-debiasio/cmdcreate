@@ -41,7 +41,9 @@ pub fn cleanup() {
         DistroBase::Unknown => error("Your distro is unsupported! Unable to proceed.", None),
     };
 
-    run_shell_command!("{dependency_removal_command}");
+    if !dependencies.is_empty() {
+        run_shell_command!("{dependency_removal_command}");
+    }
 
     if dependencies.contains("rustup") && get_distro_base() != DistroBase::Arch {
         run_shell_command!("rustup self uninstall -y");
@@ -54,6 +56,6 @@ pub fn cleanup() {
         || get_distro_base() == DistroBase::Unknown
     {
         delete_file("/usr/local/bin/zig");
-        delete_file("/usr/local/share/zig");
+        delete_folder("/usr/local/share/zig");
     }
 }

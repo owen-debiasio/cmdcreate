@@ -31,16 +31,21 @@ pub fn build() {
 
     output!("Building...", true);
 
+    let target = Rustup::target();
+
     let script_to_build_cmdcreate = format!(
         "set -e
 
         cd \"{CLONED_REPOSITORY_DESTINATION}\"
 
-        CRATE_CC_NO_DEFAULTS=true {}=\"zig cc -target {} -fno-sanitize=all\" cargo zigbuild --release --locked --target {}
+        rustup default stable
+        rustup target add {target}
+        cargo install cargo-zigbuild
+
+        CRATE_CC_NO_DEFAULTS=true {}=\"zig cc -target {} -fno-sanitize=all\" cargo zigbuild --release --locked --target {target}
         ",
         Rustup::cc_linker(),
         Rustup::zig_target(),
-        Rustup::target(),
     );
 
     run_shell_command!("{script_to_build_cmdcreate}");

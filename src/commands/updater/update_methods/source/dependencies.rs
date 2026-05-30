@@ -17,6 +17,7 @@
 use std::sync::LazyLock;
 
 use crate::{
+    core::logger::{consts::Severity, main::log},
     output, run_shell_command,
     utils::{
         io::error,
@@ -53,6 +54,13 @@ pub fn install_dependencies() {
         return;
     }
 
+    log(
+        &format!(
+            "commands/updater/update_methods/source/dependencies::install_dependencies(): Dependencies to install: {dependencies}"
+        ),
+        Severity::Normal,
+    );
+
     let dependency_install_command = match get_distro_base() {
         DistroBase::Arch => format!(
             "pacman -Sy && pacman -S --needed --noconfirm \
@@ -77,11 +85,9 @@ pub fn install_dependencies() {
     run_shell_command!("{dependency_install_command}");
 
     if dependencies.contains("rustup") && get_distro_base() != DistroBase::Arch {
+        output!("Downloading and installing rustup...", true);
         install_rustup();
     }
-
-    output!("Installing rustup...", true);
-    install_rustup();
 
     if dependencies.contains("zig") && get_distro_base() == DistroBase::Debian
         || get_distro_base() == DistroBase::Unknown
@@ -94,12 +100,7 @@ pub fn install_dependencies() {
 fn install_rustup() {
     run_shell_command!(
         "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
-        [ -f \"$HOME/.cargo/env\" ] && . \"$HOME/.cargo/env\"
-
-        rustup target add {}
-        rustup component add cargo
-        cargo install cargo-zigbuild",
-        Rustup::target()
+        [ -f \"$HOME/.cargo/env\" ] && . \"$HOME/.cargo/env\""
     );
 }
 
@@ -136,15 +137,16 @@ fn install_zig() {
 
     let zig_archive_name = zig_download_link.replace("https://ziglang.org/builds/", "");
 
-    run_shell_command!("mkdir -p /usr/local/share/zig");
+    output!("Unpacking and installing zig...", true);
 
-    run_shell_command!(
-        "tar -xf /tmp/{zig_archive_name} -C /usr/local/share/zig --strip-components=1"
+    let commands_to_install_zig = &format!(
+        "mkdir -p /usr/local/share/zig \
+            tar -xf /tmp/{zig_archive_name} -C /usr/local/share/zig --strip-components=1 \
+            ln -sf /usr/local/share/zig/zig /usr/local/bin/zig \
+            rm /tmp/{zig_archive_name}"
     );
 
-    run_shell_command!("ln -sf /usr/local/share/zig/zig /usr/local/bin/zig");
-
-    run_shell_command!("rm /tmp/{zig_archive_name}");
+    run_shell_command!("{commands_to_install_zig}");
 }
 
 pub struct Rustup {}
