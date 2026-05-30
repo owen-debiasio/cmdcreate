@@ -28,8 +28,8 @@ use crate::{
     },
 };
 
-static DEPENDENCIES_TO_INSTALL: LazyLock<String> = LazyLock::new(|| {
-    let needed_dependencies = vec!["git", "zig", "curl", "less"];
+pub static DEPENDENCIES_TO_INSTALL: LazyLock<String> = LazyLock::new(|| {
+    let needed_dependencies = vec!["git", "zig", "curl", "less", "rustup", "wget"];
     let mut dependencies_to_install = Vec::new();
 
     for dep in needed_dependencies {
@@ -49,6 +49,10 @@ static DEPENDENCIES_TO_INSTALL: LazyLock<String> = LazyLock::new(|| {
 pub fn install_dependencies() {
     let dependencies = DEPENDENCIES_TO_INSTALL.to_string();
 
+    if dependencies.is_empty() {
+        return;
+    }
+
     let dependency_install_command = match get_distro_base() {
         DistroBase::Arch => format!(
             "pacman -Sy && pacman -S --needed --noconfirm \
@@ -57,30 +61,90 @@ pub fn install_dependencies() {
         DistroBase::Debian => format!(
             "apt update && \
               apt install -y \
-           {dependencies}"
+           {}",
+            dependencies.replace("zig", "").replace("rustup", "")
         ),
         DistroBase::Fedora => format!(
             "dnf update && \
            dnf install -y \
-              {dependencies}"
+              {}",
+            dependencies.replace("rustup", "")
         ),
         DistroBase::Unknown => error("Your distro is unsupported! Unable to proceed.", None),
     };
 
-    if !DEPENDENCIES_TO_INSTALL.is_empty() {
-        output!("Installing dependencies...", true);
-        run_shell_command!("{dependency_install_command}");
+    output!("Installing dependencies...", true);
+    run_shell_command!("{dependency_install_command}");
+
+    if dependencies.contains("rustup") && get_distro_base() != DistroBase::Arch {
+        install_rustup();
     }
 
     output!("Installing rustup...", true);
+    install_rustup();
+
+    if dependencies.contains("zig") && get_distro_base() == DistroBase::Debian
+        || get_distro_base() == DistroBase::Unknown
+    {
+        output!("Downloading and installing zig...", true);
+        install_zig();
+    }
+}
+
+fn install_rustup() {
     run_shell_command!(
         "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
         [ -f \"$HOME/.cargo/env\" ] && . \"$HOME/.cargo/env\"
 
         rustup target add {}
+        rustup component add cargo
         cargo install cargo-zigbuild",
         Rustup::target()
     );
+}
+
+fn install_zig() {
+    let zig_download_link = match ARCH {
+        "x86_64" => "https://ziglang.org/builds/zig-x86_64-linux-0.17.0-dev.607+456b2ec07.tar.xz",
+        "i686" | "i386" => {
+            "https://ziglang.org/builds/zig-x86-linux-0.17.0-dev.607+456b2ec07.tar.xz"
+        }
+        "aarch64" | "arm64" => {
+            "https://ziglang.org/builds/zig-aarch64-linux-0.17.0-dev.607+456b2ec07.tar.xz"
+        }
+        "armv7" | "armv7l" => {
+            "https://ziglang.org/builds/zig-arm-linux-0.17.0-dev.607+456b2ec07.tar.xz"
+        }
+        _ => error("Unsupported architecture:", Some(ARCH)),
+    };
+
+    if !system_command_is_installed("wget") {
+        error(
+            "Failed to download zig:",
+            Some("Command \"wget\" is not installed."),
+        );
+    }
+
+    run_shell_command!("wget -P /tmp/ {zig_download_link}");
+
+    if !system_command_is_installed("tar") {
+        error(
+            "Failed to extract zig:",
+            Some("Command \"tar\" is not installed."),
+        );
+    }
+
+    let zig_archive_name = zig_download_link.replace("https://ziglang.org/builds/", "");
+
+    run_shell_command!("mkdir -p /usr/local/share/zig");
+
+    run_shell_command!(
+        "tar -xf /tmp/{zig_archive_name} -C /usr/local/share/zig --strip-components=1"
+    );
+
+    run_shell_command!("ln -sf /usr/local/share/zig/zig /usr/local/bin/zig");
+
+    run_shell_command!("rm /tmp/{zig_archive_name}");
 }
 
 pub struct Rustup {}

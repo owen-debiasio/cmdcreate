@@ -15,8 +15,13 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    output,
-    utils::{fs::core::delete_folder, io::ask_for_confirmation},
+    commands::updater::update_methods::source::dependencies::DEPENDENCIES_TO_INSTALL,
+    output, run_shell_command,
+    utils::{
+        fs::core::{delete_file, delete_folder},
+        io::{ask_for_confirmation, error},
+        sys::distro::{DistroBase, get_distro_base},
+    },
 };
 
 pub fn cleanup() {
@@ -24,6 +29,31 @@ pub fn cleanup() {
 
     ask_for_confirmation("Do you want to remove unneeded dependencies?", false);
 
-    delete_folder("/root/.cargo");
-    delete_folder("/root/.rustup");
+    let dependencies = DEPENDENCIES_TO_INSTALL.to_string();
+
+    let dependency_removal_command = match get_distro_base() {
+        DistroBase::Arch => format!("pacman -Rns --noconfirm {dependencies}"),
+        DistroBase::Debian => format!(
+            "apt remove -y {}",
+            dependencies.replace("zig", "").replace("rustup", "")
+        ),
+        DistroBase::Fedora => format!("dnf remove -y {}", dependencies.replace("rustup", "")),
+        DistroBase::Unknown => error("Your distro is unsupported! Unable to proceed.", None),
+    };
+
+    run_shell_command!("{dependency_removal_command}");
+
+    if dependencies.contains("rustup") && get_distro_base() != DistroBase::Arch {
+        run_shell_command!("rustup self uninstall -y");
+
+        delete_folder("/root/.cargo");
+        delete_folder("/root/.rustup");
+    }
+
+    if dependencies.contains("zig") && get_distro_base() == DistroBase::Debian
+        || get_distro_base() == DistroBase::Unknown
+    {
+        delete_file("/usr/local/bin/zig");
+        delete_file("/usr/local/share/zig");
+    }
 }
