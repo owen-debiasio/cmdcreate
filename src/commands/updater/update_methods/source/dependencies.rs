@@ -20,11 +20,13 @@ use crate::{
     core::logger::{consts::Severity, main::log},
     output, run_shell_command,
     utils::{
+        fs::core::delete_file,
         io::error,
         sys::{
             command::system_command_is_installed,
             cpu::ARCH,
             distro::{DistroBase, get_distro_base},
+            env::ENVIRONMENT_VARIABLES,
         },
     },
 };
@@ -97,10 +99,23 @@ pub fn install_dependencies() {
     }
 }
 
+pub fn get_cargo_env() -> &'static str {
+    match ENVIRONMENT_VARIABLES.shell.as_str() {
+        "sh" | "bash" | "zsh" | "ash" | "dash" | "pdksh" => ". \"$HOME/.cargo/env\"",
+        "fish" => "source \"$HOME/.cargo/env.fish\"",
+        "nushell" => "source \"~/.cargo/env.nu\"",
+        "tcsh" => "source \"$HOME/.cargo/env.tcsh\"",
+        "pwsh" => ". \"$HOME/.cargo/env.ps1\"",
+        "xonsh" => "source \"$HOME/.cargo/env.xsh\"",
+        _ => "test4",
+    }
+}
+
 fn install_rustup() {
     run_shell_command!(
-        "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable
-        [ -f \"$HOME/.cargo/env\" ] && . \"$HOME/.cargo/env\""
+        "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable \
+        {}",
+        get_cargo_env()
     );
 }
 
@@ -142,9 +157,10 @@ fn install_zig() {
     let commands_to_install_zig = &format!(
         "mkdir -p /usr/local/share/zig \
             tar -xf /tmp/{zig_archive_name} -C /usr/local/share/zig --strip-components=1 \
-            ln -sf /usr/local/share/zig/zig /usr/local/bin/zig \
-            rm /tmp/{zig_archive_name}"
+            ln -sf /usr/local/share/zig/zig /usr/local/bin/zig"
     );
+
+    delete_file(&format!("/tmp/{zig_archive_name}"));
 
     run_shell_command!("{commands_to_install_zig}");
 }

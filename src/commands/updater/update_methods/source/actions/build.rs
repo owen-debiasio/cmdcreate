@@ -17,7 +17,7 @@
 use crate::{
     commands::updater::update_methods::source::{
         consts::CLONED_REPOSITORY_DESTINATION,
-        dependencies::{Rustup, install_dependencies},
+        dependencies::{Rustup, get_cargo_env, install_dependencies},
     },
     output, run_shell_command,
     utils::{fs::core::delete_folder, git::clone_repository},
@@ -37,6 +37,8 @@ pub fn build() {
         "set -e
 
         cd \"{CLONED_REPOSITORY_DESTINATION}\"
+        
+        {}
 
         rustup default stable
         rustup target add {target}
@@ -44,6 +46,7 @@ pub fn build() {
 
         CRATE_CC_NO_DEFAULTS=true {}=\"zig cc -target {} -fno-sanitize=all\" cargo zigbuild --release --locked --target {target}
         ",
+        get_cargo_env(),
         Rustup::cc_linker(),
         Rustup::zig_target(),
     );
