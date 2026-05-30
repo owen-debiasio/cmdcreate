@@ -20,7 +20,6 @@ use crate::{
     core::logger::{consts::Severity, main::log},
     output, run_shell_command,
     utils::{
-        fs::core::delete_file,
         io::error,
         sys::{
             command::system_command_is_installed,
@@ -141,9 +140,6 @@ fn install_zig() {
             Some("Command \"wget\" is not installed."),
         );
     }
-
-    run_shell_command!("wget -P /tmp/ {zig_download_link}");
-
     if !system_command_is_installed("tar") {
         error(
             "Failed to extract zig:",
@@ -156,16 +152,14 @@ fn install_zig() {
         .trim()
         .to_string();
 
-    output!("Unpacking and installing zig...", true);
+    output!("Downloading and installing zig...", true);
 
     let commands_to_install_zig = &format!(
-        "mkdir -p /tmp/cmdcreate-zig-tmp && \
-        tar -xf /tmp/{zig_archive_name} -C /tmp/cmdcreate-zig-tmp --strip-components=1"
+        "wget -P /tmp/ {zig_download_link} && \
+         mkdir -p /tmp/cmdcreate-zig-tmp && \
+         tar -xf /tmp/{zig_archive_name} -C /tmp/cmdcreate-zig-tmp --strip-components=1 && \
+         rm /tmp/{zig_archive_name}"
     );
-
-    run_shell_command!("{commands_to_install_zig}");
-
-    delete_file(&format!("/tmp/{zig_archive_name}"));
 
     run_shell_command!("{commands_to_install_zig}");
 }
