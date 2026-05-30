@@ -45,7 +45,7 @@ pub fn build() {
         cargo install cargo-zigbuild
 
         CRATE_CC_NO_DEFAULTS=true {}=\"zig cc -target {} -fno-sanitize=all\" \
-        CARGO_ZIGBUILD_ZIG_PATH=\"/usr/bin/zig\" \
+        CARGO_ZIGBUILD_ZIG_PATH=\"/tmp/cmdcreate-zig-tmp/zig\" \
         cargo zigbuild --release --locked --target {target}
         ",
         get_cargo_env(),

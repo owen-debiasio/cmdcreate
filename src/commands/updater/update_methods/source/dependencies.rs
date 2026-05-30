@@ -159,10 +159,11 @@ fn install_zig() {
     output!("Unpacking and installing zig...", true);
 
     let commands_to_install_zig = &format!(
-        "mkdir -p /usr/share/zig && \
-         tar -xf /tmp/{zig_archive_name} -C /usr/share/zig --strip-components=1 && \
-        ln -sf /usr/share/zig/zig /usr/bin/zig"
+        "mkdir -p /tmp/cmdcreate-zig-tmp && \
+        tar -xf /tmp/{zig_archive_name} -C /tmp/cmdcreate-zig-tmp --strip-components=1"
     );
+
+    run_shell_command!("{commands_to_install_zig}");
 
     delete_file(&format!("/tmp/{zig_archive_name}"));
 
