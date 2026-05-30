@@ -151,7 +151,10 @@ fn install_zig() {
         );
     }
 
-    let zig_archive_name = zig_download_link.replace("https://ziglang.org/builds/", "");
+    let zig_archive_name = zig_download_link
+        .replace("https://ziglang.org/builds/", "")
+        .trim()
+        .to_string();
 
     output!("Unpacking and installing zig...", true);
 
