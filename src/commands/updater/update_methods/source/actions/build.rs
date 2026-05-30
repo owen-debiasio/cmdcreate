@@ -44,7 +44,9 @@ pub fn build() {
         rustup target add {target}
         cargo install cargo-zigbuild
 
-        CRATE_CC_NO_DEFAULTS=true {}=\"zig cc -target {} -fno-sanitize=all\" cargo zigbuild --release --locked --target {target}
+        CRATE_CC_NO_DEFAULTS=true {}=\"zig cc -target {} -fno-sanitize=all\" \
+        CARGO_ZIGBUILD_ZIG_PATH=\"/usr/bin/zig\" \
+        cargo zigbuild --release --locked --target {target}
         ",
         get_cargo_env(),
         Rustup::cc_linker(),
