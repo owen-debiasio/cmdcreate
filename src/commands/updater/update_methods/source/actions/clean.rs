@@ -49,6 +49,8 @@ pub fn cleanup() {
     if dependencies.contains("rustup") && get_distro_base() != DistroBase::Arch {
         output!("Removing rustup...", true);
 
+        // The command "rustup" doesn't work here so I manually call for the respective directories to be removed.
+
         output!("Removing \"/root/.cargo\"...", false);
         delete_folder("/root/.cargo");
 
@@ -60,6 +62,8 @@ pub fn cleanup() {
         || get_distro_base() == DistroBase::Unknown
     {
         output!("Removing zig...", true);
+
+        output!("Removing \"/tmp/cmdcreate-zig-tmp\"...", false);
         delete_folder("/tmp/cmdcreate-zig-tmp");
     }
 }
