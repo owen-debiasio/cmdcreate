@@ -59,9 +59,13 @@ select_arch() {
     echo -e "${BLUE}Select Architecture:${RESET}"
     echo -e "1) x86_64 (64-bit)"
     echo -e "2) i686 (32-bit)"
+    echo -e "3) aarch64 (ARM 64-bit)"
+    echo -e "4) armv7 (ARM 32-bit)"
     read -rp "Choice [1]: " arch_choice
     case "$arch_choice" in
         2) ARCH="i686" ;;
+        3) ARCH="aarch64" ;;
+        4) ARCH="armv7" ;;
         *) ARCH="x86_64" ;;
     esac
 }
