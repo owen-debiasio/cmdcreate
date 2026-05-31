@@ -20,6 +20,7 @@ use crate::{
     core::logger::{consts::Severity, main::log},
     output, run_shell_command,
     utils::{
+        fs::core::delete_file,
         io::error,
         sys::{
             command::system_command_is_installed,
@@ -87,7 +88,7 @@ pub fn install_dependencies() {
 
     if dependencies.contains("rustup") && get_distro_base() != DistroBase::Arch {
         output!("Downloading and installing rustup...", true);
-        install_rustup();
+        Rustup::install();
     }
 
     if dependencies.contains("zig") && get_distro_base() == DistroBase::Debian
@@ -111,26 +112,13 @@ pub fn get_cargo_env() -> &'static str {
     }
 }
 
-fn install_rustup() {
-    run_shell_command!(
-        "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable",
-    );
-
-    run_shell_command!("{}", get_cargo_env());
-}
-
 fn install_zig() {
+    // zig version 0.16.0 is hardcoded to download, I will change if there is a new release
     let zig_download_link = match ARCH {
-        "x86_64" => "https://ziglang.org/builds/zig-x86_64-linux-0.17.0-dev.607+456b2ec07.tar.xz",
-        "i686" | "i386" => {
-            "https://ziglang.org/builds/zig-x86-linux-0.17.0-dev.607+456b2ec07.tar.xz"
-        }
-        "aarch64" | "arm64" => {
-            "https://ziglang.org/builds/zig-aarch64-linux-0.17.0-dev.607+456b2ec07.tar.xz"
-        }
-        "armv7" | "armv7l" => {
-            "https://ziglang.org/builds/zig-arm-linux-0.17.0-dev.607+456b2ec07.tar.xz"
-        }
+        "x86_64" => "https://ziglang.org/builds/zig-x86_64-linux-0.16.0.tar.xz",
+        "i686" | "i386" => "https://ziglang.org/builds/zig-x86-linux-0.16.0.tar.xz",
+        "aarch64" | "arm64" => "https://ziglang.org/builds/zig-aarch64-linux-0.16.0.tar.xz",
+        "armv7" | "armv7l" => "https://ziglang.org/builds/zig-arm-linux-0.16.0.tar.xz",
         _ => error("Unsupported architecture:", Some(ARCH)),
     };
 
@@ -155,11 +143,12 @@ fn install_zig() {
     let commands_to_install_zig = &format!(
         "wget -P /tmp/ {zig_download_link} && \
          mkdir -p /tmp/cmdcreate-zig-tmp && \
-         tar -xf /tmp/{zig_archive_name} -C /tmp/cmdcreate-zig-tmp --strip-components=1 && \
-         rm /tmp/{zig_archive_name}"
+         tar -xf /tmp/{zig_archive_name} -C /tmp/cmdcreate-zig-tmp --strip-components=1"
     );
 
     run_shell_command!("{commands_to_install_zig}");
+
+    delete_file(&format!("/tmp/{zig_archive_name}"));
 }
 
 pub struct Rustup {}
@@ -192,5 +181,13 @@ impl Rustup {
             "armv7" | "armv7l" => "CC_armv7_unknown_linux_musleabihf",
             _ => error("Unsupported architecture:", Some(ARCH)),
         }
+    }
+
+    pub fn install() {
+        run_shell_command!(
+            "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --default-toolchain stable",
+        );
+
+        run_shell_command!("{}", get_cargo_env());
     }
 }
