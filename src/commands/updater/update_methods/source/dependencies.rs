@@ -152,8 +152,6 @@ fn install_zig() {
         .trim()
         .to_string();
 
-    output!("Downloading and installing zig...", true);
-
     let commands_to_install_zig = &format!(
         "wget -P /tmp/ {zig_download_link} && \
          mkdir -p /tmp/cmdcreate-zig-tmp && \
