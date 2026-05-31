@@ -909,3 +909,7 @@ Licensed under the GNU General Public License v3.0 or later.
 - Fix building from source issues
 - Fix permission issues regarding logging
 - Code optimizations
+- The cmdcreate install script (`install.sh`) now handles ARM 64 bit (`aarch64`)
+  ARM 32 bit (`armv7`).
+- Enhanced distro detection
+- Enhanced license path detection
