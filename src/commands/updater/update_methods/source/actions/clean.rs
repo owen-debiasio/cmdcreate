@@ -48,7 +48,11 @@ pub fn cleanup() {
 
     if dependencies.contains("rustup") && get_distro_base() != DistroBase::Arch {
         output!("Removing rustup...", true);
+
+        output!("Removing \"/root/.cargo\"...", false);
         delete_folder("/root/.cargo");
+
+        output!("Removing \"/root/.rustup\"...", false);
         delete_folder("/root/.rustup");
     }
 
