@@ -31,11 +31,12 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     configuration_file: "/etc/cmdcreate.toml",
     favorites: format!("{MAIN_PATH}/favorites"),
     command_installation_directory: "/usr/local/bin/",
-    license: if get_distro_base() == DistroBase::Debian {
-        // Because different distros just HAVE to have different paths for some bullshit reason
-        "/usr/share/doc/cmdcreate/copyright/LICENSE"
-    } else {
-        "/usr/share/licenses/cmdcreate/LICENSE"
+    license: match get_distro_base() {
+        DistroBase::Debian => "/usr/share/doc/cmdcreate/copyright/LICENSE",
+        DistroBase::Arch => "/usr/share/licenses/cmdcreate/LICENSE",
+        DistroBase::Fedora => "/usr/share/doc/cmdcreate/LICENSE",
+        DistroBase::Unknown => "/usr/local/share/doc/cmdcreate/LICENSE",
     },
     log_directory: "/tmp/cmdcreate-logs/",
 });
+// Because different distros just HAVE to have different paths for some bullshit reason
