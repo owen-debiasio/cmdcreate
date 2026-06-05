@@ -28,8 +28,8 @@ use crate::{
         net::{internet_is_forced_disabled, not_connected_to_internet},
         sys::{
             cpu::ARCH,
-            distro::{get_distro_base, installation_method},
-            env::{ENVIRONMENT_VARIABLES, running_as_root},
+            distro::{DistroBase, get_distro_base, installation_method},
+            env::{ENVIRONMENT_VARIABLES, root_check, running_as_root},
         },
     },
 };
@@ -84,6 +84,14 @@ Root status: {root_status}
 pub fn init() {
     init_filesystem();
     init_configs();
+
+    // Due to permission issues in the logging directory
+    // (/tmp/) on Debian/Ubuntu base distros, root perms
+    // must be enforced
+    match get_distro_base() {
+        DistroBase::Arch | DistroBase::Fedora => (),
+        DistroBase::Debian | DistroBase::Unknown => root_check(),
+    }
 
     log(
         &format!(
