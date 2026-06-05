@@ -913,3 +913,7 @@ Licensed under the GNU General Public License v3.0 or later.
   ARM 32 bit (`armv7`).
 - Enhanced distro detection
 - Enhanced license path detection
+
+## v1.3.9
+
+- "Fix" the permission issues when running not as root on Debian/Ubuntu systems
