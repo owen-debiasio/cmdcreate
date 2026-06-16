@@ -35,7 +35,6 @@ elif [[ "$ARCH" == "aarch64" || "$ARCH" == "arm64" ]]; then
     ZIG_TARGET="aarch64-linux-musl"
     CC_ENV_VAR="CC_aarch64_unknown_linux_musl"
 elif [[ "$ARCH" == "armv7l" || "$ARCH" == "armv7" ]]; then
-    # Note: Zig uses 'arm', Rust uses 'armv7'
     RUST_TARGET="armv7-unknown-linux-musleabihf"
     ZIG_TARGET="arm-linux-musleabihf"
     CC_ENV_VAR="CC_armv7_unknown_linux_musleabihf"
@@ -62,9 +61,7 @@ if [[ "${1:-}" != "--offline" && "${1:-}" != "-o" ]]; then
     rustup target add "$RUST_TARGET"
 
     echo -e "\n${BLUE}> Updating Cargo...${RESET}"
-    if ! command -v cargo-zigbuild &> /dev/null; then
-        cargo install cargo-zigbuild
-    fi
+    cargo install cargo-zigbuild
     cargo update
 fi
 
