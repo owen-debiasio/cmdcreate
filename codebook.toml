@@ -26,7 +26,6 @@ words = [
     "manjaro",
     "markdownlint",
     "misdetection",
-    "necesarry",
     "noconfirm",
     "nvim",
     "openssl",
@@ -53,5 +52,4 @@ words = [
     "vscodium",
     "vvcr",
     "xed",
-    "yay",
 ]
