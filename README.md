@@ -4,15 +4,16 @@ Copyright (C) 2026 Owen Debiasio
 Licensed under the GNU General Public License v3.0 or later.
 --->
 
-<div style="text-align: center">
-<h1>cmdcreate</h1>
+# cmdcreate
+
 Easily create and manage your own custom commands
 
-<br>
-<img src="https://img.shields.io/github/commit-activity/m/owen-debiasio/cmdcreate?label=Commits" alt="Commit rate">
-<img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="GPLv3 license">
-<img src="https://img.shields.io/github/issues/owen-debiasio/cmdcreate" alt="Issue amount">
-</div>
+[Badge Commits]:
+  https://img.shields.io/github/commit-activity/m/owen-debiasio/cmdcreate?label=Commits
+[Badge License]: https://img.shields.io/badge/License-GPLv3-blue.svg
+[Badge Issues]: https://img.shields.io/github/issues/owen-debiasio/cmdcreate
+
+![Badge Commits] ![Badge License] ![Badge Issues]
 
 ---
 
