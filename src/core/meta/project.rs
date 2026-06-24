@@ -13,7 +13,7 @@ pub mod author_information {
     pub const AUTHOR: Author = Author {
         name: "Owen Debiasio",
         username: "owen-debiasio",
-        email: "owen.debiasio@proton.me",
+        email: "owen.debiasio@gmail.com",
     };
 }
 
