@@ -936,3 +936,13 @@ Licensed under the GNU General Public License v3.0 or later.
 
 - Deprecation of the `install.sh` install script. It was unmaintained and I'll
   be honest and say I vibecoded it. It's lowkey for the best
+- New configuration
+  - New category: `self`
+    - `disable_root_usage`
+      - If `true`, cmdcreate is prevented from running as root.
+      - `false` (disabled) by default
+      - Can only be enabled when running cmdcreate as root, then can only be
+        disabled by modifying `/etc/cmdcreate.conf`.
+      - This setting is useful for `immutable`/`atomic` distros.
+      - This also disables the ability to update via most methods.
+- Code optimizations
