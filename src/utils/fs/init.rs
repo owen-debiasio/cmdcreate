@@ -19,11 +19,11 @@ use crate::{
     run_shell_command,
     utils::{
         fs::{
-            core::{create_file, create_folder, path_exists},
+            core::{create_file, create_folder, path_exists, read_file_to_string, write_to_file},
             paths::{MAIN_PATH, PATHS},
         },
         io::error,
-        sys::env::running_as_root,
+        sys::env::{ENVIRONMENT_VARIABLES, running_as_root},
     },
 };
 
@@ -33,48 +33,83 @@ pub fn init_filesystem() {
         Severity::Normal,
     );
 
-    let favorites_file = &PATHS.favorites;
-    let config_file = PATHS.configuration_file;
-    let log_directory = PATHS.log_directory;
+    create_cmdcreate_filesystem();
 
-    if path_exists(favorites_file)
-        && path_exists(config_file)
-        && path_exists(MAIN_PATH)
-        && path_exists(log_directory)
-    {
-        return;
-    }
-
+    // Add `~/.local/bin/cmdcreate` to PATH
     if !running_as_root() {
-        error(
-            "Looks like you're running cmdcreate for the first time, \
-            please run cmdcreate as root to set up the filesystem.",
-            None,
-        )
-    }
-
-    create_folder(MAIN_PATH);
-    create_file(favorites_file);
-    create_file(config_file);
-
-    create_folder(log_directory);
-
-    // Fix issues with running cmdcreate not as root on some systems
-    run_shell_command!("chmod -R 777 /tmp/cmdcreate-logs");
-
-    if !(path_exists(favorites_file)
-        && path_exists(config_file)
-        && path_exists(MAIN_PATH)
-        && path_exists(log_directory))
-    {
-        error(
-            "Failed to initialize filesystem!",
-            Some("Root access needed!"),
-        )
+        add_home_install_directory_to_path();
     }
 
     log(
         "utils/fs::init::init_filesystem(): Filesystem initialized",
         Severity::Normal,
     );
+}
+
+fn create_cmdcreate_filesystem() {
+    let favorites_file = &PATHS.favorites;
+    let config_file = PATHS.configuration_file;
+    let command_install_dir = PATHS.command_installation_directory;
+
+    let essential_folders_exist =
+        path_exists(favorites_file) && path_exists(config_file) && path_exists(&MAIN_PATH);
+
+    if essential_folders_exist {
+        return;
+    }
+
+    create_folder(&MAIN_PATH);
+
+    if !running_as_root() {
+        create_folder(command_install_dir);
+    }
+
+    create_file(favorites_file);
+    create_file(config_file);
+
+    // Fix issues with running cmdcreate not as root on some systems
+    run_shell_command!("chmod -R 777 /tmp/cmdcreate-logs");
+
+    if !essential_folders_exist && (!running_as_root() && !path_exists(command_install_dir)) {
+        error(
+            "Failed to initialize filesystem!",
+            Some("Directories don't exist!"),
+        )
+    }
+}
+
+fn add_home_install_directory_to_path() {
+    let shell = ENVIRONMENT_VARIABLES.shell.to_lowercase();
+
+    // 1. Map directly to standard Linux shell configuration files
+    let shellrc = if shell.contains("zsh") {
+        "~/.zshrc"
+    } else if shell.contains("fish") {
+        "~/.config/fish/config.fish"
+    } else if shell.contains("bash") {
+        "~/.bashrc"
+    } else if shell.contains("tcsh") || shell.contains("csh") {
+        "~/.tcshrc"
+    } else {
+        "~/.profile"
+    };
+
+    let command_install_dir = PATHS.command_installation_directory.replace('~', "$HOME");
+
+    let path_to_add = if shell.contains("fish") {
+        format!("\n# Added by cmdcreate\nset -gx PATH {command_install_dir} $PATH\n")
+    } else if shell.contains("tcsh") || shell.contains("csh") {
+        format!("\n# Added by cmdcreate\nsetenv PATH \"{command_install_dir}:$PATH\"\n")
+    } else {
+        format!("\n# Added by cmdcreate\nexport PATH=\"{command_install_dir}:$PATH\"\n")
+    };
+
+    let path_to_add = path_to_add.replace("cmdcreate/", "cmdcreate");
+
+    let shellrc_contents = read_file_to_string(shellrc);
+    let shellrc_contains_path_define = shellrc_contents.contains(path_to_add.trim());
+
+    if !shellrc_contains_path_define {
+        write_to_file(shellrc, &path_to_add, true);
+    }
 }

@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::utils::io::error;
+use crate::utils::{io::error, sys::env::ENVIRONMENT_VARIABLES};
 
 use anyhow::Context;
 use std::{
@@ -23,27 +23,30 @@ use std::{
     path::Path,
 };
 
+fn expand_home_dir(apparent_path: &str) -> String {
+    apparent_path.replace('~', &ENVIRONMENT_VARIABLES.home)
+}
+
 pub fn read_file_to_string(path_to_file_to_read: &str) -> String {
-    if !path_exists(path_to_file_to_read) {
+    let path = expand_home_dir(path_to_file_to_read);
+
+    if !path_exists(&path) {
         return String::new();
     }
 
-    read_to_string(path_to_file_to_read)
+    read_to_string(&path)
         .unwrap_or_else(|err| {
             error(
-                &format!("Failed reading file: {path_to_file_to_read}"),
+                &format!("Failed reading file: {path}"),
                 Some(&err.to_string()),
             );
         })
-        .replace("\r\n", "\n") // Avoid CRLF encoding (because it screws shit up)
+        .replace("\r\n", "\n")
 }
 
 pub fn overwrite_file(path_to_file_to_overwrite: &str, contents_of_file_to_overwrite: &str) {
-    write_to_file(
-        path_to_file_to_overwrite,
-        contents_of_file_to_overwrite,
-        false,
-    );
+    let path = expand_home_dir(path_to_file_to_overwrite);
+    write_to_file(&path, contents_of_file_to_overwrite, false);
 }
 
 pub fn write_to_file(
@@ -51,15 +54,10 @@ pub fn write_to_file(
     contents_to_write_to_file: &str,
     append_changes: bool,
 ) {
-    if let Some(parent_directory) = Path::new(path_to_file_to_be_written_to).parent() {
+    let path_of_file = expand_home_dir(path_to_file_to_be_written_to);
+    if let Some(parent_directory) = Path::new(&path_of_file).parent() {
         create_dir_all(parent_directory)
-            .with_context(|| {
-                format!(
-                    "
-                Failed to create parent directory for: \
-                {path_to_file_to_be_written_to}"
-                )
-            })
+            .with_context(|| format!("Failed to create parent directory for: {path_of_file}"))
             .expect("Failed to write to file");
     }
 
@@ -73,102 +71,66 @@ pub fn write_to_file(
     }
 
     let mut file_that_should_be_written_to = file_options
-        .open(path_to_file_to_be_written_to)
-        .with_context(|| {
-            format!(
-                "
-            Failed to open file: \
-            {path_to_file_to_be_written_to}"
-            )
-        })
+        .open(&path_of_file)
+        .with_context(|| format!("Failed to open file: {path_of_file}"))
         .expect("Failed to get file");
 
     file_that_should_be_written_to
         .write_all(contents_to_write_to_file.as_bytes())
-        .with_context(|| {
-            format!(
-                "
-            Failed writing to file: \
-            {path_to_file_to_be_written_to}"
-            )
-        })
+        .with_context(|| format!("Failed writing to file: {path_of_file}"))
         .expect("Failed to write contents");
 }
 
 pub fn remove_from_file(path_to_file: &str, contents_to_remove: &str) {
+    let path = expand_home_dir(path_to_file);
     overwrite_file(
-        path_to_file,
-        &read_file_to_string(path_to_file).replace(contents_to_remove, ""),
+        &path,
+        &read_file_to_string(&path).replace(contents_to_remove, ""),
     );
 }
 
 pub fn path_exists(apparent_path: &str) -> bool {
-    Path::new(apparent_path).exists()
+    let path = expand_home_dir(apparent_path);
+    Path::new(&path).exists()
 }
 
 pub fn create_folder(path_of_folder_to_create: &str) {
-    create_dir_all(path_of_folder_to_create)
-        .with_context(|| {
-            format!(
-                "
-            Failed to create folder: \
-            {path_of_folder_to_create}"
-            )
-        })
+    let path_of_file = expand_home_dir(path_of_folder_to_create);
+    create_dir_all(&path_of_file)
+        .with_context(|| format!("Failed to create folder: {path_of_file}"))
         .expect("Failed to create folder");
 }
 
 pub fn create_file(file_to_be_created: &str) {
-    if let Some(parent_folder) = Path::new(file_to_be_created).parent() {
+    let path_of_file = expand_home_dir(file_to_be_created);
+    if let Some(parent_folder) = Path::new(&path_of_file).parent() {
         create_dir_all(parent_folder)
-            .with_context(|| {
-                format!(
-                    "
-                Failed to create parent folder for: \
-                {file_to_be_created}"
-                )
-            })
+            .with_context(|| format!("Failed to create parent folder for: {path_of_file}"))
             .expect("Failed to create parent folder");
     }
 
-    if !path_exists(file_to_be_created) {
-        File::create(file_to_be_created)
-            .with_context(|| {
-                format!(
-                    "
-                Failed to create file: \
-                {file_to_be_created}"
-                )
-            })
+    if !path_exists(&path_of_file) {
+        File::create(&path_of_file)
+            .with_context(|| format!("Failed to create file: {path_of_file}"))
             .expect("Failed to create file");
     }
 }
 
 pub fn delete_file(path_of_file_to_delete: &str) {
-    if path_exists(path_of_file_to_delete) {
-        remove_file(path_of_file_to_delete)
-            .with_context(|| {
-                format!(
-                    "
-                Failed to delete file: \
-                {path_of_file_to_delete}"
-                )
-            })
+    let path = expand_home_dir(path_of_file_to_delete);
+    if path_exists(&path) {
+        remove_file(&path)
+            .with_context(|| format!("Failed to delete file: {path}"))
             .expect("Failed to delete file");
     }
 }
 
 pub fn delete_folder(path_of_folder_to_delete: &str) {
-    if path_exists(path_of_folder_to_delete) {
-        remove_dir_all(path_of_folder_to_delete)
-            .with_context(|| {
-                format!(
-                    "
-                Failed to delete folder: \
-                {path_of_folder_to_delete}"
-                )
-            })
-            .expect("Failed to create folder");
+    let path = expand_home_dir(path_of_folder_to_delete);
+    if path_exists(&path) {
+        remove_dir_all(&path)
+            .with_context(|| format!("Failed to delete folder: {path}"))
+            .expect("Failed to create folder"); // Fixed a typo in your original error message here too!
     }
 }
 

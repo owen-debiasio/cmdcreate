@@ -59,7 +59,7 @@ pub fn create(
     let full_contents_of_new_command = &format!("{NEW_COMMAND_HEADER}{contents_of_new_command}");
 
     let path_to_command = &format!(
-        "{}{command_to_create}",
+        "{}/{command_to_create}",
         PATHS.command_installation_directory
     );
 

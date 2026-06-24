@@ -14,10 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::utils::sys::distro::{DistroBase, get_distro_base};
+use crate::{core::meta::license::get_normal_license_paths, utils::sys::env::running_as_root};
 use std::sync::LazyLock;
 
-pub static MAIN_PATH: &str = "/usr/share/cmdcreate";
+pub static MAIN_PATH: LazyLock<&str> = LazyLock::new(|| {
+    if running_as_root() {
+        "/usr/share/cmdcreate"
+    } else {
+        "~/.local/share/cmdcreate"
+    }
+});
 
 pub struct Paths {
     pub configuration_file: &'static str,
@@ -28,15 +34,21 @@ pub struct Paths {
 }
 
 pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
-    configuration_file: "/etc/cmdcreate.toml",
-    favorites: format!("{MAIN_PATH}/favorites"),
-    command_installation_directory: "/usr/local/bin/",
-    license: match get_distro_base() {
-        DistroBase::Debian => "/usr/share/doc/cmdcreate/copyright/LICENSE",
-        DistroBase::Arch => "/usr/share/licenses/cmdcreate/LICENSE",
-        DistroBase::Fedora => "/usr/share/doc/cmdcreate/LICENSE",
-        DistroBase::Unknown => "/usr/local/share/doc/cmdcreate/LICENSE",
+    configuration_file: if running_as_root() {
+        "/etc/cmdcreate.toml"
+    } else {
+        "~/.config/cmdcreate/cmdcreate.toml"
+    },
+    favorites: format!("{}/favorites", &MAIN_PATH.to_string()),
+    command_installation_directory: if running_as_root() {
+        "/usr/local/bin/"
+    } else {
+        "~/.local/bin/cmdcreate/"
+    },
+    license: if running_as_root() {
+        get_normal_license_paths()
+    } else {
+        &MAIN_PATH
     },
     log_directory: "/tmp/cmdcreate-logs/",
 });
-// Because different distros just HAVE to have different paths for some bullshit reason

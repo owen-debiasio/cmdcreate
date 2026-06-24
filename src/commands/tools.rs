@@ -23,6 +23,7 @@ use crate::{
             paths::PATHS,
         },
         io::error,
+        sys::env::ENVIRONMENT_VARIABLES,
     },
 };
 
@@ -60,10 +61,12 @@ pub fn get_installed_commands() -> Vec<String> {
         Severity::Normal,
     );
 
-    let command_install_directory = &PATHS.command_installation_directory;
+    let command_install_directory = &PATHS
+        .command_installation_directory
+        .replace('~', &ENVIRONMENT_VARIABLES.home);
 
     let mut retrieved_commands_pathbuf: Vec<PathBuf> = read_dir(command_install_directory)
-        .unwrap_or_else(|_| error("Error: Failed to read install directory!", None))
+        .unwrap_or_else(|_| error("Failed to read install directory!", None))
         .flatten()
         .map(|entry_in_index| entry_in_index.path())
         .filter(|path_to_command| path_to_command.is_file())
@@ -71,7 +74,7 @@ pub fn get_installed_commands() -> Vec<String> {
 
     // Remove commands not created by cmdcreate
     // (commands that don't contain the command header)
-    // (See src/commands/create.rs)
+    // (See src/commands/core/create.rs)
     retrieved_commands_pathbuf.retain(|command_path| {
         let path_of_command_found = &command_path.to_string_lossy();
         let file_contents = read_file_to_string(path_of_command_found);
@@ -86,9 +89,8 @@ pub fn get_installed_commands() -> Vec<String> {
     for command in retrieved_commands_pathbuf {
         let command_vec_addition_full = command.to_str().unwrap().to_string();
 
-        // Remove "/usr/local/bin/" to just provide
-        // the names of the commands. They are all
-        // installed in the same directory anyway.
+        // Remove the installation path directories (ex. /usr/local/bin/) to just provide
+        // the names of the commands.
         let command_to_add = command_vec_addition_full.replace(command_install_directory, "");
 
         retrieved_commands.push(command_to_add);
