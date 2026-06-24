@@ -924,3 +924,4 @@ Licensed under the GNU General Public License v3.0 or later.
     - Favorite commands: `~/.local/share/cmdcreate/favorites`
     - Configuration file: `~/.config/cmdcreate/cmdcreate.toml`
     - License: `~/.local/share/cmdcreate/`
+- Code optimizations
