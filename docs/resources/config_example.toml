@@ -4,6 +4,9 @@
 
 # This file is located in either `/etc/cmdcreate.toml` or `~/.config/cmdcreate/cmdcreate.toml`
 
+[self]
+disable_root_usage = "true" # If true, you can't run cmdcreate as root
+
 [sys]
 shell = "bash" # Your preferred shell
 
