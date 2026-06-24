@@ -21,7 +21,13 @@ use std::{
 
 use ureq::Agent;
 
-use crate::utils::sys::arguments::args_contains;
+use crate::{
+    core::{
+        configs::load::load_configuration,
+        logger::{consts::Severity, main::log},
+    },
+    utils::sys::arguments::args_contains,
+};
 
 pub fn ureq_agent() -> Agent {
     Agent::config_builder()
@@ -36,12 +42,23 @@ pub fn internet_is_forced_disabled() -> bool {
 }
 
 pub fn not_connected_to_internet() -> bool {
-    if internet_is_forced_disabled() {
+    if internet_is_forced_disabled()
+        || load_configuration("internet", "force_disable", "false") == "true"
+    {
+        log(
+            "utils::net::not_connected_to_internet(): Internet is force disabled.",
+            Severity::Normal,
+        );
         return true;
     }
 
-    // The sample DNS is set to Cloudflare for reliability
-    let sample_dns = "1.1.1.1:53";
+    // The sample DNS is set to Cloudflare by default for reliability
+    let sample_dns = load_configuration("internet", "sample_dns", "1.1.1.1:53");
+
+    log(
+        &format!("utils::net::not_connected_to_internet(): Using sample dns: {sample_dns}"),
+        Severity::Normal,
+    );
 
     !sample_dns
         .to_socket_addrs()
