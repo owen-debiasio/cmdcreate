@@ -4,20 +4,19 @@ Copyright (C) 2026 Owen Debiasio
 Licensed under the GNU General Public License v3.0 or later.
 --->
 
-# cmdcreate
-
+<div style="text-align: center">
+<h1>cmdcreate</h1>
 Easily create and manage your own custom commands
 
-[Badge Commits]:
-  https://img.shields.io/github/commit-activity/m/owen-debiasio/cmdcreate?label=Commits
-[Badge License]: https://img.shields.io/badge/License-GPLv3-blue.svg
-[Badge Issues]: https://img.shields.io/github/issues/owen-debiasio/cmdcreate
-
-![Badge Commits] ![Badge License] ![Badge Issues]
+<br>
+<img src="https://img.shields.io/github/commit-activity/m/owen-debiasio/cmdcreate?label=Commits" alt="Commit rate">
+<img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="GPLv3 license">
+<img src="https://img.shields.io/github/issues/owen-debiasio/cmdcreate" alt="Issue amount">
+</div>
 
 ---
 
-## Documentation and Resources
+<h2>Documentation and Resources</h2>
 
 I do my best to provide as much documentation as I can. You can view the table
 of contents and information here:
@@ -54,17 +53,12 @@ yay -S cmdcreate-git
 
 ### Manual Package Install
 
+> [!NOTE]  
+> If using the standalone binary, you are able to run it portably, without
+> installation if you wish.
+
 You can find `.deb`, `.rpm` and standalone binary packages in the
 [latest release](https://github.com/owen-debiasio/cmdcreate/releases/latest).
-
-### Installer Script
-
-This script will walk you through how you want to install cmdcreate depending on
-your distro.
-
-```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/owen-debiasio/cmdcreate/main/install.sh)
-```
 
 ---
 
