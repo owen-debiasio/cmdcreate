@@ -24,10 +24,12 @@ use crate::{
     utils::{
         fs::{misc::use_pager_on_file, paths::PATHS},
         io::error,
+        sys::env::running_as_root,
     },
 };
 
-pub static AVAILABLE_CATEGORIES: &[&str] = &["[appearance]", "[logs]", "[sys]", "[internet]"];
+pub static AVAILABLE_CATEGORIES: &[&str] =
+    &["[self]", "[appearance]", "[logs]", "[sys]", "[internet]"];
 pub static AVAILABLE_VALUES: &[&str] = &[
     "shell",
     "time_format",
@@ -36,6 +38,7 @@ pub static AVAILABLE_VALUES: &[&str] = &[
     "disable_color",
     "force_disable",
     "sample_dns",
+    "disable_root_usage",
 ];
 
 fn edit_config_file() {
@@ -45,9 +48,18 @@ fn edit_config_file() {
     run_shell_command!("{editor} {config_file}");
 }
 
-pub fn config(mode: &str, category: &str, value: &str) {
+pub fn config(mode: &str, category: &str, key: &str) {
+    // Manual override to prevent easy exploiting and security reasons. I don't know
+    // where else to put this code tbh
+    if key == "disable_root_usage" && mode == "remove" && !running_as_root() {
+        error(
+            "You can't re-enable root when running as a normal user.",
+            Some("Try running: 'cat /etc/cmdcreate.toml'."),
+        )
+    }
+
     match mode {
-        "add" | "remove" => init_config_changes(mode, category, value),
+        "add" | "remove" => init_config_changes(mode, category, key),
 
         "help" => doc("configurations"),
         "example" => view_documentation_file("docs/resources/config_example.toml"),

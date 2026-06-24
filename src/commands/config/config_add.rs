@@ -24,6 +24,7 @@ use crate::{
             paths::PATHS,
         },
         io::error,
+        sys::env::running_as_root,
     },
 };
 
@@ -56,6 +57,13 @@ pub fn add(category: &str, full_setting: &str) {
         ),
         Severity::Normal,
     );
+
+    if key == "disable_root_usage" && !running_as_root() {
+        error(
+            "You can only enable this setting with root privileges.",
+            None,
+        )
+    }
 
     if key.is_empty() || value.is_empty() || !full_setting.contains('=') {
         error("Please provide a setting.", None)

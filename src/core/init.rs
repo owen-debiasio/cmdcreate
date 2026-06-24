@@ -16,7 +16,7 @@
 
 use crate::{
     core::{
-        configs::init::init_configs,
+        configs::{init::init_configs, load::load_configuration},
         logger::{consts::Severity, main::log},
         meta::{
             project::author_information::AUTHOR,
@@ -25,11 +25,12 @@ use crate::{
     },
     utils::{
         fs::init::init_filesystem,
+        io::error,
         net::{internet_is_forced_disabled, not_connected_to_internet},
         sys::{
             cpu::ARCH,
-            distro::{DistroBase, get_distro_base, installation_method},
-            env::{ENVIRONMENT_VARIABLES, root_check, running_as_root},
+            distro::{get_distro_base, installation_method},
+            env::{ENVIRONMENT_VARIABLES, running_as_root},
         },
     },
 };
@@ -82,16 +83,12 @@ Root status: {root_status}
 }
 
 pub fn init() {
-    // Due to permission issues in the logging directory
-    // (/tmp/) on Debian/Ubuntu base distros, root perms
-    // must be enforced
-    match get_distro_base() {
-        DistroBase::Arch | DistroBase::Fedora => (),
-        DistroBase::Debian | DistroBase::Unknown => root_check(),
-    }
-
     init_filesystem();
     init_configs();
+
+    if load_configuration("self", "disable_root_usage", "false") == "true" && running_as_root() {
+        error("Root usage is disabled on your machine!", None)
+    }
 
     log(
         &format!(
