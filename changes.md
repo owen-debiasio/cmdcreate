@@ -917,3 +917,10 @@ Licensed under the GNU General Public License v3.0 or later.
 ## v1.3.9
 
 - "Fix" the permission issues when running not as root on Debian/Ubuntu systems
+- cmdcreate can now be used not as root. This helps support on immutable
+  distros.
+  - These are the paths used when not as root:
+    - Command installation directory: `~/.local/bin/cmdcreate/`
+    - Favorite commands: `~/.local/share/cmdcreate/favorites`
+    - Configuration file: `~/.config/cmdcreate/cmdcreate.toml`
+    - License: `~/.local/share/cmdcreate/`
