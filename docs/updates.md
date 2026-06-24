@@ -29,6 +29,11 @@ cmdcreate check
 
 ## Updating cmdcreate
 
+> [!IMPORTANT]
+>
+> As of version `v1.3.9`, you MUST run as root to update cmdcreate if needed.
+> This may change in the future.
+
 ### Arch Linux
 
 #### Install through an AUR manager
