@@ -82,9 +82,6 @@ Root status: {root_status}
 }
 
 pub fn init() {
-    init_filesystem();
-    init_configs();
-
     // Due to permission issues in the logging directory
     // (/tmp/) on Debian/Ubuntu base distros, root perms
     // must be enforced
@@ -92,6 +89,9 @@ pub fn init() {
         DistroBase::Arch | DistroBase::Fedora => (),
         DistroBase::Debian | DistroBase::Unknown => root_check(),
     }
+
+    init_filesystem();
+    init_configs();
 
     log(
         &format!(
