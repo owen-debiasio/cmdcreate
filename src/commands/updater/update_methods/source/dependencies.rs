@@ -58,7 +58,7 @@ pub fn install_dependencies() {
 
     log(
         &format!(
-            "commands/updater/update_methods/source/dependencies::install_dependencies(): Dependencies to install: {dependencies}"
+            "commands::updater::update_methods::source::dependencies::install_dependencies(): Dependencies to install: {dependencies}"
         ),
         Severity::Normal,
     );
