@@ -35,10 +35,7 @@ use crate::{
         logger::{consts::Severity, main::log},
         meta::version::display_info::print_version_info,
     },
-    utils::{
-        io::error,
-        sys::{arguments::arguments_force_actions, env::root_check},
-    },
+    utils::{io::error, sys::arguments::arguments_force_actions},
     validate_args,
 };
 
@@ -128,8 +125,6 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 "&<command>:Command whose contents to edit",
                 ""
             );
-
-            root_check();
 
             let command_to_edit = argument_index(1).unwrap();
 
