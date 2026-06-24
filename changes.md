@@ -931,3 +931,8 @@ Licensed under the GNU General Public License v3.0 or later.
       (Default: "false")
     - `sample_dns`: The default is set to Cloudflare. Used to check internet
       connectivity. (Default: "1.1.1.1:53")
+
+## v1.4.0
+
+- Deprecation of the `install.sh` install script. It was unmaintained and I'll
+  be honest and say I vibecoded it. It's lowkey for the best
