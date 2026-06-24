@@ -29,10 +29,7 @@ use crate::{
         },
         io::{ask_for_confirmation, error},
         net::not_connected_to_internet,
-        sys::{
-            distro::{DistroBase, get_distro_base},
-            env::root_check,
-        },
+        sys::distro::{DistroBase, get_distro_base},
     },
 };
 
@@ -80,10 +77,10 @@ pub fn display_full() {
 fn install() {
     let green = COLORS.green;
 
-    root_check();
-
     let raw_repo_path = PROJECT.repository_raw;
     let license_path = &PATHS.license;
+
+    output!("Installing license to: {green}{license_path}");
 
     let license_install_directory = license_path.replace("LICENSE", "");
     create_folder(&license_install_directory);
