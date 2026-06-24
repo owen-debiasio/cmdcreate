@@ -44,3 +44,15 @@ You are able to configure cmdcreate in various ways. All are listed here.
 
 - If "true", colorized output will be disabled
 - Default: `true`
+
+## internet
+
+### force_disable
+
+- If "true" internet will be force disabled by default
+- Default: `false`
+
+### sample_dns
+
+- The default is set to Cloudflare. Used to check internet connectivity.
+- Default: `1.1.1.1:53`
