@@ -29,7 +29,7 @@ pub struct Paths {
     pub configuration_file: &'static str,
     pub favorites: String,
     pub command_installation_directory: &'static str,
-    pub license: &'static str,
+    pub license: String,
     pub log_directory: &'static str,
 }
 
@@ -46,9 +46,9 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
         "~/.local/bin/cmdcreate/"
     },
     license: if running_as_root() {
-        get_normal_license_paths()
+        get_normal_license_paths().to_string()
     } else {
-        &MAIN_PATH
+        format!("{}/LICENSE", &MAIN_PATH.to_string())
     },
     log_directory: "/tmp/cmdcreate-logs/",
 });
