@@ -71,11 +71,13 @@ pub fn root_check() {
 pub struct Vars {
     pub shell: String,
     pub text_editor: String,
+    pub home: String,
 }
 
 pub static ENVIRONMENT_VARIABLES: LazyLock<Vars> = LazyLock::new(|| Vars {
     shell: var("SHELL").unwrap_or_else(|_| "unknown".to_owned()),
     text_editor: var("EDITOR").unwrap_or_else(|_| "auto".to_owned()),
+    home: var("HOME").unwrap_or_else(|_| "auto".to_owned()),
 });
 
 #[cfg(test)]
@@ -86,5 +88,6 @@ mod tests {
     fn vars_are_initialized() {
         assert!(!ENVIRONMENT_VARIABLES.shell.is_empty());
         assert!(!ENVIRONMENT_VARIABLES.text_editor.is_empty());
+        assert!(!ENVIRONMENT_VARIABLES.home.is_empty());
     }
 }
