@@ -68,8 +68,6 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 "-i/--in_editor"
             );
 
-            root_check();
-
             let command_name = argument_index(1).unwrap_or("");
             let command_contents = argument_index(2).unwrap_or("");
 
@@ -84,8 +82,6 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 &<new>:New name of the old command name",
                 ""
             );
-
-            root_check();
 
             let old_command_name = argument_index(1).unwrap();
             let renamed_command_name = argument_index(2).unwrap();
@@ -103,8 +99,6 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 ""
             );
 
-            root_check();
-
             let command_operation = argument_index(1).unwrap(); // Either "add" or "remove"
             let name_of_command = argument_index(2).unwrap();
 
@@ -119,8 +113,6 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 "&<output>:Command to be removed",
                 ""
             );
-
-            root_check();
 
             for index in 1..=supplied_arguments.len() {
                 if let Some(command_to_remove) = argument_index(index) {
@@ -177,8 +169,6 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                 "&<input>:File to import from",
                 ""
             );
-
-            root_check();
 
             let file_to_import_commands_from = argument_index(1).unwrap();
 
