@@ -9,13 +9,10 @@ Licensed under the GNU General Public License v3.0 or later.
 Here I provide the organization of the cmdcreate GitHub repository. Subject to
 change.
 
-> [!NOTE]  
+> [!IMPORTANT]  
 > File structure may be inaccurate. Please let me know if it needs to be updated
 
 ## Cargo configuration
-
-- 📁 [.cargo](https://github.com/owen-debiasio/cmdcreate/tree/main/.cargo)
-  - [config.toml](https://github.com/owen-debiasio/cmdcreate/tree/main/.cargo/config.toml)
 
 ## GitHub templates, actions, workflows
 
