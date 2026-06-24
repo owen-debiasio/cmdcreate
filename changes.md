@@ -925,3 +925,9 @@ Licensed under the GNU General Public License v3.0 or later.
     - Configuration file: `~/.config/cmdcreate/cmdcreate.toml`
     - License: `~/.local/share/cmdcreate/`
 - Code optimizations
+- New configurations
+  - New category: `internet`
+    - `force_disable`: If "true" internet will be force disabled by default.
+      (Default: "false")
+    - `sample_dns`: The default is set to Cloudflare. Used to check internet
+      connectivity. (Default: "1.1.1.1:53")
