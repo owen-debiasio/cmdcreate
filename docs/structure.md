@@ -32,26 +32,9 @@ change.
 
 - 📁 [.idea](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea)
   - 📁
-    [codeStyles](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/codeStyles)
-    - [codeStyleConfig.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/codeStyles/codeStyleConfig.xml)
-    - [Project.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/codeStyles/Project.xml)
-  - 📁
-    [dictionaries](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/dictionaries)
-    - [project.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/dictionaries/project.xml)
-  - 📁
-    [inspectionProfiles](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/inspectionProfiles)
-    - [Project_Default.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/inspectionProfiles/Project_Default.xml)
-  - 📁
     [runConfigurations](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/runConfigurations)
     - [Test.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/runConfigurations/Test.xml)
   - [.gitignore](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/.gitignore)
-  - [cmdcreate.iml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/cmdcreate.iml)
-  - [cmdcreate-testing.iml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/cmdcreate-testing.iml)
-  - [discord.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/discord.xml)
-  - [jsonSchemas.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/jsonSchemas.xml)
-  - [misc.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/misc.xml)
-  - [modules.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/modules.xml)
-  - [pyProjectModel.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/pyProjectModel.xml)
   - [vcs.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/vcs.xml)
 
 ## VSCode files
@@ -209,25 +192,9 @@ change.
   - [net.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/utils/net.rs)
 - [main.rs](https://github.com/owen-debiasio/cmdcreate/blob/main/src/main.rs)
 
-## Testing cmdcreate
-
-- 📁 [testing](https://github.com/owen-debiasio/cmdcreate/tree/main/testing)
-  - 📁 [src](https://github.com/owen-debiasio/cmdcreate/tree/main/testing/src/)
-    - 📁
-      [tests](https://github.com/owen-debiasio/cmdcreate/tree/main/testing/tests/)
-      - [init_tests.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/tests/init_tests.py)
-      - [run_tests.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/tests/run_tests.py)
-    - [colors.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/colors.py)
-    - [io_utils.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/io_utils.py)
-    - [sys_utils.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/sys_utils.py)
-    - [test_features.py](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/src/test_features.py)
-  - [README.md](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/README.md)
-  - [pyproject.toml](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/pyproject.toml)
-
 ## Linting files
 
 - [.markdownlint.json](https://github.com/owen-debiasio/cmdcreate/blob/main/.markdownlint.json)
-- [.pylintrc](https://github.com/owen-debiasio/cmdcreate/blob/main/.pylintrc)
 - [.prettierrc](https://github.com/owen-debiasio/cmdcreate/blob/main/.prettierrc)
 - [.shellcheckrc](https://github.com/owen-debiasio/cmdcreate/blob/main/.shellcheckrc)
 
@@ -243,4 +210,4 @@ change.
 - [LICENSE](https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE)
 - [README.md](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md)
 - [SECURITY.md](https://github.com/owen-debiasio/cmdcreate/blob/main/SECURITY.md)
-- [update_tag.md](https://github.com/owen-debiasio/cmdcreate/blob/main/update_tag.md)
+- [update_tag.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/update_tag.sh)
