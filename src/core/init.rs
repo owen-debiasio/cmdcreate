@@ -87,7 +87,10 @@ pub fn init() {
     init_configs();
 
     if load_configuration("self", "disable_root_usage", "false") == "true" && running_as_root() {
-        error("Root usage is disabled on your machine!", None)
+        error(
+            "Root usage is disabled on your machine!",
+            Some("The setting 'disable_root_usage' is enabled in: '/etc/cmdcreate.toml'."),
+        )
     }
 
     log(

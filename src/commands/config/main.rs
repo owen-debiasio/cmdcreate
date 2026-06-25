@@ -23,7 +23,7 @@ use crate::{
     run_shell_command,
     utils::{
         fs::{misc::use_pager_on_file, paths::PATHS},
-        io::error,
+        io::{ask_for_confirmation, error},
         sys::env::running_as_root,
     },
 };
@@ -48,18 +48,13 @@ fn edit_config_file() {
     run_shell_command!("{editor} {config_file}");
 }
 
-pub fn config(mode: &str, category: &str, key: &str) {
-    // Manual override to prevent easy exploiting and security reasons. I don't know
-    // where else to put this code tbh
-    if key == "disable_root_usage" && mode == "remove" && !running_as_root() {
-        error(
-            "You can't re-enable root when running as a normal user.",
-            Some("Try running: 'cat /etc/cmdcreate.toml'."),
-        )
-    }
-
+/// How the different values are organized:
+/// `mode`: add, remove, etc.
+/// `category`: self, appearance, logs, sys, etc.
+/// `key_with_value`: key="value"
+pub fn config(mode: &str, category: &str, key_with_value: &str) {
     match mode {
-        "add" | "remove" => init_config_changes(mode, category, key),
+        "add" | "remove" => init_config_changes(mode, category, key_with_value),
 
         "help" => doc("configurations"),
         "example" => view_documentation_file("docs/resources/config_example.toml"),
@@ -71,26 +66,52 @@ pub fn config(mode: &str, category: &str, key: &str) {
     }
 }
 
-fn init_config_changes(config_mode: &str, config_category: &str, config_value: &str) {
-    let category_header = format!("[{config_category}]");
+fn init_config_changes(mode: &str, category: &str, key_with_value: &str) {
+    let key = key_with_value.split('=').next().unwrap();
+    let value = key_with_value.split('=').next_back().unwrap();
+    let category_header = format!("[{category}]");
 
-    if config_category.is_empty() {
+    // Manual override to prevent easy exploiting and security reasons. I don't know
+    // where else to put this code tbh
+    if key == "disable_root_usage" {
+        if running_as_root() {
+            if mode == "add" {
+                ask_for_confirmation(
+                    "Are you sure that you want to enable this setting? You may not be able to revert this.",
+                    true,
+                );
+            }
+        } else {
+            if mode == "remove" {
+                error(
+                    "You can't re-enable root when running as a normal user.",
+                    Some("Please see: 'cat /etc/cmdcreate.toml'."),
+                )
+            }
+            if mode == "add" {
+                error(
+                    "You can only enable this setting with root privileges.",
+                    None,
+                )
+            }
+        }
+    }
+
+    if category.is_empty() {
         error("Please provide a category.", None)
     } else if !AVAILABLE_CATEGORIES.contains(&category_header.as_str()) {
-        error("Not a valid category:", Some(config_category));
+        error("Not a valid category:", Some(category));
     }
 
-    let config_value_raw = config_value.split('=').next().unwrap();
-
-    if config_value.is_empty() {
+    if key_with_value.is_empty() {
         error("Please provide a value.", None)
-    } else if !AVAILABLE_VALUES.contains(&config_value_raw) {
-        error("Not a valid value:", Some(config_value_raw));
+    } else if !AVAILABLE_VALUES.contains(&key) {
+        error("Not a valid value:", Some(key));
     }
 
-    if config_mode == "add" {
-        add(config_category, config_value);
-    } else if config_mode == "remove" {
-        remove(config_category, config_value);
+    if mode == "add" {
+        add(category, key, value);
+    } else if mode == "remove" {
+        remove(category, key_with_value);
     }
 }

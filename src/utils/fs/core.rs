@@ -76,7 +76,7 @@ pub fn write_to_file(
         .expect("Failed to get file");
 
     file_that_should_be_written_to
-        .write_all(contents_to_write_to_file.as_bytes())
+        .write_all(format!("{contents_to_write_to_file}\n").as_bytes())
         .with_context(|| format!("Failed writing to file: {path_of_file}"))
         .expect("Failed to write contents");
 }

@@ -25,15 +25,12 @@ static CONFIG: LazyLock<Value> = LazyLock::new(|| {
     from_str(&config_file_contents).unwrap_or_else(|_| Value::Table(Map::new()))
 });
 
-pub fn load_configuration(
-    config_category: &str,
-    config_value: &str,
-    default_value: &str,
-) -> String {
-    CONFIG
-        .get(config_category)
-        .and_then(|category| category.get(config_value))
-        .and_then(|value| value.as_str())
-        .unwrap_or(default_value)
-        .to_string()
+pub fn load_configuration(category: &str, key: &str, default_value: &str) -> String {
+    let category = CONFIG.get(category);
+
+    let value = category
+        .and_then(|category| category.get(key))
+        .and_then(|value| value.as_str());
+
+    value.unwrap_or(default_value).to_string()
 }

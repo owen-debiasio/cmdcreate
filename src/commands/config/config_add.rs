@@ -24,24 +24,17 @@ use crate::{
             paths::PATHS,
         },
         io::error,
-        sys::env::running_as_root,
     },
 };
 
-pub fn add(category: &str, full_setting: &str) {
-    let config_path = PATHS.configuration_file;
-    let config_file_contents = read_file_to_string(config_path);
-
+pub fn add(category: &str, key: &str, value: &str) {
     log(
         &format!(
             "commands::config::config_add::add(): \
-        Config full setting: {full_setting}"
+        Config full setting: {key}=\"{value}\""
         ),
         Severity::Normal,
     );
-
-    let value = full_setting.split('=').next_back().unwrap();
-    let key = full_setting.split('=').next().unwrap();
 
     log(
         &format!(
@@ -58,30 +51,12 @@ pub fn add(category: &str, full_setting: &str) {
         Severity::Normal,
     );
 
-    if key == "disable_root_usage" && !running_as_root() {
-        error(
-            "You can only enable this setting with root privileges.",
-            None,
-        )
-    }
+    let config_path = PATHS.configuration_file;
+    let config_file_contents = read_file_to_string(config_path);
 
-    if key.is_empty() || value.is_empty() || !full_setting.contains('=') {
+    if key == value {
         error("Please provide a setting.", None)
     }
-
-    let parts: Vec<&str> = full_setting.splitn(2, '=').collect();
-    let key = parts[0];
-    let mut setting = parts[1].to_string();
-
-    if !setting.starts_with('"') && !setting.ends_with('"') {
-        setting = format!("\"{setting}\"");
-    }
-    let sanitized_value = format!("{key}={setting}");
-
-    let category_header = AVAILABLE_CATEGORIES
-        .iter()
-        .find(|&&category_index| category_index.contains(category))
-        .expect("Invalid category");
 
     let mut lines: Vec<String> = config_file_contents
         .lines()
@@ -90,7 +65,14 @@ pub fn add(category: &str, full_setting: &str) {
 
     let (mut in_target_section, mut replaced) = (false, false);
 
+    let category_header = AVAILABLE_CATEGORIES
+        .iter()
+        .find(|&&category_index| category_index.contains(category))
+        .expect("Invalid category");
+
     let mut section_end_index = lines.len();
+
+    let sanitized_value = format!("{key}=\"{value}\"");
 
     for (line_index, line) in lines.iter_mut().enumerate() {
         let trimmed = line.trim();
@@ -125,5 +107,5 @@ pub fn add(category: &str, full_setting: &str) {
     let new_contents = lines.join("\n");
     write_to_file(config_path, &new_contents, false);
 
-    output!("Successfully updated config: {key} set to {setting}.", true);
+    output!("Successfully updated config: {key} set to {value}.", true);
 }
