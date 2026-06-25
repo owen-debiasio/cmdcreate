@@ -946,3 +946,7 @@ Licensed under the GNU General Public License v3.0 or later.
       - This setting is useful for `immutable`/`atomic` distros.
       - This also disables the ability to update via most methods.
 - Code optimizations
+- I am now no longer providing the Python testing utilities. They will be
+  replaced by tests you can run using `cargo test`.
+- Removed Python linting and code formatters from dev dependencies.
+  - Such as `black` and `pylint`.
