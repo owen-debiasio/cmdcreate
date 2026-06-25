@@ -14,8 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::{core::meta::license::get_normal_license_paths, utils::sys::env::running_as_root};
-use std::sync::LazyLock;
+use crate::{
+    core::meta::license::get_normal_license_paths,
+    utils::sys::env::{ENVIRONMENT_VARIABLES, running_as_root},
+};
+use std::{path::Path, sync::LazyLock};
 
 pub static MAIN_PATH: LazyLock<&str> = LazyLock::new(|| {
     if running_as_root() {
@@ -52,3 +55,24 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     },
     log_directory: "/tmp/cmdcreate-logs/",
 });
+
+pub fn expand_home_dir(apparent_path: &str) -> String {
+    apparent_path.replace('~', &ENVIRONMENT_VARIABLES.home)
+}
+
+pub fn path_exists(apparent_path: &str) -> bool {
+    let path = expand_home_dir(apparent_path);
+    Path::new(&path).exists()
+}
+
+#[test]
+fn path_exists_reports_correctly() {
+    use crate::utils::fs::core::creation::{create_file, delete_file};
+
+    let file_name = "cmdcreate_test_file";
+    create_file(file_name);
+
+    assert!(path_exists(file_name));
+
+    delete_file(file_name);
+}
