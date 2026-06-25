@@ -42,7 +42,7 @@ use crate::{
 #[allow(clippy::too_many_lines)]
 pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
     log(
-        &format!("core/parser::parse(): Parsing command: {supplied_command}"),
+        &format!("core::parser::parse(): Parsing command: {supplied_command}"),
         Severity::Normal,
     );
 

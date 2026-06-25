@@ -34,7 +34,7 @@ pub fn add(category: &str, full_setting: &str) {
 
     log(
         &format!(
-            "commands/config/config_add::add(): \
+            "commands::config::config_add::add(): \
         Config full setting: {full_setting}"
         ),
         Severity::Normal,
@@ -45,14 +45,14 @@ pub fn add(category: &str, full_setting: &str) {
 
     log(
         &format!(
-            "commands/config/config_add::add(): \
+            "commands::config::config_add::add(): \
         Config value: {value}"
         ),
         Severity::Normal,
     );
     log(
         &format!(
-            "commands/config/config_add::add(): \
+            "commands::config::config_add::add(): \
         Config key: {key}"
         ),
         Severity::Normal,

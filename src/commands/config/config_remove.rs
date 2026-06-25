@@ -16,6 +16,7 @@
 
 use crate::{
     commands::config::main::AVAILABLE_CATEGORIES,
+    core::logger::{consts::Severity, main::log},
     output,
     utils::{
         colors::COLORS,
@@ -32,6 +33,13 @@ pub fn remove(category: &str, value: &str) {
 
     let config_path = PATHS.configuration_file;
     let config_file_contents = read_file_to_string(config_path);
+
+    log(
+        &format!(
+            "commands::config::config_remove(): Removing setting \"{value}\" from category \"{category}\""
+        ),
+        Severity::Normal,
+    );
 
     let category_header = AVAILABLE_CATEGORIES
         .iter()
@@ -75,6 +83,7 @@ pub fn remove(category: &str, value: &str) {
             true
         };
 
+        // Remove category if no more settings remain
         if is_last_item && line_position > 0 && lines[line_position - 1].trim() == *category_header
         {
             lines.remove(line_position - 1);
@@ -82,20 +91,20 @@ pub fn remove(category: &str, value: &str) {
             if line_position > 1 && lines[line_position - 2].trim().is_empty() {
                 lines.remove(line_position - 2);
             }
-
-            output!(
-                "{green}Successfully removed config and empty category: {category}.",
-                true
-            );
-        } else {
-            output!(
-                "{green}Successfully removed config: {value} from {category}.",
-                true
-            );
         }
+
+        log(
+            "commands::config::config_remove(): Writing setting...",
+            Severity::Normal,
+        );
 
         let new_contents = lines.join("\n");
         write_to_file(config_path, &new_contents, false);
+
+        output!(
+            "{green}Successfully removed config: {value} from {category}.",
+            true
+        );
     } else {
         error(
             &format!("Config key \"{value}\" not found in category:"),
