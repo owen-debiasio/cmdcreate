@@ -80,14 +80,9 @@ pub static ENVIRONMENT_VARIABLES: LazyLock<Vars> = LazyLock::new(|| Vars {
     home: var("HOME").unwrap_or_else(|_| "auto".to_owned()),
 });
 
-#[cfg(test)]
-mod tests {
-    use crate::utils::sys::env::ENVIRONMENT_VARIABLES;
-
-    #[test]
-    fn vars_are_initialized() {
-        assert!(!ENVIRONMENT_VARIABLES.shell.is_empty());
-        assert!(!ENVIRONMENT_VARIABLES.text_editor.is_empty());
-        assert!(!ENVIRONMENT_VARIABLES.home.is_empty());
-    }
+#[test]
+fn vars_are_initialized() {
+    assert!(!ENVIRONMENT_VARIABLES.shell.is_empty());
+    assert!(!ENVIRONMENT_VARIABLES.text_editor.is_empty());
+    assert!(!ENVIRONMENT_VARIABLES.home.is_empty());
 }

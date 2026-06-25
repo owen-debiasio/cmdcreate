@@ -84,61 +84,56 @@ pub fn remove_spare_color_codes(input_string: String) -> String {
 
 pub static COLORS: LazyLock<Colors> = LazyLock::new(|| Colors::new(colors_enabled()));
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#[test]
+fn colors_are_valid_ansi_codes_when_enabled() {
+    let color = Colors::new(true);
+    let color_codes = vec![
+        color.red,
+        color.green,
+        color.yellow,
+        color.blue,
+        color.magenta,
+        color.cyan,
+        color.reset,
+    ];
 
-    #[test]
-    fn colors_are_valid_ansi_codes_when_enabled() {
-        let color = Colors::new(true);
-        let color_codes = vec![
-            color.red,
-            color.green,
-            color.yellow,
-            color.blue,
-            color.magenta,
-            color.cyan,
-            color.reset,
-        ];
-
-        for code in color_codes {
-            assert!(code.starts_with("\x1b["));
-            assert!(code.ends_with('m'));
-        }
+    for code in color_codes {
+        assert!(code.starts_with("\x1b["));
+        assert!(code.ends_with('m'));
     }
+}
 
-    #[test]
-    fn colors_are_empty_when_disabled() {
-        let color = Colors::new(false);
-        let color_codes = vec![
-            color.red,
-            color.green,
-            color.yellow,
-            color.blue,
-            color.magenta,
-            color.cyan,
-            color.reset,
-        ];
+#[test]
+fn colors_are_empty_when_disabled() {
+    let color = Colors::new(false);
+    let color_codes = vec![
+        color.red,
+        color.green,
+        color.yellow,
+        color.blue,
+        color.magenta,
+        color.cyan,
+        color.reset,
+    ];
 
-        for code in color_codes {
-            assert!(code.is_empty());
-        }
+    for code in color_codes {
+        assert!(code.is_empty());
     }
+}
 
-    #[test]
-    fn reset_is_unique_when_enabled() {
-        let colors = Colors::new(true);
-        let color_codes = vec![
-            colors.red,
-            colors.green,
-            colors.yellow,
-            colors.blue,
-            colors.magenta,
-            colors.cyan,
-        ];
+#[test]
+fn reset_is_unique_when_enabled() {
+    let colors = Colors::new(true);
+    let color_codes = vec![
+        colors.red,
+        colors.green,
+        colors.yellow,
+        colors.blue,
+        colors.magenta,
+        colors.cyan,
+    ];
 
-        for code in color_codes {
-            assert_ne!(code, colors.reset);
-        }
+    for code in color_codes {
+        assert_ne!(code, colors.reset);
     }
 }

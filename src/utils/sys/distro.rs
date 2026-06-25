@@ -80,18 +80,13 @@ pub fn installation_method() -> InstallMethod {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use crate::utils::sys::distro::{DistroBase, get_distro_base};
-
-    #[test]
-    fn distro_detection_returns_known_or_unknown() {
-        let distro_base = get_distro_base();
-        assert!(
-            distro_base == DistroBase::Arch
-                || distro_base == DistroBase::Fedora
-                || distro_base == DistroBase::Debian
-                || distro_base == DistroBase::Unknown
-        );
-    }
+#[test]
+fn distro_detection_returns_known_or_unknown() {
+    let distro_base = get_distro_base();
+    assert!(
+        distro_base == DistroBase::Arch
+            || distro_base == DistroBase::Fedora
+            || distro_base == DistroBase::Debian
+            || distro_base == DistroBase::Unknown
+    );
 }
