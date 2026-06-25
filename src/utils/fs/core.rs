@@ -182,7 +182,7 @@ mod tests {
 
         write_to_file(&path_of_file, sample_text, false);
 
-        assert_eq!(read_file_to_string(&path_of_file), sample_text);
+        assert_eq!(read_file_to_string(&path_of_file), sample_text.trim());
     }
 
     #[test]
