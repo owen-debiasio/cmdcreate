@@ -42,7 +42,6 @@ This script will:
 sudo pacman -S --needed --noconfirm \
     rustup curl openssl git base-devel \
     shfmt shellcheck bash-language-server \
-    python-black python-pylint python-lsp-server \
     nodejs npm markdownlint-cli2 prettier marksman vscode-json-languageserver \
     rpm-tools dpkg
 ```
@@ -53,7 +52,6 @@ sudo pacman -S --needed --noconfirm \
 sudo apt-get install -y \
     curl libssl-dev build-essential pkg-config git \
     shfmt shellcheck \
-    black pylint \
     nodejs npm rpm dpkg-dev
 ```
 
@@ -63,7 +61,6 @@ sudo apt-get install -y \
 sudo dnf install -y \
     curl openssl-devel git gcc gcc-c++ make \
     shfmt ShellCheck nodejs-bash-language-server \
-    python3-black python3-pylint \
     nodejs npm rpm-build dpkg-dev
 ```
 
@@ -152,8 +149,6 @@ The `<desired directory>` may include paths such as `~/dev/cmdcreate` or
 
 ## Utilities I provide
 
-### Standard Utilities
-
 - `dev/setup_env.sh` Sets up the development environment.
 
 - `dev/clean.sh` Cleans up the development environment.
@@ -163,15 +158,6 @@ The `<desired directory>` may include paths such as `~/dev/cmdcreate` or
 - `dev/install.sh` Install a test (non-production) version of cmdcreate.
 
 - `dev/uninstall.sh` Remove the testing version.
-
-### Testing Purposes
-
-- `testing/src/test_cmdcreate.py` Run a script that exercises cmdcreate
-  features.
-
-> [!NOTE]  
-> You can read more here:
-> [Testing the Features of cmdcreate](https://github.com/owen-debiasio/cmdcreate/blob/main/testing/README.md)
 
 ---
 
