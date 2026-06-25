@@ -19,7 +19,7 @@ use crate::{
     output,
     utils::{
         colors::COLORS,
-        fs::{core::read_file_to_string, paths::PATHS},
+        fs::{core::read_write::read_file_to_string, paths::PATHS},
     },
 };
 

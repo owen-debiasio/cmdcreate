@@ -20,7 +20,7 @@ use crate::{
         dependencies::{Rustup, get_cargo_env, install_dependencies},
     },
     output, run_shell_command,
-    utils::{fs::core::delete_folder, git::clone_repository},
+    utils::{fs::core::creation::delete_folder, git::clone_repository},
 };
 
 pub fn build() {

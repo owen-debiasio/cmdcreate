@@ -23,9 +23,9 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{
-            core::{create_folder, path_exists},
+            core::creation::create_folder,
             misc::{download_file_to_location_via_curl, use_pager_on_file},
-            paths::PATHS,
+            paths::{PATHS, path_exists},
         },
         io::{ask_for_confirmation, error},
         net::not_connected_to_internet,

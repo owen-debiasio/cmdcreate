@@ -21,8 +21,11 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{
-            core::{create_file, path_exists, read_file_to_string, write_to_file},
-            paths::PATHS,
+            core::{
+                creation::create_file,
+                read_write::{read_file_to_string, write_to_file},
+            },
+            paths::{PATHS, path_exists},
         },
         io::error,
         sys::env::root_check,

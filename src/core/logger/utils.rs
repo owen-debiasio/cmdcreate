@@ -16,7 +16,7 @@
 
 use crate::{
     core::configs::load::load_configuration,
-    utils::fs::{core::write_to_file, paths::PATHS},
+    utils::fs::{core::read_write::write_to_file, paths::PATHS},
 };
 use chrono::Local;
 

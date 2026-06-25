@@ -22,7 +22,7 @@ use crate::{
     output,
     utils::{
         colors::COLORS,
-        fs::{core::write_to_file, paths::PATHS},
+        fs::{core::read_write::write_to_file, paths::PATHS},
         io::error,
     },
 };

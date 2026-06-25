@@ -20,7 +20,7 @@ use crate::{
     core::logger::{consts::Severity, main::log},
     output, run_shell_command,
     utils::{
-        fs::core::delete_file,
+        fs::core::creation::delete_file,
         io::error,
         sys::{
             command::system_command_is_installed,

@@ -19,8 +19,8 @@ use crate::{
     core::logger::{consts::Severity, main::log},
     utils::{
         fs::{
-            core::{path_exists, read_file_to_string},
-            paths::PATHS,
+            core::read_write::read_file_to_string,
+            paths::{PATHS, path_exists},
         },
         io::error,
         sys::env::ENVIRONMENT_VARIABLES,

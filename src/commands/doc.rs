@@ -23,7 +23,10 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{
-            core::{delete_file, read_file_to_string, write_to_file},
+            core::{
+                creation::delete_file,
+                read_write::{read_file_to_string, write_to_file},
+            },
             misc::{download_file_to_location_via_curl, use_pager_on_file},
         },
         io::error,

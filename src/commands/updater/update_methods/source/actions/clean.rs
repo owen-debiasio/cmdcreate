@@ -18,7 +18,7 @@ use crate::{
     commands::updater::update_methods::source::dependencies::DEPENDENCIES_TO_INSTALL,
     output, run_shell_command,
     utils::{
-        fs::core::delete_folder,
+        fs::core::creation::delete_folder,
         io::{ask_for_confirmation, error},
         sys::distro::{DistroBase, get_distro_base},
     },

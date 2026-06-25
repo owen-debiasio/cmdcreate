@@ -20,7 +20,7 @@ use crate::{
     },
     output,
     utils::{
-        fs::{core::path_exists, misc::install_binary},
+        fs::{misc::install_binary, paths::path_exists},
         io::error,
     },
 };

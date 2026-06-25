@@ -20,7 +20,7 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{
-            core::delete_file,
+            core::creation::delete_file,
             misc::{download_file_to_location_via_curl, install_binary},
         },
         git::get_latest_tag,

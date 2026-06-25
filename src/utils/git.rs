@@ -21,7 +21,7 @@ use crate::{
     },
     output, run_shell_command,
     utils::{
-        fs::core::path_exists,
+        fs::paths::path_exists,
         io::{error, output_is_silent},
         net::{not_connected_to_internet, ureq_agent},
         sys::command::system_command_is_installed,

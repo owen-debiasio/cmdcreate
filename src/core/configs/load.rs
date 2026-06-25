@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::utils::fs::{core::read_file_to_string, paths::PATHS};
+use crate::utils::fs::{core::read_write::read_file_to_string, paths::PATHS};
 
 use std::sync::LazyLock;
 use toml::{Value, from_str, map::Map};

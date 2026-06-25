@@ -20,7 +20,7 @@ use crate::{
     output,
     utils::{
         colors::COLORS,
-        fs::{core::remove_from_file, paths::PATHS},
+        fs::{core::read_write::remove_from_file, paths::PATHS},
         io::error,
     },
 };

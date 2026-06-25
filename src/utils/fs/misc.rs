@@ -18,7 +18,7 @@ use crate::{
     core::logger::{consts::Severity, main::log},
     run_shell_command,
     utils::{
-        fs::core::path_exists,
+        fs::paths::path_exists,
         io::error,
         net::not_connected_to_internet,
         sys::{command::system_command_is_installed, env::root_check},

@@ -21,8 +21,8 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{
-            core::{delete_file, path_exists, read_file_to_string},
-            paths::PATHS,
+            core::{creation::delete_file, read_write::read_file_to_string},
+            paths::{PATHS, path_exists},
         },
         io::{ask_for_confirmation, error},
     },

@@ -19,8 +19,11 @@ use crate::{
     run_shell_command,
     utils::{
         fs::{
-            core::{create_file, create_folder, path_exists, read_file_to_string, write_to_file},
-            paths::{MAIN_PATH, PATHS},
+            core::{
+                creation::{create_file, create_folder},
+                read_write::{read_file_to_string, write_to_file},
+            },
+            paths::{MAIN_PATH, PATHS, path_exists},
         },
         io::error,
         sys::env::{ENVIRONMENT_VARIABLES, running_as_root},

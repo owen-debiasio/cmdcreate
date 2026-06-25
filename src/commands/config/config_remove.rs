@@ -21,7 +21,7 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{
-            core::{read_file_to_string, write_to_file},
+            core::read_write::{read_file_to_string, write_to_file},
             paths::PATHS,
         },
         io::error,

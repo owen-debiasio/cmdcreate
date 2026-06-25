@@ -18,7 +18,7 @@ use crate::{
     output, run_shell_command,
     utils::{
         colors::COLORS,
-        fs::core::{delete_folder, path_exists},
+        fs::{core::creation::delete_folder, paths::path_exists},
         io::{ask_for_confirmation, error},
         sys::env::running_as_root,
     },

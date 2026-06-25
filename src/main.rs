@@ -14,11 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-mod commands;
-mod core;
-mod utils;
-
-use crate::{
+use cmdcreate::{
     core::{
         init::init,
         logger::{consts::Severity, main::log},

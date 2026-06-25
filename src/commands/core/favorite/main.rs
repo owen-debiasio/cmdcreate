@@ -17,7 +17,7 @@
 use crate::{
     commands::core::favorite::{add_favorite::add, remove_favorite::remove},
     utils::{
-        fs::{core::read_file_to_string, paths::PATHS},
+        fs::{core::read_write::read_file_to_string, paths::PATHS},
         io::error,
     },
 };
