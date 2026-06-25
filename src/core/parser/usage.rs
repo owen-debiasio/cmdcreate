@@ -28,7 +28,7 @@ pub fn cmdcreate_usage() {
     let (blue, cyan, yellow, reset) = (COLORS.blue, COLORS.cyan, COLORS.yellow, COLORS.reset);
 
     log(
-        "core/parser/usage::cmdcreate_usage(): Displaying usage information...",
+        "core::parser::usage::cmdcreate_usage(): Displaying usage information...",
         Severity::Normal,
     );
 
