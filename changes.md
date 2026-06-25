@@ -942,8 +942,8 @@ Licensed under the GNU General Public License v3.0 or later.
       - If `true`, cmdcreate is prevented from running as root.
       - `false` (disabled) by default
       - Can only be enabled when running cmdcreate as root, then can only be
-        disabled by modifying `/etc/cmdcreate.conf`.
-      - This setting is useful for `immutable`/`atomic` distros.
+        disabled by modifying `/etc/cmdcreate.toml`.
+      - This setting is useful for immutable/atomic distros.
       - This also disables the ability to update via most methods.
 - Code optimizations
 - I am now no longer providing the Python testing utilities. They will be
