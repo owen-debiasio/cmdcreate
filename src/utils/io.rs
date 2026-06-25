@@ -124,34 +124,3 @@ pub fn error(error_message: &str, error_details: Option<&str>) -> ! {
 
     exit(1)
 }
-
-#[cfg(test)]
-mod tests {
-    use core::fmt;
-    use std::fmt::{Display, Formatter};
-
-    #[derive(Debug)]
-    pub struct TestError(pub String);
-
-    impl Display for TestError {
-        fn fmt(&self, formatter: &mut Formatter<'_>) -> fmt::Result {
-            write!(formatter, "{}", self.0)
-        }
-    }
-
-    #[allow(dead_code)]
-    pub fn error_result<T>(error_result_message: &str) -> Result<T, TestError> {
-        Err(TestError(error_result_message.to_owned()))
-    }
-
-    #[test]
-    fn error_returns_err() {
-        let error_result: Result<(), _> = error_result("nope");
-        assert!(error_result.is_err());
-    }
-
-    #[test]
-    fn error_message_matches() {
-        assert_eq!(error_result::<()>("bad").unwrap_err().to_string(), "bad");
-    }
-}
