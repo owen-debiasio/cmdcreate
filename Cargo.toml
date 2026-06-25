@@ -28,7 +28,7 @@ serde_json = "1.0"
 toml = "1.1.2"
 chrono = "0.4.44"
 rustix = { version = "1.1.4", features = ["process"] }
-anyhow = "1.0.102"
+anyhow = "1.0.103"
 ureq = "3.3.0"
 
 [lints.rust]
