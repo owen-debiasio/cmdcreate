@@ -65,6 +65,7 @@ change.
   - [format.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/dev/format.sh)
   - [install.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/dev/install.sh)
   - [setup_env.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/dev/setup_env.sh)
+  - [test.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/dev/test.sh)
   - [uninstall.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/dev/uninstall.sh)
 
 ## Packaging cmdcreate
