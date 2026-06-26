@@ -159,15 +159,9 @@ fn clean_from_failure(command_name: &str) {
 #[cfg(test)]
 mod tests {
     use crate::{
-        commands::{
-            core::create::NEW_COMMAND_HEADER,
-            tools::tests::{SAMPLE_COMMAND_CONTENTS, TestCommand},
-        },
+        commands::tools::tests::{SAMPLE_COMMAND_CONTENTS, TestCommand},
         run_shell_command,
-        utils::fs::{
-            core::read_write::read_file_to_string, init::add_home_install_directory_to_path,
-            paths::path_exists,
-        },
+        utils::fs::{init::add_home_install_directory_to_path, paths::path_exists},
     };
 
     #[test]
@@ -187,14 +181,9 @@ mod tests {
         let test_command_name = "command_contains_contents";
         TestCommand::create(test_command_name);
 
-        let command_install_path = &TestCommand::get_install_path(test_command_name);
+        let command_contents = TestCommand::get_contents(test_command_name, false);
 
-        let command_contents = read_file_to_string(command_install_path);
-
-        assert_eq!(
-            command_contents.replace(NEW_COMMAND_HEADER, "").trim(),
-            SAMPLE_COMMAND_CONTENTS
-        );
+        assert_eq!(command_contents, SAMPLE_COMMAND_CONTENTS);
 
         TestCommand::remove(test_command_name);
     }
