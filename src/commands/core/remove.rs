@@ -100,7 +100,7 @@ mod tests {
     };
 
     fn create_and_delete_command(command_name: &str) {
-        TestCommand::create(command_name);
+        TestCommand::create(command_name, false);
         TestCommand::remove(command_name);
     }
 

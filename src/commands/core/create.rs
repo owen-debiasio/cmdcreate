@@ -167,7 +167,7 @@ mod tests {
     #[test]
     fn command_file_exists() {
         let test_command_name = "command_file_exists";
-        TestCommand::create(test_command_name);
+        TestCommand::create(test_command_name, false);
 
         let command_install_path = &TestCommand::get_install_path(test_command_name);
 
@@ -179,7 +179,7 @@ mod tests {
     #[test]
     fn command_contains_contents() {
         let test_command_name = "command_contains_contents";
-        TestCommand::create(test_command_name);
+        TestCommand::create(test_command_name, false);
 
         let command_contents = TestCommand::get_contents(test_command_name, false);
 
@@ -193,7 +193,7 @@ mod tests {
         add_home_install_directory_to_path();
 
         let test_command_name = "created_command_runs";
-        TestCommand::create(test_command_name);
+        TestCommand::create(test_command_name, false);
 
         let command_status = run_shell_command!(bool: "{test_command_name}");
 

@@ -176,7 +176,7 @@ mod tests {
         let renamed_command_name = "file_name_of_command_changes_new";
         let renamed_command_install_path = TestCommand::get_install_path(renamed_command_name);
 
-        TestCommand::create(old_command_name);
+        TestCommand::create(old_command_name, false);
 
         rename(old_command_name, renamed_command_name);
 
@@ -191,7 +191,7 @@ mod tests {
         let old_command_name = "renamed_command_contains_contents";
         let renamed_command_name = "renamed_command_contains_contents_new";
 
-        TestCommand::create(old_command_name);
+        TestCommand::create(old_command_name, false);
 
         let old_command_contents = TestCommand::get_contents(old_command_name, false);
 
@@ -209,7 +209,7 @@ mod tests {
         let old_command_name = "renamed_command_runs";
         let renamed_command_name = "renamed_command_runs_new";
 
-        TestCommand::create(old_command_name);
+        TestCommand::create(old_command_name, false);
 
         let old_command_runs = run_shell_command!(bool: "{old_command_name}");
         let renamed_command_runs = run_shell_command!(bool: "{renamed_command_name}");
