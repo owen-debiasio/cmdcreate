@@ -950,3 +950,6 @@ Licensed under the GNU General Public License v3.0 or later.
   replaced by tests you can run using `cargo test`.
 - Removed Python linting and code formatters from dev dependencies.
   - Such as `black` and `pylint`.
+- New developer utility:
+  - `./dev/test.sh`
+    - Tests cmdcreate using `cargo test`
