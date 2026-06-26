@@ -102,3 +102,28 @@ pub fn get_installed_commands() -> Vec<String> {
 
     retrieved_commands
 }
+
+#[cfg(test)]
+pub mod tests {
+    use crate::commands::core::{create::create, remove::remove};
+    use crate::utils::fs::paths::PATHS;
+
+    pub static SAMPLE_COMMAND_CONTENTS: &str = "echo hi";
+
+    pub struct TestCommand;
+
+    impl TestCommand {
+        pub fn create(command_name: &str) {
+            create(command_name, SAMPLE_COMMAND_CONTENTS, false);
+        }
+
+        pub fn remove(command_name: &str) {
+            remove(command_name, true);
+        }
+
+        pub fn get_install_path(command_name: &str) -> String {
+            let installation_path = PATHS.command_installation_directory;
+            format!("{installation_path}{command_name}")
+        }
+    }
+}

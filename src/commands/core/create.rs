@@ -155,3 +155,43 @@ fn clean_from_failure(command_name: &str) {
         Severity::Normal,
     );
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        commands::{
+            core::create::NEW_COMMAND_HEADER,
+            tools::tests::{SAMPLE_COMMAND_CONTENTS, TestCommand},
+        },
+        utils::fs::{core::read_write::read_file_to_string, paths::path_exists},
+    };
+
+    #[test]
+    fn command_file_exists() {
+        let test_command_name = "command_file_exists";
+        TestCommand::create(test_command_name);
+
+        let command_install_path = &TestCommand::get_install_path(test_command_name);
+
+        assert!(path_exists(command_install_path));
+
+        TestCommand::remove(test_command_name);
+    }
+
+    #[test]
+    fn command_contains_contents() {
+        let test_command_name = "command_contains_contents";
+        TestCommand::create(test_command_name);
+
+        let command_install_path = &TestCommand::get_install_path(test_command_name);
+
+        let command_contents = read_file_to_string(command_install_path);
+
+        assert_eq!(
+            command_contents.replace(NEW_COMMAND_HEADER, "").trim(),
+            SAMPLE_COMMAND_CONTENTS
+        );
+
+        TestCommand::remove(test_command_name);
+    }
+}
