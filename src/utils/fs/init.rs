@@ -32,7 +32,7 @@ use crate::{
 
 pub fn init_filesystem() {
     log(
-        "utils/fs::init::init_filesystem(): Initializing filesystem...",
+        "utils::fs::init::init_filesystem(): Initializing filesystem...",
         Severity::Normal,
     );
 
@@ -44,7 +44,7 @@ pub fn init_filesystem() {
     }
 
     log(
-        "utils/fs::init::init_filesystem(): Filesystem initialized",
+        "utils::fs::init::init_filesystem(): Filesystem initialized",
         Severity::Normal,
     );
 }
@@ -53,15 +53,20 @@ fn create_cmdcreate_filesystem() {
     let favorites_file = &PATHS.favorites;
     let config_file = PATHS.configuration_file;
     let command_install_dir = PATHS.command_installation_directory;
+    let log_directory = PATHS.log_directory;
 
-    let essential_folders_exist =
-        path_exists(favorites_file) && path_exists(config_file) && path_exists(&MAIN_PATH);
+    let essential_folders_exist = path_exists(favorites_file)
+        && path_exists(config_file)
+        && path_exists(&MAIN_PATH)
+        && path_exists(log_directory);
 
     if essential_folders_exist {
         return;
     }
 
     create_folder(&MAIN_PATH);
+
+    create_folder(log_directory);
 
     if !running_as_root() {
         create_folder(command_install_dir);
@@ -71,7 +76,12 @@ fn create_cmdcreate_filesystem() {
     create_file(config_file);
 
     // Fix issues with running cmdcreate not as root on some systems
-    run_shell_command!("chmod -R 777 /tmp/cmdcreate-logs");
+    if !run_shell_command!(bool: "chmod -R 777 /tmp/cmdcreate-logs") {
+        error(
+            "Failed to mark log '/tmp/cmdcreate-logs' with 'chmod -R 777'.",
+            None,
+        )
+    }
 
     if !essential_folders_exist && (!running_as_root() && !path_exists(command_install_dir)) {
         error(
@@ -81,7 +91,7 @@ fn create_cmdcreate_filesystem() {
     }
 }
 
-fn add_home_install_directory_to_path() {
+pub fn add_home_install_directory_to_path() {
     let shell = ENVIRONMENT_VARIABLES.shell.to_lowercase();
 
     // 1. Map directly to standard Linux shell configuration files
@@ -97,7 +107,14 @@ fn add_home_install_directory_to_path() {
         "~/.profile"
     };
 
-    let command_install_dir = PATHS.command_installation_directory.replace('~', "$HOME");
+    log(
+        &format!(
+            "cmdcreate::utils::fs::init::add_home_install_directory_to_path(): Using shellrc file: {shellrc}"
+        ),
+        Severity::Normal,
+    );
+
+    let command_install_dir: String = PATHS.command_installation_directory.replace('~', "$HOME");
 
     let path_to_add = if shell.contains("fish") {
         format!("\n# Added by cmdcreate\nset -gx PATH {command_install_dir} $PATH\n")
@@ -112,7 +129,22 @@ fn add_home_install_directory_to_path() {
     let shellrc_contents = read_file_to_string(shellrc);
     let shellrc_contains_path_define = shellrc_contents.contains(path_to_add.trim());
 
-    if !shellrc_contains_path_define {
+    if shellrc_contains_path_define {
+        log(
+            "cmdcreate::utils::fs::init::add_home_install_directory_to_path(): PATH exists in shellrc, skipping...",
+            Severity::Normal,
+        );
+    } else {
+        log(
+            "cmdcreate::utils::fs::init::add_home_install_directory_to_path(): Writing PATH to shellrc...",
+            Severity::Normal,
+        );
+
         write_to_file(shellrc, &path_to_add, true);
     }
+
+    log(
+        "cmdcreate::utils::fs::init::add_home_install_directory_to_path(): Wrote PATH to shellrc.",
+        Severity::Normal,
+    );
 }

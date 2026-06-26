@@ -164,7 +164,10 @@ mod tests {
             tools::tests::{SAMPLE_COMMAND_CONTENTS, TestCommand},
         },
         run_shell_command,
-        utils::fs::{core::read_write::read_file_to_string, paths::path_exists},
+        utils::fs::{
+            core::read_write::read_file_to_string, init::add_home_install_directory_to_path,
+            paths::path_exists,
+        },
     };
 
     #[test]
@@ -198,6 +201,8 @@ mod tests {
 
     #[test]
     fn created_command_runs() {
+        add_home_install_directory_to_path();
+
         let test_command_name = "created_command_runs";
         TestCommand::create(test_command_name);
 

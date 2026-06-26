@@ -101,4 +101,6 @@ jobs:
           cargo zigbuild --release --target armv7-unknown-linux-musleabihf
 
       - name: Run tests
-        run: cargo test
+        run: |
+
+          cargo test
