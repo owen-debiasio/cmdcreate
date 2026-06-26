@@ -163,6 +163,7 @@ mod tests {
             core::create::NEW_COMMAND_HEADER,
             tools::tests::{SAMPLE_COMMAND_CONTENTS, TestCommand},
         },
+        run_shell_command,
         utils::fs::{core::read_write::read_file_to_string, paths::path_exists},
     };
 
@@ -193,5 +194,15 @@ mod tests {
         );
 
         TestCommand::remove(test_command_name);
+    }
+
+    #[test]
+    fn created_command_runs() {
+        let test_command_name = "created_command_runs";
+        TestCommand::create(test_command_name);
+
+        let command_status = run_shell_command!(bool: "{test_command_name}");
+
+        assert!(command_status);
     }
 }
