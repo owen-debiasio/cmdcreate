@@ -106,8 +106,11 @@ pub fn get_installed_commands() -> Vec<String> {
 #[cfg(test)]
 pub mod tests {
     use crate::{
-        commands::core::{create::create, remove::remove},
-        utils::fs::paths::PATHS,
+        commands::core::{
+            create::{NEW_COMMAND_HEADER, create},
+            remove::remove,
+        },
+        utils::fs::{core::read_write::read_file_to_string, paths::PATHS},
     };
 
     pub static SAMPLE_COMMAND_CONTENTS: &str = "echo \"\nIf you see this message, the test 'created_command_runs' has passed.\
@@ -127,6 +130,18 @@ pub mod tests {
         pub fn get_install_path(command_name: &str) -> String {
             let installation_path = PATHS.command_installation_directory;
             format!("{installation_path}{command_name}")
+        }
+
+        pub fn get_contents(command: &str, include_header: bool) -> String {
+            let command_file = &Self::get_install_path(command);
+
+            let command_contents = if include_header {
+                read_file_to_string(command_file)
+            } else {
+                read_file_to_string(command_file).replace(NEW_COMMAND_HEADER, "")
+            };
+
+            command_contents.trim().to_string()
         }
     }
 }
