@@ -162,7 +162,6 @@ fn command_rename_success(
 
 #[cfg(test)]
 mod tests {
-
     use crate::{
         commands::{core::rename::rename, tools::tests::TestCommand},
         run_shell_command,
@@ -183,6 +182,24 @@ mod tests {
 
         assert!(path_exists(&renamed_command_install_path));
         assert!(!path_exists(&old_command_install_path));
+
+        TestCommand::remove(renamed_command_name);
+    }
+
+    #[test]
+    fn renamed_command_contains_contents() {
+        let old_command_name = "renamed_command_contains_contents";
+        let renamed_command_name = "renamed_command_contains_contents_new";
+
+        TestCommand::create(old_command_name);
+
+        let old_command_contents = TestCommand::get_contents(old_command_name, false);
+
+        rename(old_command_name, renamed_command_name);
+
+        let new_command_contents = TestCommand::get_contents(renamed_command_name, false);
+
+        assert_eq!(old_command_contents, new_command_contents);
 
         TestCommand::remove(renamed_command_name);
     }
