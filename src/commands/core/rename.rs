@@ -159,3 +159,55 @@ fn command_rename_success(
         Severity::Normal,
     );
 }
+
+#[cfg(test)]
+mod tests {
+
+    use crate::{
+        commands::{core::rename::rename, tools::tests::TestCommand},
+        run_shell_command,
+        utils::fs::paths::path_exists,
+    };
+
+    #[test]
+    fn file_name_of_command_changes() {
+        let old_command_name = "file_name_of_command_changes";
+        let old_command_install_path = TestCommand::get_install_path(old_command_name);
+
+        let renamed_command_name = "file_name_of_command_changes_new";
+        let renamed_command_install_path = TestCommand::get_install_path(renamed_command_name);
+
+        TestCommand::create(old_command_name);
+
+        rename(old_command_name, renamed_command_name);
+
+        assert!(path_exists(&renamed_command_install_path));
+        assert!(!path_exists(&old_command_install_path));
+
+        TestCommand::remove(renamed_command_name);
+    }
+
+    #[test]
+    fn renamed_command_runs() {
+        let old_command_name = "renamed_command_runs";
+        let renamed_command_name = "renamed_command_runs_new";
+
+        TestCommand::create(old_command_name);
+
+        let old_command_runs = run_shell_command!(bool: "{old_command_name}");
+        let renamed_command_runs = run_shell_command!(bool: "{renamed_command_name}");
+
+        assert!(old_command_runs);
+        assert!(!renamed_command_runs);
+
+        rename(old_command_name, renamed_command_name);
+
+        let old_command_fails = !run_shell_command!(bool: "{old_command_name}");
+        let renamed_command_fails = !run_shell_command!(bool: "{renamed_command_name}");
+
+        assert!(old_command_fails);
+        assert!(!renamed_command_fails);
+
+        TestCommand::remove(renamed_command_name);
+    }
+}

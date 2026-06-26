@@ -102,7 +102,7 @@ jobs:
           cargo zigbuild --release --target armv7-unknown-linux-musleabihf
 
       - name: Run tests
-        # I'm skipping the test `created_command_runs` because
+        # I'm skipping the tests `created_command_runs` and `renamed_command_runs` because
         # Something with the PATH doesn't work in workflows or something
         run: |
-          cargo test -- --skip created_command_runs
+          cargo test -- --skip created_command_runs --skip renamed_command_runs
