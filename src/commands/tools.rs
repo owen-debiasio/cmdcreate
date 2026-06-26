@@ -108,6 +108,7 @@ pub mod tests {
     use crate::{
         commands::core::{
             create::{NEW_COMMAND_HEADER, create},
+            favorite::main::favorite,
             remove::remove,
         },
         utils::fs::{core::read_write::read_file_to_string, paths::PATHS},
@@ -118,12 +119,33 @@ pub mod tests {
     pub struct TestCommand;
 
     impl TestCommand {
-        pub fn create(command_name: &str) {
+        pub fn create(command_name: &str, make_favorite: bool) {
             create(command_name, SAMPLE_COMMAND_CONTENTS, false);
+
+            if make_favorite {
+                favorite("add", command_name);
+            }
+        }
+
+        pub fn create_group(test_name: &str, with_favorite: bool) {
+            for command_i in 1..=3 {
+                let command_name = &format!("{test_name}_{command_i}");
+                create(command_name, SAMPLE_COMMAND_CONTENTS, false);
+
+                if command_i == 2 && with_favorite {
+                    favorite("add", command_name);
+                }
+            }
         }
 
         pub fn remove(command_name: &str) {
             remove(command_name, true);
+        }
+
+        pub fn remove_group(test_name: &str) {
+            for command_i in 1..=3 {
+                remove(&format!("{test_name}_{command_i}"), true);
+            }
         }
 
         pub fn get_install_path(command_name: &str) -> String {

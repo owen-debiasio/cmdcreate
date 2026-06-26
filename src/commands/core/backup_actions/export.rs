@@ -35,9 +35,9 @@ use crate::{
 pub fn export(path: &str) {
     let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
-    if !(path.starts_with('/') || path.starts_with('~')) {
-        error("Not a valid path:", Some(path))
-    }
+    // if !(path.starts_with('/') || path.starts_with('~')) {
+    //     error("Not a valid path:", Some(path))
+    // }
 
     if path.starts_with('/') && !path.starts_with("/home") {
         root_check();
@@ -70,7 +70,7 @@ pub fn export(path: &str) {
     for retrieved_command in installed_commands {
         log(
             &format!(
-                "commands/core/backup_actions/export::export(): \
+                "commands::core::backup_actions::export::export(): \
                 Exporting command: \"{retrieved_command}\"..."
             ),
             Severity::Normal,
@@ -102,7 +102,7 @@ pub fn export(path: &str) {
 
         log(
             &format!(
-                "commands/core/backup_actions/export::export(): \
+                "commands::core::backup_actions::export::export(): \
                 Writing data to file: \"{data}\"..."
             ),
             Severity::Normal,
@@ -116,4 +116,72 @@ pub fn export(path: &str) {
         {blue}\"{path_of_file_to_export_to}\"{green}.{reset}",
         true
     );
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        commands::{core::backup_actions::export::export, tools::tests::TestCommand},
+        utils::fs::{
+            core::{
+                creation::{create_folder, delete_folder},
+                read_write::read_file_to_string,
+            },
+            paths::path_exists,
+        },
+    };
+
+    #[test]
+    #[ignore = "Must be called manually to avoid conflicts with other tests."]
+    fn export_file_is_created() {
+        let test_name = "export_file_is_created";
+
+        TestCommand::create_group(test_name, false);
+
+        let temp_dir_name = "export_file_is_created_temp_destination";
+
+        create_folder(temp_dir_name);
+
+        export(temp_dir_name);
+
+        let export_file_name = &format!("{temp_dir_name}/export.cmdcreate");
+
+        assert!(path_exists(export_file_name));
+
+        TestCommand::remove_group(test_name);
+        delete_folder(temp_dir_name);
+    }
+
+    #[test]
+    #[ignore = "Must be called manually to avoid conflicts with other tests."]
+    fn export_file_contains_command_with_contents() {
+        let test_name = "export_file_contains_command_with_contents";
+
+        TestCommand::create_group(test_name, true);
+
+        let temp_dir_name = "export_file_contains_command_with_contents_temp";
+
+        create_folder(temp_dir_name);
+
+        export(temp_dir_name);
+
+        let export_file_name = &format!("{temp_dir_name}/export.cmdcreate");
+
+        let export_file_contents = read_file_to_string(export_file_name);
+
+        let command_one_is_exported_correctly =
+            export_file_contents.contains("export_file_contains_command_with_contents_1 | true");
+        assert!(command_one_is_exported_correctly);
+
+        let command_two_is_exported_correctly = export_file_contents
+            .contains("export_file_contains_command_with_contents_2 | true | favorite");
+        assert!(command_two_is_exported_correctly);
+
+        let command_three_is_exported_correctly =
+            export_file_contents.contains("export_file_contains_command_with_contents_2 | true");
+        assert!(command_three_is_exported_correctly);
+
+        TestCommand::remove_group(test_name);
+        delete_folder(temp_dir_name);
+    }
 }
