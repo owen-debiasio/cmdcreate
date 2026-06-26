@@ -83,9 +83,13 @@ pub fn write_to_file(
 
 pub fn remove_from_file(path_to_file: &str, contents_to_remove: &str) {
     let path = expand_home_dir(path_to_file);
+
+    // The new line is included to completely remove the line
+    let complete_contents_to_remove = &format!("{contents_to_remove}\n");
+
     overwrite_file(
         &path,
-        &read_file_to_string(&path).replace(contents_to_remove, ""),
+        &read_file_to_string(&path).replace(complete_contents_to_remove, ""),
     );
 }
 
