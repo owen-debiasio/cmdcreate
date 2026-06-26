@@ -100,7 +100,7 @@ fn write_to_file_overwrites() {
 
     write_to_file(file_name, sample_text, false);
 
-    assert_eq!(read_file_to_string(file_name), format!("{sample_text}\n"));
+    assert_eq!(read_file_to_string(file_name), sample_text);
 
     delete_file(file_name);
 }
