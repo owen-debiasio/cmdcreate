@@ -53,7 +53,7 @@ pub fn create(
     };
 
     let log_message = &format!(
-        "commands/core/create::create(): Creating command \"{command_to_create}\": \
+        "commands::core::create::create(): Creating command \"{command_to_create}\": \
         With contents \"{contents_of_new_command}\"{verbose_creation_message}",
     );
 
@@ -67,7 +67,7 @@ pub fn create(
     );
 
     log(
-        &format!("commands/core/create::create(): Command path: \"{path_to_command}\""),
+        &format!("commands::core::create::create(): Command path: \"{path_to_command}\""),
         Severity::Normal,
     );
 
@@ -85,7 +85,7 @@ pub fn create(
     }
 
     log(
-        "commands/core/create::create(): Activating command...",
+        "commands::core::create::create(): Activating command...",
         Severity::Normal,
     );
 
@@ -108,7 +108,7 @@ fn command_creation_success(
     installed_command_path: &str,
 ) {
     log(
-        "commands/core/create::command_creation_success(): \
+        "commands::core::create::command_creation_success(): \
         Determining command creation status...",
         Severity::Normal,
     );
@@ -134,7 +134,7 @@ fn command_creation_success(
     }
 
     log(
-        "commands/core/create::command_creation_success(): \
+        "commands::core::create::command_creation_success(): \
         Command has been created correctly...",
         Severity::Normal,
     );
@@ -142,7 +142,7 @@ fn command_creation_success(
 
 fn clean_from_failure(command_name: &str) {
     log(
-        "commands/core/create::clean_from_failure(): \
+        "commands::core::create::clean_from_failure(): \
         Starting on-fail cleanup...",
         Severity::Normal,
     );
@@ -150,7 +150,7 @@ fn clean_from_failure(command_name: &str) {
     remove(command_name, true);
 
     log(
-        "commands/core/create::clean_from_failure(): \
+        "commands::core::create::clean_from_failure(): \
         Cleaned up...",
         Severity::Normal,
     );
