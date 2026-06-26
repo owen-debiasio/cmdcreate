@@ -14,18 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use std::process::Command;
-
 pub fn system_command_is_installed(command_to_check: &str) -> bool {
-    Command::new("which")
-        .arg(command_to_check)
-        .output()
-        .is_ok_and(|output_status| output_status.status.success())
+    crate::run_shell_command!(bool: "which {command_to_check}")
 }
 
 #[macro_export]
 macro_rules! run_shell_command {
-    ($($arg:tt)*) => {{
+    (bool: $($arg:tt)*) => {{
         use std::process::{Command, Stdio};
 
         let command_string = format!($($arg)*);
@@ -34,7 +29,6 @@ macro_rules! run_shell_command {
         if !command.is_empty() {
             let shell = $crate::core::configs::load::load_configuration("sys", "shell", "sh");
 
-            // Determine if terminal output is visible
             let stdout = if $crate::utils::io::output_is_silent() {
                 Stdio::null()
             } else {
@@ -49,9 +43,18 @@ macro_rules! run_shell_command {
                 .stderr(Stdio::inherit())
                 .status();
 
-            if let Err(e) = result {
-                $crate::utils::io::error("Failed to launch shell:", Some(&e.to_string()));
+            match result {
+                Ok(status) => status.success(),
+                Err(error) => {
+                    $crate::utils::io::error("Failed to launch shell:", Some(&error.to_string()));
+                }
             }
+        } else {
+            true
         }
+    }};
+
+    ($($arg:tt)*) => {{
+        let _ = $crate::run_shell_command!(bool: $($arg)*);
     }};
 }
