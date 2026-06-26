@@ -105,10 +105,13 @@ pub fn get_installed_commands() -> Vec<String> {
 
 #[cfg(test)]
 pub mod tests {
-    use crate::commands::core::{create::create, remove::remove};
-    use crate::utils::fs::paths::PATHS;
+    use crate::{
+        commands::core::{create::create, remove::remove},
+        utils::fs::paths::PATHS,
+    };
 
-    pub static SAMPLE_COMMAND_CONTENTS: &str = "echo hi";
+    pub static SAMPLE_COMMAND_CONTENTS: &str =
+        "echo \"\nIf you see this message, the test 'created_command_runs' has passed.\" && echo";
 
     pub struct TestCommand;
 
