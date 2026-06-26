@@ -110,8 +110,8 @@ pub mod tests {
         utils::fs::paths::PATHS,
     };
 
-    pub static SAMPLE_COMMAND_CONTENTS: &str =
-        "echo \"\nIf you see this message, the test 'created_command_runs' has passed.\" && echo";
+    pub static SAMPLE_COMMAND_CONTENTS: &str = "echo \"\nIf you see this message, the test 'created_command_runs' has passed.\
+        \n(Or test 'deleted_command_fails_to_run' fails)\" && echo";
 
     pub struct TestCommand;
 
