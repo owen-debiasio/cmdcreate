@@ -25,7 +25,6 @@ use rustix::process::geteuid;
 use std::{env::var, sync::LazyLock};
 
 pub fn running_as_root() -> bool {
-    // 0 is root, if it returns anything else, cmdcreate won't run
     geteuid().as_raw() == 0
 }
 
