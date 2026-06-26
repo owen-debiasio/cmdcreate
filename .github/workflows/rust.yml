@@ -43,9 +43,10 @@ jobs:
             armv7-unknown-linux-musleabihf
 
       - name: Install Zig
-        uses: mlugg/setup-zig@v1
+        uses: mlugg/setup-zig@v2
         with:
           version: 0.16.0
+          use-cache: true
 
       - name: Install cargo-zigbuild
         run: cargo install cargo-zigbuild
