@@ -209,5 +209,7 @@ mod tests {
         let command_status = run_shell_command!(bool: "{test_command_name}");
 
         assert!(command_status);
+
+        TestCommand::remove(test_command_name);
     }
 }
