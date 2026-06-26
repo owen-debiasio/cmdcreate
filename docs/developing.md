@@ -149,15 +149,17 @@ The `<desired directory>` may include paths such as `~/dev/cmdcreate` or
 
 ## Utilities I provide
 
-- `dev/setup_env.sh` Sets up the development environment.
+> [!NOTE]  
+> These are located in
+> [The development utility folder](https://github.com/owen-debiasio/cmdcreate/tree/main/dev)
+> (`./dev/`)
 
-- `dev/clean.sh` Cleans up the development environment.
-
-- `dev/format.sh` Formats all Bash, Python, and Rust code.
-
-- `dev/install.sh` Install a test (non-production) version of cmdcreate.
-
-- `dev/uninstall.sh` Remove the testing version.
+- `clean.sh` Cleans up the development environment.
+- `format.sh` Formats all Bash and Rust code.
+- `install.sh` Install a test (non-production) version of cmdcreate.
+- `setup_env.sh` Sets up the development environment.
+- `test.sh` Tests cmdcreate using `cargo test`
+- `uninstall.sh` Remove the testing version.
 
 ---
 
