@@ -66,10 +66,6 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
 
     command_removal_success(path_of_command_to_remove);
 
-    // I have to put this in because using "\n" on the second
-    // "output!() below doesn't do anything for some reason."
-    output!("");
-
     output!("{green}Removed command {blue}\"{command}\"{reset}", true);
 }
 
