@@ -95,7 +95,7 @@ pub fn init() {
 
     log(
         &format!(
-            "core/init::init(): Starting cmdcreate...\n         {}",
+            "core::init::init(): Starting cmdcreate...\n         {}",
             debug_intro()
         ),
         Severity::Normal,
