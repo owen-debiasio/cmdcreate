@@ -95,17 +95,33 @@ fn command_removal_success(path_of_command: &str) {
 
 #[cfg(test)]
 mod tests {
-    use crate::{commands::tools::tests::TestCommand, utils::fs::paths::path_exists};
+    use crate::{
+        commands::tools::tests::TestCommand, run_shell_command, utils::fs::paths::path_exists,
+    };
+
+    fn create_and_delete_command(command_name: &str) {
+        TestCommand::create(command_name);
+        TestCommand::remove(command_name);
+    }
 
     #[test]
     fn file_is_deleted_on_removal() {
         let test_command_name = "file_is_deleted_on_removal";
 
-        TestCommand::create(test_command_name);
-        TestCommand::remove(test_command_name);
+        create_and_delete_command(test_command_name);
 
         let command_install_path = TestCommand::get_install_path(test_command_name);
 
         assert!(!path_exists(&command_install_path));
+    }
+
+    #[test]
+    fn deleted_command_fails_to_run() {
+        let test_command_name = "deleted_command_fails_to_run";
+
+        create_and_delete_command(test_command_name);
+
+        let command_fails_to_run = !run_shell_command!(bool: "{test_command_name}");
+        assert!(command_fails_to_run);
     }
 }
