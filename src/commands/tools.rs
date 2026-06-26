@@ -113,8 +113,7 @@ pub mod tests {
         utils::fs::{core::read_write::read_file_to_string, paths::PATHS},
     };
 
-    pub static SAMPLE_COMMAND_CONTENTS: &str = "echo \"\nIf you see this message, the test 'created_command_runs' has passed.\
-        \n(Or test 'deleted_command_fails_to_run' fails)\" && echo";
+    pub static SAMPLE_COMMAND_CONTENTS: &str = "true";
 
     pub struct TestCommand;
 
