@@ -96,3 +96,20 @@ fn command_removal_success(path_of_command: &str) {
         Severity::Normal,
     );
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{commands::tools::tests::TestCommand, utils::fs::paths::path_exists};
+
+    #[test]
+    fn file_is_deleted_on_removal() {
+        let test_command_name = "file_is_deleted_on_removal";
+
+        TestCommand::create(test_command_name);
+        TestCommand::remove(test_command_name);
+
+        let command_install_path = TestCommand::get_install_path(test_command_name);
+
+        assert!(!path_exists(&command_install_path));
+    }
+}
