@@ -145,6 +145,15 @@ cd cmdcreate
 >
 > `target/<target of your choice>/release/cmdcreate`
 
+> [!TIP]  
+> If you get an error while building such as:
+>
+> `error occurred in cc-rs: failed to find tool "zig": No such file or directory (os error 2)`
+>
+> Try prefixing `cargo zigbuild` with:
+>
+> `PATH="$(pwd)/<path to directory containing zig binary>:$PATH"`
+
 ```bash
 cargo zigbuild --release --target <target of your choice>
 sudo install -Dm755 target/<target of your choice>/release/cmdcreate /usr/local/bin/cmdcreate
