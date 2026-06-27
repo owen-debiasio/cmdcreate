@@ -17,7 +17,12 @@
 use std::sync::LazyLock;
 
 use crate::{
-    core::{configs::load::load_configuration, logger::{consts::Severity, main::log}}, output, run_shell_command, utils::{
+    core::{
+        configs::load::load_configuration,
+        logger::{consts::Severity, main::log},
+    },
+    output, run_shell_command,
+    utils::{
         fs::core::creation::{delete_file, delete_folder},
         io::error,
         sys::{
