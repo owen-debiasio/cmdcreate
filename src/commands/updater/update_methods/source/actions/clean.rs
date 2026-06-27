@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::updater::update_methods::source::dependencies::DEPENDENCIES_TO_INSTALL,
+    commands::updater::update_methods::source::dependencies::{DEPENDENCIES_TO_INSTALL, Rustup},
     output, run_shell_command,
     utils::{
         fs::core::creation::delete_folder,
@@ -27,17 +27,16 @@ use crate::{
 pub fn cleanup() {
     output!("Cleaning up...", true);
 
-    ask_for_confirmation("Do you want to remove unneeded dependencies?", false);
+    if !ask_for_confirmation("Do you want to remove unneeded dependencies?", false) {
+        return;
+    }
 
     let dependencies = DEPENDENCIES_TO_INSTALL.to_string();
 
     let dependency_removal_command = match get_distro_base() {
         DistroBase::Arch => format!("pacman -Rns --noconfirm {dependencies}"),
-        DistroBase::Debian => format!(
-            "apt remove -y {}",
-            dependencies.replace("zig", "").replace("rustup", "")
-        ),
-        DistroBase::Fedora => format!("dnf remove -y {}", dependencies.replace("rustup", "")),
+        DistroBase::Debian => format!("apt remove -y {dependencies}"),
+        DistroBase::Fedora => format!("dnf remove -y {dependencies}"),
         DistroBase::Unknown => error("Your distro is unsupported! Unable to proceed.", None),
     };
 
@@ -46,24 +45,14 @@ pub fn cleanup() {
         run_shell_command!("{dependency_removal_command}");
     }
 
-    if dependencies.contains("rustup") && get_distro_base() != DistroBase::Arch {
-        output!("Removing rustup...", true);
+    output!("Removing rustup...", true);
+    Rustup::uninstall();
 
-        // The command "rustup" doesn't work here so I manually call for the respective directories to be removed.
+    output!("Removing zig...", true);
 
-        output!("Removing \"/root/.cargo\"...", false);
-        delete_folder("/root/.cargo");
+    output!("Removing \"/tmp/cmdcreate-zig-tmp\"...", false);
+    delete_folder("/tmp/cmdcreate-zig-tmp");
 
-        output!("Removing \"/root/.rustup\"...", false);
-        delete_folder("/root/.rustup");
-    }
-
-    if dependencies.contains("zig") && get_distro_base() == DistroBase::Debian
-        || get_distro_base() == DistroBase::Unknown
-    {
-        output!("Removing zig...", true);
-
-        output!("Removing \"/tmp/cmdcreate-zig-tmp\"...", false);
-        delete_folder("/tmp/cmdcreate-zig-tmp");
-    }
+    output!("Removing \"/tmp/cmdcreate-zig-tmp\"...", false);
+    delete_folder("/root/.cache/zig");
 }
