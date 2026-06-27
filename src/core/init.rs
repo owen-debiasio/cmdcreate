@@ -29,7 +29,7 @@ use crate::{
         net::{internet_is_forced_disabled, not_connected_to_internet},
         sys::{
             cpu::ARCH,
-            distro::{get_distro_base, installation_method},
+            distro::{get_distro_base, installation_method, is_immutable_distro},
             env::{ENVIRONMENT_VARIABLES, running_as_root},
         },
     },
@@ -83,6 +83,13 @@ Root status: {root_status}
 }
 
 pub fn init() {
+    if is_immutable_distro() && running_as_root() {
+        error(
+            "Because you are using an immutable distro, you are unable to run cmdcreate as root.",
+            None,
+        )
+    }
+
     init_filesystem();
     init_configs();
 

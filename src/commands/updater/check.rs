@@ -18,7 +18,10 @@ use crate::{
     commands::updater::main::update,
     core::meta::version::{build::is_development_version, consts::CURRENT_PROJECT_VERSION},
     output,
-    utils::{colors::COLORS, git::get_latest_tag, io::error, net::not_connected_to_internet},
+    utils::{
+        colors::COLORS, git::get_latest_tag, io::error, net::not_connected_to_internet,
+        sys::distro::is_immutable_distro,
+    },
 };
 
 pub fn check() {
@@ -51,7 +54,9 @@ pub fn check() {
             true
         );
 
-        update();
+        if !is_immutable_distro() {
+            update();
+        }
 
         return;
     }

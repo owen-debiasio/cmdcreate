@@ -29,15 +29,18 @@ use crate::{
         net::not_connected_to_internet,
         sys::{
             cpu::arch_is_supported,
-            distro::{InstallMethod, installation_method},
+            distro::{InstallMethod, installation_method, is_immutable_distro},
         },
     },
 };
 
-pub fn update() {
-    let (blue, red, reset) = (COLORS.blue, COLORS.red, COLORS.reset);
-
-    let project_name = PROJECT.name;
+fn init() {
+    if is_immutable_distro() {
+        error(
+            "Because you are using an immutable distro, you are unable to update cmdcreate using the built-in command.",
+            None,
+        )
+    }
 
     if not_connected_to_internet() {
         error(
@@ -53,7 +56,14 @@ pub fn update() {
             true,
         );
     }
+}
 
+pub fn update() {
+    let (blue, red, reset) = (COLORS.blue, COLORS.red, COLORS.reset);
+
+    init();
+
+    let project_name = PROJECT.name;
     let question_to_ask = &format!("\nDo you want to upgrade {project_name}?");
     ask_for_confirmation(question_to_ask, true);
 
