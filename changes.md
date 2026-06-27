@@ -936,8 +936,8 @@ Licensed under the GNU General Public License v3.0 or later.
 
 - Deprecation of the `install.sh` install script. It was unmaintained and I'll
   be honest and say I vibecoded it. It's lowkey for the best
-- New configuration
-  - New category: `self`
+- New configurations
+  - Category: `self`
     - `disable_root_usage`
       - If `true`, cmdcreate is prevented from running as root.
       - `false` (disabled) by default
@@ -945,6 +945,11 @@ Licensed under the GNU General Public License v3.0 or later.
         disabled by modifying `/etc/cmdcreate.toml`.
       - This setting is useful for immutable/atomic distros.
       - This also disables the ability to update via most methods.
+  - Category: `update`
+    - `zig_version`
+      - The version that is downloaded when building cmdcreate from source when
+        using `sudo cmdcreate update`
+      - `0.16.0` by default **(as of June 27, 2026)**
 - Code optimizations
 - I am now no longer providing the Python testing utilities. They will be
   replaced by tests you can run using `cargo test`.
@@ -953,3 +958,8 @@ Licensed under the GNU General Public License v3.0 or later.
 - New developer utility:
   - `./dev/test.sh`
     - Tests cmdcreate using `cargo test`
+- Fixed building from source when running `sudo cmdcreate update`
+  - `zig` and `rustup` are no longer installed via the distro's package manager,
+    and are always installed.
+  - Fixed download links for `zig`
+  - Other misc changes
