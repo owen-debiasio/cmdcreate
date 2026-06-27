@@ -189,7 +189,9 @@ cargo clippy --fix --allow-no-vcs --target "$RUST_TARGET"
 echo -e "\n${BLUE}> Building release (Static Musl $ARCH)...${RESET}"
 cargo zigbuild --release --target "$RUST_TARGET"
 
-mv "target/$RUST_TARGET/release/cmdcreate" "$TARGET_BIN"
+if [ -f "target/$RUST_TARGET/release/cmdcreate" ]; then
+    cp "target/$RUST_TARGET/release/cmdcreate" "$TARGET_BIN"
+fi
 
 echo -e "\n${BLUE}> Installing binary...${RESET}"
 if [ "$USE_SUDO" = true ]; then
@@ -199,4 +201,5 @@ else
     add_to_shell_paths
 fi
 
-echo -e "\n${GREEN}> Done. $BIN_NAME (statically linked $ARCH) installed to $INSTALL_DIR${RESET}"
+echo -e "\n${GREEN}> Done. $BIN_NAME (statically linked $ARCH) installed to \"${BLUE}$INSTALL_DIR/$BIN_NAME\".${RESET}"
+echo -e "\n${GREEN}> Run ${BLUE}\"cmdcreate-dev\"${GREEN} to run this development build!${RESET}"
