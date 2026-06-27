@@ -34,31 +34,39 @@ command -v cargo > /dev/null || {
     echo -e "\n${RED}> cargo not found${RESET}"
     exit 1
 }
-command -v shfmt > /dev/null || {
-    echo -e "\n${YELLOW}> shfmt not found... ignore if not in a development environment!${RESET}"
-}
-command -v shellcheck > /dev/null || {
-    echo -e "\n${YELLOW}> shellcheck not found... ignore if not in a development environment!${RESET}"
-}
-command -v markdownlint-cli2 > /dev/null || {
-    echo -e "\n${YELLOW}> markdownlint-cli2 not found... ignore if not in a development environment!${RESET}"
-}
-command -v prettier > /dev/null || {
-    echo -e "\n${YELLOW}> prettier not found... ignore if not in a development environment!${RESET}"
-}
 
 echo -e "\n${BLUE}> Linting and formatting cmdcreate...${RESET}"
 cargo fmt --all --
 cargo clippy
 
 echo -e "\n${BLUE}> Linting shell scripts...${RESET}"
-find . -name "*.sh" -exec shellcheck {} +
+if command -v shellcheck &> /dev/null; then
+    find . -name "*.sh" -exec shellcheck {} +
+else
+    echo -e "\n${YELLOW}> shellcheck not found... ignore if not in a development environment!${RESET}"
+fi
 
 echo -e "\n${BLUE}> Formatting shell scripts...${RESET}"
-shfmt -w -i 4 -ci -sr "$ROOT_DIR"
+if command -v shfmt &> /dev/null; then
+    shfmt -w -i 4 -ci -sr "$ROOT_DIR"
+else
+    echo -e "\n${YELLOW}> shfmt not found... ignore if not in a development environment!${RESET}"
+fi
 
 echo -e "\n${BLUE}> Linting and formatting markdown and yaml files...${RESET}"
-markdownlint-cli2 "**/*.md" "**/*.yml" --config .markdownlint.json --fix
-prettier --config .prettierrc -w .
+
+echo -e "\n${BLUE}> Running Markdownlint...${RESET}"
+if command -v markdownlint-cli2 &> /dev/null; then
+    markdownlint-cli2 "**/*.md" "**/*.yml" --config .markdownlint.json --fix
+else
+    echo -e "\n${YELLOW}> markdownlint-cli2 not found... ignore if not in a development environment!${RESET}"
+fi
+
+echo -e "\n${BLUE}> Running Prettier...${RESET}"
+if command -v prettier &> /dev/null; then
+    prettier --config .prettierrc -w .
+else
+    echo -e "\n${YELLOW}> prettier not found... ignore if not in a development environment!${RESET}"
+fi
 
 echo -e "\n${GREEN}> Formatting complete!${RESET}"
