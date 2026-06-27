@@ -20,7 +20,7 @@ use crate::{
     core::logger::{consts::Severity, main::log},
     output, run_shell_command,
     utils::{
-        fs::core::creation::delete_file,
+        fs::core::creation::{delete_file, delete_folder},
         io::error,
         sys::{
             command::system_command_is_installed,
@@ -32,7 +32,8 @@ use crate::{
 };
 
 pub static DEPENDENCIES_TO_INSTALL: LazyLock<String> = LazyLock::new(|| {
-    let needed_dependencies = vec!["git", "zig", "curl", "less", "rustup", "wget"];
+    // Rustup and zig are needed, but they are installed manually (without a package manager)
+    let needed_dependencies = vec!["git", "curl", "less", "wget"];
     let mut dependencies_to_install = Vec::new();
 
     for dep in needed_dependencies {
@@ -52,6 +53,12 @@ pub static DEPENDENCIES_TO_INSTALL: LazyLock<String> = LazyLock::new(|| {
 pub fn install_dependencies() {
     let dependencies = DEPENDENCIES_TO_INSTALL.to_string();
 
+    output!("Downloading and installing rustup...", true);
+    Rustup::install();
+
+    output!("Downloading and installing zig...", true);
+    install_zig();
+
     if dependencies.is_empty() {
         return;
     }
@@ -66,37 +73,23 @@ pub fn install_dependencies() {
     let dependency_install_command = match get_distro_base() {
         DistroBase::Arch => format!(
             "pacman -Sy && pacman -S --needed --noconfirm \
-              {dependencies}"
+              {dependencies}",
         ),
         DistroBase::Debian => format!(
             "apt update && \
               apt install -y \
-           {}",
-            dependencies.replace("zig", "").replace("rustup", "")
+           {dependencies}",
         ),
         DistroBase::Fedora => format!(
             "dnf update && \
            dnf install -y \
-              {}",
-            dependencies.replace("rustup", "")
+              {dependencies}",
         ),
         DistroBase::Unknown => error("Your distro is unsupported! Unable to proceed.", None),
     };
 
     output!("Installing dependencies...", true);
     run_shell_command!("{dependency_install_command}");
-
-    if dependencies.contains("rustup") && get_distro_base() != DistroBase::Arch {
-        output!("Downloading and installing rustup...", true);
-        Rustup::install();
-    }
-
-    if dependencies.contains("zig") && get_distro_base() == DistroBase::Debian
-        || get_distro_base() == DistroBase::Unknown
-    {
-        output!("Downloading and installing zig...", true);
-        install_zig();
-    }
 }
 
 pub fn get_cargo_env() -> &'static str {
@@ -104,7 +97,6 @@ pub fn get_cargo_env() -> &'static str {
         "fish" => "source \"$HOME/.cargo/env.fish\"",
         "nushell" => "source \"~/.cargo/env.nu\"",
         "tcsh" => "source \"$HOME/.cargo/env.tcsh\"",
-        "pwsh" => ". \"$HOME/.cargo/env.ps1\"",
         "xonsh" => "source \"$HOME/.cargo/env.xsh\"",
 
         // Bash is the default cause most distros use it
@@ -113,12 +105,17 @@ pub fn get_cargo_env() -> &'static str {
 }
 
 fn install_zig() {
-    // zig version 0.16.0 is hardcoded to download, I will change if there is a new release
-    let zig_download_link = match ARCH {
-        "x86_64" => "https://ziglang.org/builds/zig-x86_64-linux-0.16.0.tar.xz",
-        "i686" | "i386" => "https://ziglang.org/builds/zig-x86-linux-0.16.0.tar.xz",
-        "aarch64" | "arm64" => "https://ziglang.org/builds/zig-aarch64-linux-0.16.0.tar.xz",
-        "armv7" | "armv7l" => "https://ziglang.org/builds/zig-arm-linux-0.16.0.tar.xz",
+    // The version is hardcoded to download, I'll update it if needed
+    let zig_version = "0.16.0";
+    let zig_download_page = &format!("https://ziglang.org/download/{zig_version}");
+
+    let zig_download_file = match ARCH {
+        "x86_64" => &format!("{zig_download_page}/zig-x86_64-linux-{zig_version}.tar.xz"),
+        "i686" | "i386" => &format!("{zig_download_page}/zig-x86-linux-{zig_version}.tar.xz"),
+        "aarch64" | "arm64" => {
+            &format!("{zig_download_page}/zig-aarch64-linux-{zig_version}.tar.xz")
+        }
+        "armv7" | "armv7l" => &format!("{zig_download_page}/zig-arm-linux-{zig_version}.tar.xz"),
         _ => error("Unsupported architecture:", Some(ARCH)),
     };
 
@@ -135,13 +132,13 @@ fn install_zig() {
         );
     }
 
-    let zig_archive_name = zig_download_link
-        .replace("https://ziglang.org/builds/", "")
+    let zig_archive_name = zig_download_file
+        .replace(&format!("{zig_download_page}/"), "")
         .trim()
         .to_string();
 
     let commands_to_install_zig = &format!(
-        "wget -P /tmp/ {zig_download_link} && \
+        "wget -P /tmp/ {zig_download_file} && \
          mkdir -p /tmp/cmdcreate-zig-tmp && \
          tar -xf /tmp/{zig_archive_name} -C /tmp/cmdcreate-zig-tmp --strip-components=1"
     );
@@ -151,7 +148,7 @@ fn install_zig() {
     delete_file(&format!("/tmp/{zig_archive_name}"));
 }
 
-pub struct Rustup {}
+pub struct Rustup;
 
 impl Rustup {
     pub fn target() -> &'static str {
@@ -189,5 +186,18 @@ impl Rustup {
         );
 
         run_shell_command!("{}", get_cargo_env());
+    }
+
+    pub fn uninstall() {
+        // The command "rustup" doesn't work here so I manually call for the respective directories to be removed.
+
+        output!("Removing \"/root/.cargo\"...", false);
+        delete_folder("/root/.cargo");
+
+        output!("Removing \"/root/.rustup\"...", false);
+        delete_folder("/root/.rustup");
+
+        output!("Removing \"/root/.cache/cargo-zigbuild\"...", false);
+        delete_folder("/root/.cache/cargo-zigbuild");
     }
 }
