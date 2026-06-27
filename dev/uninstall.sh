@@ -46,7 +46,6 @@ is_immutable() {
     return 1
 }
 
-# --- Help Menu ---
 show_help() {
     echo -e "\n${YELLOW}> Usage:${RESET} $0 [options]"
     echo -e "\n${YELLOW}Uninstallation Scope (Required):${RESET}"
