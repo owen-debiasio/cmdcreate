@@ -42,11 +42,9 @@ command -v shellcheck > /dev/null || {
 }
 command -v markdownlint-cli2 > /dev/null || {
     echo -e "\n${YELLOW}> markdownlint-cli2 not found... ignore if not in a development environment!${RESET}"
-    exit 1
 }
 command -v prettier > /dev/null || {
     echo -e "\n${YELLOW}> prettier not found... ignore if not in a development environment!${RESET}"
-    exit 1
 }
 
 echo -e "\n${BLUE}> Linting and formatting cmdcreate...${RESET}"
