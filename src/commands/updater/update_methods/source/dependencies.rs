@@ -17,9 +17,7 @@
 use std::sync::LazyLock;
 
 use crate::{
-    core::logger::{consts::Severity, main::log},
-    output, run_shell_command,
-    utils::{
+    core::{configs::load::load_configuration, logger::{consts::Severity, main::log}}, output, run_shell_command, utils::{
         fs::core::creation::{delete_file, delete_folder},
         io::error,
         sys::{
@@ -105,9 +103,24 @@ pub fn get_cargo_env() -> &'static str {
 }
 
 fn install_zig() {
+    let zig_version = load_configuration("update", "zig_version", "0.16.0");
+
+    log(
+        &format!(
+            "cmdcreate::commands::updater::update_methods::source::dependencies::install_zig(): Using zig version: {zig_version}"
+        ),
+        Severity::Normal,
+    );
+
     // The version is hardcoded to download, I'll update it if needed
-    let zig_version = "0.16.0";
     let zig_download_page = &format!("https://ziglang.org/download/{zig_version}");
+
+    log(
+        &format!(
+            "cmdcreate::commands::updater::update_methods::source::dependencies::install_zig(): Using zig download page: {zig_download_page}"
+        ),
+        Severity::Normal,
+    );
 
     let zig_download_file = match ARCH {
         "x86_64" => &format!("{zig_download_page}/zig-x86_64-linux-{zig_version}.tar.xz"),
@@ -118,6 +131,13 @@ fn install_zig() {
         "armv7" | "armv7l" => &format!("{zig_download_page}/zig-arm-linux-{zig_version}.tar.xz"),
         _ => error("Unsupported architecture:", Some(ARCH)),
     };
+
+    log(
+        &format!(
+            "cmdcreate::commands::updater::update_methods::source::dependencies::install_zig(): Downloading zig from: {zig_download_file}"
+        ),
+        Severity::Normal,
+    );
 
     if !system_command_is_installed("wget") {
         error(
