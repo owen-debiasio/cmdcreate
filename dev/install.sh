@@ -17,8 +17,129 @@
 
 set -euo pipefail
 
-BIN_NAME="cmdcreate"
-INSTALL_DIR="/usr/bin/"
+BIN_NAME="cmdcreate-dev"
+BLUE='\033[0;34m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+RED='\033[0;31m'
+RESET='\033[0m'
+
+INSTALL_DIR=""
+USE_SUDO=true
+OFFLINE_MODE=false
+
+is_immutable() {
+    if [[ -d "/ostree" ]]; then
+        return 0
+    fi
+
+    if [[ -f "/etc/os-release" ]]; then
+        if grep -qiE "silverblue|kinoite|microos|bazzite|aurae" /etc/os-release; then
+            return 0
+        fi
+    fi
+
+    if awk '$2 == "/" || $2 == "/usr" {print $4}' /proc/mounts 2> /dev/null | grep -q -E '(^|,)ro(,|$);'; then
+        return 0
+    fi
+
+    return 1
+}
+
+add_to_shell_paths() {
+    local target_path="\$HOME/.local/bin"
+
+    if [[ ":$PATH:" == *":$HOME/.local/bin:"* ]]; then
+        return 0
+    fi
+
+    echo -e "\n${YELLOW}> Notice: $HOME/.local/bin is not in your PATH. Updating shell configs...${RESET}"
+
+    if [[ -f "$HOME/.bashrc" ]]; then
+        if ! grep -q "export PATH=.*\.local/bin" "$HOME/.bashrc"; then
+            echo -e "\n# Added by $BIN_NAME installer\nexport PATH=\"$target_path:\$PATH\"" >> "$HOME/.bashrc"
+            echo -e "  -> Added to ~/.bashrc"
+        fi
+    fi
+
+    if [[ -f "$HOME/.zshrc" ]]; then
+        if ! grep -q "export PATH=.*\.local/bin" "$HOME/.zshrc"; then
+            echo -e "\n# Added by $BIN_NAME installer\nexport PATH=\"$target_path:\$PATH\"" >> "$HOME/.zshrc"
+            echo -e "  -> Added to ~/.zshrc"
+        fi
+    fi
+
+    if which fish &> /dev/null; then
+        mkdir -p "$HOME/.config/fish"
+        local fish_config="$HOME/.config/fish/config.fish"
+        touch "$fish_config"
+        if ! grep -q "fish_add_path.*\.local/bin" "$fish_config"; then
+            echo -e "\n# Added by $BIN_NAME installer\nfish_add_path \$HOME/.local/bin" >> "$fish_config"
+            echo -e "  -> Added to $fish_config"
+        fi
+    fi
+
+    echo -e "${YELLOW}! Please restart your shell or source your config file for changes to take effect.${RESET}"
+}
+
+show_help() {
+    echo -e "\n${YELLOW}> Usage:${RESET} $0 [options]"
+    echo -e "\n${YELLOW}Installation Type (Required):${RESET}"
+    echo "  -u, --user      Install to \$HOME/.local/bin/"
+    echo "  -s, --system    Install to /usr/bin/ (Requires root)"
+    echo -e "\n${YELLOW}Flags:${RESET}"
+    echo "  -o, --offline   Skip toolchain updates and use offline cargo build"
+    echo "  -h, --help      Show this help menu"
+    exit 0
+}
+
+if [[ $# -eq 0 ]]; then
+    echo -e "${RED}Error: You must specify an installation scope (--user or --system).${RESET}"
+    show_help
+fi
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -h | --help)
+            show_help
+            ;;
+        -u | --user)
+            INSTALL_DIR="$HOME/.local/bin"
+            USE_SUDO=false
+            shift
+            ;;
+        -s | --system)
+            INSTALL_DIR="/usr/bin/"
+            USE_SUDO=true
+            shift
+            ;;
+        -o | --offline)
+            OFFLINE_MODE=true
+            shift
+            ;;
+        *)
+            echo -e "${RED}Unknown argument: $1${RESET}"
+            show_help
+            ;;
+    esac
+done
+
+if [[ -z "$INSTALL_DIR" ]]; then
+    echo -e "${RED}Error: Missing installation scope (-u or -s).${RESET}"
+    exit 1
+fi
+
+if is_immutable; then
+    if [ "$INSTALL_DIR" = "/usr/bin/" ]; then
+        echo -e "${YELLOW}> Warning: Immutable distribution detected. Forcing installation to local user directory instead.${RESET}"
+    fi
+    INSTALL_DIR="$HOME/.local/bin"
+    USE_SUDO=false
+fi
+
+if [ "$USE_SUDO" = false ]; then
+    mkdir -p "$INSTALL_DIR"
+fi
 
 ARCH=$(uname -m)
 
@@ -45,17 +166,7 @@ fi
 
 TARGET_BIN="target/$RUST_TARGET/release/$BIN_NAME"
 
-BLUE='\033[0;34m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-RESET='\033[0m'
-
-if [[ "${1:-}" = "--help" || "${1:-}" = "-h" ]]; then
-    echo -ne "\n${YELLOW}> Help:\n\nPass \"-o\" or \"--offline\" flags to use offline${RESET}\n"
-    exit 0
-fi
-
-if [[ "${1:-}" != "--offline" && "${1:-}" != "-o" ]]; then
+if [ "$OFFLINE_MODE" = false ]; then
     echo -e "\n${BLUE}> Updating Rust toolchain...${RESET}"
     rustup update stable
     rustup target add "$RUST_TARGET"
@@ -78,7 +189,14 @@ cargo clippy --fix --allow-no-vcs --target "$RUST_TARGET"
 echo -e "\n${BLUE}> Building release (Static Musl $ARCH)...${RESET}"
 cargo zigbuild --release --target "$RUST_TARGET"
 
+mv "target/$RUST_TARGET/release/cmdcreate" "$TARGET_BIN"
+
 echo -e "\n${BLUE}> Installing binary...${RESET}"
-sudo install -Dm755 "$TARGET_BIN" "$INSTALL_DIR/$BIN_NAME"
+if [ "$USE_SUDO" = true ]; then
+    sudo install -Dm755 "$TARGET_BIN" "$INSTALL_DIR/$BIN_NAME"
+else
+    install -Dm755 "$TARGET_BIN" "$INSTALL_DIR/$BIN_NAME"
+    add_to_shell_paths
+fi
 
 echo -e "\n${GREEN}> Done. $BIN_NAME (statically linked $ARCH) installed to $INSTALL_DIR${RESET}"
