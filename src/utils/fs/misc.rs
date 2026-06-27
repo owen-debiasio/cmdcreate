@@ -45,8 +45,7 @@ pub fn install_binary(mode: &str, binary: &str, destination: &str) {
 
     log(
         &format!(
-            "
-            utils/fs::misc::install_binary(): \
+            "utils::fs::misc::install_binary(): \
             Installing binary \"{binary}\" \
             to \"{destination}\" \
             using mode \"{mode}\"..."
@@ -61,7 +60,7 @@ pub fn install_binary(mode: &str, binary: &str, destination: &str) {
     }
 
     log(
-        "utils/fs::misc::install_binary(): Successfully installed binary!",
+        "utils::fs::misc::install_binary(): Successfully installed binary!",
         Severity::Normal,
     );
 }
