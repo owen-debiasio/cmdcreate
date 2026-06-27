@@ -61,6 +61,91 @@ yay -S cmdcreate-git
 You can find `.deb`, `.rpm` and standalone binary packages in the
 [latest release](https://github.com/owen-debiasio/cmdcreate/releases/latest).
 
+### Build From Source
+
+#### Dependencies
+
+##### Gather Prerequisites
+
+- Rust (`stable` branch)
+  - Cargo
+  - Rustup
+  - [`cargo-zigbuild`](https://github.com/rust-cross/cargo-zigbuild)
+- Zig
+
+##### Setup
+
+> [!NOTE]  
+> I recommend using the stable branch, but you can choose whatever if needed.
+
+```bash
+rustup update stable
+```
+
+##### Add needed target
+
+> [!IMPORTANT]  
+> The target you choose is based on your CPU architecture. Choose accordingly.
+
+###### x86_64
+
+```bash
+rustup target add x86_64-unknown-linux-musl
+```
+
+###### x86, i686, i386
+
+```bash
+rustup target add i686-unknown-linux-musl
+```
+
+###### aarch64 (ARM64)
+
+```bash
+rustup target add aarch64-unknown-linux-musl
+```
+
+###### arm (32-bit, armv7)
+
+```bash
+rustup target add armv7-unknown-linux-musleabihf
+```
+
+##### Install `cargo-zigbuild`
+
+> [!IMPORTANT]  
+> Make sure you have `zig` installed, or else it will not build
+
+```bash
+cargo install cargo-zigbuild
+```
+
+#### Build & Install
+
+##### Clone and enter repository
+
+```bash
+git clone https://github.com/owen-debiasio/cmdcreate.git --depth=1
+cd cmdcreate
+```
+
+##### Build
+
+```bash
+cargo zigbuild --release --target <target of your choice>
+```
+
+##### Install
+
+> [!NOTE]  
+> The resulting binary after you build will be located in the following:
+>
+> `target/<target of your choice>/release/cmdcreate`
+
+```bash
+sudo install -Dm755 target/<target of your choice>/release/cmdcreate /usr/local/bin/cmdcreate
+```
+
 ---
 
 (C) 2026 Owen Debiasio
