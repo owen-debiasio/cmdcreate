@@ -134,14 +134,16 @@ pub fn add_home_install_directory_to_path() {
             "cmdcreate::utils::fs::init::add_home_install_directory_to_path(): PATH exists in shellrc, skipping...",
             Severity::Normal,
         );
-    } else {
-        log(
-            "cmdcreate::utils::fs::init::add_home_install_directory_to_path(): Writing PATH to shellrc...",
-            Severity::Normal,
-        );
 
-        write_to_file(shellrc, &path_to_add, true);
+        return;
     }
+
+    log(
+        "cmdcreate::utils::fs::init::add_home_install_directory_to_path(): Writing PATH to shellrc...",
+        Severity::Normal,
+    );
+
+    write_to_file(shellrc, &path_to_add, true);
 
     log(
         "cmdcreate::utils::fs::init::add_home_install_directory_to_path(): Wrote PATH to shellrc.",
