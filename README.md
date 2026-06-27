@@ -129,13 +129,16 @@ git clone https://github.com/owen-debiasio/cmdcreate.git --depth=1
 cd cmdcreate
 ```
 
-##### Build
+###### Automatic **(recommended)**
 
 ```bash
-cargo zigbuild --release --target <target of your choice>
+./dev/install.sh
 ```
 
-##### Install
+###### Manual
+
+> [!WARNING]  
+> Be prepared to manually troubleshoot issues.
 
 > [!NOTE]  
 > The resulting binary after you build will be located in the following:
@@ -143,6 +146,7 @@ cargo zigbuild --release --target <target of your choice>
 > `target/<target of your choice>/release/cmdcreate`
 
 ```bash
+cargo zigbuild --release --target <target of your choice>
 sudo install -Dm755 target/<target of your choice>/release/cmdcreate /usr/local/bin/cmdcreate
 ```
 
