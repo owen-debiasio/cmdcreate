@@ -24,6 +24,7 @@ BLUE='\033[0;34m'
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 RESET='\033[0m'
+YELLOW='\033[0;33m'
 
 cd "$ROOT_DIR"
 
@@ -34,15 +35,17 @@ command -v cargo > /dev/null || {
     exit 1
 }
 command -v shfmt > /dev/null || {
-    echo -e "\n${RED}> shfmt not found${RESET}"
-    exit 1
+    echo -e "\n${YELLOW}> shfmt not found... ignore if not in a development environment!${RESET}"
 }
 command -v shellcheck > /dev/null || {
-    echo -e "\n${RED}> shellcheck not found${RESET}"
-    exit 1
+    echo -e "\n${YELLOW}> shellcheck not found... ignore if not in a development environment!${RESET}"
 }
 command -v markdownlint-cli2 > /dev/null || {
-    echo -e "\n${RED}> markdownlint-cli2 not found${RESET}"
+    echo -e "\n${YELLOW}> markdownlint-cli2 not found... ignore if not in a development environment!${RESET}"
+    exit 1
+}
+command -v prettier > /dev/null || {
+    echo -e "\n${YELLOW}> prettier not found... ignore if not in a development environment!${RESET}"
     exit 1
 }
 
