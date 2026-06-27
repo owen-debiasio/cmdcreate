@@ -963,3 +963,4 @@ Licensed under the GNU General Public License v3.0 or later.
     and are always installed.
   - Fixed download links for `zig`
   - Other misc changes
+- Linting tools are now optional when using `./dev/install.sh`
