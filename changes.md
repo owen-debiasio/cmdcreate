@@ -964,3 +964,13 @@ Licensed under the GNU General Public License v3.0 or later.
   - Fixed download links for `zig`
   - Other misc changes
 - Linting tools are now optional when using `./dev/install.sh`
+- Remove `./dev/clean.sh` as a dev utility
+  - There is virtually nothing to clean, just run `cargo clean` instead.
+- Overhauls to `./dev/install.sh` and `./dev/uninstall.sh`
+  - You must now specify if you want to install via these methods:
+    - User
+      - Pass `-u`/`--user`
+      - Only option for immutable distros, but usable everywhere.
+    - System
+      - Pass `-s`/`--system`
+      - Can use on any mutable distro
