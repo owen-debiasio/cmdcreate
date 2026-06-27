@@ -43,6 +43,7 @@ pub fn debug_intro() -> String {
     let build_status = get_build_status();
 
     let distro_base = get_distro_base();
+    let immutable_distro_status = is_immutable_distro();
     let installation_method = installation_method();
 
     let internet_status = if not_connected_to_internet() {
@@ -72,6 +73,7 @@ and open an issue
 Version: {CURRENT_PROJECT_VERSION} {build_status}
 CPU architecture: {ARCH}
 Distro base: {distro_base:?}
+Distro is immutable: {immutable_distro_status}
 Installation Method: {installation_method:?}
 Internet status: {internet_status}
 Preferred text editor: {chosen_text_editor}
