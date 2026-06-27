@@ -154,7 +154,6 @@ The `<desired directory>` may include paths such as `~/dev/cmdcreate` or
 > [The development utility folder](https://github.com/owen-debiasio/cmdcreate/tree/main/dev)
 > (`./dev/`)
 
-- `clean.sh` Cleans up the development environment.
 - `format.sh` Formats all Bash and Rust code.
 - `install.sh` Install a test (non-production) version of cmdcreate.
 - `setup_env.sh` Sets up the development environment.
