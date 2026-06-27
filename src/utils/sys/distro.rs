@@ -14,7 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-use crate::utils::fs::core::read_write::read_file_to_string;
+use std::collections::HashMap;
+
+use crate::utils::fs::{core::read_write::read_file_to_string, paths::path_exists};
 
 #[derive(Debug)]
 pub enum InstallMethod {
@@ -80,13 +82,172 @@ pub fn installation_method() -> InstallMethod {
     }
 }
 
-#[test]
-fn distro_detection_returns_known_or_unknown() {
-    let distro_base = get_distro_base();
-    assert!(
-        distro_base == DistroBase::Arch
-            || distro_base == DistroBase::Fedora
-            || distro_base == DistroBase::Debian
-            || distro_base == DistroBase::Unknown
-    );
+pub fn is_immutable_distro() -> bool {
+    if is_usr_directory_readonly() || path_exists("/run/ostree-booted") {
+        return true;
+    }
+
+    let os_release_contents = read_file_to_string("/etc/os-release");
+    check_os_release_immutability(&os_release_contents)
+}
+
+fn check_os_release_immutability(contents: &str) -> bool {
+    if contents.is_empty() {
+        return false;
+    }
+
+    let os_properties: HashMap<String, String> = contents
+        .lines()
+        .filter_map(|line| line.split_once('='))
+        .map(|(key, value)| {
+            (
+                key.trim().to_lowercase(),
+                value.trim_matches('"').to_lowercase(),
+            )
+        })
+        .collect();
+
+    let variant_id = os_properties.get("variant_id").map(String::as_str);
+    let distro_id = os_properties.get("id").map(String::as_str);
+
+    matches!(
+        variant_id,
+        Some("silverblue" | "kinoite" | "sericea" | "carbon" | "steamdeck")
+    ) || matches!(
+        distro_id,
+        Some("opensuse-microos" | "opensuse-tumbleweed-microos")
+    )
+}
+
+fn check_mounts_immutability(contents: &str) -> bool {
+    if contents.is_empty() {
+        return false;
+    }
+
+    for mount_line in contents.lines() {
+        let mount_segments: Vec<&str> = mount_line.split_whitespace().collect();
+
+        if mount_segments.len() >= 4 {
+            let mount_point = mount_segments[1];
+
+            if mount_point == "/usr" || mount_point == "/" {
+                let mount_options = mount_segments[3];
+
+                if mount_options == "ro"
+                    || mount_options.starts_with("ro,")
+                    || mount_options.contains(",ro,")
+                    || mount_options.ends_with(",ro")
+                {
+                    return true;
+                }
+            }
+        }
+    }
+
+    false
+}
+
+fn is_usr_directory_readonly() -> bool {
+    let active_mounts_contents = read_file_to_string("/proc/mounts");
+    check_mounts_immutability(&active_mounts_contents)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_os_release_returns_false() {
+        assert!(!check_os_release_immutability(""));
+    }
+
+    #[test]
+    fn test_standard_ubuntu_os_release_returns_false() {
+        let ubuntu_mock = r#"
+            NAME="Ubuntu"
+            VERSION="24.04 LTS (Noble Numbat)"
+            ID=ubuntu
+            ID_LIKE=debian
+            PRETTY_NAME="Ubuntu 24.04 LTS"
+        "#;
+        assert!(!check_os_release_immutability(ubuntu_mock));
+    }
+
+    #[test]
+    fn test_steamdeck_os_release_returns_true() {
+        let steamdeck_mock = r#"
+            NAME="SteamOS"
+            ID=steamos
+            ID_LIKE="arch"
+            PRETTY_NAME="SteamOS"
+            VARIANT_ID=steamdeck
+        "#;
+        assert!(check_os_release_immutability(steamdeck_mock));
+    }
+
+    #[test]
+    fn test_fedora_silverblue_os_release_returns_true() {
+        let silverblue_mock = r#"
+            NAME="Fedora Linux"
+            VERSION="40 (Silverblue)"
+            ID=fedora
+            VARIANT_ID="silverblue"
+        "#;
+        assert!(check_os_release_immutability(silverblue_mock));
+    }
+
+    #[test]
+    fn test_opensuse_microos_os_release_returns_true() {
+        let microos_mock = r#"
+            NAME="openSUSE MicroOS"
+            ID="opensuse-microos"
+            PRETTY_NAME="openSUSE MicroOS"
+        "#;
+        assert!(check_os_release_immutability(microos_mock));
+    }
+
+    #[test]
+    fn test_standard_rw_mounts_returns_false() {
+        let rw_mounts_mock = r"
+            sysfs /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0
+            proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0
+            /dev/nvme0n1p2 / ext4 rw,relatime,errors=remount-ro 0 0
+            /dev/nvme0n1p2 /usr ext4 rw,relatime 0 0
+        ";
+        assert!(!check_mounts_immutability(rw_mounts_mock));
+    }
+
+    #[test]
+    fn test_readonly_root_mount_returns_true() {
+        let ro_root_mock = r"
+            sysfs /sys sysfs rw,nosuid,nodev,noexec 0 0
+            /dev/loop0 / squashfs ro,relatime,errors=continue 0 0
+        ";
+        assert!(check_mounts_immutability(ro_root_mock));
+    }
+
+    #[test]
+    fn test_readonly_usr_mount_variants_returns_true() {
+        // Checks mid-string options flag containing 'ro'
+        let ro_usr_middle = "some_dev /usr ext4 rw,ro,nosuid 0 0";
+        // Checks end-string options flag ending with 'ro'
+        let ro_usr_end = "some_dev /usr ext4 rw,nosuid,ro 0 0";
+        // Checks plain single 'ro' flag
+        let ro_usr_plain = "some_dev /usr ext4 ro 0 0";
+
+        assert!(check_mounts_immutability(ro_usr_middle));
+        assert!(check_mounts_immutability(ro_usr_end));
+        assert!(check_mounts_immutability(ro_usr_plain));
+    }
+
+    #[test]
+    fn distro_detection_returns_known_or_unknown() {
+        let distro_base = get_distro_base();
+        assert!(
+            distro_base == DistroBase::Arch
+                || distro_base == DistroBase::Fedora
+                || distro_base == DistroBase::Debian
+                || distro_base == DistroBase::Unknown
+        );
+    }
 }
