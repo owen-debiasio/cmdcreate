@@ -20,8 +20,9 @@ use crate::{
     commands::updater::update_methods::source::actions::{
         build::build, clean::cleanup, install::install,
     },
+    core::logger::{consts::Severity, main::log},
     output,
-    utils::{colors::COLORS, sys::env::root_check},
+    utils::{colors::COLORS, fs::core::creation::delete_file, sys::env::root_check},
 };
 
 pub fn source() {
@@ -33,6 +34,13 @@ pub fn source() {
         "\nUpdating cmdcreate {magenta}(please wait as this might take a while){blue}...",
         true
     );
+
+    log(
+        "cmdcreate::commands::updater::update_methods::source::main::source(): Deleting old binary...",
+        Severity::Normal,
+    );
+
+    delete_file("/usr/bin/cmdcreate");
 
     build();
     install();
