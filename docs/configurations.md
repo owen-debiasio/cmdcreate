@@ -140,3 +140,18 @@ force_disable = "true"
 [internet]
 sample_dns = "8.8.8.8:53"
 ```
+
+## updates
+
+### zig_version
+
+#### The version that is downloaded when building cmdcreate from source when using `sudo cmdcreate update`
+
+- **Default:** `0.16.0`
+
+##### Example
+
+```toml
+[update]
+zig_version = "0.15.0"
+```

@@ -21,3 +21,6 @@ disable_color = "true" # If "true", colorized output will be disabled
 [internet]
 force_disable = "true" # If "true" internet will be force disabled by default
 sample_dns = "1.1.1.1:53" # The default is set to Cloudflare. Used to check internet connectivity.
+
+[update]
+zig_version = "0.15.0" # The version that is downloaded when building cmdcreate from source when using `sudo cmdcreate update`

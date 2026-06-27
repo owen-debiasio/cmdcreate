@@ -28,8 +28,14 @@ use crate::{
     },
 };
 
-pub static AVAILABLE_CATEGORIES: &[&str] =
-    &["[self]", "[appearance]", "[logs]", "[sys]", "[internet]"];
+pub static AVAILABLE_CATEGORIES: &[&str] = &[
+    "[self]",
+    "[appearance]",
+    "[logs]",
+    "[sys]",
+    "[internet]",
+    "[update]",
+];
 pub static AVAILABLE_VALUES: &[&str] = &[
     "shell",
     "time_format",
@@ -39,6 +45,7 @@ pub static AVAILABLE_VALUES: &[&str] = &[
     "force_disable",
     "sample_dns",
     "disable_root_usage",
+    "zig_version",
 ];
 
 fn edit_config_file() {
