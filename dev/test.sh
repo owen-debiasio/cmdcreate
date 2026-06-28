@@ -28,5 +28,6 @@ cargo test --release
 # Tests that have to be run separately
 cargo test --release export_file_contains_command_with_contents -- --ignored
 cargo test --release export_file_is_created -- --ignored
+cargo test --release imported_commands_are_located_in_install_dir -- --ignored
 
 echo -e "\n${GREEN}> Finished tests!${RESET}"
