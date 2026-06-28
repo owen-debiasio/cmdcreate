@@ -26,7 +26,7 @@ pub fn import(command_import_file: &str) {
 
     log(
         &format!(
-            "commands/core/backup_actions/import::import(): \
+            "commands::core::backup_actions::import::import(): \
             Importing commands from file: \"{command_import_file}\"..."
         ),
         Severity::Normal,
@@ -74,4 +74,72 @@ pub fn import(command_import_file: &str) {
     }
 
     output!("\n{green}Successfully imported commands.{reset}", true);
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        commands::{
+            core::backup_actions::{export::export, import::import},
+            tools::{cmdcreate_command_is_installed, tests::TestCommand},
+        },
+        run_shell_command,
+        utils::fs::core::creation::{create_folder, delete_folder},
+    };
+
+    fn export_commands(directory: &str) {
+        create_folder(directory);
+
+        export(directory);
+    }
+
+    #[test]
+    #[ignore = "Must be called manually to avoid conflicts with other tests."]
+    fn imported_commands_are_located_in_install_dir() {
+        let test_name = "imported_commands_are_located_in_install_dir";
+        TestCommand::create_group(test_name, true);
+
+        let temp_dir_name = "export_file_contains_command_with_contents_temp";
+
+        export_commands(temp_dir_name);
+
+        let file_to_import = &format!("{temp_dir_name}/export.cmdcreate");
+
+        import(file_to_import);
+
+        for command_i in 1..=3 {
+            let command_is_installed =
+                cmdcreate_command_is_installed(&format!("{test_name}_{command_i}"));
+            assert!(command_is_installed);
+        }
+
+        delete_folder(temp_dir_name);
+
+        TestCommand::remove_group(test_name);
+    }
+
+    #[test]
+    #[ignore = "Must be called manually to avoid conflicts with other tests."]
+    fn imported_commands_run_correctly() {
+        let test_name = "imported_commands_run_correctly";
+        TestCommand::create_group(test_name, true);
+
+        let temp_dir_name = "imported_commands_run_correctly_temp";
+
+        export_commands(temp_dir_name);
+
+        let file_to_import = &format!("{temp_dir_name}/export.cmdcreate");
+
+        import(file_to_import);
+
+        for command_i in 1..=3 {
+            let command = &format!("{test_name}_{command_i}");
+            let command_runs_correctly = run_shell_command!(bool: "{command}");
+            assert!(command_runs_correctly);
+        }
+
+        delete_folder(temp_dir_name);
+
+        TestCommand::remove_group(test_name);
+    }
 }

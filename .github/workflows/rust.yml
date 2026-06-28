@@ -103,8 +103,12 @@ jobs:
 
       - name: Run tests
         # I'm skipping the tests `created_command_runs` and `renamed_command_runs` because
-        # Something with the PATH doesn't work in workflows or something
+        # Something with the PATH doesn't work in workflows or something.background.
+
+        # Tests involving importing/exporting have do be dealt with individually to avoid conflicts.
         run: |
           cargo test -- --skip created_command_runs --skip renamed_command_runs
           cargo test --release export_file_contains_command_with_contents -- --ignored
           cargo test --release export_file_is_created -- --ignored
+          cargo test --release imported_commands_are_located_in_install_dir -- --ignored
+          cargo test --release imported_commands_run_correctly -- --ignored
