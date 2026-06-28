@@ -66,6 +66,8 @@ macro_rules! output {
             $crate::utils::colors::COLORS.reset,
         );
 
+        $crate::core::logger::main::log(text, $crate::core::logger::consts::Severity::Normal);
+
         println!(
             "{blue}{}{text}{reset}",
             if !text.is_empty() && $include_arrow {
