@@ -20,7 +20,10 @@ use crate::{
     },
     output,
     utils::{
-        fs::{misc::install_binary, paths::path_exists},
+        fs::{
+            misc::install_binary,
+            paths::{CMDCREATE_BINARY_PATH, path_exists},
+        },
         io::error,
     },
 };
@@ -28,16 +31,18 @@ use crate::{
 pub fn install() {
     output!("\nInstalling...", true);
 
+    let binary_name = &CMDCREATE_BINARY_PATH;
+
     install_binary(
         "-Dm755",
         &format!(
             "{CLONED_REPOSITORY_DESTINATION}/target/{}/release/cmdcreate",
             Rustup::target()
         ),
-        "/usr/bin/cmdcreate",
+        binary_name,
     );
 
-    if !path_exists("/usr/bin/cmdcreate") {
+    if !path_exists(binary_name) {
         error("Failed to update!", Some("Updated binary not found!"))
     }
 }

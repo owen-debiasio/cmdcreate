@@ -18,7 +18,10 @@ use crate::{
     output, run_shell_command,
     utils::{
         colors::COLORS,
-        fs::{core::creation::delete_folder, paths::path_exists},
+        fs::{
+            core::creation::delete_folder,
+            paths::{CMDCREATE_BINARY_PATH, path_exists},
+        },
         io::{ask_for_confirmation, error},
         sys::env::running_as_root,
     },
@@ -47,10 +50,12 @@ pub fn update_via_aur() {
         true
     );
 
+    let cmdcreate_bin_path = &CMDCREATE_BINARY_PATH.to_string();
+
     let command_to_install = format!(
         "set -e
 
-        sudo rm -rf /usr/bin/cmdcreate /tmp/cmdcreate_aur_tmp
+        sudo rm -rf {cmdcreate_bin_path} /tmp/cmdcreate_aur_tmp
 
         git clone https://aur.archlinux.org/{package_name}.git /tmp/cmdcreate_aur_tmp
 

@@ -22,7 +22,11 @@ use crate::{
     },
     core::logger::{consts::Severity, main::log},
     output,
-    utils::{colors::COLORS, fs::core::creation::delete_file, sys::env::root_check},
+    utils::{
+        colors::COLORS,
+        fs::{core::creation::delete_file, paths::CMDCREATE_BINARY_PATH},
+        sys::env::root_check,
+    },
 };
 
 pub fn source() {
@@ -40,7 +44,7 @@ pub fn source() {
         Severity::Normal,
     );
 
-    delete_file("/usr/bin/cmdcreate");
+    delete_file(&CMDCREATE_BINARY_PATH);
 
     build();
     install();

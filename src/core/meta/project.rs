@@ -2,7 +2,6 @@ use crate::core::meta::project::author_information::AUTHOR;
 
 pub const YEAR: &str = "2026";
 
-#[allow(dead_code)]
 pub mod author_information {
     pub struct Author {
         pub name: &'static str,

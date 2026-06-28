@@ -18,10 +18,8 @@ use crate::{
     core::logger::{consts::Severity, main::log},
     run_shell_command,
     utils::{
-        fs::paths::path_exists,
-        io::error,
-        net::not_connected_to_internet,
-        sys::{command::system_command_is_installed, env::root_check},
+        fs::paths::path_exists, io::error, net::not_connected_to_internet,
+        sys::command::system_command_is_installed,
     },
 };
 
@@ -41,8 +39,6 @@ pub fn use_pager_on_file(file_path: &str) {
 }
 
 pub fn install_binary(mode: &str, binary: &str, destination: &str) {
-    root_check();
-
     log(
         &format!(
             "utils::fs::misc::install_binary(): \

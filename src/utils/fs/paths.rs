@@ -18,7 +18,7 @@ use crate::{
     core::meta::license::get_normal_license_paths,
     utils::sys::env::{ENVIRONMENT_VARIABLES, running_as_root},
 };
-use std::{path::Path, sync::LazyLock};
+use std::{env::current_exe, path::Path, sync::LazyLock};
 
 pub static MAIN_PATH: LazyLock<&str> = LazyLock::new(|| {
     if running_as_root() {
@@ -27,6 +27,29 @@ pub static MAIN_PATH: LazyLock<&str> = LazyLock::new(|| {
         "~/.local/share/cmdcreate"
     }
 });
+
+pub static CMDCREATE_BINARY_PATH: LazyLock<String> = LazyLock::new(|| {
+    current_exe()
+        .expect("Failed to get the binary path!")
+        .to_string_lossy()
+        .into_owned()
+});
+
+pub fn get_program_binary_path() -> String {
+    let user_home = &ENVIRONMENT_VARIABLES.home;
+
+    let paths_to_check = [
+        "/usr/bin/cmdcreate".to_string(),
+        "/usr/bin/cmdcreate-dev".to_string(),
+        format!("{user_home}/.local/bin/cmdcreate"),
+        format!("{user_home}/.local/bin/cmdcreate-dev"),
+    ];
+
+    paths_to_check
+        .into_iter()
+        .find(|path| path_exists(path))
+        .unwrap_or_else(|| format!("{user_home}/.local/bin/cmdcreate-dev"))
+}
 
 pub struct Paths {
     pub configuration_file: &'static str,

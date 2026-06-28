@@ -15,16 +15,17 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    core::meta::project::project_information::PROJECT,
+    core::meta::{project::project_information::PROJECT, version::build::is_development_version},
     input, output, run_shell_command,
     utils::{
         colors::COLORS,
         fs::{
             core::creation::delete_file,
             misc::{download_file_to_location_via_curl, install_binary},
+            paths::CMDCREATE_BINARY_PATH,
         },
         git::get_latest_tag,
-        io::error,
+        io::{ask_for_confirmation, error},
         sys::{
             cpu::{ARCH, cpu_arch_check},
             env::root_check,
@@ -73,15 +74,34 @@ pub fn update_via_package(package_type: &str) {
 
     download_file_to_location_via_curl(temp_package_file_path, package_file_download_path);
 
+    let current_cmdcreate_binary_path = &CMDCREATE_BINARY_PATH.to_string();
+
     match package_type {
         ".deb" => run_shell_command!("dpkg -i {temp_package_file_path}"),
         ".rpm" => run_shell_command!("rpm -Uvh {temp_package_file_path}"),
-        "-bin" => install_binary("-Dm755", temp_package_file_path, "/usr/bin/cmdcreate"),
+        "-bin" => install_binary(
+            "-Dm755",
+            temp_package_file_path,
+            current_cmdcreate_binary_path,
+        ),
 
         _ => error("Developer error: INVALID METHOD", Some(package_type)),
     }
 
     delete_file(temp_package_file_path);
+
+    if package_type == "-bin"
+        && (current_cmdcreate_binary_path.contains("cmdcreate-dev") || is_development_version())
+        && !ask_for_confirmation(
+            "It looks like you are running a development build. Do you want the binary to be \"cmdcreate-dev\"?",
+            false,
+        )
+    {
+        let new_binary_path = current_cmdcreate_binary_path.replace("/cmdcreate-dev", "/cmdcreate");
+        if !run_shell_command!(bool: "mv {current_cmdcreate_binary_path} {new_binary_path}") {
+            error("Failed to rename binary! Please try again!", None)
+        }
+    }
 
     println!("\n{green}Update complete!");
 
