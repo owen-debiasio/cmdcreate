@@ -169,19 +169,22 @@ mod tests {
 
         let export_file_contents = read_file_to_string(export_file_name);
 
-        let command_one_is_exported_correctly =
-            export_file_contents.contains("export_file_contains_command_with_contents_1 | true");
-        assert!(command_one_is_exported_correctly);
+        for command_i in 1..=3 {
+            let command = &format!("{test_name}_{command_i}");
 
-        let command_two_is_exported_correctly = export_file_contents
-            .contains("export_file_contains_command_with_contents_2 | true | favorite");
-        assert!(command_two_is_exported_correctly);
+            let contents_to_match = if command.ends_with("_2") {
+                &format!("{command} | true | favorite")
+            } else {
+                &format!("{command} | true")
+            };
 
-        let command_three_is_exported_correctly =
-            export_file_contents.contains("export_file_contains_command_with_contents_2 | true");
-        assert!(command_three_is_exported_correctly);
+            let command_is_exported_correctly = export_file_contents.contains(contents_to_match);
+
+            assert!(command_is_exported_correctly);
+        }
 
         TestCommand::remove_group(test_name);
+
         delete_folder(temp_dir_name);
     }
 }
