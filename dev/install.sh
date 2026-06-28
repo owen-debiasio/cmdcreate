@@ -17,13 +17,13 @@
 
 set -euo pipefail
 
-BIN_NAME="cmdcreate-dev"
 BLUE='\033[0;34m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 RED='\033[0;31m'
 RESET='\033[0m'
 
+BIN_NAME="cmdcreate-dev"
 INSTALL_DIR=""
 USE_SUDO=true
 OFFLINE_MODE=false
@@ -44,6 +44,58 @@ is_immutable() {
     fi
 
     return 1
+}
+
+check_conflicting_binaries() {
+    local conflicts=()
+    local target_file="${INSTALL_DIR%/}/$BIN_NAME"
+    local paths=(
+        "$HOME/.local/bin/cmdcreate"
+        "/usr/bin/cmdcreate"
+        "$HOME/.local/bin/cmdcreate-dev"
+        "/usr/bin/cmdcreate-dev"
+    )
+
+    for p in "${paths[@]}"; do
+        if [[ "$p" == "$target_file" ]]; then
+            continue
+        fi
+        if [[ "$INSTALL_DIR" == "/usr/bin/" && "$p" == "$HOME/.local/bin/"* ]]; then
+            continue
+        fi
+        if [[ "$INSTALL_DIR" == "$HOME/.local/bin" && "$p" == /usr/bin/* ]]; then
+            continue
+        fi
+
+        if [[ -f "$p" ]]; then
+            conflicts+=("$p")
+        fi
+    done
+
+    if [[ ${#conflicts[@]} -gt 0 ]]; then
+        echo -e "\n${RED}> Conflict Detected: The following binaries cannot coexist with this installation:${RESET}"
+        for c in "${conflicts[@]}"; do
+            echo -e "  - $c"
+        done
+
+        echo -ne "\n${YELLOW}Would you like to delete these conflicting binaries to proceed? (y/N): ${RESET}"
+        read -r response
+        if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+            for c in "${conflicts[@]}"; do
+                if [[ "$c" == /usr/bin/* ]]; then
+                    echo -e "${BLUE}> Removing system binary (requires sudo):${RESET} $c"
+                    sudo rm -f "$c"
+                else
+                    echo -e "${BLUE}> Removing user binary:${RESET} $c"
+                    rm -f "$c"
+                fi
+            done
+            echo -e "${GREEN}> Conflicts resolved.${RESET}"
+        else
+            echo -e "${RED}Installation aborted due to conflicting binaries.${RESET}"
+            exit 1
+        fi
+    fi
 }
 
 add_to_shell_paths() {
@@ -136,6 +188,8 @@ if is_immutable; then
     INSTALL_DIR="$HOME/.local/bin"
     USE_SUDO=false
 fi
+
+check_conflicting_binaries
 
 if [ "$USE_SUDO" = false ]; then
     mkdir -p "$INSTALL_DIR"
