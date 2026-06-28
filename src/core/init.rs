@@ -24,7 +24,7 @@ use crate::{
         },
     },
     utils::{
-        fs::init::init_filesystem,
+        fs::{init::init_filesystem, paths::CMDCREATE_BINARY_PATH},
         io::error,
         net::{internet_is_forced_disabled, not_connected_to_internet},
         sys::{
@@ -39,6 +39,8 @@ use crate::{
 pub fn debug_intro() -> String {
     let author_name = AUTHOR.name;
     let author_email = AUTHOR.email;
+
+    let binary_path = CMDCREATE_BINARY_PATH.to_string();
 
     let build_status = get_build_status();
 
@@ -71,6 +73,7 @@ Have an issue? Copy the text below
 and open an issue
 ----------------
 Version: {CURRENT_PROJECT_VERSION} {build_status}
+Binary path: {binary_path}
 CPU architecture: {ARCH}
 Distro base: {distro_base:?}
 Distro is immutable: {immutable_distro_status}
