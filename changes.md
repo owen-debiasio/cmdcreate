@@ -977,3 +977,5 @@ Licensed under the GNU General Public License v3.0 or later.
 - If you are using an immutable distro, the following restrictions are applied:
   - No updating
   - No running cmdcreate as root
+- (Almost) all text output is now logged in a log file
+  - Any text displayed that is outputted through `output!()`
