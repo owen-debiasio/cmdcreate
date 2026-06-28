@@ -979,3 +979,4 @@ Licensed under the GNU General Public License v3.0 or later.
   - No running cmdcreate as root
 - (Almost) all text output is now logged in a log file
   - Any text displayed that is outputted through `output!()`
+- Move `./update_tag.sh` to `./dev/update_tag.sh`
