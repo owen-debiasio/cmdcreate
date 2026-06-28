@@ -66,6 +66,7 @@ change.
   - [setup_env.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/dev/setup_env.sh)
   - [test.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/dev/test.sh)
   - [uninstall.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/dev/uninstall.sh)
+  - [update_tag.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/dev/update_tag.sh)
 
 ## Packaging cmdcreate
 
@@ -215,4 +216,3 @@ change.
 - [LICENSE](https://github.com/owen-debiasio/cmdcreate/blob/main/LICENSE)
 - [README.md](https://github.com/owen-debiasio/cmdcreate/blob/main/README.md)
 - [SECURITY.md](https://github.com/owen-debiasio/cmdcreate/blob/main/SECURITY.md)
-- [update_tag.sh](https://github.com/owen-debiasio/cmdcreate/blob/main/update_tag.sh)
