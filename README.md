@@ -79,7 +79,7 @@ You can find `.deb`, `.rpm` and standalone binary packages in the
 > I recommend using the stable branch, but you can choose whatever if needed.
 
 ```bash
-rustup update stable
+rustup default stable
 ```
 
 ##### Add needed target
