@@ -54,6 +54,6 @@ mod test {
 
         TestCommand::remove(test_name);
 
-        assert!(!command_is_in_favorites(test_name))
+        assert!(!command_is_in_favorites(test_name));
     }
 }
