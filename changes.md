@@ -939,6 +939,8 @@ are also plenty of new features, changes and fixes.
 
 ### Added
 
+- Subcommand `list` for command `config`. Lists the available categories and
+  keys/values.
 - New configurations
   - Category: `self`
     - `disable_root_usage`
@@ -958,12 +960,16 @@ are also plenty of new features, changes and fixes.
 
 - Various code optimizations
 - Fixed building from source when running `sudo cmdcreate update`
-- `zig` and `rustup` are no longer handled via the distro's package manager
+- `zig` and `rustup` are no longer handled via the distros package manager
 - Fixed download links for `zig`
 - If you are using an immutable distro, the following restrictions are applied:
   - No updating
   - No running cmdcreate as root
 - (Almost) all text output is now logged in the log file
+- Overhauled how verifying settings works when running `cmdcreate config add` or
+  `cmdcreate config remove`
+- The default shell is now the shell defined through the `$SHELL` environment
+  variable
 
 ### Developers
 
