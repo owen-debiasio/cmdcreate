@@ -15,7 +15,6 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::config::main::AVAILABLE_CATEGORIES,
     core::logger::{consts::Severity, main::log},
     output,
     utils::{
@@ -41,11 +40,6 @@ pub fn remove(category: &str, value: &str) {
         Severity::Normal,
     );
 
-    let category_header = AVAILABLE_CATEGORIES
-        .iter()
-        .find(|&&category_index| category_index.contains(category))
-        .expect("Invalid category");
-
     let mut lines: Vec<String> = config_file_contents
         .lines()
         .map(ToString::to_string)
@@ -54,10 +48,12 @@ pub fn remove(category: &str, value: &str) {
     let mut in_target_section = false;
     let mut removed_index: Option<usize> = None;
 
+    let category_header = format!("[{category}]");
+
     for (line_index, line) in lines.iter().enumerate() {
         let trimmed = line.trim();
 
-        if trimmed == *category_header {
+        if trimmed == category_header {
             in_target_section = true;
             continue;
         }
@@ -84,8 +80,7 @@ pub fn remove(category: &str, value: &str) {
         };
 
         // Remove category if no more settings remain
-        if is_last_item && line_position > 0 && lines[line_position - 1].trim() == *category_header
-        {
+        if is_last_item && line_position > 0 && lines[line_position - 1].trim() == category_header {
             lines.remove(line_position - 1);
 
             if line_position > 1 && lines[line_position - 2].trim().is_empty() {

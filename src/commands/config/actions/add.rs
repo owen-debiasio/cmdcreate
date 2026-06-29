@@ -15,15 +15,11 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    commands::config::main::AVAILABLE_CATEGORIES,
     core::logger::{consts::Severity, main::log},
     output,
-    utils::{
-        fs::{
-            core::read_write::{read_file_to_string, write_to_file},
-            paths::PATHS,
-        },
-        io::error,
+    utils::fs::{
+        core::read_write::{read_file_to_string, write_to_file},
+        paths::PATHS,
     },
 };
 
@@ -54,10 +50,6 @@ pub fn add(category: &str, key: &str, value: &str) {
     let config_path = PATHS.configuration_file;
     let config_file_contents = read_file_to_string(config_path);
 
-    if key == value {
-        error("Please provide a setting.", None)
-    }
-
     let mut lines: Vec<String> = config_file_contents
         .lines()
         .map(ToString::to_string)
@@ -65,19 +57,16 @@ pub fn add(category: &str, key: &str, value: &str) {
 
     let (mut in_target_section, mut replaced) = (false, false);
 
-    let category_header = AVAILABLE_CATEGORIES
-        .iter()
-        .find(|&&category_index| category_index.contains(category))
-        .expect("Invalid category");
-
     let mut section_end_index = lines.len();
 
     let sanitized_value = format!("{key}=\"{value}\"");
 
+    let category_header = format!("[{category}]");
+
     for (line_index, line) in lines.iter_mut().enumerate() {
         let trimmed = line.trim();
 
-        if trimmed == *category_header {
+        if trimmed == category_header {
             in_target_section = true;
             continue;
         }
