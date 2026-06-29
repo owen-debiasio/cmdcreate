@@ -157,12 +157,12 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_empty_os_release_returns_false() {
+    fn empty_os_release_returns_false() {
         assert!(!check_os_release_immutability(""));
     }
 
     #[test]
-    fn test_standard_ubuntu_os_release_returns_false() {
+    fn standard_ubuntu_os_release_returns_false() {
         let ubuntu_mock = r#"
             NAME="Ubuntu"
             VERSION="24.04 LTS (Noble Numbat)"
@@ -174,7 +174,7 @@ mod tests {
     }
 
     #[test]
-    fn test_steamdeck_os_release_returns_true() {
+    fn steamdeck_os_release_returns_true() {
         let steamdeck_mock = r#"
             NAME="SteamOS"
             ID=steamos
@@ -186,7 +186,7 @@ mod tests {
     }
 
     #[test]
-    fn test_fedora_silverblue_os_release_returns_true() {
+    fn fedora_silverblue_os_release_returns_true() {
         let silverblue_mock = r#"
             NAME="Fedora Linux"
             VERSION="40 (Silverblue)"
@@ -197,7 +197,7 @@ mod tests {
     }
 
     #[test]
-    fn test_opensuse_microos_os_release_returns_true() {
+    fn opensuse_microos_os_release_returns_true() {
         let microos_mock = r#"
             NAME="openSUSE MicroOS"
             ID="opensuse-microos"
@@ -207,7 +207,7 @@ mod tests {
     }
 
     #[test]
-    fn test_standard_rw_mounts_returns_false() {
+    fn standard_rw_mounts_returns_false() {
         let rw_mounts_mock = r"
             sysfs /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0
             proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0
@@ -218,7 +218,7 @@ mod tests {
     }
 
     #[test]
-    fn test_readonly_root_mount_returns_true() {
+    fn readonly_root_mount_returns_true() {
         let ro_root_mock = r"
             sysfs /sys sysfs rw,nosuid,nodev,noexec 0 0
             /dev/loop0 / squashfs ro,relatime,errors=continue 0 0
