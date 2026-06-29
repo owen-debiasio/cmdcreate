@@ -16,7 +16,7 @@
 
 use crate::{commands::config::main::AVAILABLE_SETTINGS, utils::io::error};
 
-pub fn verify_setting(mode: &str, category: &str, key: &str, value: &str) {
+pub fn verify_setting(mode: &str, category: &str, key: &str, value: &str) -> bool {
     if category.replace(['[', ']'], "").is_empty() {
         error("Please provide a category.", None)
     } else if !AVAILABLE_SETTINGS
@@ -45,5 +45,17 @@ pub fn verify_setting(mode: &str, category: &str, key: &str, value: &str) {
 
     if value.is_empty() {
         error("Please provide a value.", None)
+    }
+
+    true
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::commands::config::verify::verify_setting;
+
+    #[test]
+    fn correct_setting_formatting_passes() {
+        assert!(verify_setting("add", "[sys]", "shell", "bash"))
     }
 }
