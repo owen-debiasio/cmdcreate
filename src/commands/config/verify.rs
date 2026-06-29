@@ -56,6 +56,6 @@ mod tests {
 
     #[test]
     fn correct_setting_formatting_passes() {
-        assert!(verify_setting("add", "[sys]", "shell", "bash"))
+        assert!(verify_setting("add", "[sys]", "shell", "bash"));
     }
 }
