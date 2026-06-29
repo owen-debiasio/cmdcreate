@@ -37,3 +37,23 @@ pub fn favorite(action: &str, command: &str) {
         _ => error("Invalid option:", Some(action)),
     }
 }
+
+#[cfg(test)]
+mod test {
+    use crate::commands::{
+        core::favorite::main::command_is_in_favorites, tools::tests::TestCommand,
+    };
+
+    #[test]
+    fn function_command_is_in_favorites_returns_correctly() {
+        let test_name = "function_command_is_in_favorites_returns_correctly";
+
+        TestCommand::create(test_name, true);
+
+        assert!(command_is_in_favorites(test_name));
+
+        TestCommand::remove(test_name);
+
+        assert!(!command_is_in_favorites(test_name))
+    }
+}
