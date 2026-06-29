@@ -194,6 +194,7 @@ pub fn parse(supplied_command: &str, supplied_arguments: &[String]) {
                     &add:Add a new configuration+
                     &remove:Remove an existing configuration+
                     &edit:Edit the config file directory+
+                    &list:List the available settings (better used offline)+
                     &display:Display the current configuration file+
                     &<category>:Category of configs to modify+
                     &<key='value'>:Direct config to modify",
