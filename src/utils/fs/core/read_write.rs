@@ -89,7 +89,7 @@ pub fn remove_from_file(path_to_file: &str, contents_to_remove: &str) {
 
     overwrite_file(
         &path,
-        &read_file_to_string(&path).replace(complete_contents_to_remove, ""),
+        &read_file_to_string(&path).replace(complete_contents_to_remove, "\n"),
     );
 }
 
