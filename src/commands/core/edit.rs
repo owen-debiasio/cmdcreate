@@ -17,9 +17,8 @@
 use crate::{
     commands::tools::cmdcreate_command_is_installed,
     core::logger::{consts::Severity, main::log},
-    run_shell_command,
     utils::{
-        fs::paths::PATHS,
+        fs::{core::read_write::edit_file_in_text_editor, paths::PATHS},
         io::error,
         sys::{command::system_command_is_installed, env::ENVIRONMENT_VARIABLES},
     },
@@ -73,5 +72,7 @@ pub fn edit(command_to_edit: &str) {
 
     let command_install_directory = PATHS.command_installation_directory;
 
-    run_shell_command!("{editor_to_use} {command_install_directory}{command_to_edit}");
+    let path_of_command = &format!("{command_install_directory}{command_to_edit}");
+
+    edit_file_in_text_editor(path_of_command);
 }

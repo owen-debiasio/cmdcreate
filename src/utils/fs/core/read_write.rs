@@ -22,10 +22,20 @@ use std::{
 
 use anyhow::Context;
 
-use crate::utils::{
-    fs::paths::{expand_home_dir, path_exists},
-    io::error,
+use crate::{
+    commands::core::edit::get_available_editor,
+    run_shell_command,
+    utils::{
+        fs::paths::{expand_home_dir, path_exists},
+        io::error,
+    },
 };
+
+pub fn edit_file_in_text_editor(path: &str) {
+    let editor = get_available_editor();
+
+    run_shell_command!("{editor} {path}");
+}
 
 pub fn read_file_to_string(path_to_file_to_read: &str) -> String {
     let path = expand_home_dir(path_to_file_to_read);
