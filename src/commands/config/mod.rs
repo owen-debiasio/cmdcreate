@@ -14,6 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-mod config_add;
-mod config_remove;
 pub mod main;
+
+mod actions;
+mod list;
+
+mod verify;
