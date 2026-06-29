@@ -27,13 +27,14 @@ macro_rules! run_shell_command {
         let command = command_string.trim();
 
         if !command.is_empty() {
-            let shell = $crate::core::configs::load::load_configuration("sys", "shell", "sh");
-
             let stdout = if $crate::utils::io::output_is_silent() {
                 Stdio::null()
             } else {
                 Stdio::inherit()
             };
+
+            let shell_var = &$crate::utils::sys::env::ENVIRONMENT_VARIABLES.shell;
+            let shell = $crate::core::configs::load::load_configuration("sys", "shell", shell_var);
 
             let result = Command::new(shell)
                 .arg("-c")

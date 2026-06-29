@@ -934,8 +934,11 @@ Licensed under the GNU General Public License v3.0 or later.
 
 ## v1.4.0
 
-- Deprecation of the `install.sh` install script. It was unmaintained and I'll
-  be honest and say I vibecoded it. It's lowkey for the best
+This is a big one! Although this update is mostly focused on developing, there
+are also plenty of new features, changes and fixes.
+
+### Added
+
 - New configurations
   - Category: `self`
     - `disable_root_usage`
@@ -950,22 +953,41 @@ Licensed under the GNU General Public License v3.0 or later.
       - The version that is downloaded when building cmdcreate from source when
         using `sudo cmdcreate update`
       - `0.16.0` by default **(as of June 27, 2026)**
-- Code optimizations
+
+### Changes/Fixes
+
+- Various code optimizations
+- Fixed building from source when running `sudo cmdcreate update`
+- `zig` and `rustup` are no longer handled via the distro's package manager
+- Fixed download links for `zig`
+- If you are using an immutable distro, the following restrictions are applied:
+  - No updating
+  - No running cmdcreate as root
+- (Almost) all text output is now logged in the log file
+
+### Developers
+
+#### Added
+
+- You can now test features using `cargo test`
+  - Replaces the Python testing suite
+- New developer utility: `./dev/test.sh`
+  - Tests cmdcreate using `cargo test`
+
+#### Removals/Deprecations
+
+- Remove `./dev/clean.sh` as a dev utility. There is virtually nothing to clean,
+  just run `cargo clean` instead.
+- Deprecation of the `install.sh` install script. It was unmaintained and I'll
+  be honest and say I vibecoded it. It's lowkey for the best
 - I am now no longer providing the Python testing utilities. They will be
   replaced by tests you can run using `cargo test`.
-- Removed Python linting and code formatters from dev dependencies.
-  - Such as `black` and `pylint`.
-- New developer utility:
-  - `./dev/test.sh`
-    - Tests cmdcreate using `cargo test`
-- Fixed building from source when running `sudo cmdcreate update`
-  - `zig` and `rustup` are no longer installed via the distro's package manager,
-    and are always installed.
-  - Fixed download links for `zig`
-  - Other misc changes
-- Linting tools are now optional when using `./dev/install.sh`
-- Remove `./dev/clean.sh` as a dev utility
-  - There is virtually nothing to clean, just run `cargo clean` instead.
+- Removed Python linting and code formatters from dev dependencies such as
+  `black` and `pylint`.
+
+#### Changes/Fixes
+
+- Linting tools are now optional when using `./dev/format.sh`
 - Overhauls to `./dev/install.sh` and `./dev/uninstall.sh`
   - You must now specify if you want to install via these methods:
     - User
@@ -974,9 +996,5 @@ Licensed under the GNU General Public License v3.0 or later.
     - System
       - Pass `-s`/`--system`
       - Can use on any mutable distro
-- If you are using an immutable distro, the following restrictions are applied:
-  - No updating
-  - No running cmdcreate as root
-- (Almost) all text output is now logged in a log file
-  - Any text displayed that is outputted through `output!()`
+  - Only one installation of cmdcreate is allowed.
 - Move `./update_tag.sh` to `./dev/update_tag.sh`
