@@ -32,9 +32,15 @@ change.
 
 - 📁 [.idea](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea)
   - 📁
+    [codeStyles](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/codeStyles)
+    - [codeStyleConfig](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/codeStyles/codeStyleConfig)
+    - [Project.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/codeStyles/Project.xml)
+  - 📁
     [runConfigurations](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/runConfigurations)
     - [Test.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/runConfigurations/Test.xml)
   - [.gitignore](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/.gitignore)
+  - [cmdcreate.iml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/cmdcreate.iml)
+  - [modules.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/modules.xml)
   - [vcs.xml](https://github.com/owen-debiasio/cmdcreate/blob/main/.idea/vcs.xml)
 
 ## VSCode files
