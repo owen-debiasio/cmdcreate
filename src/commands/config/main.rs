@@ -16,44 +16,28 @@
 
 use crate::{
     commands::{
-        config::{config_add::add, config_remove::remove},
-        core::edit::get_available_editor,
+        config::{
+            actions::{add::add, remove::remove},
+            list::list,
+            verify::verify_setting,
+        },
         doc::{doc, view_documentation_file},
     },
-    run_shell_command,
     utils::{
-        fs::{misc::use_pager_on_file, paths::PATHS},
+        fs::{core::read_write::edit_file_in_text_editor, misc::use_pager_on_file, paths::PATHS},
         io::{ask_for_confirmation, error},
         sys::env::running_as_root,
     },
 };
 
-pub static AVAILABLE_CATEGORIES: &[&str] = &[
-    "[self]",
-    "[appearance]",
-    "[logs]",
-    "[sys]",
-    "[internet]",
-    "[update]",
+pub static AVAILABLE_SETTINGS: &[&str] = &[
+    "[self]:disable_root_usage",
+    "[sys]:shell",
+    "[logs]:time_format,verbose",
+    "[appearance]:favorite_indicator,disable_color",
+    "[internet]:force_disable,sample_dns",
+    "[update]:zig_version",
 ];
-pub static AVAILABLE_VALUES: &[&str] = &[
-    "shell",
-    "time_format",
-    "verbose",
-    "favorite_indicator",
-    "disable_color",
-    "force_disable",
-    "sample_dns",
-    "disable_root_usage",
-    "zig_version",
-];
-
-fn edit_config_file() {
-    let editor = get_available_editor();
-    let config_file = PATHS.configuration_file;
-
-    run_shell_command!("{editor} {config_file}");
-}
 
 /// How the different values are organized:
 /// `mode`: add, remove, etc.
@@ -66,9 +50,9 @@ pub fn config(mode: &str, category: &str, key_with_value: &str) {
         "help" => doc("configurations"),
         "example" => view_documentation_file("docs/resources/config_example.toml"),
 
-        "edit" => edit_config_file(),
+        "edit" => edit_file_in_text_editor(PATHS.configuration_file),
         "display" => use_pager_on_file(PATHS.configuration_file),
-
+        "list" => list(),
         _ => error("Invalid action:", Some(mode)),
     }
 }
@@ -84,7 +68,8 @@ fn init_config_changes(mode: &str, category: &str, key_with_value: &str) {
         if running_as_root() {
             if mode == "add" {
                 ask_for_confirmation(
-                    "Are you sure that you want to enable this setting? You may not be able to revert this.",
+                    "Are you sure that you want to enable this setting? \
+                    You may not be able to revert this.",
                     true,
                 );
             }
@@ -104,17 +89,7 @@ fn init_config_changes(mode: &str, category: &str, key_with_value: &str) {
         }
     }
 
-    if category.is_empty() {
-        error("Please provide a category.", None)
-    } else if !AVAILABLE_CATEGORIES.contains(&category_header.as_str()) {
-        error("Not a valid category:", Some(category));
-    }
-
-    if key_with_value.is_empty() {
-        error("Please provide a value.", None)
-    } else if !AVAILABLE_VALUES.contains(&key) {
-        error("Not a valid value:", Some(key));
-    }
+    verify_setting(mode, &category_header, key, value);
 
     if mode == "add" {
         add(category, key, value);
