@@ -85,3 +85,24 @@ fn command_favorite_addition_check(command: &str) {
         Severity::Normal,
     );
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        commands::tools::tests::TestCommand,
+        utils::fs::{core::read_write::read_file_to_string, paths::PATHS},
+    };
+
+    #[test]
+    fn command_name_is_written_to_favorites_file() {
+        let test_name = "command_name_is_written_to_favorites_file";
+
+        TestCommand::create(test_name, true);
+
+        let favorites_file_contents = read_file_to_string(&PATHS.favorites);
+
+        assert!(favorites_file_contents.contains(test_name));
+
+        TestCommand::remove(test_name);
+    }
+}
