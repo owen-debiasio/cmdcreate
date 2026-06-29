@@ -393,14 +393,14 @@ Command "cba" added to favorites. # (Shows if command was exported as favorite)
 ##### Successful addition
 
 ```bash
-$ sudo cmdcreate config add sys shell="zsh"
+$ cmdcreate config add sys shell="zsh"
 Successfully updated config: shell set to "zsh".
 ```
 
 ##### Successful removal
 
 ```bash
-$ sudo cmdcreate config remove sys shell
+$ cmdcreate config remove sys shell
 Successfully removed config: shell from sys.
 ```
 
@@ -413,7 +413,7 @@ Successfully removed config: shell from sys.
 ###### Invalid format
 
 ```bash
-$ sudo cmdcreate config add sys shell
+$ cmdcreate config add sys shell
 Error: Invalid format! Use key=value
 Example: cmdcreate config add sys shell="bash"
 ```
@@ -421,39 +421,48 @@ Example: cmdcreate config add sys shell="bash"
 ###### Key not found
 
 ```bash
-$ sudo cmdcreate config remove sys fake_key
+$ cmdcreate config remove sys fake_key
 Error: Config key 'fake_key' not found in category 'sys'.
 ```
 
 ###### Edit config
 
 ```bash
-$ sudo cmdcreate config edit
+$ cmdcreate config edit
 # The file `/etc/cmdcreate.toml` will open in a text editor
 ```
 
 ###### Display config
 
 ```bash
-$ sudo cmdcreate config display
+$ cmdcreate config display
 # The file `/etc/cmdcreate.toml` will be opened in a pager
 ```
 
 ###### Example
 
 ```bash
-$ sudo cmdcreate config example
+$ cmdcreate config example
 # An example config will be opened in a pager
 ```
 
 ###### Help
 
 > [!NOTE]  
-> You could also run: `sudo cmdcreate doc configurations`
+> You could also run: `cmdcreate doc configurations`
 
 ```bash
-$ sudo cmdcreate config help
+$ cmdcreate config help
 # Documentation for configurations will be opened in a pager
+```
+
+###### List
+
+```bash
+$ cmdcreate config list
+> Available settings:
+
+...
 ```
 
 ## Doc
@@ -472,14 +481,14 @@ $ sudo cmdcreate config help
 > The resource `about` is being used in this example
 
 ```bash
-$ sudo cmdcreate doc about
+$ cmdcreate doc about
 # Documentation for your information your request will be opened in a pager
 ```
 
 ##### List available information to view
 
 ```bash
-$ sudo cmdcreate doc list
+$ cmdcreate doc list
 > Available options:
 ----Main Repository Information----
 main              The main README file.
