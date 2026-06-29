@@ -71,3 +71,23 @@ fn command_favorite_removed_check(command: &str) {
         Severity::Normal,
     );
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{
+        commands::tools::tests::TestCommand,
+        utils::fs::{core::read_write::read_file_to_string, paths::PATHS},
+    };
+
+    #[test]
+    fn command_name_is_removed_from_favorites_file() {
+        let test_name = "command_name_is_removed_from_favorites_file";
+
+        TestCommand::create(test_name, true);
+        TestCommand::remove(test_name);
+
+        let favorites_file_contents = read_file_to_string(&PATHS.favorites);
+
+        assert!(!favorites_file_contents.contains(test_name));
+    }
+}
