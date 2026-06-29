@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 pub fn system_command_is_installed(command_to_check: &str) -> bool {
-    crate::run_shell_command!(bool: "which {command_to_check} > /dev/null")
+    crate::run_shell_command!(bool: "which {command_to_check} > /dev/null 2>&1")
 }
 
 #[macro_export]
