@@ -66,6 +66,6 @@ I have a couple other things to say that don't quite fit anywhere else...
 If you have any issues for whatever reason about cmdcreate, you could either:
 
 - Open an issue or PR
-- Email me at: <owen.debiasio@proton.me>
+- Email me at: <owen.debiasio@gmail.com>
 
 If what you have to say isn't about cmdcreate, I'll probably ignore it.
