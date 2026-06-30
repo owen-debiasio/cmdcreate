@@ -159,7 +159,7 @@ fn clean_from_failure(command_name: &str) {
 #[cfg(test)]
 mod tests {
     use crate::{
-        commands::tools::tests::{SAMPLE_COMMAND_CONTENTS, TestCommand},
+        commands::tools::testing_tools::{SAMPLE_COMMAND_CONTENTS, TestCommand},
         run_shell_command,
         utils::fs::{init::add_home_install_directory_to_path, paths::path_exists},
     };

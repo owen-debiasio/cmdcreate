@@ -104,7 +104,7 @@ pub fn get_installed_commands() -> Vec<String> {
 }
 
 #[cfg(test)]
-pub mod tests {
+pub mod testing_tools {
     use crate::{
         commands::core::{
             create::{NEW_COMMAND_HEADER, create},

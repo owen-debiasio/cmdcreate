@@ -41,7 +41,7 @@ pub fn favorite(action: &str, command: &str) {
 #[cfg(test)]
 mod test {
     use crate::commands::{
-        core::favorite::main::command_is_in_favorites, tools::tests::TestCommand,
+        core::favorite::main::command_is_in_favorites, tools::testing_tools::TestCommand,
     };
 
     #[test]

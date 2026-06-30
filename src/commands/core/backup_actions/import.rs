@@ -81,7 +81,7 @@ mod tests {
     use crate::{
         commands::{
             core::backup_actions::{export::export, import::import},
-            tools::{cmdcreate_command_is_installed, tests::TestCommand},
+            tools::{cmdcreate_command_is_installed, testing_tools::TestCommand},
         },
         run_shell_command,
         utils::fs::core::creation::{create_folder, delete_folder},

@@ -163,7 +163,7 @@ fn command_rename_success(
 #[cfg(test)]
 mod tests {
     use crate::{
-        commands::{core::rename::rename, tools::tests::TestCommand},
+        commands::{core::rename::rename, tools::testing_tools::TestCommand},
         run_shell_command,
         utils::fs::paths::path_exists,
     };

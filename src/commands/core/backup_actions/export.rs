@@ -121,7 +121,7 @@ pub fn export(path: &str) {
 #[cfg(test)]
 mod tests {
     use crate::{
-        commands::{core::backup_actions::export::export, tools::tests::TestCommand},
+        commands::{core::backup_actions::export::export, tools::testing_tools::TestCommand},
         utils::fs::{
             core::{
                 creation::{create_folder, delete_folder},

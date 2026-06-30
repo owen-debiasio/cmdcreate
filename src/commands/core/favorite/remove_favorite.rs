@@ -75,7 +75,7 @@ fn command_favorite_removed_check(command: &str) {
 #[cfg(test)]
 mod tests {
     use crate::{
-        commands::tools::tests::TestCommand,
+        commands::tools::testing_tools::TestCommand,
         utils::fs::{core::read_write::read_file_to_string, paths::PATHS},
     };
 
