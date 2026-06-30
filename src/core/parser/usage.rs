@@ -19,7 +19,6 @@ use crate::{
         logger::{consts::Severity, main::log},
         meta::{project::project_information::PROJECT, version::consts::CURRENT_PROJECT_VERSION},
     },
-    output,
     utils::colors::COLORS,
 };
 use std::process::exit;
@@ -34,8 +33,10 @@ pub fn cmdcreate_usage() {
 
     let project_name = PROJECT.name;
 
-    output!(
-        "
+    // In order to prevent this entire text from being logged,
+    // pass it through `println!` instead of `output!`
+    println!(
+        "\
 {project_name} {reset}{CURRENT_PROJECT_VERSION}
 Usage: {blue}{project_name} {cyan}<flag(s)>{reset} [{blue}command{reset}, {yellow}argument(s){reset}]
 
@@ -69,8 +70,7 @@ Flags:
   {cyan}-b{reset}, {cyan}--bypass-root{reset}   Bypass root requirement {yellow}(USE WITH CAUTION){reset}
 
 About:
-   {project_name}: Easily create and manage your own custom commands.",
-   false
+   {project_name}: Easily create and manage your own custom commands."
     );
 
     exit(1)
