@@ -1010,3 +1010,4 @@ are also plenty of new features, changes and fixes.
 - cmdcreate now launches faster
 - The main usage paragraph is no longer logged (the text you see without running
   commands or passing flags)
+- Change non-root license path to `~/.local/share/doc/cmdcreate/LICENSE`
