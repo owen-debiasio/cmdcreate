@@ -28,7 +28,7 @@ use crate::{
         sys::{
             command::system_command_is_installed,
             cpu::ARCH,
-            distro::{DistroBase, get_distro_base},
+            distro::get_distro_base,
             env::ENVIRONMENT_VARIABLES,
         },
     },
@@ -74,21 +74,21 @@ pub fn install_dependencies() {
     );
 
     let dependency_install_command = match get_distro_base() {
-        DistroBase::Arch => format!(
+        "Arch" => format!(
             "pacman -Sy && pacman -S --needed --noconfirm \
               {dependencies}",
         ),
-        DistroBase::Debian => format!(
+        "Debian" => format!(
             "apt update && \
               apt install -y \
            {dependencies}",
         ),
-        DistroBase::Fedora => format!(
+        "Fedora" => format!(
             "dnf update && \
            dnf install -y \
               {dependencies}",
         ),
-        DistroBase::Unknown => error("Your distro is unsupported! Unable to proceed.", None),
+        _ => error("Your distro is unsupported! Unable to proceed.", None),
     };
 
     output!("Installing dependencies...", true);
