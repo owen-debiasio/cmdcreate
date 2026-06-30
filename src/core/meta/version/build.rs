@@ -16,11 +16,19 @@
 
 use crate::{
     core::meta::version::consts::CURRENT_PROJECT_VERSION,
-    utils::{git::get_latest_tag, net::not_connected_to_internet},
+    utils::{
+        fs::paths::CMDCREATE_BINARY_PATH, git::get_latest_tag, net::not_connected_to_internet,
+    },
 };
 use std::cmp::Ordering;
 
 pub fn is_development_version() -> bool {
+    if CMDCREATE_BINARY_PATH.ends_with("/cmdcreate-dev") {
+        return true;
+    } else if CMDCREATE_BINARY_PATH.ends_with("/cmdcreate") {
+        return false;
+    }
+
     let parse_version = |parsed_version_digits: &str| -> (u32, u32, u32) {
         // 'v' always comes before the version
         // '.' separates the version values
