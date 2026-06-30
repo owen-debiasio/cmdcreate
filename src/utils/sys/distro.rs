@@ -34,11 +34,23 @@ pub fn get_distro_base() -> &'static str {
 
     let distro_base = &format!("{distro_id} {distro_id_alt}");
 
-    if matches!(distro_base.as_str(), "arch" | "manjaro" | "endeavouros") {
+    if distro_base.contains("arch")
+        || distro_base.contains("manjaro")
+        || distro_base.contains("endeavouros")
+    {
         "Arch"
-    } else if matches!(distro_base.as_str(), "fedora" | "rhel" | "centos" | "amzn") {
+    } else if distro_base.contains("fedora")
+        || distro_base.contains("rhel")
+        || distro_base.contains("centos")
+        || distro_base.contains("amzn")
+    {
         "Fedora"
-    } else if matches!(distro_base.as_str(), "debian" | "ubuntu" | "linuxmint" | "kali" | "pop") {
+    } else if distro_base.contains("debian")
+        || distro_base.contains("ubuntu")
+        || distro_base.contains("linuxmint")
+        || distro_base.contains("kali")
+        || distro_base.contains("pop")
+    {
         "Debian"
     } else {
         "Unknown"
