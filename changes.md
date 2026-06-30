@@ -1011,3 +1011,5 @@ are also plenty of new features, changes and fixes.
 - The main usage paragraph is no longer logged (the text you see without running
   commands or passing flags)
 - Change non-root license path to `~/.local/share/doc/cmdcreate/LICENSE`
+- Remove flags `-b`/`--bypass-root`: No longer needed due to the ability to use
+  cmdcreate unelevated
