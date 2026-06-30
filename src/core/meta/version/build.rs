@@ -23,7 +23,8 @@ use crate::{
 use std::cmp::Ordering;
 
 pub fn is_development_version() -> bool {
-    if CMDCREATE_BINARY_PATH.ends_with("/cmdcreate-dev") {
+    if CMDCREATE_BINARY_PATH.ends_with("/cmdcreate-dev") || CMDCREATE_BINARY_PATH.contains("target")
+    {
         return true;
     } else if CMDCREATE_BINARY_PATH.ends_with("/cmdcreate") {
         return false;
