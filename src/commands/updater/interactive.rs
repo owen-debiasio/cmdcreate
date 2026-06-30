@@ -25,24 +25,19 @@ use crate::{
         io::error,
         sys::{
             cpu::arch_is_supported,
-            distro::{DistroBase, get_distro_base},
+            distro::get_distro_base,
         },
     },
 };
 
 pub fn interactive_upgrade() {
-    let (blue, green, red, reset) = (COLORS.blue, COLORS.green, COLORS.red, COLORS.reset);
+    let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
 
-    let latest_commit = get_latest_commit();
+    output!("\nSelect an available upgrade method:\n", true);
 
-    let installed_distro = get_distro_base();
+    let mut chosen_update_method = Vec::new();
+
     let cpu_arch_is_supported = arch_is_supported();
-
-    let debian_build_warning = if installed_distro == DistroBase::Debian {
-        format!(", {red}MAY INVOLVE MANUAL INTERVENTION{blue}")
-    } else {
-        String::new()
-    };
 
     let compatibility_notice = if cpu_arch_is_supported {
         ""
@@ -50,11 +45,9 @@ pub fn interactive_upgrade() {
         ", universal compatibility"
     };
 
-    output!("\nSelect an available upgrade method:\n", true);
+    let installed_distro = get_distro_base();
 
-    let mut chosen_update_method = Vec::new();
-
-    if installed_distro == DistroBase::Arch {
+    if installed_distro == "Arch" {
         chosen_update_method.push((
             "aur",
             format!(
@@ -65,15 +58,17 @@ pub fn interactive_upgrade() {
         ));
     }
 
-    if installed_distro == DistroBase::Debian && cpu_arch_is_supported {
-        chosen_update_method.push(("deb", "Install via .deb file".to_string()));
-    }
-    if installed_distro == DistroBase::Fedora && cpu_arch_is_supported {
-        chosen_update_method.push(("rpm", "Install via .rpm file".to_string()));
-    }
     if cpu_arch_is_supported {
+        match installed_distro {
+            "Debian" => chosen_update_method.push(("deb", "Install via .deb file".to_string())),
+            "Fedora" => chosen_update_method.push(("rpm", "Install via .rpm file".to_string())),
+            _ => ()
+        }
+        
         chosen_update_method.push(("bin", "Install via raw binary".to_string()));
     }
+
+    let latest_commit = get_latest_commit();
 
     chosen_update_method.push((
         "src",
@@ -81,8 +76,7 @@ pub fn interactive_upgrade() {
             "\
             Build from source{blue} \
             (latest git {green}(commit: {latest_commit}){blue}\
-            {compatibility_notice}\
-            {debian_build_warning}){reset}",
+            {compatibility_notice}){reset}",
         ),
     ));
 
