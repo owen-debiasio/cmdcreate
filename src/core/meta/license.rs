@@ -30,7 +30,7 @@ use crate::{
         io::{ask_for_confirmation, error},
         net::not_connected_to_internet,
         sys::{
-            distro::{DistroBase, get_distro_base},
+            distro::get_distro_base,
             env::running_as_root,
         },
     },
@@ -44,10 +44,10 @@ pub fn get_license_location() -> &'static str {
     }
 
     match get_distro_base() {
-        DistroBase::Debian => "/usr/share/doc/cmdcreate/copyright/LICENSE",
-        DistroBase::Arch => "/usr/share/licenses/cmdcreate/LICENSE",
-        DistroBase::Fedora => "/usr/share/doc/cmdcreate/LICENSE",
-        DistroBase::Unknown => "/usr/local/share/doc/cmdcreate/LICENSE",
+        "Debian" => "/usr/share/doc/cmdcreate/copyright/LICENSE",
+        "Arch" => "/usr/share/licenses/cmdcreate/LICENSE",
+        "Fedora" => "/usr/share/doc/cmdcreate/LICENSE",
+        _ => "/usr/local/share/doc/cmdcreate/LICENSE",
     }
 }
 
