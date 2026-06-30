@@ -1027,6 +1027,8 @@ are also plenty of new features, changes and fixes.
 
 - cmdcreate now launches faster due to logic enhances in the detection of the
   build status.
+- Flags `-s`/`--silent` didn't do anything due to intentional differences in
+  macros I forgot about
 
 ### Developers
 
