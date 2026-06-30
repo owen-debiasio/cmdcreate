@@ -20,7 +20,7 @@ use crate::{
     utils::{
         fs::core::creation::delete_folder,
         io::{ask_for_confirmation, error},
-        sys::distro::{DistroBase, get_distro_base},
+        sys::distro::get_distro_base,
     },
 };
 
@@ -34,10 +34,10 @@ pub fn cleanup() {
     let dependencies = DEPENDENCIES_TO_INSTALL.to_string();
 
     let dependency_removal_command = match get_distro_base() {
-        DistroBase::Arch => format!("pacman -Rns --noconfirm {dependencies}"),
-        DistroBase::Debian => format!("apt remove -y {dependencies}"),
-        DistroBase::Fedora => format!("dnf remove -y {dependencies}"),
-        DistroBase::Unknown => error("Your distro is unsupported! Unable to proceed.", None),
+        "Arch" => format!("pacman -Rns --noconfirm {dependencies}"),
+        "Debian" => format!("apt remove -y {dependencies}"),
+        "Fedora" => format!("dnf remove -y {dependencies}"),
+        _ => error("Your distro is unsupported! Unable to proceed.", None),
     };
 
     if !dependencies.is_empty() {
