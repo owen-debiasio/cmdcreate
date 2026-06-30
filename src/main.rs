@@ -36,15 +36,7 @@ fn main() {
     arguments_retrieved.retain(|argument| {
         !matches!(
             argument.as_str(),
-            "-V" | "--verbose"
-                | "-o"
-                | "--offline"
-                | "-m"
-                | "--monochrome"
-                | "-b"
-                | "--bypass-root"
-                | "-s"
-                | "--silent"
+            "-V" | "--verbose" | "-o" | "--offline" | "-m" | "--monochrome" | "-s" | "--silent"
         )
     });
 

@@ -16,10 +16,7 @@
 
 use crate::{
     core::logger::{consts::Severity, main::log},
-    utils::{
-        io::{ask_for_confirmation, error},
-        sys::arguments::args_contains,
-    },
+    utils::io::error,
 };
 use rustix::process::geteuid;
 use std::{env::var, sync::LazyLock};
@@ -28,13 +25,7 @@ pub fn running_as_root() -> bool {
     geteuid().as_raw() == 0
 }
 
-pub fn root_requirement_is_bypassed() -> bool {
-    // Either of these flags allow root bypass
-    args_contains("-b") || args_contains("--bypass-root")
-}
-
 pub fn root_check() {
-    let user_bypasses_root = root_requirement_is_bypassed();
     let user_is_running_as_root = running_as_root();
 
     log(
@@ -43,27 +34,13 @@ pub fn root_check() {
         Severity::Normal,
     );
 
-    if !user_is_running_as_root && !user_bypasses_root {
+    if !user_is_running_as_root {
         error(
             "\
         To execute this action, \
         please run cmdcreate as root.",
             None,
         )
-    }
-
-    if user_bypasses_root && !user_is_running_as_root {
-        log(
-            "utils::sys::env::root_check(): \
-            Root is being bypassed...",
-            Severity::Warn,
-        );
-
-        ask_for_confirmation(
-            "Root requirement is bypassed, which means instability \
-            and incompatibility will occur. Proceed?",
-            true,
-        );
     }
 }
 

@@ -67,7 +67,6 @@ Flags:
   {cyan}-V{reset}, {cyan}--verbose    {reset}   Print logs to output
   {cyan}-s{reset}, {cyan}--silent     {reset}   Suppress any non-error output
   {cyan}-f{reset}, {cyan}--force      {reset}   Force commands to be ran
-  {cyan}-b{reset}, {cyan}--bypass-root{reset}   Bypass root requirement {yellow}(USE WITH CAUTION){reset}
 
 About:
    {project_name}: Easily create and manage your own custom commands."
