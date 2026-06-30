@@ -1012,13 +1012,24 @@ are also plenty of new features, changes and fixes.
 - The main usage paragraph is no longer logged (the text you see without running
   commands or passing flags)
 - Change non-root license path to `~/.local/share/doc/cmdcreate/LICENSE`
+- Overhauled distro detection, made more efficient and less confusing
 
 ### Removed
 
 - Remove flags `-b`/`--bypass-root`: No longer needed due to the ability to use
   cmdcreate unelevated
+- Information for installation method in verbose intro
+- Build warning when building from source on Debian systems using
+  `cmdcreate update`
+- Claim for universal compatibility when using `cmdcreate update`
 
 ### Fixed
 
 - cmdcreate now launches faster due to logic enhances in the detection of the
   build status.
+
+### Developers
+
+#### Removed
+
+- Remove test `distro_detection_returns_known_or_unknown`: No longer applicable
