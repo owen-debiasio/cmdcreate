@@ -31,7 +31,7 @@ use crate::{
 };
 
 pub fn interactive_upgrade() {
-    let (blue, green, reset) = (COLORS.blue, COLORS.green, COLORS.reset);
+    let (blue, reset) = (COLORS.blue, COLORS.reset);
 
     output!("\nSelect an available upgrade method:\n", true);
 
@@ -39,48 +39,45 @@ pub fn interactive_upgrade() {
 
     let cpu_arch_is_supported = arch_is_supported();
 
-    let compatibility_notice = if cpu_arch_is_supported {
-        ""
-    } else {
-        ", universal compatibility"
-    };
-
     let installed_distro = get_distro_base();
 
     if installed_distro == "Arch" {
         chosen_update_method.push((
             "aur",
-            format!(
-                "\
-            Update via AUR{blue} \
-            {compatibility_notice}",
-            ),
+            "Update via AUR",
         ));
     }
 
     if cpu_arch_is_supported {
         match installed_distro {
-            "Debian" => chosen_update_method.push(("deb", "Install via .deb file".to_string())),
-            "Fedora" => chosen_update_method.push(("rpm", "Install via .rpm file".to_string())),
+            "Debian" => chosen_update_method.push((
+                "deb",
+                "Update via .deb file"
+            )),
+            "Fedora" => chosen_update_method.push((
+                "rpm",
+                "Update via .rpm file"
+            )),
             _ => ()
         }
         
-        chosen_update_method.push(("bin", "Install via raw binary".to_string()));
+        chosen_update_method.push((
+            "bin",
+            "Update via raw binary"
+        ));
     }
 
     let latest_commit = get_latest_commit();
 
+    // I have to make this variable separate because Clippy yells at you otherwise
+    let build_from_source_message = &format!("Build from source (commit: {latest_commit})");
+    
     chosen_update_method.push((
         "src",
-        format!(
-            "\
-            Build from source{blue} \
-            (latest git {green}(commit: {latest_commit}){blue}\
-            {compatibility_notice}){reset}",
-        ),
+        build_from_source_message,
     ));
 
-    chosen_update_method.push(("exit", "Exit".to_string()));
+    chosen_update_method.push(("exit", "Exit"));
 
     for (update_option_index, (_, update_option)) in chosen_update_method.iter().enumerate() {
         println!("{blue}{}]{reset} {update_option}", update_option_index + 1);
