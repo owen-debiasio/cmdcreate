@@ -1004,3 +1004,9 @@ are also plenty of new features, changes and fixes.
       - Can use on any mutable distro
   - Only one installation of cmdcreate is allowed.
 - Move `./update_tag.sh` to `./dev/update_tag.sh`
+
+## v1.4.1
+
+- cmdcreate now launches faster
+- The main usage paragraph is no longer logged (the text you see without running
+  commands or passing flags)
