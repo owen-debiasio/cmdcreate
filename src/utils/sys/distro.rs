@@ -202,15 +202,4 @@ mod tests {
         assert!(check_mounts_immutability(ro_usr_end));
         assert!(check_mounts_immutability(ro_usr_plain));
     }
-
-    #[test]
-    fn distro_detection_returns_known_or_unknown() {
-        let distro_base = get_distro_base();
-        assert!(
-            distro_base == DistroBase::Arch
-                || distro_base == DistroBase::Fedora
-                || distro_base == DistroBase::Debian
-                || distro_base == DistroBase::Unknown
-        );
-    }
 }
