@@ -18,18 +18,12 @@ use crate::{
     commands::updater::{
         interactive::interactive_upgrade,
         update_methods::{aur::update_via_aur, package::update_via_package},
-    },
-    core::{
+    }, core::{
         logger::{consts::Severity, main::log},
         meta::project::project_information::PROJECT,
-    },
-    utils::{
-        colors::COLORS,
-        io::{ask_for_confirmation, error, output_is_silent},
-        net::not_connected_to_internet,
-        sys::{
-            cpu::arch_is_supported,
-            distro::{InstallMethod, installation_method, is_immutable_distro},
+    }, utils::{
+        colors::COLORS, io::{ask_for_confirmation, error, output_is_silent}, net::not_connected_to_internet, sys::{
+            cpu::arch_is_supported, distro::{get_distro_base, is_immutable_distro},
         },
     },
 };
@@ -76,8 +70,8 @@ pub fn update() {
         interactive_upgrade();
     }
 
-    match installation_method() {
-        InstallMethod::Aur => {
+    match get_distro_base() {
+        "Arch" => {
             let aur_install_confirmation = &format!(
                 "\n{blue}Arch Linux{reset}-based system detected. \
                 Do you want to update via the AUR?"
@@ -88,7 +82,7 @@ pub fn update() {
             }
         }
 
-        InstallMethod::Dpkg => {
+        "Debian" => {
             let deb_install_confirmation = &format!(
                 "\n{red}Debian{reset}/{red}Ubuntu{reset}-based system detected. \
                 Would you like to install via a {blue}.deb{reset} file?"
@@ -99,7 +93,7 @@ pub fn update() {
             }
         }
 
-        InstallMethod::Rpm => {
+        "Fedora" => {
             let rpm_install_confirmation = &format!(
                 "\n{blue}Fedora{reset}-based system detected. \
                 Would you like to install via a {blue}.rpm{reset} file?"
@@ -110,7 +104,7 @@ pub fn update() {
             }
         }
 
-        InstallMethod::Other => (),
+        _ => (),
     }
 
     interactive_upgrade();
