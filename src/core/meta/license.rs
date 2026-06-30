@@ -29,14 +29,20 @@ use crate::{
         },
         io::{ask_for_confirmation, error},
         net::not_connected_to_internet,
-        sys::distro::{DistroBase, get_distro_base},
+        sys::{
+            distro::{DistroBase, get_distro_base},
+            env::running_as_root,
+        },
     },
 };
 
 use std::process::exit;
 
-/// These paths are for a standard non-immutable distro with root access
-pub fn get_normal_license_paths() -> &'static str {
+pub fn get_license_location() -> &'static str {
+    if !running_as_root() {
+        return "~/.local/share/doc/cmdcreate/LICENSE";
+    }
+
     match get_distro_base() {
         DistroBase::Debian => "/usr/share/doc/cmdcreate/copyright/LICENSE",
         DistroBase::Arch => "/usr/share/licenses/cmdcreate/LICENSE",

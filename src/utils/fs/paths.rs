@@ -15,7 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 use crate::{
-    core::meta::license::get_normal_license_paths,
+    core::meta::license::get_license_location,
     utils::sys::env::{ENVIRONMENT_VARIABLES, running_as_root},
 };
 use std::{env::current_exe, path::Path, sync::LazyLock};
@@ -55,7 +55,7 @@ pub struct Paths {
     pub configuration_file: &'static str,
     pub favorites: String,
     pub command_installation_directory: &'static str,
-    pub license: String,
+    pub license: &'static str,
     pub log_directory: &'static str,
 }
 
@@ -71,11 +71,7 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     } else {
         "~/.local/bin/cmdcreate/"
     },
-    license: if running_as_root() {
-        get_normal_license_paths().to_string()
-    } else {
-        format!("{}/LICENSE", &MAIN_PATH.to_string())
-    },
+    license: get_license_location(),
     log_directory: "/tmp/cmdcreate-logs/",
 });
 
