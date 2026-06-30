@@ -19,12 +19,21 @@ use crate::{
         logger::{consts::Severity, main::log},
         meta::{project::project_information::PROJECT, version::consts::CURRENT_PROJECT_VERSION},
     },
-    utils::colors::COLORS,
+    utils::{colors::COLORS, io::output_is_silent},
 };
 use std::process::exit;
 
 pub fn cmdcreate_usage() {
     let (blue, cyan, yellow, reset) = (COLORS.blue, COLORS.cyan, COLORS.yellow, COLORS.reset);
+
+    if output_is_silent() {
+        log(
+            "core::parser::usage::cmdcreate_usage(): Output is silent, not displaying usage...",
+            Severity::Normal,
+        );
+
+        exit(1)
+    }
 
     log(
         "core::parser::usage::cmdcreate_usage(): Displaying usage information...",

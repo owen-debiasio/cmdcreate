@@ -16,7 +16,7 @@
 
 use crate::{
     core::configs::load::load_configuration,
-    utils::{colors::COLORS, sys::arguments::args_contains},
+    utils::{colors::COLORS, io::output_is_silent, sys::arguments::args_contains},
 };
 
 pub fn is_verbose_enabled() -> bool {
@@ -30,8 +30,8 @@ pub fn is_verbose_enabled() -> bool {
 }
 
 pub fn output_verbose_message(text_to_print: &str) {
-    if is_verbose_enabled() {
-        // Using print! because your text_to_log already ends with \n
+    if is_verbose_enabled() && !output_is_silent() {
+        // Using print! because text_to_log already ends with \n
         print!("{text_to_print}{}", COLORS.reset);
     }
 }

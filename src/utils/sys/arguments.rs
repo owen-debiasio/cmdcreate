@@ -28,7 +28,7 @@ pub fn return_args() -> Vec<String> {
     for supplied_argument in args().skip(1) {
         if supplied_argument.starts_with("--") {
             supplied_argument_vector.push(supplied_argument);
-        } else if supplied_argument.starts_with('-') && supplied_argument.len() > 2 {
+        } else if supplied_argument.starts_with('-') && supplied_argument != "-" {
             for character in supplied_argument.chars().skip(1) {
                 supplied_argument_vector.push(format!("-{character}"));
             }

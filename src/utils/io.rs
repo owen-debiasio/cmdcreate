@@ -68,6 +68,10 @@ macro_rules! output {
 
         $crate::core::logger::main::log(text, $crate::core::logger::consts::Severity::Normal);
 
+        if $crate::utils::io::output_is_silent() {
+            return;
+        }
+
         println!(
             "{blue}{}{text}{reset}",
             if !text.is_empty() && $include_arrow {

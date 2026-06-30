@@ -44,6 +44,10 @@ macro_rules! validate_args {
             let formatted_subcommand_list =
                 $crate::core::parser::validate_args::format_subcommand_list(stringify!($subcommands_with_desc));
 
+            if $crate::utils::io::output_is_silent() {
+                return;
+            }
+
             println!(
                 "{blue}> Usage:\n{reset}cmdcreate {yellow}{} {blue}[usage] {magenta}{include_additional_flags}{reset}\n\
                 Commands/Fields:\n\
