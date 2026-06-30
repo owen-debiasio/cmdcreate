@@ -96,7 +96,8 @@ fn command_removal_success(path_of_command: &str) {
 #[cfg(test)]
 mod tests {
     use crate::{
-        commands::tools::testing_tools::TestCommand, run_shell_command, utils::fs::paths::path_exists,
+        commands::tools::testing_tools::TestCommand, run_shell_command,
+        utils::fs::paths::path_exists,
     };
 
     fn create_and_delete_command(command_name: &str) {
