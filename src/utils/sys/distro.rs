@@ -34,7 +34,7 @@ pub fn get_distro_base() -> &'static str {
 
     let distro_base = &format!("{distro_id} {distro_id_alt}");
 
-    return if matches!(distro_base.as_str(), "arch" | "manjaro" | "endeavouros") {
+    if matches!(distro_base.as_str(), "arch" | "manjaro" | "endeavouros") {
         "Arch"
     } else if matches!(distro_base.as_str(), "fedora" | "rhel" | "centos" | "amzn") {
         "Fedora"
