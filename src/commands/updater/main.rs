@@ -18,12 +18,18 @@ use crate::{
     commands::updater::{
         interactive::interactive_upgrade,
         update_methods::{aur::update_via_aur, package::update_via_package},
-    }, core::{
+    },
+    core::{
         logger::{consts::Severity, main::log},
         meta::project::project_information::PROJECT,
-    }, utils::{
-        colors::COLORS, io::{ask_for_confirmation, error, output_is_silent}, net::not_connected_to_internet, sys::{
-            cpu::arch_is_supported, distro::{get_distro_base, is_immutable_distro},
+    },
+    utils::{
+        colors::COLORS,
+        io::{ask_for_confirmation, error, output_is_silent},
+        net::not_connected_to_internet,
+        sys::{
+            cpu::arch_is_supported,
+            distro::{get_distro_base, is_immutable_distro},
         },
     },
 };

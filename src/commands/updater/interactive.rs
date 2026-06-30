@@ -23,10 +23,7 @@ use crate::{
         colors::COLORS,
         git::get_latest_commit,
         io::error,
-        sys::{
-            cpu::arch_is_supported,
-            distro::get_distro_base,
-        },
+        sys::{cpu::arch_is_supported, distro::get_distro_base},
     },
 };
 
@@ -42,40 +39,25 @@ pub fn interactive_upgrade() {
     let installed_distro = get_distro_base();
 
     if installed_distro == "Arch" {
-        chosen_update_method.push((
-            "aur",
-            "Update via AUR",
-        ));
+        chosen_update_method.push(("aur", "Update via AUR"));
     }
 
     if cpu_arch_is_supported {
         match installed_distro {
-            "Debian" => chosen_update_method.push((
-                "deb",
-                "Update via .deb file"
-            )),
-            "Fedora" => chosen_update_method.push((
-                "rpm",
-                "Update via .rpm file"
-            )),
-            _ => ()
+            "Debian" => chosen_update_method.push(("deb", "Update via .deb file")),
+            "Fedora" => chosen_update_method.push(("rpm", "Update via .rpm file")),
+            _ => (),
         }
-        
-        chosen_update_method.push((
-            "bin",
-            "Update via raw binary"
-        ));
+
+        chosen_update_method.push(("bin", "Update via raw binary"));
     }
 
     let latest_commit = get_latest_commit();
 
     // I have to make this variable separate because Clippy yells at you otherwise
     let build_from_source_message = &format!("Build from source (commit: {latest_commit})");
-    
-    chosen_update_method.push((
-        "src",
-        build_from_source_message,
-    ));
+
+    chosen_update_method.push(("src", build_from_source_message));
 
     chosen_update_method.push(("exit", "Exit"));
 

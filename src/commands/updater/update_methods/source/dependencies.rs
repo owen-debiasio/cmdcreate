@@ -26,9 +26,7 @@ use crate::{
         fs::core::creation::{delete_file, delete_folder},
         io::error,
         sys::{
-            command::system_command_is_installed,
-            cpu::ARCH,
-            distro::get_distro_base,
+            command::system_command_is_installed, cpu::ARCH, distro::get_distro_base,
             env::ENVIRONMENT_VARIABLES,
         },
     },

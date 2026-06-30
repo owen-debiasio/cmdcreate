@@ -29,10 +29,7 @@ use crate::{
         },
         io::{ask_for_confirmation, error},
         net::not_connected_to_internet,
-        sys::{
-            distro::get_distro_base,
-            env::running_as_root,
-        },
+        sys::{distro::get_distro_base, env::running_as_root},
     },
 };
 
