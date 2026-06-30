@@ -18,24 +18,8 @@ use std::collections::HashMap;
 
 use crate::utils::fs::{core::read_write::read_file_to_string, paths::path_exists};
 
-#[derive(Debug)]
-pub enum InstallMethod {
-    Aur,
-    Dpkg,
-    Other,
-    Rpm,
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum DistroBase {
-    Arch,
-    Debian,
-    Fedora,
-    Unknown,
-}
-
 /// This function is kind of fucked so bear with me here
-pub fn get_distro_base() -> DistroBase {
+pub fn get_distro_base() -> &'static str {
     let (mut distro_id, mut distro_id_alt) = ("", "");
 
     let os_release = read_file_to_string("/etc/os-release").to_lowercase();
@@ -48,37 +32,16 @@ pub fn get_distro_base() -> DistroBase {
         }
     }
 
-    let distro_base = format!("{distro_id} {distro_id_alt}");
+    let distro_base = &format!("{distro_id} {distro_id_alt}");
 
-    if distro_base.contains("arch")
-        || distro_base.contains("manjaro")
-        || distro_base.contains("endeavouros")
-    {
-        DistroBase::Arch
-    } else if distro_base.contains("fedora")
-        || distro_base.contains("rhel")
-        || distro_base.contains("centos")
-        || distro_base.contains("amzn")
-    {
-        DistroBase::Fedora
-    } else if distro_base.contains("debian")
-        || distro_base.contains("ubuntu")
-        || distro_base.contains("linuxmint")
-        || distro_base.contains("kali")
-        || distro_base.contains("pop")
-    {
-        DistroBase::Debian
+    return if matches!(distro_base.as_str(), "arch" | "manjaro" | "endeavouros") {
+        "Arch"
+    } else if matches!(distro_base.as_str(), "fedora" | "rhel" | "centos" | "amzn") {
+        "Fedora"
+    } else if matches!(distro_base.as_str(), "debian" | "ubuntu" | "linuxmint" | "kali" | "pop") {
+        "Debian"
     } else {
-        DistroBase::Unknown
-    }
-}
-
-pub fn installation_method() -> InstallMethod {
-    match get_distro_base() {
-        DistroBase::Arch => InstallMethod::Aur,
-        DistroBase::Fedora => InstallMethod::Rpm,
-        DistroBase::Debian => InstallMethod::Dpkg,
-        DistroBase::Unknown => InstallMethod::Other,
+        "Unknown"
     }
 }
 
