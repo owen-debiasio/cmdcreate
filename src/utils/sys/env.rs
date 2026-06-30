@@ -26,15 +26,13 @@ pub fn running_as_root() -> bool {
 }
 
 pub fn root_check() {
-    let user_is_running_as_root = running_as_root();
-
     log(
         "utils::sys::env::root_check(): \
         Checking root status...",
         Severity::Normal,
     );
 
-    if !user_is_running_as_root {
+    if !running_as_root() {
         error(
             "\
         To execute this action, \
