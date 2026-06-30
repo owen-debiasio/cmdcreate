@@ -110,9 +110,7 @@ macro_rules! input {
 /// Error details are optional.
 /// In that case, provide `None`
 pub fn error(error_message: &str, error_details: Option<&str>) -> ! {
-    // Colors need to be hardcoded because it would hang or crash otherwise
-    let red = "\x1b[31m";
-    let reset = "\x1b[0m";
+    let (red, reset) = (COLORS.red, COLORS.reset);
 
     if error_details.unwrap_or("").is_empty() {
         eprintln!("{red}Error: {}{reset}", error_message.trim());
