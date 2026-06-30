@@ -37,8 +37,8 @@ pub fn edit_file_in_text_editor(path: &str) {
     run_shell_command!("{editor} {path}");
 }
 
-pub fn read_file_to_string(path_to_file_to_read: &str) -> String {
-    let path = expand_home_dir(path_to_file_to_read);
+pub fn read_file_to_string(file_path: &str) -> String {
+    let path = expand_home_dir(file_path);
 
     if !path_exists(&path) {
         return String::new();
@@ -54,9 +54,9 @@ pub fn read_file_to_string(path_to_file_to_read: &str) -> String {
         .replace("\r\n", "\n")
 }
 
-pub fn overwrite_file(path_to_file_to_overwrite: &str, contents_of_file_to_overwrite: &str) {
-    let path = expand_home_dir(path_to_file_to_overwrite);
-    write_to_file(&path, contents_of_file_to_overwrite, false);
+pub fn overwrite_file(file_path: &str, contents: &str) {
+    let path = expand_home_dir(file_path);
+    write_to_file(&path, contents, false);
 }
 
 pub fn write_to_file(
@@ -99,7 +99,7 @@ pub fn remove_from_file(path_to_file: &str, contents_to_remove: &str) {
 
     overwrite_file(
         &path,
-        &read_file_to_string(&path).replace(complete_contents_to_remove, "\n"),
+        &read_file_to_string(&path).replace(complete_contents_to_remove, ""),
     );
 }
 
