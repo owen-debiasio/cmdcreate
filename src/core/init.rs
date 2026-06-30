@@ -74,7 +74,7 @@ and open an issue
 Version: {CURRENT_PROJECT_VERSION} {build_status}
 Binary path: {binary_path}
 CPU architecture: {ARCH}
-Distro base: {distro_base:?}
+Distro base: {distro_base}
 Distro is immutable: {immutable_distro_status}
 Internet status: {internet_status}
 Preferred text editor: {chosen_text_editor}
