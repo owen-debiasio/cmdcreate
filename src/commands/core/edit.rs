@@ -61,7 +61,9 @@ pub fn get_available_editor() -> String {
 }
 
 pub fn edit(command_to_edit: &str) {
-    cmdcreate_command_is_installed(command_to_edit);
+    if !cmdcreate_command_is_installed(command_to_edit) {
+        error("Command is not installed:", Some(command_to_edit))
+    }
 
     let editor_to_use = get_available_editor();
 

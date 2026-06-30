@@ -20,13 +20,16 @@ use crate::{
     utils::{
         colors::COLORS,
         fs::{core::read_write::read_file_to_string, paths::PATHS},
+        io::error,
     },
 };
 
 pub fn display(command_to_display: &str) {
     let (blue, magenta, reset) = (COLORS.blue, COLORS.magenta, COLORS.reset);
 
-    cmdcreate_command_is_installed(command_to_display);
+    if !cmdcreate_command_is_installed(command_to_display) {
+        error("Command is not installed:", Some(command_to_display))
+    }
 
     let path_to_command = format!(
         "{}{command_to_display}",

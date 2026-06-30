@@ -37,7 +37,9 @@ pub fn remove(command: &str, force_removal_of_command: bool) {
         COLORS.reset,
     );
 
-    cmdcreate_command_is_installed(command);
+    if !cmdcreate_command_is_installed(command) {
+        error("Command is not installed:", Some(command))
+    }
 
     if !force_removal_of_command {
         let question = &format!(
