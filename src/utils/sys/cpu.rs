@@ -27,17 +27,15 @@ pub static ARCH: &str = ARCHITECTURE;
 /// 32-bit (`x86`, `i386`, `i686`, `armv7`)
 /// 64-bit (`x86_64`, `aarch64`)
 pub fn arch_is_supported() -> bool {
-    ARCH == "x86_64"
-        || ARCH == "x86"
-        || ARCH == "i386"
-        || ARCH == "i686"
-        || ARCH == "aarch64"
-        || ARCH == "armv7"
+    matches!(
+        ARCH,
+        "x86_64" | "x86" | "i386" | "i686" | "aarch64" | "armv7"
+    )
 }
 
 pub fn cpu_arch_check(error_reason: &str) {
     log(
-        "utils/sys::cpu_arch_check(): Double checking if CPU arch. is supported...",
+        "utils::sys::cpu_arch_check(): Double checking if CPU arch. is supported...",
         Severity::Normal,
     );
 
@@ -46,7 +44,7 @@ pub fn cpu_arch_check(error_reason: &str) {
     }
 
     log(
-        "utils/sys::cpu_arch_check(): CPU arch. is supported... Continuing action...",
+        "utils::sys::cpu_arch_check(): CPU arch. is supported... Continuing action...",
         Severity::Normal,
     );
 }
