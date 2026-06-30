@@ -29,7 +29,7 @@ use crate::{
         net::{internet_is_forced_disabled, not_connected_to_internet},
         sys::{
             cpu::ARCH,
-            distro::{get_distro_base, installation_method, is_immutable_distro},
+            distro::{get_distro_base, is_immutable_distro},
             env::{ENVIRONMENT_VARIABLES, running_as_root},
         },
     },
@@ -46,7 +46,6 @@ pub fn debug_intro() -> String {
 
     let distro_base = get_distro_base();
     let immutable_distro_status = is_immutable_distro();
-    let installation_method = installation_method();
 
     let internet_status = if not_connected_to_internet() {
         if internet_is_forced_disabled() {
@@ -77,7 +76,6 @@ Binary path: {binary_path}
 CPU architecture: {ARCH}
 Distro base: {distro_base:?}
 Distro is immutable: {immutable_distro_status}
-Installation Method: {installation_method:?}
 Internet status: {internet_status}
 Preferred text editor: {chosen_text_editor}
 Shell in use: {shell_in_use}
