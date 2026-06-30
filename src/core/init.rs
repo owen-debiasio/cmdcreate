@@ -86,22 +86,24 @@ Root status: {root_status}
 }
 
 pub fn init() {
-    if is_immutable_distro() && running_as_root() {
-        error(
-            "Because you are using an immutable distro, you are unable to run cmdcreate as root.",
-            None,
-        )
+    if running_as_root() {
+        if is_immutable_distro() {
+            error(
+                "Because you are using an immutable distro, you are unable to run cmdcreate as root.",
+                None,
+            )
+        }
+        if load_configuration("self", "disable_root_usage", "false") == "true" && running_as_root()
+        {
+            error(
+                "Root usage is disabled on your machine!",
+                Some("The setting 'disable_root_usage' is enabled in: '/etc/cmdcreate.toml'."),
+            )
+        }
     }
 
     init_filesystem();
     init_configs();
-
-    if load_configuration("self", "disable_root_usage", "false") == "true" && running_as_root() {
-        error(
-            "Root usage is disabled on your machine!",
-            Some("The setting 'disable_root_usage' is enabled in: '/etc/cmdcreate.toml'."),
-        )
-    }
 
     log(
         &format!(
