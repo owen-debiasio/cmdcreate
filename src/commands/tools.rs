@@ -33,14 +33,10 @@ pub fn cmdcreate_command_is_installed(command_to_find: &str) -> bool {
     let command_install_path =
         &format!("{}{command_to_find}", PATHS.command_installation_directory);
 
-    // Using both path_exists() and get_installed_commands().contains()
-    // Will help the accuracy if one method doesn't work for some reason.
-    if path_exists(command_install_path)
-        || get_installed_commands().contains(&command_to_find.to_string())
-    {
+    if path_exists(command_install_path) {
         log(
             &format!(
-                "commands/tools::command_is_installed(): \
+                "commands::tools::command_is_installed(): \
                 Command \"{command_to_find}\" is installed... Continuing..."
             ),
             Severity::Normal,
@@ -49,15 +45,12 @@ pub fn cmdcreate_command_is_installed(command_to_find: &str) -> bool {
         return true;
     }
 
-    error(
-        &format!("Command \"{command_to_find}\" is not installed"),
-        None,
-    );
+    false
 }
 
 pub fn get_installed_commands() -> Vec<String> {
     log(
-        "commands/tools::get_installed_commands(): Getting installed commands...",
+        "commands::tools::get_installed_commands(): Getting installed commands...",
         Severity::Normal,
     );
 
@@ -101,6 +94,42 @@ pub fn get_installed_commands() -> Vec<String> {
     }
 
     retrieved_commands
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::commands::tools::{
+        cmdcreate_command_is_installed, get_installed_commands, testing_tools::TestCommand,
+    };
+
+    #[test]
+    fn cmdcreate_command_is_installed_returns_correctly() {
+        let test_name = "cmdcreate_command_is_installed_returns_correctly";
+
+        TestCommand::create(test_name, false);
+
+        assert!(cmdcreate_command_is_installed(test_name));
+
+        TestCommand::remove(test_name);
+
+        assert!(!cmdcreate_command_is_installed(test_name));
+    }
+
+    #[test]
+    fn commands_are_retrieved() {
+        let test_name = "commands_are_retrieved";
+
+        TestCommand::create_group(test_name, false);
+
+        let command_list = get_installed_commands();
+
+        for command_i in 1..=3 {
+            let command_name = &format!("{test_name}_{command_i}");
+            assert!(command_list.contains(command_name));
+        }
+
+        TestCommand::remove_group(test_name);
+    }
 }
 
 #[cfg(test)]
