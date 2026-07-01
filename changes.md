@@ -1035,3 +1035,7 @@ are also plenty of new features, changes and fixes.
 #### Removed
 
 - Remove test `distro_detection_returns_known_or_unknown`: No longer applicable
+
+## v1.4.2
+
+- Fix `cmdcreate export` creating an empty file when no commands are installed
