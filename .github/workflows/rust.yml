@@ -67,25 +67,25 @@ jobs:
       - name: Cache cargo
         uses: Swatinem/rust-cache@v2
 
-      - name: Clippy (x86_64)
+      - name: x86_64 (x64)
         run: |
           CRATE_CC_NO_DEFAULTS=true \
           CC_x86_64_unknown_linux_musl="zig cc -target x86_64-linux-musl" \
           cargo clippy --target x86_64-unknown-linux-musl --all-targets --all-features
 
-      - name: Clippy (i686)
+      - name: i686 (x86)
         run: |
           CRATE_CC_NO_DEFAULTS=true \
-          CC_i686_unknown_linux_musl="zig cc -target i686-linux-musl" \
+          CC_i686_unknown_linux_musl="zig cc -target x86-linux-musl" \
           cargo clippy --target i686-unknown-linux-musl --all-targets --all-features
 
-      - name: Clippy (aarch64)
+      - name: aarch64 (arm64)
         run: |
           CRATE_CC_NO_DEFAULTS=true \
           CC_aarch64_unknown_linux_musl="zig cc -target aarch64-linux-musl" \
           cargo clippy --target aarch64-unknown-linux-musl --all-targets --all-features
 
-      - name: Clippy (armv7)
+      - name: armv7 (arm)
         run: |
           CRATE_CC_NO_DEFAULTS=true \
           CC_armv7_unknown_linux_musleabihf="zig cc -target arm-linux-musleabihf" \
