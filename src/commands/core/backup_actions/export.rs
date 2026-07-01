@@ -63,9 +63,9 @@ pub fn export(path: &str) {
         Severity::Normal,
     );
 
-    create_file(path_of_file_to_export_to);
-
     let installed_commands = get_installed_commands();
+
+    create_file(path_of_file_to_export_to);
 
     for retrieved_command in installed_commands {
         log(
