@@ -25,9 +25,8 @@ env:
   RUSTFLAGS: "-Dwarnings"
 
 jobs:
-  lint-and-test:
+  Format:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,7 +34,66 @@ jobs:
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
         with:
-          components: rustfmt, clippy
+          components: rustfmt
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Format check
+        run: cargo fmt --all -- --check
+
+  Clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+          targets: |
+            x86_64-unknown-linux-musl
+            i686-unknown-linux-musl
+            aarch64-unknown-linux-musl
+            armv7-unknown-linux-musleabihf
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Clippy (x86_64)
+        run: |
+          CRATE_CC_NO_DEFAULTS=true \
+          CC_x86_64_unknown_linux_musl="zig cc -target x86_64-linux-musl" \
+          cargo clippy --target x86_64-unknown-linux-musl --all-targets --all-features
+
+      - name: Clippy (i686)
+        run: |
+          CRATE_CC_NO_DEFAULTS=true \
+          CC_i686_unknown_linux_musl="zig cc -target i686-linux-musl" \
+          cargo clippy --target i686-unknown-linux-musl --all-targets --all-features
+
+      - name: Clippy (aarch64)
+        run: |
+          CRATE_CC_NO_DEFAULTS=true \
+          CC_aarch64_unknown_linux_musl="zig cc -target aarch64-linux-musl" \
+          cargo clippy --target aarch64-unknown-linux-musl --all-targets --all-features
+
+      - name: Clippy (armv7)
+        run: |
+          CRATE_CC_NO_DEFAULTS=true \
+          CC_armv7_unknown_linux_musleabihf="zig cc -target arm-linux-musleabihf" \
+          cargo clippy --target armv7-unknown-linux-musleabihf --all-targets --all-features
+
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
           targets: |
             x86_64-unknown-linux-musl
             i686-unknown-linux-musl
@@ -53,33 +111,6 @@ jobs:
 
       - name: Cache cargo
         uses: Swatinem/rust-cache@v2
-
-      - name: Format check
-        run: cargo fmt --all -- --check
-
-      - name: Clippy (x86_64)
-        run: |
-          CRATE_CC_NO_DEFAULTS=true \
-          CC_x86_64_unknown_linux_musl="zig cc -target x86_64-linux-musl" \
-          cargo clippy --target x86_64-unknown-linux-musl --all-targets --all-features
-
-      - name: Clippy (i686)
-        run: |
-          CRATE_CC_NO_DEFAULTS=true \
-          CC_i686_unknown_linux_musl="zig cc -target x86-linux-musl" \
-          cargo clippy --target i686-unknown-linux-musl --all-targets --all-features
-
-      - name: Clippy (aarch64)
-        run: |
-          CRATE_CC_NO_DEFAULTS=true \
-          CC_aarch64_unknown_linux_musl="zig cc -target aarch64-linux-musl" \
-          cargo clippy --target aarch64-unknown-linux-musl --all-targets --all-features
-
-      - name: Clippy (armv7)
-        run: |
-          CRATE_CC_NO_DEFAULTS=true \
-          CC_armv7_unknown_linux_musleabihf="zig cc -target arm-linux-musleabihf" \
-          cargo clippy --target armv7-unknown-linux-musleabihf --all-targets --all-features
 
       - name: Build (x86_64 release)
         run: |
@@ -101,11 +132,19 @@ jobs:
           RUSTFLAGS="-C target-feature=+crt-static" \
           cargo zigbuild --release --target armv7-unknown-linux-musleabihf
 
-      - name: Run tests
-        # I'm skipping the tests `created_command_runs` and `renamed_command_runs` because
-        # Something with the PATH doesn't work in workflows or something.background.
+  Tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        # Tests involving importing/exporting have do be dealt with individually to avoid conflicts.
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+
+      - name: Run tests
         run: |
           cargo test --release -- --no-capture --skip created_command_runs --skip renamed_command_runs --skip imported_commands_run_correctly
           cargo test --release export_file_contains_command_with_contents -- --ignored
