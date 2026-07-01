@@ -58,6 +58,12 @@ jobs:
             aarch64-unknown-linux-musl
             armv7-unknown-linux-musleabihf
 
+      - name: Install Zig
+        uses: mlugg/setup-zig@v2
+        with:
+          version: 0.16.0
+          use-cache: true
+
       - name: Cache cargo
         uses: Swatinem/rust-cache@v2
 
@@ -85,7 +91,7 @@ jobs:
           CC_armv7_unknown_linux_musleabihf="zig cc -target arm-linux-musleabihf" \
           cargo clippy --target armv7-unknown-linux-musleabihf --all-targets --all-features
 
-  Build:
+  Builds:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
