@@ -1038,4 +1038,13 @@ are also plenty of new features, changes and fixes.
 
 ## v1.4.2
 
-- Fix `cmdcreate export` creating an empty file when no commands are installed
+### Fixed
+
+- `cmdcreate export` creates an empty file when no commands are installed
+
+### Developers
+
+#### Added
+
+- Add Zed config to make Rust Analyzer use `clippy` over `cargo check` in
+  `.zed/settings.json`
