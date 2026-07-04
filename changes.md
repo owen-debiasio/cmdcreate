@@ -1038,8 +1038,14 @@ are also plenty of new features, changes and fixes.
 
 ## v1.4.2
 
+### Changed
+
+- When cleaning up building from source when using `cmdcreate update`, directory
+  `/tmp/cmdcreate` is also a directory to be cleaned up.
+
 ### Fixed
 
+- Incorrect message when cleaning up building from source
 - `cmdcreate export` creates an empty file when no commands are installed
 
 ### Developers
