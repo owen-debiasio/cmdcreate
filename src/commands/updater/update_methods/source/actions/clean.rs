@@ -56,6 +56,8 @@ pub fn cleanup() {
     output!("Removing \"/root/.cache/zig\"...", false);
     delete_folder("/root/.cache/zig");
 
-    output!("Removing cmdcreate source: \"/tmp/cmdcreate\"......", true);
+    output!("Removing cmdcreate source...", true);
+
+    output!("Removing \"/tmp/cmdcreate\"...", false);
     delete_folder("/tmp/cmdcreate");
 }
