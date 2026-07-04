@@ -100,7 +100,7 @@ fn install() {
 
 fn install_success_check(license_path: &str) {
     log(
-        "core/meta/license::install_success_check(): \
+        "core::meta/license::install_success_check(): \
         Determining License installation status...",
         Severity::Normal,
     );
@@ -113,7 +113,7 @@ fn install_success_check(license_path: &str) {
     }
 
     log(
-        "core/meta/license::install_success_check(): \
+        "core::meta/license::install_success_check(): \
         License installed correctly, continuing...",
         Severity::Normal,
     );
