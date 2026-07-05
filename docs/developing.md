@@ -42,7 +42,7 @@ This script will:
 sudo pacman -S --needed --noconfirm \
     rustup curl openssl git base-devel \
     shfmt shellcheck bash-language-server \
-    nodejs npm markdownlint-cli2 prettier marksman vscode-json-languageserver \
+    markdownlint-cli2 prettier marksman vscode-json-languageserver \
     rpm-tools dpkg
 ```
 
@@ -52,7 +52,7 @@ sudo pacman -S --needed --noconfirm \
 sudo apt-get install -y \
     curl libssl-dev build-essential pkg-config git \
     shfmt shellcheck \
-    nodejs npm rpm dpkg-dev
+    rpm dpkg-dev
 ```
 
 ##### Fedora
@@ -61,7 +61,7 @@ sudo apt-get install -y \
 sudo dnf install -y \
     curl openssl-devel git gcc gcc-c++ make \
     shfmt ShellCheck nodejs-bash-language-server \
-    nodejs npm rpm-build dpkg-dev
+    rpm-build dpkg-dev
 ```
 
 ---
@@ -99,14 +99,34 @@ cargo install cargo-zigbuild
 
 ---
 
-#### Install Markdownlint and Prettier
+#### Fedora, Debian, Ubuntu users
 
 > [!NOTE]  
 > Arch Linux users can skip this step if `markdownlint-cli2` and `prettier` were
 > installed via `pacman`.
 
+##### Install Brew
+
 ```bash
-sudo npm install -g prettier markdownlint-cli2@0.13.0
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+##### Install Zig
+
+```bash
+brew install zig
+```
+
+##### Install Markdownlint
+
+```bash
+brew install markdownlint-cli2
+```
+
+##### Install Prettier
+
+```bash
+brew install prettier
 ```
 
 ---

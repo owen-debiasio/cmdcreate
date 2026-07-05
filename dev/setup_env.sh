@@ -48,7 +48,7 @@ install_dependencies() {
             sudo pacman -S --needed --noconfirm \
                 rustup curl openssl git base-devel \
                 shfmt shellcheck bash-language-server \
-                nodejs npm markdownlint-cli2 prettier marksman vscode-json-languageserver \
+                markdownlint-cli2 prettier marksman vscode-json-languageserver \
                 rpm-tools dpkg zig
             ;;
         *fedora*)
@@ -57,7 +57,9 @@ install_dependencies() {
                 shfmt ShellCheck nodejs-bash-language-server \
                 nodejs npm rpm-build dpkg-dev zig
 
-            sudo npm install -g prettier markdownlint-cli2@0.13.0
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            brew install prettier markdownlint-cli2
+
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
             ;;
         *debian* | *ubuntu*)
@@ -65,8 +67,11 @@ install_dependencies() {
             sudo apt-get install -y \
                 curl libssl-dev build-essential pkg-config git \
                 shfmt shellcheck \
-                nodejs npm rpm dpkg-dev zig
-            sudo npm install -g prettier markdownlint-cli2@0.13.0
+                rpm dpkg-dev
+
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            brew install prettier markdownlint-cli2
+
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
             ;;
     esac
