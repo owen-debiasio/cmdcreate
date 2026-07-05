@@ -1054,3 +1054,21 @@ are also plenty of new features, changes and fixes.
 
 - Add Zed config to make Rust Analyzer use `clippy` over `cargo check` in
   `.zed/settings.json`
+
+## v1.4.3
+
+### Developers
+
+#### Removed
+
+- The following dependencies, they are no longer needed:
+  - `npm`
+  - `nodejs`
+
+#### Changed
+
+- `brew` is now used to install the following on `fedora`, `debian`, and
+  `ubuntu` systems:
+  - `markdownlint-cli2`
+  - `prettier`
+  - `zig`
