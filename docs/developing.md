@@ -113,6 +113,9 @@ cargo install cargo-zigbuild
 
 ##### Install Zig
 
+> [!TIP] If you are on `Fedora` and already installed `Zig` using `dnf`, you can
+> skip this step
+
 ```bash
 brew install zig
 ```
@@ -127,6 +130,12 @@ brew install markdownlint-cli2
 
 ```bash
 brew install prettier
+```
+
+##### Install Marksman
+
+```bash
+brew install marksman
 ```
 
 ---
