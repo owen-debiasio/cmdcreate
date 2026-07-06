@@ -70,7 +70,7 @@ install_dependencies() {
                 rpm dpkg-dev
 
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-            brew install prettier markdownlint-cli2
+            brew install prettier markdownlint-cli2 marksman
 
             curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
             ;;
