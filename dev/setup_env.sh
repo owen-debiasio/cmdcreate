@@ -55,7 +55,7 @@ install_dependencies() {
             sudo dnf install -y \
                 curl openssl-devel git gcc gcc-c++ make \
                 shfmt ShellCheck nodejs-bash-language-server \
-                nodejs npm rpm-build dpkg-dev zig
+                rpm-build dpkg-dev zig
 
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
             brew install prettier markdownlint-cli2
