@@ -1059,7 +1059,7 @@ are also plenty of new features, changes and fixes.
 
 ### Developers
 
-####
+#### Added
 
 - `marksman` as a linter. Installed through `brew`.
 
