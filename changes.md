@@ -1059,6 +1059,10 @@ are also plenty of new features, changes and fixes.
 
 ### Developers
 
+####
+
+- `marksman` as a linter. Installed through `brew`.
+
 #### Removed
 
 - The following dependencies, they are no longer needed:
@@ -1071,4 +1075,5 @@ are also plenty of new features, changes and fixes.
   `ubuntu` systems:
   - `markdownlint-cli2`
   - `prettier`
-  - `zig`
+  - `zig` **(`Debian`/`Ubuntu` only)**
+  - `brew`
