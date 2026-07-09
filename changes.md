@@ -1057,6 +1057,15 @@ are also plenty of new features, changes and fixes.
 
 ## v1.4.3
 
+### Changed
+
+- Update cmdcreate for rust `1.97.0`
+
+### Fixed
+
+- Fix variable referencing issues in
+  `cmdcreate::utils::fs::paths::PATHS.favorites`
+
 ### Developers
 
 #### Added
