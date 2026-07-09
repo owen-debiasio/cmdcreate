@@ -65,7 +65,7 @@ pub static PATHS: LazyLock<Paths> = LazyLock::new(|| Paths {
     } else {
         "~/.config/cmdcreate/cmdcreate.toml"
     },
-    favorites: format!("{}/favorites", &MAIN_PATH.to_string()),
+    favorites: format!("{}/favorites", MAIN_PATH.to_string().as_str()),
     command_installation_directory: if running_as_root() {
         "/usr/local/bin/"
     } else {
