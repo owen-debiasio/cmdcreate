@@ -1059,7 +1059,7 @@ are also plenty of new features, changes and fixes.
 
 ### Changed
 
-- Update cmdcreate for rust `1.97.0`
+- Update cmdcreate for rust `1.97.1`
 
 ### Fixed
 
