@@ -1086,3 +1086,11 @@ are also plenty of new features, changes and fixes.
   - `prettier`
   - `zig` **(`Debian`/`Ubuntu` only)**
   - `brew`
+
+## v1.4.4
+
+### Changes/Fixes
+
+- Code optimizations
+  - Removed unused function
+    `cmdcreate::utils::fs::paths::get_program_binary_path()`
