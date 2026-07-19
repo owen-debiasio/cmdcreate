@@ -72,7 +72,7 @@ Version: $VERSION
 Section: utils
 Priority: optional
 Architecture: $DEB_ARCH
-Maintainer: Owen Debiasio <owen.debiasio@proton.me>
+Maintainer: Owen Debiasio <owen.debiasio@gmail.com>
 Description: Create your own custom commands for your convenience
 EOF
 
