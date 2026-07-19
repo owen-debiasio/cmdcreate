@@ -1094,3 +1094,9 @@ are also plenty of new features, changes and fixes.
 - Code optimizations
   - Removed unused function
     `cmdcreate::utils::fs::paths::get_program_binary_path()`
+
+### Developers
+
+#### Fixed
+
+- Incorrect email in `./package/create_deb.sh`
