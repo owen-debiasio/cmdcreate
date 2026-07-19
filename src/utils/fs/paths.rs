@@ -35,22 +35,6 @@ pub static CMDCREATE_BINARY_PATH: LazyLock<String> = LazyLock::new(|| {
         .into_owned()
 });
 
-pub fn get_program_binary_path() -> String {
-    let user_home = &ENVIRONMENT_VARIABLES.home;
-
-    let paths_to_check = [
-        "/usr/bin/cmdcreate".to_string(),
-        "/usr/bin/cmdcreate-dev".to_string(),
-        format!("{user_home}/.local/bin/cmdcreate"),
-        format!("{user_home}/.local/bin/cmdcreate-dev"),
-    ];
-
-    paths_to_check
-        .into_iter()
-        .find(|path| path_exists(path))
-        .unwrap_or_else(|| format!("{user_home}/.local/bin/cmdcreate-dev"))
-}
-
 pub struct Paths {
     pub configuration_file: &'static str,
     pub favorites: String,
